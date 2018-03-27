@@ -1,5 +1,6 @@
 from openprocurement.audit.api.tests.base import BaseWebTest
 import unittest
+from datetime import datetime, timedelta
 
 
 class MonitorResourceTest(BaseWebTest):
@@ -33,7 +34,10 @@ class MonitorResourceTest(BaseWebTest):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.patch_json(
             '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
-            {"data": {"status": "active"}}
+            {"data": {
+                "status": "active",
+                "monitoringPeriod": {"startDate": (datetime.now() + timedelta(days=2)).isoformat()}
+            }}
         )
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')

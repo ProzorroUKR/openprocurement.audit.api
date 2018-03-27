@@ -25,7 +25,8 @@ class BaseWebTest(unittest.TestCase):
     """
     initial_data = {
         "tender_id": "f" * 32,
-        "status": "draft",
+        "reasons": ["indicator"],
+        "procuringStages": ["planning"]
     }
 
     def setUp(self):

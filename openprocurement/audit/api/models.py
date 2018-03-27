@@ -1,5 +1,5 @@
 from openprocurement.api.utils import get_now
-from openprocurement.api.models import Model, Revision, Document
+from openprocurement.api.models import Model, Revision, Document, Period
 from openprocurement.api.models import schematics_embedded_role, schematics_default_role, IsoDateTimeType, ListType
 from schematics.types import StringType, MD5Type
 from schematics.types.serializable import serializable
@@ -10,12 +10,37 @@ from pyramid.security import Allow
 
 
 # roles
-plain_role = (blacklist('_attachments', 'revisions', 'dateModified') + schematics_embedded_role)
-create_role = (blacklist('owner_token', 'owner', 'revisions', 'dateModified', 'dateCreated', 'doc_id', '_attachments') + schematics_embedded_role)
-edit_role = (blacklist('owner_token', 'owner', 'revisions', 'dateModified', 'dateCreated', 'doc_id', '_attachments') + schematics_embedded_role)
-view_role = (blacklist('owner_token', '_attachments', 'revisions') + schematics_embedded_role)
-listing_role = whitelist('dateModified', 'doc_id')
-revision_role = whitelist('revisions')
+plain_role = blacklist(
+    '_attachments', 'revisions', 'dateModified'
+) + schematics_embedded_role
+
+create_role = blacklist(
+    'owner_token', 'owner', 'revisions', 'dateModified',
+    'dateCreated', 'doc_id', '_attachments'
+) + schematics_embedded_role
+
+edit_role = blacklist(
+    'owner_token', 'owner', 'revisions', 'dateModified',
+    'dateCreated', 'doc_id', '_attachments', 'tender_id',
+    'monitoring_id'
+) + schematics_embedded_role
+
+view_role = blacklist(
+    'owner_token', '_attachments', 'revisions'
+) + schematics_embedded_role
+
+listing_role = whitelist(
+    'dateModified', 'doc_id'
+)
+
+revision_role = whitelist(
+    'revisions'
+)
+
+
+class MonitorPeriod(Period):
+    startDate = IsoDateTimeType(required=True)
+    endDate = IsoDateTimeType()
 
 
 class Monitor(SchematicsDocument, Model):
@@ -33,8 +58,13 @@ class Monitor(SchematicsDocument, Model):
 
     # fields
     tender_id = MD5Type(required=True)
+    monitoring_id = StringType()
     status = StringType(choices=['draft', 'active'], default='draft')
     documents = ListType(ModelType(Document), default=list())  # All documents and attachments related to the item.
+
+    reasons = ListType(StringType(choices=['indicator', 'authorities', 'media', 'fiscal', 'public']), required=True)
+    procuringStages = ListType(StringType(choices=['planning', 'awarding', 'contracting']), required=True)
+    monitoringPeriod = ModelType(MonitorPeriod)
 
     dateModified = IsoDateTimeType()
     dateCreated = IsoDateTimeType(default=get_now)

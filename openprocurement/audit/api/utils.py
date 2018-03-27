@@ -1,6 +1,10 @@
+from couchdb import ResourceConflict
+from gevent import sleep
+from openprocurement.audit.api.constraints import MONITORING_TIME
 from openprocurement.audit.api.traversal import factory
 from functools import partial
 from cornice.resource import resource
+from openprocurement.tender.core.utils import calculate_business_date
 from schematics.exceptions import ModelValidationError
 from openprocurement.api.models import Revision
 from openprocurement.api.utils import (
@@ -39,11 +43,9 @@ def save_monitor(request):
     monitor = request.validated['monitor']
     patch = get_revision_changes(monitor.serialize("plain"), request.validated['monitor_src'])
     if patch:
-        monitor.revisions.append(
-            Revision({'author': request.authenticated_userid, 'changes': patch, 'rev': monitor.rev})
-        )
+        add_revision(request, monitor, patch)
         old_date_modified = monitor.dateModified
-        monitor.dateModified = get_now()
+        monitor.dateModified = monitor.dateCreated if not monitor.dateModified else get_now()
         try:
             monitor.store(request.registry.db)
         except ModelValidationError, e:  # pragma: no cover
@@ -58,9 +60,18 @@ def save_monitor(request):
                     monitor.id, old_date_modified and old_date_modified.isoformat(),
                     monitor.dateModified.isoformat()
                 ),
-                extra=context_unpack(request, {'MESSAGE_ID': 'save_plan'}, {'PLAN_REV': monitor.rev})
+                extra=context_unpack(request, {'MESSAGE_ID': 'save_monitor'})
             )
             return True
+
+
+def add_revision(request, item, changes):
+    revision_data = {
+        'author': request.authenticated_userid,
+        'changes': changes,
+        'rev': item.rev
+    }
+    item.revisions.append(Revision(revision_data))
 
 
 def apply_patch(request, data=None, save=True, src=None):
@@ -105,3 +116,35 @@ def extract_monitor_adapter(request, monitor_id):
 def extract_monitor(request):
     monitor_id = request.matchdict['monitor_id']
     return extract_monitor_adapter(request, monitor_id)
+
+
+def generate_monitor_id(ctime, db, server_id=''):
+    """ Generate ID for new monitor in format "UA-M-YYYY-MM-DD-NNNNNN" + ["-server_id"]
+        YYYY - year, MM - month (start with 1), DD - day, NNNNNN - sequence number per 1 day
+        and save monitors count per day in database document with _id = "monitorID" 
+        as { key, value } = { "2015-12-03": 2 }
+    :param ctime: system date-time
+    :param db: couchdb database object
+    :param server_id: server mark (for claster mode)
+    :return: planID in "UA-M-2015-05-08-000005"
+    """
+    key = ctime.date().isoformat()
+    monitor_id_doc = 'monitorID_' + server_id if server_id else 'monitorID'
+    while True:
+        try:
+            monitor_id = db.get(monitor_id_doc, {'_id': monitor_id_doc})
+            index = monitor_id.get(key, 1)
+            monitor_id[key] = index + 1
+            db.save(monitor_id)
+        except ResourceConflict:  # pragma: no cover
+            pass
+        except Exception:  # pragma: no cover
+            sleep(1)
+        else:
+            break
+    return 'UA-M-{:04}-{:02}-{:02}-{:06}{}'.format(
+        ctime.year, ctime.month, ctime.day, index, server_id and '-' + server_id)
+
+def update_monitoring_period(period):
+    if period.startDate and not period.endDate:
+        period.endDate = calculate_business_date(period.startDate, MONITORING_TIME, working_days=True)

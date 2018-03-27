@@ -6,6 +6,11 @@
     :target: https://github.com/raccoongang/openprocurement.audit.api/blob/master/LICENSE.txt
 
 
+.. image:: https://coveralls.io/repos/github/raccoongang/openprocurement.audit.api/badge.svg?branch=master
+    :target: https://coveralls.io/github/raccoongang/openprocurement.audit.api?branch=master
+
+
+
 Installation
 *  Clone
 *  `python bootstrap.py`

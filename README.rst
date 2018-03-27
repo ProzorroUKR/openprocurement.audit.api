@@ -1,4 +1,10 @@
-# openprocurement.audit.api
+.. image:: https://travis-ci.org/raccoongang/openprocurement.audit.api.svg?branch=master
+    :target: https://travis-ci.org/raccoongang/openprocurement.audit.api
+
+
+.. image:: https://img.shields.io/hexpm/l/plug.svg
+    :target: https://github.com/raccoongang/openprocurement.audit.api/blob/master/LICENSE.txt
+
 
 Installation
 *  Clone

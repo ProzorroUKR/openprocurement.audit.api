@@ -24,7 +24,7 @@ entry_points = {
 setup(name='openprocurement.audit.api',
       version=version,
       description="",
-      long_description=open("README.md").read(),
+      long_description=open("README.rst").read(),
       classifiers=[
         "Programming Language :: Python",
       ],

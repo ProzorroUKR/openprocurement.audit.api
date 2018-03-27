@@ -13,8 +13,9 @@ from openprocurement.audit.api.utils import (
     monitor_serialize,
     apply_patch,
     op_resource,
-    APIResource
-)
+    APIResource,
+    generate_monitor_id,
+    update_monitoring_period)
 from openprocurement.audit.api.design import (
     monitors_real_by_dateModified_view,
     monitors_test_by_dateModified_view,
@@ -27,7 +28,8 @@ from openprocurement.audit.api.design import (
     monitors_real_by_status_dateModified_view,
     monitors_test_by_status_dateModified_view,
 )
-from openprocurement.audit.api.validation import validate_monitor_data, validate_patch_monitor_data
+from openprocurement.audit.api.validation import validate_monitor_data, validate_patch_monitor_data, \
+    validate_patch_monitor_status
 from openprocurement.audit.api.design import FIELDS
 from functools import partial
 from logging import getLogger
@@ -279,26 +281,26 @@ class MonitorsResource(APIResource):
 
         return self.format_result(view)
 
-    @json_view(content_type="application/json", permission='create_monitor', validators=(validate_monitor_data,))
+    @json_view(content_type='application/json',
+               permission='create_monitor',
+               validators=(validate_monitor_data,))
     def post(self):
         monitor = self.request.validated['monitor']
         monitor.id = generate_id()
-
+        monitor.monitoring_id = generate_monitor_id(get_now(), self.db, self.server_id)
         set_ownership(monitor, self.request)
-        self.request.validated['monitor'] = monitor
-        self.request.validated['monitor_src'] = {}
-        if save_monitor(self.request):
-            LOGGER.info('Created monitor {}'.format(monitor.id),
-                        extra=context_unpack(self.request, {'MESSAGE_ID': 'monitor_create'},
-                                             {'monitor_id': monitor.id}))
-            self.request.response.status = 201
-            self.request.response.headers['Location'] = self.request.route_url('Monitor', monitor_id=monitor.id)
-            return {
-                'data': monitor.serialize("view"),
-                'access': {
-                    'token': monitor.owner_token
-                }
+        save_monitor(self.request)
+        LOGGER.info('Created monitor {}'.format(monitor.id),
+                    extra=context_unpack(self.request, {'MESSAGE_ID': 'monitor_create'},
+                                         {'monitor_id': monitor.id}))
+        self.request.response.status = 201
+        self.request.response.headers['Location'] = self.request.route_url('Monitor', monitor_id=monitor.id)
+        return {
+            'data': monitor.serialize('view'),
+            'access': {
+                'token': monitor.owner_token
             }
+        }
 
 
 @op_resource(name='Monitor', path='/monitors/{monitor_id}')
@@ -307,13 +309,16 @@ class MonitorResource(APIResource):
     @json_view(permission='view_monitor')
     def get(self):
         monitor = self.request.validated['monitor']
-        data = monitor.serialize('view')
-        return {'data': data}
+        return {'data': monitor.serialize('view')}
 
-    @json_view(content_type="application/json", validators=(validate_patch_monitor_data,), permission='edit_monitor')
+    @json_view(content_type='application/json',
+               validators=(validate_patch_monitor_data, validate_patch_monitor_status),
+               permission='edit_monitor')
     def patch(self):
         monitor = self.request.validated['monitor']
-        apply_patch(self.request, src=self.request.validated['monitor_src'])
+        apply_patch(self.request, save=False, src=self.request.validated['monitor_src'])
+        update_monitoring_period(monitor.monitoringPeriod)
+        save_monitor(self.request)
         LOGGER.info('Updated monitor {}'.format(monitor.id),
                     extra=context_unpack(self.request, {'MESSAGE_ID': 'monitor_patch'}))
         return {'data': monitor.serialize('view')}

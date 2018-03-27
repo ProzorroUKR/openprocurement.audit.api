@@ -4,7 +4,7 @@ from openprocurement.api import design
 
 
 FIELDS = [
-    'tenderID',
+    'tender_id',
 ]
 CHANGES_FIELDS = FIELDS + [
     'dateModified',
@@ -17,12 +17,41 @@ def add_design():
             setattr(design, i, j)
 
 
-monitors_all_view = ViewDefinition('monitors', 'all', '''function(doc) {
+monitors_by_status_dateModified_view = ViewDefinition('monitors', 'by_status_dateModified', '''function(doc) {
     if(doc.doc_type == 'Monitor') {
-        emit(doc.planID, null);
+        var fields=%s, data={};
+        for (var i in fields) {
+            if (doc[fields[i]]) {
+                data[fields[i]] = doc[fields[i]]
+            }
+        }
+        emit([doc.status, doc.dateModified], data);
     }
-}''')
+}''' % FIELDS)
 
+monitors_real_by_status_dateModified_view = ViewDefinition('monitors', 'real_by_status_dateModified', '''function(doc) {
+    if(doc.doc_type == 'Monitor' && !doc.mode) {
+        var fields=%s, data={};
+        for (var i in fields) {
+            if (doc[fields[i]]) {
+                data[fields[i]] = doc[fields[i]]
+            }
+        }
+        emit([doc.status, doc.dateModified], data);
+    }
+}''' % FIELDS)
+
+monitors_test_by_status_dateModified_view = ViewDefinition('monitors', 'test_by_status_dateModified', '''function(doc) {
+    if(doc.doc_type == 'Monitor' && doc.mode == 'test') {
+        var fields=%s, data={};
+        for (var i in fields) {
+            if (doc[fields[i]]) {
+                data[fields[i]] = doc[fields[i]]
+            }
+        }
+        emit([doc.status, doc.dateModified], data);
+    }
+}''' % FIELDS)
 
 monitors_by_dateModified_view = ViewDefinition('monitors', 'by_dateModified', '''function(doc) {
     if(doc.doc_type == 'Monitor') {

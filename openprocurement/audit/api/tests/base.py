@@ -11,7 +11,9 @@ class PrefixedRequestClass(webtest.app.TestRequest):
 
     @classmethod
     def blank(cls, path, *args, **kwargs):
-        path = '/api/%s%s' % (VERSION, path)
+        prefix = '/api/{}'.format(VERSION)
+        if not path.startswith(prefix):
+            path = prefix + path
         return webtest.app.TestRequest.blank(path, *args, **kwargs)
 
 
@@ -21,6 +23,10 @@ class BaseWebTest(unittest.TestCase):
 
     It setups the database before each test and delete it after.
     """
+    initial_data = {
+        "tender_id": "f" * 32,
+        "status": "draft",
+    }
 
     def setUp(self):
         self.app = webtest.TestApp("config:tests.ini", relative_to=os.path.dirname(__file__))
@@ -36,19 +42,10 @@ class BaseWebTest(unittest.TestCase):
     def tearDown(self):
         del self.couchdb_server[self.db.name]
 
+    def create_monitor(self, **kwargs):
 
-class BaseMonitorWebTest(BaseWebTest):
-    initial_data = {
-        "tender_id": "f" * 32,
-        "status": "draft",
-    }
-
-    def setUp(self):
-        super(BaseMonitorWebTest, self).setUp()
-        self.create_monitor()
-
-    def create_monitor(self):
         data = deepcopy(self.initial_data)
+        data.update(kwargs)
         self.app.authorization = ('Basic', (self.sas_token, ''))
 
         response = self.app.post_json('/monitors', {'data': data})
@@ -58,6 +55,4 @@ class BaseMonitorWebTest(BaseWebTest):
 
         self.app.authorization = None
 
-    def tearDown(self):
-        del self.db[self.monitor_id]
-        super(BaseMonitorWebTest, self).tearDown()
+        return monitor

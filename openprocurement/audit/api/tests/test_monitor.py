@@ -1,8 +1,12 @@
-from openprocurement.audit.api.tests.base import BaseMonitorWebTest
+from openprocurement.audit.api.tests.base import BaseWebTest
 import unittest
 
 
-class MonitorResourceTest(BaseMonitorWebTest):
+class MonitorResourceTest(BaseWebTest):
+
+    def setUp(self):
+        super(MonitorResourceTest, self).setUp()
+        self.create_monitor()
 
     def test_get(self):
         response = self.app.get('/monitors/{}'.format(self.monitor_id))

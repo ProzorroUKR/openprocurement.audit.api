@@ -1,4 +1,4 @@
-.. image:: https://travis-ci.org/raccoongang/openprocurement.audit.api.svg?branch=master
+.. image:: https://travis-ci.org/raccoongang/openprocurement.audit.api.svg
     :target: https://travis-ci.org/raccoongang/openprocurement.audit.api
 
 
@@ -6,8 +6,8 @@
     :target: https://github.com/raccoongang/openprocurement.audit.api/blob/master/LICENSE.txt
 
 
-.. image:: https://coveralls.io/repos/github/raccoongang/openprocurement.audit.api/badge.svg?branch=master
-    :target: https://coveralls.io/github/raccoongang/openprocurement.audit.api?branch=master
+.. image:: https://coveralls.io/repos/github/raccoongang/openprocurement.audit.api/badge.svg
+    :target: https://coveralls.io/github/raccoongang/openprocurement.audit.api
 
 
 

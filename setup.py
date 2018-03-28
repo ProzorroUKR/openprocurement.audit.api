@@ -5,6 +5,7 @@ version = '1.0.0'
 requires = [
     'setuptools',
     'openprocurement.api>=2.4',
+    'openprocurement.tender.core>=2.4',
 ]
 test_requires = requires + [
     'webtest',
@@ -23,7 +24,7 @@ entry_points = {
 setup(name='openprocurement.audit.api',
       version=version,
       description="",
-      long_description=open("README.md").read(),
+      long_description=open("README.rst").read(),
       classifiers=[
         "Programming Language :: Python",
       ],

@@ -108,15 +108,19 @@ class MonitorsResource(APIResource):
         )
 
     def decrypt_offset(self, offset):
-        if offset and self.feed_map is self.CHANGES_VIEW_MAP:
-            decrypted_value = decrypt(self.server.uuid, self.db.name, offset)
+        if offset:
+            if self.feed_map is self.CHANGES_VIEW_MAP:
+                decrypted_value = decrypt(self.server.uuid, self.db.name, offset)
 
-            if decrypted_value and decrypted_value.isdigit():
-                offset = int(decrypted_value)
-            else:
-                self.request.errors.add('params', 'offset', 'Offset expired/invalid')
-                self.request.errors.status = 404
-                raise error_handler(self.request.errors)
+                if decrypted_value and decrypted_value.isdigit():
+                    offset = int(decrypted_value)
+                else:
+                    self.request.errors.add('params', 'offset', 'Offset expired/invalid')
+                    self.request.errors.status = 404
+                    raise error_handler(self.request.errors)
+
+            elif self.feed_map is self.STATUS_VIEW_MAP:
+                offset = offset.split(",")
         return offset
 
     def format_data(self, view):
@@ -236,6 +240,12 @@ class MonitorsResource(APIResource):
             if q_params.get('prev_offset'):
                 q_params['prev_offset'] = encrypt(self.server.uuid, self.db.name, q_params['prev_offset'])
 
+        elif self.feed_map is self.STATUS_VIEW_MAP:
+            q_params['offset'] = ",".join(q_params['offset'])
+
+            if q_params.get('prev_offset'):
+                q_params['prev_offset'] = ",".join(q_params['prev_offset'])
+
         if q_params["opt_fields"]:
             q_params["opt_fields"] = ",".join(q_params["opt_fields"])
         else:
@@ -254,7 +264,8 @@ class MonitorsResource(APIResource):
             else:
                 default_start, default_end = None, {}
 
-            kwargs["startkey"] = [self.feed_params["status_filter"], kwargs.get("startkey", default_start)]
+            start = kwargs["startkey"][1] if kwargs.get("startkey") else default_start
+            kwargs["startkey"] = [self.feed_params["status_filter"], start]
             kwargs["endkey"] = [self.feed_params["status_filter"], default_end]
 
         view = partial(feed_view, self.db, **kwargs)

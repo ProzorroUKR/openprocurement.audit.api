@@ -27,12 +27,19 @@ class MonitorsEmptyListingResourceTest(BaseWebTest):
     def test_post_monitor_sas_empty_data(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.post_json('/monitors', {"data": {}}, status=422)
-        self.assertEqual(response.json["errors"][0]["name"], "tender_id")
-        self.assertEqual(response.json["errors"][0]["description"], ["This field is required."])
+        self.assertEqual(set(e["name"] for e in response.json["errors"]), {"reasons", "tender_id", "procuringStages"})
 
     def test_post_monitor_sas(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
-        response = self.app.post_json('/monitors', {"data": {"tender_id": "f" * 32}}, status=201)
+        response = self.app.post_json(
+            '/monitors',
+            {"data": {
+                "tender_id": "f" * 32,
+                "reasons": ["public", "fiscal"],
+                "procuringStages": ["awarding", "contracting"]
+            }},
+            status=201
+        )
 
         self.assertIn("access", response.json)
         self.assertIn("token", response.json["access"])
@@ -40,7 +47,8 @@ class MonitorsEmptyListingResourceTest(BaseWebTest):
         self.assertIn("data", response.json)
         self.assertEqual(
             set(response.json["data"]),
-            {"id", "status", "tender_id", "owner", "dateModified", "dateCreated"}
+            {"id", "status", "tender_id", "owner", "dateModified",
+             "dateCreated", "reasons", "monitoring_id", "procuringStages"}
         )
         self.assertEqual(response.json["data"]["status"], "draft")
 

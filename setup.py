@@ -9,6 +9,7 @@ requires = [
 ]
 test_requires = requires + [
     'webtest',
+    'freezegun',
     'python-coveralls',
 ]
 docs_requires = requires + [

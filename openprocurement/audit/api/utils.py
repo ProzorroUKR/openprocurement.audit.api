@@ -148,4 +148,5 @@ def generate_monitor_id(ctime, db, server_id=''):
 def update_monitoring_period(monitor):
     monitor.monitoringPeriod = Period()
     monitor.monitoringPeriod.startDate = get_now()
-    monitor.monitoringPeriod.endDate = calculate_business_date(monitor.monitoringPeriod.startDate, MONITORING_TIME, working_days=True)
+    monitor.monitoringPeriod.endDate = calculate_business_date(
+        monitor.monitoringPeriod.startDate, MONITORING_TIME, working_days=True)

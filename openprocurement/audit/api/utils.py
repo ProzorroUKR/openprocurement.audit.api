@@ -6,7 +6,7 @@ from functools import partial
 from cornice.resource import resource
 from openprocurement.tender.core.utils import calculate_business_date
 from schematics.exceptions import ModelValidationError
-from openprocurement.api.models import Revision
+from openprocurement.api.models import Revision, Period
 from openprocurement.api.utils import (
     update_logging_context, context_unpack, get_revision_changes, get_now,
     apply_data_patch, error_handler
@@ -145,6 +145,8 @@ def generate_monitor_id(ctime, db, server_id=''):
     return 'UA-M-{:04}-{:02}-{:02}-{:06}{}'.format(
         ctime.year, ctime.month, ctime.day, index, server_id and '-' + server_id)
 
-def update_monitoring_period(period):
-    if period.startDate and not period.endDate:
-        period.endDate = calculate_business_date(period.startDate, MONITORING_TIME, working_days=True)
+def update_monitoring_period(monitor):
+    monitor.monitoringPeriod = Period()
+    monitor.monitoringPeriod.startDate = get_now()
+    monitor.monitoringPeriod.endDate = calculate_business_date(
+        monitor.monitoringPeriod.startDate, MONITORING_TIME, working_days=True)

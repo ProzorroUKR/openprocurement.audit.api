@@ -1,6 +1,10 @@
+from freezegun import freeze_time
+from openprocurement.api.constants import TZ
+from openprocurement.audit.api.constraints import MONITORING_TIME
 from openprocurement.audit.api.tests.base import BaseWebTest
 import unittest
 from datetime import datetime, timedelta
+from openprocurement.tender.core.utils import calculate_business_date
 
 
 class MonitorResourceTest(BaseWebTest):
@@ -30,19 +34,68 @@ class MonitorResourceTest(BaseWebTest):
             status=403
         )
 
+    def test_patch_without_decision(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.patch_json(
+            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            {"data": {"status": "active"}},
+            status=403
+        )
+
+    @freeze_time('2018-01-01T12:00:00.000000+03:00')
     def test_patch(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
+        now_date = datetime.now(TZ)
+        end_date = calculate_business_date(now_date, MONITORING_TIME, working_days=True)
+        decision_date = (now_date - timedelta(days=2))
         response = self.app.patch_json(
             '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
             {"data": {
                 "status": "active",
-                "monitoringPeriod": {"startDate": (datetime.now() + timedelta(days=2)).isoformat()}
+                "decision": {
+                    "description": "text",
+                    "date": decision_date.isoformat()
+                }
+            }}
+        )
+
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["id"], self.monitor_id)
+        self.assertEqual(response.json['data']["status"], "active")
+        self.assertEqual(response.json['data']["decision"]["description"], "text")
+        self.assertEqual(response.json['data']["decision"]["date"], decision_date.isoformat())
+        self.assertEqual(response.json['data']["monitoringPeriod"]["startDate"], now_date.isoformat())
+        self.assertEqual(response.json['data']["monitoringPeriod"]["endDate"], end_date.isoformat())
+
+    def test_patch_active(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        date = (datetime.now() + timedelta(days=2)).isoformat()
+        response = self.app.patch_json(
+            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            {"data": {
+                "status": "active",
+                "decision": {
+                    "description": "text",
+                    "date": date
+                }
             }}
         )
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["id"], self.monitor_id)
         self.assertEqual(response.json['data']["status"], "active")
+
+        response = self.app.patch_json(
+            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            {"data": {
+                "decision": {
+                    "description": "text_changed",
+                }
+            }}
+        )
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.json['data']["decision"]["description"], "text")
 
 
 def suite():

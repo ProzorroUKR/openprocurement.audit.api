@@ -327,8 +327,13 @@ class MonitorResource(APIResource):
                permission='edit_monitor')
     def patch(self):
         monitor = self.request.validated['monitor']
+        monitor_old_status = monitor.status
+
         apply_patch(self.request, save=False, src=self.request.validated['monitor_src'])
-        update_monitoring_period(monitor.monitoringPeriod)
+
+        if monitor_old_status == 'draft' and monitor.status == 'active':
+            update_monitoring_period(monitor)
+
         save_monitor(self.request)
         LOGGER.info('Updated monitor {}'.format(monitor.id),
                     extra=context_unpack(self.request, {'MESSAGE_ID': 'monitor_patch'}))

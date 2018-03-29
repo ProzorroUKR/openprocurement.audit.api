@@ -29,7 +29,7 @@ def validate_patch_monitor_active_status(request):
     data = request.validated['data']
     if request.context.status != 'draft':
         raise_operation_error(request, 'Can\'t activate monitor in current {} status'.format(request.context.status))
-    if not data['monitoringPeriod']:
+    if not data['decision']:
         request.errors.status = 403
-        request.errors.add('body', 'monitoringPeriod', 'This field is required.')
+        request.errors.add('body', 'decision', 'This field is required.')
         raise error_handler(request.errors)

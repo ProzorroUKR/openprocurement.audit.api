@@ -11,18 +11,25 @@ from pyramid.security import Allow
 
 # roles
 plain_role = blacklist(
-    '_attachments', 'revisions', 'dateModified'
+    '_attachments', 'revisions',
 ) + schematics_embedded_role
 
 create_role = blacklist(
     'owner_token', 'owner', 'revisions', 'dateModified',
-    'dateCreated', 'doc_id', '_attachments'
+    'dateCreated', 'monitoringPeriod', 'doc_id', '_attachments',
+    'monitoring_id'
 ) + schematics_embedded_role
 
-edit_role = blacklist(
+edit_draft_role = blacklist(
     'owner_token', 'owner', 'revisions', 'dateModified',
-    'dateCreated', 'doc_id', '_attachments', 'tender_id',
-    'monitoring_id'
+    'dateCreated', 'monitoringPeriod', 'doc_id', '_attachments',
+    'tender_id', 'monitoring_id'
+) + schematics_embedded_role
+
+edit_active_role = blacklist(
+    'owner_token', 'owner', 'revisions', 'dateModified',
+    'dateCreated', 'monitoringPeriod', 'doc_id', '_attachments',
+    'tender_id', 'monitoring_id', 'decision'
 ) + schematics_embedded_role
 
 view_role = blacklist(
@@ -38,9 +45,10 @@ revision_role = whitelist(
 )
 
 
-class MonitorPeriod(Period):
-    startDate = IsoDateTimeType(required=True)
-    endDate = IsoDateTimeType()
+class Decision(Model):
+    description = StringType(required=True)
+    date = IsoDateTimeType(required=True)
+    documents = ListType(ModelType(Document), default=list())
 
 
 class Monitor(SchematicsDocument, Model):
@@ -50,7 +58,8 @@ class Monitor(SchematicsDocument, Model):
             'plain': plain_role,
             'revision': revision_role,
             'create': create_role,
-            'edit': edit_role,
+            'edit_draft': edit_draft_role,
+            'edit_active': edit_active_role,
             'view': view_role,
             'listing': listing_role,
             'default': schematics_default_role,
@@ -60,11 +69,12 @@ class Monitor(SchematicsDocument, Model):
     tender_id = MD5Type(required=True)
     monitoring_id = StringType()
     status = StringType(choices=['draft', 'active'], default='draft')
-    documents = ListType(ModelType(Document), default=list())  # All documents and attachments related to the item.
 
     reasons = ListType(StringType(choices=['indicator', 'authorities', 'media', 'fiscal', 'public']), required=True)
     procuringStages = ListType(StringType(choices=['planning', 'awarding', 'contracting']), required=True)
-    monitoringPeriod = ModelType(MonitorPeriod)
+    monitoringPeriod = ModelType(Period)
+
+    decision = ModelType(Decision)
 
     dateModified = IsoDateTimeType()
     dateCreated = IsoDateTimeType(default=get_now)
@@ -73,6 +83,14 @@ class Monitor(SchematicsDocument, Model):
     revisions = ListType(ModelType(Revision), default=list())
 
     __name__ = ''
+
+    def get_role(self):
+        root = self.__parent__
+        request = root.request
+        if request.authenticated_role in ('Administrator',):
+            return request.authenticated_role
+        else:
+            return 'edit_{}'.format(request.context.status)
 
     def __acl__(self):
         acl = [

@@ -1,0 +1,27 @@
+PATCH /api/2.4/monitors/fa5d1cbdc1184e10bdaabd36820b60c7?acc_token=e4558465a5ad4bf991568930a835290c HTTP/1.0
+Authorization: Basic dGVzdF9zYXNfdG9rZW46
+Content-Length: 30
+Content-Type: application/json
+Host: api-sandbox.openprocurement.org
+
+{
+  "data": {
+    "status": "active"
+  }
+}
+
+
+403 Forbidden
+Content-Type: application/json; charset=UTF-8
+
+{
+  "status": "error", 
+  "errors": [
+    {
+      "description": "This field is required.", 
+      "location": "body", 
+      "name": "decision"
+    }
+  ]
+}
+

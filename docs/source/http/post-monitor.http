@@ -1,0 +1,48 @@
+POST /api/2.4/monitors HTTP/1.0
+Authorization: Basic dGVzdF9zYXNfdG9rZW46
+Content-Length: 140
+Content-Type: application/json
+Host: api-sandbox.openprocurement.org
+
+{
+  "data": {
+    "reasons": [
+      "public", 
+      "fiscal"
+    ], 
+    "procuringStages": [
+      "awarding", 
+      "contracting"
+    ], 
+    "tender_id": "ffffffffffffffffffffffffffffffff"
+  }
+}
+
+
+201 Created
+Content-Type: application/json; charset=UTF-8
+Location: http://api-sandbox.openprocurement.org/api/2.4/monitors/fa5d1cbdc1184e10bdaabd36820b60c7
+
+{
+  "access": {
+    "token": "e4558465a5ad4bf991568930a835290c"
+  }, 
+  "data": {
+    "status": "draft", 
+    "procuringStages": [
+      "awarding", 
+      "contracting"
+    ], 
+    "reasons": [
+      "public", 
+      "fiscal"
+    ], 
+    "monitoring_id": "UA-M-2018-04-03-000001", 
+    "dateModified": "2018-04-03T16:59:30.966500+03:00", 
+    "owner": "test_sas", 
+    "dateCreated": "2018-04-03T16:59:30.966500+03:00", 
+    "id": "fa5d1cbdc1184e10bdaabd36820b60c7", 
+    "tender_id": "ffffffffffffffffffffffffffffffff"
+  }
+}
+

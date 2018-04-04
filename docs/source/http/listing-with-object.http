@@ -1,0 +1,17 @@
+GET /api/2.4/monitors HTTP/1.0
+Authorization: Basic dGVzdF9zYXNfdG9rZW46
+Host: api-sandbox.openprocurement.org
+
+
+200 OK
+Content-Type: application/json; charset=UTF-8
+
+{
+  "data": [
+    {
+      "id": "fa5d1cbdc1184e10bdaabd36820b60c7", 
+      "dateModified": "2018-04-03T16:59:30.966500+03:00"
+    }
+  ]
+}
+

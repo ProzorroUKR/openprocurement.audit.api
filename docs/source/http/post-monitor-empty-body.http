@@ -1,0 +1,41 @@
+POST /api/2.4/monitors HTTP/1.0
+Authorization: Basic dGVzdF9zYXNfdG9rZW46
+Content-Length: 12
+Content-Type: application/json
+Host: api-sandbox.openprocurement.org
+
+{
+  "data": {}
+}
+
+
+422 Unprocessable Entity
+Content-Type: application/json; charset=UTF-8
+
+{
+  "status": "error", 
+  "errors": [
+    {
+      "description": [
+        "This field is required."
+      ], 
+      "location": "body", 
+      "name": "reasons"
+    }, 
+    {
+      "description": [
+        "This field is required."
+      ], 
+      "location": "body", 
+      "name": "procuringStages"
+    }, 
+    {
+      "description": [
+        "This field is required."
+      ], 
+      "location": "body", 
+      "name": "tender_id"
+    }
+  ]
+}
+

@@ -114,8 +114,8 @@ def extract_monitor_adapter(request, monitor_id):
 
 
 def extract_monitor(request):
-    monitor_id = request.matchdict['monitor_id']
-    return extract_monitor_adapter(request, monitor_id)
+    monitor_id = request.matchdict.get('monitor_id')
+    return extract_monitor_adapter(request, monitor_id) if monitor_id else None
 
 
 def generate_monitor_id(ctime, db, server_id=''):

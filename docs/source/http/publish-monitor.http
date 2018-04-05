@@ -1,6 +1,6 @@
-PATCH /api/2.4/monitors/fa5d1cbdc1184e10bdaabd36820b60c7?acc_token=e4558465a5ad4bf991568930a835290c HTTP/1.0
+PATCH /api/2.4/monitors/fb7470776af64006b06c65efbe673771?acc_token=b7460248a4af432d9b1821ab8539c67f HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
-Content-Length: 105
+Content-Length: 435
 Content-Type: application/json
 Host: api-sandbox.openprocurement.org
 
@@ -8,7 +8,15 @@ Host: api-sandbox.openprocurement.org
   "data": {
     "status": "active", 
     "decision": {
-      "date": "2018-04-03T16:59:31.003660", 
+      "date": "2018-04-05T13:17:14.557181", 
+      "documents": [
+        {
+          "url": "http://docs-sandbox.openprocurement.org/get/3b3c5f0424204d0db5c8949988c37354?KeyID=de5d0def&Signature=rqpdGuaHH%2FIh8veU2R38QHbsdpnEFcvevVWU2zC9yswmv7OScvL%2Bvqb6uYWqJ22Qhfvbj%2BFJG8hSqye1AuXcAQ%3D%3D", 
+          "title": "lorem.doc", 
+          "hash": "md5:00000000000000000000000000000000", 
+          "format": "application/msword"
+        }
+      ], 
       "description": "text"
     }
   }
@@ -30,18 +38,29 @@ Content-Type: application/json; charset=UTF-8
       "fiscal"
     ], 
     "monitoringPeriod": {
-      "startDate": "2018-04-03T16:59:31.011209+03:00", 
-      "endDate": "2018-04-27T16:59:31.011209+03:00"
+      "startDate": "2018-04-05T13:17:14.573030+03:00", 
+      "endDate": "2018-05-02T13:17:14.573030+03:00"
     }, 
     "decision": {
-      "date": "2018-04-03T16:59:31.003660+03:00", 
+      "date": "2018-04-05T13:17:14.557181+03:00", 
+      "documents": [
+        {
+          "hash": "md5:00000000000000000000000000000000", 
+          "title": "lorem.doc", 
+          "url": "http://docs-sandbox.openprocurement.org/get/3b3c5f0424204d0db5c8949988c37354?KeyID=de5d0def&Signature=rqpdGuaHH%2FIh8veU2R38QHbsdpnEFcvevVWU2zC9yswmv7OScvL%2Bvqb6uYWqJ22Qhfvbj%2BFJG8hSqye1AuXcAQ%3D%3D", 
+          "format": "application/msword", 
+          "datePublished": "2018-04-05T13:17:14.568066+03:00", 
+          "id": "1a9e29e45752444c9f606153ab2f9297", 
+          "dateModified": "2018-04-05T13:17:14.568088+03:00"
+        }
+      ], 
       "description": "text"
     }, 
-    "monitoring_id": "UA-M-2018-04-03-000001", 
-    "id": "fa5d1cbdc1184e10bdaabd36820b60c7", 
+    "monitoring_id": "UA-M-2018-04-05-000001", 
+    "id": "fb7470776af64006b06c65efbe673771", 
     "owner": "test_sas", 
-    "dateCreated": "2018-04-03T16:59:30.966500+03:00", 
-    "dateModified": "2018-04-03T16:59:31.011657+03:00", 
+    "dateCreated": "2018-04-05T13:17:14.315799+03:00", 
+    "dateModified": "2018-04-05T13:17:14.573710+03:00", 
     "tender_id": "ffffffffffffffffffffffffffffffff"
   }
 }

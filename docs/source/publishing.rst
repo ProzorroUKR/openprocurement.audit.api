@@ -7,7 +7,8 @@ We are supposed to change the status of our monitor to publish it:
     :code:
 
 
-Let's provide our decision:
+Let's provide our decision with documents. Documents uploading should
+follow the :ref:`upload` rules.
 
 .. include:: http/publish-monitor.http
     :code:

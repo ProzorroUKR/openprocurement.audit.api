@@ -64,29 +64,8 @@ class BaseWebTest(unittest.TestCase):
         return monitor
 
 
-class DSWebTestMixin(object):
-    app = None
-
-    def setUpDS(self):
-        self.app.app.registry.docservice_url = 'http://localhost'
-
-        def request(method, url, **kwargs):
-            response = Response()
-            if method == 'POST' and '/upload' in url:
-                url = self.generate_docservice_url()
-                response.status_code = 200
-                response.encoding = 'application/json'
-                content = '{{"data":{{"url":"{url}","hash":"md5:{md5}","format":' \
-                          '"application/msword","title":"name.doc"}},"get_url":"{url}"}}'
-                response._content = content.format(url=url, md5='0'*32)
-                response.reason = '200 OK'
-            return response
-
-        self._srequest = SESSION.request
-        SESSION.request = request
-
-    def tearDownDS(self):
-        SESSION.request = self._srequest
+class BaseDSWebTest(BaseWebTest):
+    docservice_host = 'localhost'
 
     def generate_docservice_url(self):
         uuid = uuid4().hex
@@ -94,13 +73,8 @@ class DSWebTestMixin(object):
         keyid = key.hex_vk()[:8]
         signature = b64encode(key.signature("{}\0{}".format(uuid, '0' * 32)))
         query = {'Signature': signature, 'KeyID': keyid}
-        return "http://localhost/get/{}?{}".format(uuid, urlencode(query))
+        return 'http://{}/get/{}?{}'.format(self.docservice_host, uuid, urlencode(query))
 
-class BaseDSWebTest(BaseWebTest, DSWebTestMixin):
     def setUp(self):
         super(BaseDSWebTest, self).setUp()
-        self.setUpDS()
-
-    def tearDown(self):
-        self.tearDownDS()
-        super(BaseDSWebTest, self).tearDown()
+        self.app.app.registry.docservice_url = self.docservice_host

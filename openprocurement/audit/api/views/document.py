@@ -17,9 +17,12 @@ from openprocurement.api.validation import (
     validate_file_upload,
     validate_patch_document_data,
 )
+from openprocurement.audit.api.validation import validate_document_decision_upload_allowed, \
+    validate_document_conclusion_upload_allowed
 
 
 class MonitorsDocumentBaseResource(APIResource):
+    document_of = None
 
     @json_view(permission='view_monitor')
     def collection_get(self):
@@ -39,11 +42,11 @@ class MonitorsDocumentBaseResource(APIResource):
         Monitor Document Upload
         """
         document = upload_file(self.request)
-        self.set_additional_data(document)
+        document.documentOf = self.document_of
         documents = self.context.documents
         documents.append(document)
         if save_monitor(self.request):
-            self.LOGGER.info('Created monitor document {}'.format(document.id),
+            self.LOGGER.info('Created {} monitor document {}'.format(self.document_of, document.id),
                              extra=context_unpack(self.request,
                                                   {'MESSAGE_ID': 'monitor_document_create'},
                                                   {'DOCUMENT_ID': document.id}))
@@ -67,17 +70,18 @@ class MonitorsDocumentBaseResource(APIResource):
         document_data['previousVersions'] = versions_data
         return {'data': document_data}
 
-    @json_view(permission='upload_monitor_documents', validators=(validate_file_update,))
+    @json_view(permission='upload_monitor_documents',
+               validators=(validate_file_update,))
     def put(self):
         """
         Monitor Document Update
         """
         parent = self.request.context.__parent__
         document = upload_file(self.request)
-        self.set_additional_data(document)
+        document.documentOf = self.document_of
         parent.documents.append(document)
         if save_monitor(self.request):
-            self.LOGGER.info('Updated monitor document {}'.format(document.id),
+            self.LOGGER.info('Updated {} monitor document {}'.format(self.document_of, document.id),
                              extra=context_unpack(self.request,
                                                   {'MESSAGE_ID': 'monitor_document_put'},
                                                   {'DOCUMENT_ID': document.id}))
@@ -91,17 +95,14 @@ class MonitorsDocumentBaseResource(APIResource):
         Monitor Document Update
         """
         document = self.request.context
-        self.set_additional_data(document)
+        document.documentOf = self.document_of
         if apply_patch(self.request, src=document.serialize()):
             update_file_content_type(self.request)
-            self.LOGGER.info('Updated monitor document {}'.format(document.id),
+            self.LOGGER.info('Updated {} monitor document {}'.format(self.document_of, document.id),
                              extra=context_unpack(self.request,
                                                   {'MESSAGE_ID': 'monitor_document_patch'},
                                                   {'DOCUMENT_ID': document.id}))
             return {'data': self.request.context.serialize("view")}
-
-    def set_additional_data(self, document):
-        pass
 
 
 @op_resource(name='Monitor Decision Documents',
@@ -109,8 +110,12 @@ class MonitorsDocumentBaseResource(APIResource):
              path='/monitors/{monitor_id}/decision/documents/{document_id}',
              description="Monitor Decision related binary files (PDFs, etc.)")
 class MonitorsDocumentDecisionResource(MonitorsDocumentBaseResource):
-    def set_additional_data(self, document):
-        document.documentOf = 'decision'
+    document_of = 'decision'
+
+    @json_view(permission='upload_monitor_documents',
+               validators=(validate_file_upload, validate_document_decision_upload_allowed))
+    def collection_post(self):
+        super(MonitorsDocumentDecisionResource, self).collection_post()
 
 
 @op_resource(name='Monitor Conclusion Documents',
@@ -118,5 +123,9 @@ class MonitorsDocumentDecisionResource(MonitorsDocumentBaseResource):
              path='/monitors/{monitor_id}/conclusion/documents/{document_id}',
              description="Monitor Conclusion related binary files (PDFs, etc.)")
 class MonitorsDocumentConclusionResource(MonitorsDocumentBaseResource):
-    def set_additional_data(self, document):
-        document.documentOf = 'conclusion'
+    document_of = 'conclusion'
+
+    @json_view(permission='upload_monitor_documents',
+               validators=(validate_file_upload, validate_document_conclusion_upload_allowed))
+    def collection_post(self):
+        super(MonitorsDocumentConclusionResource, self).collection_post()

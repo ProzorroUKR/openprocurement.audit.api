@@ -36,13 +36,11 @@ def factory(request):
         request.validated['monitor_src'] = monitor.serialize('plain')
     if 'decision' in request.path.split('/'):
         if request.matchdict.get('document_id'):
-            request.validated['documents'] = request.validated['monitor'].decision.documents
             return get_item(monitor.decision, 'document', request)
         else:
             return monitor.decision
     elif 'conclusion' in request.path.split('/'):
         if request.matchdict.get('document_id'):
-            request.validated['documents'] = request.validated['monitor'].conclusion.documents
             return get_item(monitor.conclusion, 'document', request)
         else:
             return monitor.conclusion

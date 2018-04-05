@@ -7,7 +7,7 @@ from openprocurement.api.utils import (
     json_view,
     set_ownership,
     error_handler,
-)
+    update_logging_context)
 from openprocurement.audit.api.utils import (
     save_monitor,
     monitor_serialize,
@@ -302,8 +302,9 @@ class MonitorsResource(APIResource):
         set_ownership(monitor, self.request)
         save_monitor(self.request)
         LOGGER.info('Created monitor {}'.format(monitor.id),
-                    extra=context_unpack(self.request, {'MESSAGE_ID': 'monitor_create'},
-                                         {'monitor_id': monitor.id}))
+                    extra=context_unpack(self.request,
+                                         {'MESSAGE_ID': 'monitor_create'},
+                                         {'MONITOR_ID': monitor.id}))
         self.request.response.status = 201
         self.request.response.headers['Location'] = self.request.route_url('Monitor', monitor_id=monitor.id)
         return {

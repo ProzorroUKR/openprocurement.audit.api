@@ -40,7 +40,8 @@ class DumpsTestAppwebtest(TestApp):
         return resp
 
 
-class MonitorsEmptyListingResourceTest(base_test.BaseWebTest):
+class MonitorsEmptyListingResourceTest(base_test.BaseDSWebTest):
+    docservice_host = 'docs-sandbox.openprocurement.org'
 
     def setUp(self):
         self.app = DumpsTestAppwebtest(
@@ -102,7 +103,13 @@ class MonitorsEmptyListingResourceTest(base_test.BaseWebTest):
                     "status": "active",
                     "decision": {
                         "description": "text",
-                        "date": datetime.now().isoformat()
+                        "date": datetime.now().isoformat(),
+                        "documents": [{
+                            'title': 'lorem.doc',
+                            'url': self.generate_docservice_url(),
+                            'hash': 'md5:' + '0' * 32,
+                            'format': 'application/msword',
+                        }]
                     }
                 }},
                 status=200

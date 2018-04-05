@@ -1,9 +1,10 @@
-from openprocurement.api.utils import get_now
-from openprocurement.api.models import Model, Revision, Document, Period
+from openprocurement.api.utils import get_now, get_root
+from openprocurement.api.models import Model, Revision, Period
+from openprocurement.api.models import Document as BaseDocument
 from openprocurement.api.models import schematics_embedded_role, schematics_default_role, IsoDateTimeType, ListType
-from schematics.types import StringType, MD5Type
+from schematics.types import StringType, MD5Type, BaseType
 from schematics.types.serializable import serializable
-from schematics.types.compound import ModelType
+from schematics.types.compound import ModelType, DictType
 from schematics.transforms import whitelist, blacklist
 from couchdb_schematics.document import SchematicsDocument
 from pyramid.security import Allow
@@ -45,7 +46,17 @@ revision_role = whitelist(
 )
 
 
+class Document(BaseDocument):
+    documentOf = StringType(choices=('decision', 'conclusion'), required=False)
+
+
 class Decision(Model):
+    description = StringType(required=True)
+    date = IsoDateTimeType(required=True)
+    documents = ListType(ModelType(Document), default=list())
+
+
+class Conclusion(Model):
     description = StringType(required=True)
     date = IsoDateTimeType(required=True)
     documents = ListType(ModelType(Document), default=list())
@@ -75,26 +86,29 @@ class Monitor(SchematicsDocument, Model):
     monitoringPeriod = ModelType(Period)
 
     decision = ModelType(Decision)
+    conclusion = ModelType(Conclusion)
 
     dateModified = IsoDateTimeType()
     dateCreated = IsoDateTimeType(default=get_now)
     owner_token = StringType()
     owner = StringType()
     revisions = ListType(ModelType(Revision), default=list())
+    _attachments = DictType(DictType(BaseType), default=dict())
 
     __name__ = ''
 
     def get_role(self):
         root = self.__parent__
         request = root.request
+        context = request.context
         if request.authenticated_role in ('Administrator',):
             return request.authenticated_role
-        else:
-            return 'edit_{}'.format(request.context.status)
+        return 'edit_{}'.format(context.status)
 
     def __acl__(self):
         acl = [
             (Allow, '{}_{}'.format(self.owner, self.owner_token), 'edit_monitor'),
+            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_monitor_documents'),
         ]
         return acl
 

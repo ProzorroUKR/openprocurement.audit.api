@@ -4,11 +4,10 @@ import unittest
 import webtest
 import os
 from copy import deepcopy
-from openprocurement.api.constants import VERSION, SESSION
+from openprocurement.api.constants import VERSION
 from uuid import uuid4
 from urllib import urlencode
 from base64 import b64encode
-from requests.models import Response
 import ConfigParser
 
 
@@ -64,17 +63,14 @@ class BaseWebTest(unittest.TestCase):
         return monitor
 
 
-class BaseDSWebTest(BaseWebTest):
+class DSWebTestMixin(object):
     docservice_host = 'localhost'
 
     def generate_docservice_url(self):
+        self.app.app.registry.docservice_url = self.docservice_host
         uuid = uuid4().hex
         key = self.app.app.registry.docservice_key
         keyid = key.hex_vk()[:8]
         signature = b64encode(key.signature("{}\0{}".format(uuid, '0' * 32)))
         query = {'Signature': signature, 'KeyID': keyid}
         return 'http://{}/get/{}?{}'.format(self.docservice_host, uuid, urlencode(query))
-
-    def setUp(self):
-        super(BaseDSWebTest, self).setUp()
-        self.app.app.registry.docservice_url = self.docservice_host

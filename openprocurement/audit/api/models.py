@@ -48,6 +48,7 @@ revision_role = whitelist(
 
 class Document(BaseDocument):
     documentOf = StringType(choices=('decision', 'conclusion'), required=False)
+    documentType = StringType()
 
 
 class Decision(Model):
@@ -57,8 +58,6 @@ class Decision(Model):
 
 
 class Conclusion(Model):
-    description = StringType(required=True)
-    date = IsoDateTimeType(required=True)
     documents = ListType(ModelType(Document), default=list())
 
 

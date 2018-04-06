@@ -1,6 +1,6 @@
 POST /api/2.4/monitors HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
-Content-Length: 140
+Content-Length: 169
 Content-Type: application/json
 Host: api-sandbox.openprocurement.org
 
@@ -15,17 +15,20 @@ Host: api-sandbox.openprocurement.org
       "contracting"
     ], 
     "tender_id": "ffffffffffffffffffffffffffffffff"
+  }, 
+  "options": {
+    "pretty": true
   }
 }
 
 
 201 Created
 Content-Type: application/json; charset=UTF-8
-Location: http://api-sandbox.openprocurement.org/api/2.4/monitors/fb7470776af64006b06c65efbe673771
+Location: http://api-sandbox.openprocurement.org/api/2.4/monitors/6b8792bb31694ebf8976718425a16fcd
 
 {
   "access": {
-    "token": "b7460248a4af432d9b1821ab8539c67f"
+    "token": "d38daea3cf3e4a36aeba817876750393"
   }, 
   "data": {
     "status": "draft", 
@@ -37,11 +40,11 @@ Location: http://api-sandbox.openprocurement.org/api/2.4/monitors/fb7470776af640
       "public", 
       "fiscal"
     ], 
-    "monitoring_id": "UA-M-2018-04-05-000001", 
-    "dateModified": "2018-04-05T13:17:14.315799+03:00", 
+    "monitoring_id": "UA-M-2018-04-06-000001", 
+    "dateModified": "2018-04-06T14:43:49.809491+03:00", 
     "owner": "test_sas", 
-    "dateCreated": "2018-04-05T13:17:14.315799+03:00", 
-    "id": "fb7470776af64006b06c65efbe673771", 
+    "dateCreated": "2018-04-06T14:43:49.809491+03:00", 
+    "id": "6b8792bb31694ebf8976718425a16fcd", 
     "tender_id": "ffffffffffffffffffffffffffffffff"
   }
 }

@@ -8,8 +8,6 @@ Welcome to openprocurement.audit.api documentation!
    :caption: Contents:
 
 
-   creation
-   publishing
-   dialogs
-   documents
+   tutorial/index
+   options/index
    standard/index

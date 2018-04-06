@@ -1,4 +1,4 @@
-PATCH /api/2.4/monitors/fb7470776af64006b06c65efbe673771?acc_token=b7460248a4af432d9b1821ab8539c67f HTTP/1.0
+PATCH /api/2.4/monitors/b62b7e58102245f89b682ab4b3814a99?acc_token=7bc4fd2e39ed4fad8f90796130038f1a HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
 Content-Length: 30
 Content-Type: application/json

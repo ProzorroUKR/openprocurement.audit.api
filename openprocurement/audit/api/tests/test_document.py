@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-from openprocurement.audit.api.tests.base import BaseDSWebTest
+from openprocurement.audit.api.tests.base import BaseWebTest, DSWebTestMixin
 
 
-class MonitorDecisionDocumentResourceTest(BaseDSWebTest):
+class MonitorDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
 
     def setUp(self):
         super(MonitorDecisionDocumentResourceTest, self).setUp()
@@ -109,7 +109,7 @@ class MonitorDecisionDocumentResourceTest(BaseDSWebTest):
             'Can\'t add document in current active monitor status')
 
 
-class MonitorConclusionDocumentResourceTest(BaseDSWebTest):
+class MonitorConclusionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
     # TODO: Add tests on conclusion functionality ready
     pass
 

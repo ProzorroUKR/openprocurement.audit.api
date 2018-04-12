@@ -12,7 +12,7 @@ parameters prefixed with `opt_`.
 
 Example:
 
-.. include:: http/listing-with-options-query-params.http
+.. include:: http/monitors-with-options-query-params.http
     :code:
 
 For POST or PUT requests, options are
@@ -21,7 +21,7 @@ data object).
 
 Example:
 
-.. include:: http/listing-with-options.http
+.. include:: http/monitors-with-options.http
     :code:
 
 The option specified in the body overrides the `opt_` one

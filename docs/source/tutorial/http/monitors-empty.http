@@ -7,11 +7,6 @@ Host: api-sandbox.openprocurement.org
 Content-Type: application/json; charset=UTF-8
 
 {
-  "data": [
-    {
-      "id": "b62b7e58102245f89b682ab4b3814a99", 
-      "dateModified": "2018-04-06T14:43:49.035702+03:00"
-    }
-  ]
+  "data": []
 }
 

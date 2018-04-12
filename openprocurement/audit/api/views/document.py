@@ -128,4 +128,17 @@ class MonitorsDocumentConclusionResource(MonitorsDocumentBaseResource):
     @json_view(permission='upload_monitor_documents',
                validators=(validate_file_upload, validate_document_conclusion_upload_allowed))
     def collection_post(self):
-        super(MonitorsDocumentConclusionResource, self).collection_post()
+        return super(MonitorsDocumentConclusionResource, self).collection_post()
+
+
+@op_resource(name='Monitor Dialogue Documents',
+             collection_path='/monitors/{monitor_id}/dialogues/{dialogue_id}/documents',
+             path='/monitors/{monitor_id}/dialogues/{dialogue_id}/documents/{document_id}',
+             description="Monitor Conclusion related binary files (PDFs, etc.)")
+class MonitorsDocumentDialogueResource(MonitorsDocumentBaseResource):
+    document_of = 'dialogue'
+
+    @json_view(permission='upload_dialogue_documents',
+               validators=(validate_file_upload, validate_document_conclusion_upload_allowed,))
+    def collection_post(self):
+        return super(MonitorsDocumentDialogueResource, self).collection_post()

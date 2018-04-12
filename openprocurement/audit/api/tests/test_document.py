@@ -8,6 +8,7 @@ class MonitorDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
 
     def setUp(self):
         super(MonitorDecisionDocumentResourceTest, self).setUp()
+        self.app.app.registry.docservice_url = 'http://localhost'
         self.create_monitor()
         self.test_docservice_document_data = {
             'title': 'lorem.doc',
@@ -41,6 +42,7 @@ class MonitorDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         document_data = response.json['data']
 
         self.assertEqual(document_data['title'], 'lorem.doc')
+        self.assertEqual(document_data['documentOf'], 'decision')
         self.assertIn('Signature=', document_data["url"])
         self.assertIn('KeyID=', document_data["url"])
         self.assertNotIn('Expires=', document_data["url"])

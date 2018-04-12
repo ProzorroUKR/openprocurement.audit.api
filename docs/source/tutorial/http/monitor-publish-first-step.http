@@ -1,0 +1,63 @@
+PATCH /api/2.4/monitors/0fe4ca0b1d6c306bb6c3ee43edf17070?acc_token=0ab3edaa2c273d0d9ba2fb312b26054f HTTP/1.0
+Authorization: Basic dGVzdF9zYXNfdG9rZW46
+Content-Length: 408
+Content-Type: application/json
+Host: api-sandbox.openprocurement.org
+
+{
+  "data": {
+    "decision": {
+      "date": "2018-01-01T00:00:00", 
+      "documents": [
+        {
+          "url": "http://docs-sandbox.openprocurement.org/get/93f55b54829744a4a0b1616ea16d4b45?KeyID=f8371d5a&Signature=kzQp%2FPGnGvk3eLHSmlPBhgQ2Qu9qnV4oFkxnpQl5Agt60ZuGW55soxiqW%2BYwub30F%2FbXdqzwb0vWGg4jGGhNCw%3D%3D", 
+          "title": "lorem.doc", 
+          "hash": "md5:00000000000000000000000000000000", 
+          "format": "application/msword"
+        }
+      ], 
+      "description": "text"
+    }
+  }
+}
+
+
+200 OK
+Content-Type: application/json; charset=UTF-8
+
+{
+  "data": {
+    "status": "draft", 
+    "procuringStages": [
+      "awarding", 
+      "contracting"
+    ], 
+    "reasons": [
+      "public", 
+      "fiscal"
+    ], 
+    "decision": {
+      "date": "2018-01-01T00:00:00+02:00", 
+      "documents": [
+        {
+          "hash": "md5:00000000000000000000000000000000", 
+          "title": "lorem.doc", 
+          "url": "http://docs-sandbox.openprocurement.org/get/93f55b54829744a4a0b1616ea16d4b45?KeyID=f8371d5a&Signature=kzQp%2FPGnGvk3eLHSmlPBhgQ2Qu9qnV4oFkxnpQl5Agt60ZuGW55soxiqW%2BYwub30F%2FbXdqzwb0vWGg4jGGhNCw%3D%3D", 
+          "format": "application/msword", 
+          "documentOf": "decision", 
+          "datePublished": "2018-01-01T02:00:00+02:00", 
+          "id": "9ae0a72dbabc4ec5934cfff8ad4a29fd", 
+          "dateModified": "2018-01-01T02:00:00+02:00"
+        }
+      ], 
+      "description": "text"
+    }, 
+    "monitoring_id": "UA-M-2018-01-01-000001", 
+    "id": "0fe4ca0b1d6c306bb6c3ee43edf17070", 
+    "owner": "test_sas", 
+    "dateCreated": "2018-01-01T02:00:00+02:00", 
+    "dateModified": "2018-01-01T02:00:00+02:00", 
+    "tender_id": "ffffffffffffffffffffffffffffffff"
+  }
+}
+

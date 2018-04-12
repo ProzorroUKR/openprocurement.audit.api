@@ -8,9 +8,8 @@ from openprocurement.tender.core.utils import calculate_business_date
 from schematics.exceptions import ModelValidationError
 from openprocurement.api.models import Revision, Period
 from openprocurement.api.utils import (
-    update_logging_context, context_unpack, get_revision_changes, get_now,
-    apply_data_patch, error_handler
-)
+    update_logging_context, context_unpack, get_revision_changes,
+    apply_data_patch, error_handler)
 from openprocurement.audit.api.models import Monitor
 from pkg_resources import get_distribution
 from logging import getLogger
@@ -41,11 +40,9 @@ def monitor_serialize(request, monitor_data, fields):
 
 def save_monitor(request):
     monitor = request.validated['monitor']
-    patch = get_revision_changes(monitor.serialize("plain"), request.validated['monitor_src'])
+    patch = get_revision_changes(request.validated['monitor_src'], monitor.serialize("plain"))
     if patch:
         add_revision(request, monitor, patch)
-        old_date_modified = monitor.dateModified
-        monitor.dateModified = monitor.dateCreated if not monitor.dateModified else get_now()
         try:
             monitor.store(request.registry.db)
         except ModelValidationError, e:  # pragma: no cover
@@ -56,22 +53,10 @@ def save_monitor(request):
             request.errors.add('body', 'data', str(e))
         else:
             LOGGER.info(
-                'Saved monitor {}: dateModified {} -> {}'.format(
-                    monitor.id, old_date_modified and old_date_modified.isoformat(),
-                    monitor.dateModified.isoformat()
-                ),
+                'Saved monitor {}'.format(monitor.id),
                 extra=context_unpack(request, {'MESSAGE_ID': 'save_monitor'})
             )
             return True
-
-
-def add_revision(request, item, changes):
-    revision_data = {
-        'author': request.authenticated_userid,
-        'changes': changes,
-        'rev': item.rev
-    }
-    item.revisions.append(Revision(revision_data))
 
 
 def apply_patch(request, data=None, save=True, src=None):
@@ -81,6 +66,15 @@ def apply_patch(request, data=None, save=True, src=None):
         request.context.import_data(patch)
         if save:
             return save_monitor(request)
+
+
+def add_revision(request, item, changes):
+    revision_data = {
+        'author': request.authenticated_userid,
+        'changes': changes,
+        'rev': item.rev
+    }
+    item.revisions.append(Revision(revision_data))
 
 
 def set_logging_context(event):
@@ -145,8 +139,13 @@ def generate_monitor_id(ctime, db, server_id=''):
     return 'UA-M-{:04}-{:02}-{:02}-{:06}{}'.format(
         ctime.year, ctime.month, ctime.day, index, server_id and '-' + server_id)
 
-def update_monitoring_period(monitor):
-    monitor.monitoringPeriod = Period()
-    monitor.monitoringPeriod.startDate = get_now()
-    monitor.monitoringPeriod.endDate = calculate_business_date(
-        monitor.monitoringPeriod.startDate, MONITORING_TIME, working_days=True)
+def generate_monitoring_period(date):
+    period = Period()
+    period.startDate = date
+    period.endDate = calculate_business_date(date, MONITORING_TIME, working_days=True)
+    return period
+
+
+def set_documents_of_type(documents, of_type):
+    for document in documents:
+        document.documentOf = of_type

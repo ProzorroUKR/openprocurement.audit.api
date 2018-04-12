@@ -6,8 +6,7 @@ from openprocurement.api.utils import (
     generate_id,
     json_view,
     set_ownership,
-    error_handler,
-    update_logging_context)
+    error_handler)
 from openprocurement.audit.api.utils import (
     save_monitor,
     monitor_serialize,
@@ -15,7 +14,8 @@ from openprocurement.audit.api.utils import (
     op_resource,
     APIResource,
     generate_monitor_id,
-    update_monitoring_period)
+    set_documents_of_type,
+    generate_monitoring_period)
 from openprocurement.audit.api.design import (
     monitors_real_by_dateModified_view,
     monitors_test_by_dateModified_view,
@@ -300,6 +300,7 @@ class MonitorsResource(APIResource):
         monitor.id = generate_id()
         monitor.monitoring_id = generate_monitor_id(get_now(), self.db, self.server_id)
         set_ownership(monitor, self.request)
+        monitor.dateModified = monitor.dateCreated
         save_monitor(self.request)
         LOGGER.info('Created monitor {}'.format(monitor.id),
                     extra=context_unpack(self.request,
@@ -329,11 +330,15 @@ class MonitorResource(APIResource):
     def patch(self):
         monitor = self.request.validated['monitor']
         monitor_old_status = monitor.status
+        now = get_now()
 
         apply_patch(self.request, save=False, src=self.request.validated['monitor_src'])
 
-        if monitor_old_status == 'draft' and monitor.status == 'active':
-            update_monitoring_period(monitor)
+        monitor.dateModified = now
+        if monitor_old_status == 'draft':
+            set_documents_of_type(monitor.decision.documents, 'decision')
+            if monitor.status == 'active':
+                monitor.monitoringPeriod = generate_monitoring_period(now)
 
         save_monitor(self.request)
         LOGGER.info('Updated monitor {}'.format(monitor.id),

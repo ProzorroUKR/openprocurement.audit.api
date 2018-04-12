@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 from openprocurement.api.utils import get_now, get_root
 from openprocurement.api.models import Model, Revision, Period
 from openprocurement.api.models import Document as BaseDocument
@@ -30,7 +32,7 @@ edit_draft_role = blacklist(
 edit_active_role = blacklist(
     'owner_token', 'owner', 'revisions', 'dateModified',
     'dateCreated', 'monitoringPeriod', 'doc_id', '_attachments',
-    'tender_id', 'monitoring_id', 'decision'
+    'tender_id', 'monitoring_id'
 ) + schematics_embedded_role
 
 view_role = blacklist(
@@ -47,7 +49,7 @@ revision_role = whitelist(
 
 
 class Document(BaseDocument):
-    documentOf = StringType(choices=('decision', 'conclusion'), required=False)
+    documentOf = StringType(choices=('decision', 'conclusion', 'dialogue'), required=False)
     documentType = StringType()
 
 
@@ -60,6 +62,36 @@ class Decision(Model):
 class Conclusion(Model):
     documents = ListType(ModelType(Document), default=list())
 
+
+class Dialogue(Model):
+    class Options:
+        roles = {
+            'create': whitelist('title', 'description', 'answer', 'documents'),
+            'view': blacklist('owner_token', 'owner') + schematics_default_role
+        }
+    id = MD5Type(required=True, default=lambda: uuid4().hex)
+
+    title = StringType(required=True)
+    description = StringType()
+    answer = StringType()
+    documents = ListType(ModelType(Document), default=list())
+
+    dateSubmitted = IsoDateTimeType()
+    dateAnswered = IsoDateTimeType()
+
+    owner_token = StringType()
+    owner = StringType()
+
+    def __local_roles__(self):
+        return dict(
+            [('{}_{}'.format(self.owner, self.owner_token), 'dialogue_owner')]
+        )
+
+    def __acl__(self):
+        return [
+            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'edit_dialogue'),
+            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_dialogue_documents')
+        ]
 
 class Monitor(SchematicsDocument, Model):
 
@@ -75,7 +107,6 @@ class Monitor(SchematicsDocument, Model):
             'default': schematics_default_role,
         }
 
-    # fields
     tender_id = MD5Type(required=True)
     monitoring_id = StringType()
     status = StringType(choices=['draft', 'active'], default='draft')
@@ -86,6 +117,7 @@ class Monitor(SchematicsDocument, Model):
 
     decision = ModelType(Decision)
     conclusion = ModelType(Conclusion)
+    dialogues = ListType(ModelType(Dialogue), default=list())
 
     dateModified = IsoDateTimeType()
     dateCreated = IsoDateTimeType(default=get_now)
@@ -93,8 +125,6 @@ class Monitor(SchematicsDocument, Model):
     owner = StringType()
     revisions = ListType(ModelType(Revision), default=list())
     _attachments = DictType(DictType(BaseType), default=dict())
-
-    __name__ = ''
 
     def get_role(self):
         root = self.__parent__
@@ -104,12 +134,16 @@ class Monitor(SchematicsDocument, Model):
             return request.authenticated_role
         return 'edit_{}'.format(context.status)
 
+    def __local_roles__(self):
+        return dict(
+            [('{}_{}'.format(self.owner, self.owner_token), 'monitor_owner')]
+        )
+
     def __acl__(self):
-        acl = [
+        return [
             (Allow, '{}_{}'.format(self.owner, self.owner_token), 'edit_monitor'),
-            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_monitor_documents'),
+            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_monitor_documents')
         ]
-        return acl
 
     def __repr__(self):
         return '<%s:%r-%r@%r>' % (type(self).__name__, self.tender_id, self.id, self.rev)

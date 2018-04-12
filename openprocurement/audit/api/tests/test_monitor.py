@@ -92,10 +92,10 @@ class MonitorResourceTest(BaseWebTest):
                 "decision": {
                     "description": "text_changed",
                 }
-            }}
+            }},
+            status=403
         )
-        self.assertEqual(response.status, '200 OK')
-        self.assertEqual(response.json['data']["decision"]["description"], "text")
+        self.assertEqual(response.status, '403 Forbidden')
 
 
 def suite():

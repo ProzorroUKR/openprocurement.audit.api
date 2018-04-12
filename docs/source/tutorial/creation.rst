@@ -3,22 +3,22 @@ Creation of a monitoring object
 
 Let's look at the list:
 
-.. include:: http/empty-listing.http
+.. include:: http/monitors-empty.http
     :code:
 
 It's empty. But we can try posting new objects:
 
-.. include:: http/post-monitor-empty-body.http
+.. include:: http/monitor-post-empty-body.http
     :code:
 
 Let's provide the required fields:
 
-.. include:: http/post-monitor.http
+.. include:: http/monitor-post.http
     :code:
 
 Success! And the object is seen on the list
 
-.. include:: http/listing-with-object.http
+.. include:: http/monitors-with-object.http
     :code:
 
 

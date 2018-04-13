@@ -1,0 +1,36 @@
+GET /api/2.4/monitors?feed=changes&opt_fields=reasons&prev_offset=b819e83858017b5e792910411f499bed&offset=74ae385d4ca1271e5361664049cdcf67&limit=3 HTTP/1.0
+Host: api-sandbox.openprocurement.org
+
+
+200 OK
+Content-Type: application/json; charset=UTF-8
+
+{
+  "next_page": {
+    "path": "/api/2.4/monitors?feed=changes&skip=1&opt_fields=reasons&prev_offset=74ae385d4ca1271e5361664049cdcf67&offset=5bd043554ce358753fb5951faae1180a&limit=3", 
+    "uri": "http://api-sandbox.openprocurement.org/api/2.4/monitors?feed=changes&skip=1&opt_fields=reasons&prev_offset=74ae385d4ca1271e5361664049cdcf67&offset=5bd043554ce358753fb5951faae1180a&limit=3", 
+    "offset": "5bd043554ce358753fb5951faae1180a"
+  }, 
+  "data": [
+    {
+      "reasons": [
+        "indicator"
+      ], 
+      "id": "39df20db8761472784793f867f858e3a", 
+      "dateModified": "2018-04-12T13:54:42.387727+03:00"
+    }, 
+    {
+      "reasons": [
+        "indicator"
+      ], 
+      "id": "af5ffdb63868431eb22baa4f482ac15b", 
+      "dateModified": "2018-04-12T13:54:42.404602+03:00"
+    }
+  ], 
+  "prev_page": {
+    "path": "/api/2.4/monitors?feed=changes&limit=3&offset=b819e83858017b5e792910411f499bed&opt_fields=reasons", 
+    "uri": "http://api-sandbox.openprocurement.org/api/2.4/monitors?feed=changes&limit=3&offset=b819e83858017b5e792910411f499bed&opt_fields=reasons", 
+    "offset": "b819e83858017b5e792910411f499bed"
+  }
+}
+

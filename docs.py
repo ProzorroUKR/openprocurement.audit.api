@@ -1,7 +1,4 @@
-import uuid
-
 from freezegun import freeze_time
-import mock
 from openprocurement.api import utils
 from openprocurement.api.utils import generate_id
 from webtest import TestApp
@@ -9,6 +6,8 @@ from datetime import datetime
 import openprocurement.audit.api.tests.base as base_test
 import ConfigParser
 import json
+import mock
+import uuid
 import os
 
 
@@ -264,3 +263,61 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                 }},
                 status=200
             )
+
+
+class FeedDocsTest(BaseDocWebTest):
+
+    def setUp(self):
+        super(FeedDocsTest, self).setUp()
+
+        for i in range(5):
+            self.create_monitor()
+
+    def test_changes_feed(self):
+        with open('docs/source/feed/http/changes-feed.http', 'w') as self.app.file_obj:
+            response = self.app.get('/monitors?feed=changes&limit=3&opt_fields=reasons')
+
+            self.assertEqual(len(response.json["data"]), 3)
+            self.assertIn("next_page", response.json)
+
+        with open('docs/source/feed/http/changes-feed-next.http', 'w') as self.app.file_obj:
+            response = self.app.get(response.json["next_page"]["path"])
+
+            self.assertEqual(len(response.json["data"]), 2)
+            self.assertIn("next_page", response.json)
+
+        with open('docs/source/feed/http/changes-feed-last.http', 'w') as self.app.file_obj:
+            response = self.app.get(response.json["next_page"]["path"])
+
+            self.assertEqual(len(response.json["data"]), 0)
+            self.assertIn("next_page", response.json)
+
+        self.create_monitor()
+
+        with open('docs/source/feed/http/changes-feed-new.http', 'w') as self.app.file_obj:
+            response = self.app.get(response.json["next_page"]["path"])
+
+            self.assertEqual(len(response.json["data"]), 1)
+            self.assertIn("next_page", response.json)
+
+        next_url = response.json["next_page"]["path"]
+
+        with open('docs/source/feed/http/changes-feed-new-next.http', 'w') as self.app.file_obj:
+            print(next_url)
+            response = self.app.get(next_url)
+            self.assertEqual(len(response.json["data"]), 0)
+            self.assertIn("next_page", response.json)
+
+        self.create_monitor()
+
+        # TODO: why doesn't this make the tender be shown on the next page?
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.patch_json(
+            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            {'data': {"reasons": ['media', 'public']}}
+        )
+
+        with open('docs/source/feed/http/changes-feed-new-last.http', 'w') as self.app.file_obj:
+            response = self.app.get(next_url)
+            self.assertEqual(len(response.json["data"]), 1)
+            self.assertIn("next_page", response.json)

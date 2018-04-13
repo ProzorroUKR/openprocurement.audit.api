@@ -100,11 +100,17 @@ class MonitorsResource(APIResource):
         )
         self.feed_map = self.FEED.get(feed, self.VIEW_MAP)
 
+        try:
+            skip = int(self.request.params.get('skip', '0'))
+        except ValueError:
+            skip = 0
+
         self.paging_params.update(
             offset=self.decrypt_offset(self.request.params.get('offset')),
             offset_doc_id=self.request.params.get('offset_doc_id'),
             prev_offset=self.decrypt_offset(self.request.params.get('prev_offset')),
             prev_offset_doc_id=self.request.params.get('prev_offset_doc_id'),
+            skip=skip,
         )
 
     def decrypt_offset(self, offset):
@@ -187,14 +193,40 @@ class MonitorsResource(APIResource):
         data = {}
         results = self.format_data(view)
 
+        next_params = None
         limit = self.feed_params["limit"]
         if len(results) > limit:
             next_item = results.pop(limit)
-
             next_params = self.get_link_query_params(
                 offset=next_item[1], offset_doc_id=next_item[2],
                 prev_offset=results[0][1], prev_offset_doc_id=results[0][2],
             )
+        elif results:
+            last_item = results[-1]
+            next_params = self.get_link_query_params(
+                offset=last_item[1], offset_doc_id=last_item[2],
+                prev_offset=results[0][1], prev_offset_doc_id=results[0][2],
+                skip=1,
+            )
+        elif self.paging_params["offset"]:
+            next_param_kwargs = dict(
+                offset=self.paging_params["offset"], skip=1,
+            )
+            if self.paging_params["offset_doc_id"]:
+                next_param_kwargs.update(
+                    offset_doc_id=self.paging_params["offset_doc_id"]
+                )
+            if self.paging_params["prev_offset"]:
+                next_param_kwargs.update(
+                    prev_offset=self.paging_params["prev_offset"],
+                )
+                if self.paging_params["prev_offset_doc_id"]:
+                    next_param_kwargs.update(
+                        prev_offset_doc_id=self.paging_params["prev_offset_doc_id"],
+                    )
+            next_params = self.get_link_query_params(**next_param_kwargs)
+
+        if next_params:
             data["next_page"] = {
                 "offset": next_params['offset'],
                 "path": self.request.route_path(self.object_name_for_listing, _query=next_params),
@@ -204,20 +236,25 @@ class MonitorsResource(APIResource):
         data['data'] = [i[0] for i in results]
 
         prev_offset = prev_offset_doc_id = None
-        if self.paging_params["prev_offset"] and self.paging_params["prev_offset_doc_id"]:
+        if self.paging_params["prev_offset"]:
             prev_offset = self.paging_params["prev_offset"]
-            prev_offset_doc_id = self.paging_params["prev_offset_doc_id"]
+            if self.paging_params["prev_offset_doc_id"]:
+                prev_offset_doc_id = self.paging_params["prev_offset_doc_id"]
 
-        elif self.paging_params["offset"] and self.paging_params["offset_doc_id"]:
-            view = self.get_feed_view(
-                startkey=self.paging_params["offset"], startkey_docid=self.paging_params["offset_doc_id"],
+        elif self.paging_params["offset"]:
+            prev_param_kwargs = dict(
+                startkey=self.paging_params["offset"],
                 limit=limit + 1, skip=limit, descending=not self.feed_params["descending"]
             )
+            if self.paging_params.get("offset_doc_id") is not None:
+                prev_param_kwargs.update(startkey_docid=self.paging_params.get("offset_doc_id"))
+            view = self.get_feed_view(**prev_param_kwargs)
             prev_items = list(view())
+
             if prev_items:
                 prev_offset, prev_offset_doc_id = prev_items[0].key, prev_items[0].id
 
-        if prev_offset and prev_offset_doc_id:
+        if prev_offset:
             prev_params = self.get_link_query_params(
                 offset=prev_offset,
                 offset_doc_id=prev_offset_doc_id,
@@ -239,6 +276,10 @@ class MonitorsResource(APIResource):
 
             if q_params.get('prev_offset'):
                 q_params['prev_offset'] = encrypt(self.server.uuid, self.db.name, q_params['prev_offset'])
+
+            for k in ("offset_doc_id", "prev_offset_doc_id"):
+                if k in q_params:
+                    del q_params[k]
 
         elif self.feed_map is self.STATUS_VIEW_MAP:
             q_params['offset'] = ",".join(q_params['offset'])
@@ -278,6 +319,7 @@ class MonitorsResource(APIResource):
         view_kwargs = dict(
             limit=self.feed_params["limit"] + 1,
             descending=self.feed_params["descending"],
+            skip=self.paging_params["skip"],
         )
         if self.paging_params["offset"]:
             view_kwargs.update(startkey=self.paging_params["offset"])

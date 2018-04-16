@@ -378,7 +378,8 @@ class MonitorResource(APIResource):
 
         monitor.dateModified = now
         if monitor_old_status == 'draft':
-            set_documents_of_type(monitor.decision.documents, 'decision')
+            if monitor.decision is not None:
+                set_documents_of_type(monitor.decision.documents, 'decision')
             if monitor.status == 'active':
                 monitor.monitoringPeriod = generate_monitoring_period(now)
 

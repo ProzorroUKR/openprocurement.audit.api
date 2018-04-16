@@ -4,10 +4,11 @@ from openprocurement.api.utils import get_now, get_root
 from openprocurement.api.models import Model, Revision, Period
 from openprocurement.api.models import Document as BaseDocument
 from openprocurement.api.models import schematics_embedded_role, schematics_default_role, IsoDateTimeType, ListType
-from schematics.types import StringType, MD5Type, BaseType
+from schematics.types import StringType, MD5Type, BaseType, BooleanType
 from schematics.types.serializable import serializable
 from schematics.types.compound import ModelType, DictType
 from schematics.transforms import whitelist, blacklist
+from schematics.exceptions import ValidationError
 from couchdb_schematics.document import SchematicsDocument
 from pyramid.security import Allow
 
@@ -62,6 +63,20 @@ class Decision(Model):
 class Conclusion(Model):
     documents = ListType(ModelType(Document), default=list())
 
+    violationOccurred = BooleanType(required=True)
+    violationType = StringType(choices=(
+        'corruptionDescription', 'corruptionProcurementMethodType', 'corruptionPublicDisclosure',
+        'corruptionBiddingDocuments', 'documentsForm', 'corruptionAwarded', 'corruptionCancelled',
+        'corruptionContracting', 'corruptionChanges', 'other',
+    ))
+    auditFinding = StringType()
+    stringsAttached = StringType()
+    description = StringType()
+
+    def validate_violationType(self, data, value):
+        if data["violationOccurred"] and not value:
+            raise ValidationError(u"This field is required.")
+
 
 class Dialogue(Model):
     class Options:
@@ -92,6 +107,7 @@ class Dialogue(Model):
             (Allow, '{}_{}'.format(self.owner, self.owner_token), 'edit_dialogue'),
             (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_dialogue_documents')
         ]
+
 
 class Monitor(SchematicsDocument, Model):
 
@@ -171,3 +187,7 @@ class Monitor(SchematicsDocument, Model):
 
         self._data.update(data)
         return self
+
+    def validate_conclusion(self, data, value):
+        if value and data["status"] != "active":
+            raise ValidationError(u"Can't manage conclusion in current {} monitor status".format(data["status"]))

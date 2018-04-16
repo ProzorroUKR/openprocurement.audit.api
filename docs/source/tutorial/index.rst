@@ -10,4 +10,5 @@ Tutorial
    creation
    publishing
    dialogs
-   documents
+   conclusion
+

@@ -229,6 +229,66 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                 status=200
             )
 
+        # CONCLUSION
+        with open('docs/source/tutorial/http/conclusion-wo-violations.http', 'w') as self.app.file_obj:
+            response = self.app.patch_json(
+                '/monitors/{}?acc_token={}'.format(monitor_id, monitor_token),
+                {"data": {
+                    "conclusion": {
+                        "violationOccurred": False,
+                    }
+                }},
+            )
+            self.assertEqual(response.status_code, 200)
+            self.assertIs(response.json["data"]["conclusion"]["violationOccurred"], False)
+
+        with open('docs/source/tutorial/http/conclusion-failed-required.http', 'w') as self.app.file_obj:
+            response = self.app.patch_json(
+                '/monitors/{}?acc_token={}'.format(monitor_id, monitor_token),
+                {"data": {
+                    "conclusion": {
+                        "violationOccurred": True,
+                    }
+                }},
+                status=422
+            )
+        self.assertEqual(len(response.json["errors"]), 1)
+
+        with open('docs/source/tutorial/http/conclusion-full.http', 'w') as self.app.file_obj:
+            response = self.app.patch_json(
+                '/monitors/{}?acc_token={}'.format(monitor_id, monitor_token),
+                {"data": {
+                    "conclusion": {
+                        "violationOccurred": True,
+                        "violationType": "corruptionProcurementMethodType",
+                        "auditFinding": "Ring around the rosies",
+                        "stringsAttached": "Pocket full of posies",
+                        "description": "Ashes, ashes, we all fall down",
+                        "documents": [
+                            {
+                                'title': 'New document(2).doc',
+                                'url': self.generate_docservice_url(),
+                                'hash': 'md5:' + '0' * 32,
+                                'format': 'application/msword',
+                            }
+                        ]
+                    }
+                }}
+            )
+        self.assertEqual(response.status_code, 200)
+
+        with open('docs/source/tutorial/http/conclusion-add-document.http', 'w') as self.app.file_obj:
+            self.app.post_json(
+                '/monitors/{}/conclusion/documents?acc_token={}'.format(monitor_id, dialogue_id, dialogue_token),
+                {"data": {
+                    'title': 'sign.p7s',
+                    'url': self.generate_docservice_url(),
+                    'hash': 'md5:' + '0' * 32,
+                    'format': 'application/pkcs7-signature',
+                }},
+                status=201
+            )
+
     def test_monitor_creation_fast(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
 

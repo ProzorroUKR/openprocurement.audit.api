@@ -35,21 +35,21 @@ Content-Type: application/json; charset=UTF-8
         {
           "hash": "md5:00000000000000000000000000000000", 
           "title": "lorem.doc", 
-          "url": "http://docs-sandbox.openprocurement.org/get/0c6cf73af31f401db705b1df270f55f6?KeyID=85a2c39e&Signature=zxbMym5Gaya72YGnHi%2FJzjmHSwlXULwGnCFyuzlqhR4LZCVpafOF45%2BippwXcmc%2F0UFG7%2B7IvVNuKQZDhpPvAg%3D%3D", 
+          "url": "http://docs-sandbox.openprocurement.org/get/3163b900101339e68c6bcbb724454e4a?KeyID=a8968c46&Signature=LfsrOI2KA6l2DIlx%2BgBcbxJgdc58d12trrCuhcq4aBU44zPL24DNjmXBTT%2FN8X9zlmFu6%2F5XH87MqOlFTaDMCw%3D%3D", 
           "format": "application/msword", 
           "documentOf": "decision", 
           "datePublished": "2018-01-01T02:00:00+02:00", 
-          "id": "d180c3bbd3d34f6d8458324144aa0fda", 
+          "id": "c207d8b1e8ed3ba3b229742f7813ef0a", 
           "dateModified": "2018-01-01T02:00:00+02:00"
         }, 
         {
           "hash": "md5:00000000000000000000000000000000", 
           "title": "dolor.doc", 
-          "url": "http://docs-sandbox.openprocurement.org/get/acc12ec75b354158b147dfb7f193d7e9?KeyID=85a2c39e&Signature=oXQSNhvX%2FA0KVoO697nUFm%2FYPdWuyTj3I501zQ1svZwVJ4bl29K2HjtUdyUAZEK8lL3u5UHyRHtwVjxblvWGBw%253D%253D", 
+          "url": "http://docs-sandbox.openprocurement.org/get/10fed7f2e8ac30d78e1a074747ff05d9?KeyID=a8968c46&Signature=wI7iSkV118s5tbxpTOXvNyj8bSzyL34r2srZs0smCgHfVJ%252BQlZbCiY59a8JB8P%252BgpobdEcKOkeFlNqBT8oYwBw%253D%253D", 
           "format": "application/msword", 
           "documentOf": "decision", 
           "datePublished": "2018-01-01T02:00:00+02:00", 
-          "id": "4df8b2bd12624d448a3ad60832e23099", 
+          "id": "a09913cf97833731a790ffd551d205ed", 
           "dateModified": "2018-01-01T02:00:00+02:00"
         }
       ], 

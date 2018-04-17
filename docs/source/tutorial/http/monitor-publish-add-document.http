@@ -1,12 +1,12 @@
 POST /api/2.4/monitors/0fe4ca0b1d6c306bb6c3ee43edf17070/decision/documents?acc_token=0ab3edaa2c273d0d9ba2fb312b26054f HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
-Content-Length: 325
+Content-Length: 319
 Content-Type: application/json
 Host: api-sandbox.openprocurement.org
 
 {
   "data": {
-    "url": "http://docs-sandbox.openprocurement.org/get/acc12ec75b354158b147dfb7f193d7e9?KeyID=85a2c39e&Signature=Jeae60F1ir%2Fm5UCE%2FFgH8gleHkUgYC%2Br9qBj02SQjkYIoV%2BzjvWOrJqFYEetgz2miLyzLIgHpGfBLK31EnUoCQ%3D%3D", 
+    "url": "http://docs-sandbox.openprocurement.org/get/10fed7f2e8ac30d78e1a074747ff05d9?KeyID=a8968c46&Signature=UUBU5MV3MEepSoqg%2B9xuMfBa75DSGlNjTgdVGGSfK2rrq2i0IWlB4jZEr5Udi5HOEgDDpGMw7CvIC3QoUyGyBg%3D%3D", 
     "title": "dolor.doc", 
     "hash": "md5:00000000000000000000000000000000", 
     "format": "application/msword"
@@ -16,7 +16,7 @@ Host: api-sandbox.openprocurement.org
 
 201 Created
 Content-Type: application/json; charset=UTF-8
-Location: http://api-sandbox.openprocurement.org/api/2.4/monitors/0fe4ca0b1d6c306bb6c3ee43edf17070/decision/documents/4df8b2bd12624d448a3ad60832e23099
+Location: http://api-sandbox.openprocurement.org/api/2.4/monitors/0fe4ca0b1d6c306bb6c3ee43edf17070/decision/documents/a09913cf97833731a790ffd551d205ed
 
 null
 

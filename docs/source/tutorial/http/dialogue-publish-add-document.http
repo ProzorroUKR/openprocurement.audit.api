@@ -1,12 +1,12 @@
-POST /api/2.4/monitors/0fe4ca0b1d6c306bb6c3ee43edf17070/dialogues/198b54b9973543db8478546408a7c16d/documents?acc_token=3163b900101339e68c6bcbb724454e4a HTTP/1.0
+POST /api/2.4/monitors/0fe4ca0b1d6c306bb6c3ee43edf17070/dialogues/e34ca971e7dd4010b27e11f09fe9fd3d/documents?acc_token=68f982e033ae309ab4094fa18c6ee135 HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
-Content-Length: 323
+Content-Length: 321
 Content-Type: application/json
 Host: api-sandbox.openprocurement.org
 
 {
   "data": {
-    "url": "http://docs-sandbox.openprocurement.org/get/df506f46d71645ca9c09a9494769d6bc?KeyID=85a2c39e&Signature=jOSAi9PM0PgmNrTK6H75SjVf1bg4BlnWzvSEc%2F%2FTvmgtJ77nytgv181xGykGuI0Ot1ZGjar2poN%2B6lyX98HrCA%3D%3D", 
+    "url": "http://docs-sandbox.openprocurement.org/get/8c10d4124c9434e59f7c424afda8aa7a?KeyID=a8968c46&Signature=Ym4qLei7pSip3ARunhwjYiqX5sJfQOBv7G5EQlzIBT6%2FnIzGMo1A1X8r5QQmpS%2BJH1qv8Sx2vyVYwM93v14nCQ%3D%3D", 
     "title": "dolor.doc", 
     "hash": "md5:00000000000000000000000000000000", 
     "format": "application/msword"
@@ -16,17 +16,17 @@ Host: api-sandbox.openprocurement.org
 
 201 Created
 Content-Type: application/json; charset=UTF-8
-Location: http://api-sandbox.openprocurement.org/api/2.4/monitors/0fe4ca0b1d6c306bb6c3ee43edf17070/dialogues/198b54b9973543db8478546408a7c16d/documents/8f46dd3c2d4c428185be5fa10d754bd8
+Location: http://api-sandbox.openprocurement.org/api/2.4/monitors/0fe4ca0b1d6c306bb6c3ee43edf17070/dialogues/e34ca971e7dd4010b27e11f09fe9fd3d/documents/e59252987ef23f27ac22e5783e6a1456
 
 {
   "data": {
     "hash": "md5:00000000000000000000000000000000", 
     "title": "dolor.doc", 
-    "url": "http://docs-sandbox.openprocurement.org/get/df506f46d71645ca9c09a9494769d6bc?KeyID=85a2c39e&Signature=1H0gu%252Bdtk5bLQpP0uk8Cb6EtANdVo%252BAOItGrV3Rq0rARkU%252BuaG2MkNnlfscjJ87smwu80jBO6QitY0tC%252BsyUAA%253D%253D", 
+    "url": "http://docs-sandbox.openprocurement.org/get/8c10d4124c9434e59f7c424afda8aa7a?KeyID=a8968c46&Signature=Lh7bhm0lzxAsC%2F1I43IzrwMEixgkLUWqizlcj7wz7oFvUPFZiITp%2FJsW1ch%2FJ9Nz3vWpk9%2FN58qORmIus6sBAw%253D%253D", 
     "format": "application/msword", 
     "documentOf": "dialogue", 
     "datePublished": "2018-01-01T02:00:00+02:00", 
-    "id": "8f46dd3c2d4c428185be5fa10d754bd8", 
+    "id": "e59252987ef23f27ac22e5783e6a1456", 
     "dateModified": "2018-01-01T02:00:00+02:00"
   }
 }

@@ -1,4 +1,4 @@
-GET /api/2.4/monitors/0fe4ca0b1d6c306bb6c3ee43edf17070/dialogues/99249fa6c6434a9ab68dfb34c6908862/documents HTTP/1.0
+GET /api/2.4/monitors/0fe4ca0b1d6c306bb6c3ee43edf17070/dialogues/7c6af64f47653b6499e0c4a929dac255/documents HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
 Host: api-sandbox.openprocurement.org
 
@@ -10,22 +10,22 @@ Content-Type: application/json; charset=UTF-8
   "data": [
     {
       "hash": "md5:00000000000000000000000000000000", 
-      "title": "dolor.doc", 
-      "url": "http://docs-sandbox.openprocurement.org/get/fe05ee607a8848748d1c76986660224c?KeyID=f8371d5a&Signature=Xjwpqvkv4Oui%252BM3fEmWAFrkTEz2Xa%252BvGzTYNNgAwblrKM3iaBpu632nLhabfIdSNxiIhERX6he8H1KVpCH1iDw%253D%253D", 
+      "title": "ipsum.doc", 
+      "url": "http://docs-sandbox.openprocurement.org/get/7f4d99f2106d3744b83cb2ed0707d493?KeyID=a8968c46&Signature=aYutR3NWOkduynpX%2FGw%2FBaedGuACyiGZbWJ00RvSWY81wX2PHavACSzJQaSFZMEHUNh7ebhm50kimUAKw4zMAQ%3D%3D", 
       "format": "application/msword", 
       "documentOf": "dialogue", 
       "datePublished": "2018-01-01T02:00:00+02:00", 
-      "id": "6f91eb73448e4f1d8a44dde18e620c73", 
+      "id": "8c10d4124c9434e59f7c424afda8aa7a", 
       "dateModified": "2018-01-01T02:00:00+02:00"
     }, 
     {
       "hash": "md5:00000000000000000000000000000000", 
-      "title": "ipsum.doc", 
-      "url": "http://docs-sandbox.openprocurement.org/get/9328096db85a4957a193e72549f0f977?KeyID=f8371d5a&Signature=7hn5u6XmGe3TIt8sVGDw1CR56kMhEIqPKfkBLS%2B5NF%2FzJY8UFMJ0xYzUyEEeZSYyvt6pXp31S%2BXGw30DEMwzAg%3D%3D", 
+      "title": "dolor.doc", 
+      "url": "http://docs-sandbox.openprocurement.org/get/db408058407731f58a910280025982f7?KeyID=a8968c46&Signature=ZrMFxQNUt5rnJot%2Fi7YqlhynrPfNxmPIS5tVMM4Bs42tpyzy4Ny8XDNBCkA2kxzBdC46uX6N4aqmHJGc%252Bb%252BhBw%253D%253D", 
       "format": "application/msword", 
       "documentOf": "dialogue", 
       "datePublished": "2018-01-01T02:00:00+02:00", 
-      "id": "d376e993ddd242b7927fac325ca0a72a", 
+      "id": "e04ff6ad7c703896b03e6c31c8dda9c5", 
       "dateModified": "2018-01-01T02:00:00+02:00"
     }
   ]

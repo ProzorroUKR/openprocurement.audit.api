@@ -65,11 +65,21 @@ class BaseDocWebTest(base_test.BaseWebTest):
             self.uuid_counter += 1
             return uuid.uuid3(uuid.UUID(int=0), self.id() + str(self.uuid_counter))
 
-        self.uuid4_patch = mock.patch('openprocurement.api.utils.uuid4', side_effect=generate_test_uuid)
-        self.uuid4_patch.start()
+        self.uuid_patches = [
+            mock.patch(path, side_effect=generate_test_uuid)
+            for path in (
+                'openprocurement.api.utils.uuid4',
+                'openprocurement.audit.api.tests.base.uuid4',
+                'openprocurement.api.models.uuid4',
+                'openprocurement.audit.api.models.uuid4',
+            )
+        ]
+        for p in self.uuid_patches:
+            p.start()
 
     def tearDown(self):
-        self.uuid4_patch.stop()
+        for p in self.uuid_patches:
+            p.stop()
         super(BaseDocWebTest, self).tearDown()
 
 
@@ -371,11 +381,11 @@ class FeedDocsTest(BaseDocWebTest):
         self.create_monitor()
 
         # TODO: why doesn't this make the tender be shown on the next page?
-        self.app.authorization = ('Basic', (self.sas_token, ''))
-        self.app.patch_json(
-            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
-            {'data': {"reasons": ['media', 'public']}}
-        )
+        # self.app.authorization = ('Basic', (self.sas_token, ''))
+        # self.app.patch_json(
+        #     '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+        #     {'data': {"reasons": ['media', 'public']}}
+        # )
 
         with open('docs/source/feed/http/changes-feed-new-last.http', 'w') as self.app.file_obj:
             response = self.app.get(next_url)

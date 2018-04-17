@@ -16,22 +16,22 @@ Content-Type: application/json; charset=UTF-8
       "reasons": [
         "indicator"
       ], 
-      "id": "8a776a38197542a894904c1fd595a283", 
-      "dateModified": "2018-04-12T13:54:42.334500+03:00"
+      "id": "96aa057441e6365596ee82dfa352cca7", 
+      "dateModified": "2018-01-01T02:00:00+02:00"
     }, 
     {
       "reasons": [
         "indicator"
       ], 
-      "id": "f890f750aa7a4e9da86abbf575996b37", 
-      "dateModified": "2018-04-12T13:54:42.352475+03:00"
+      "id": "8dd282b5426837d9a0ac4f44786fc5e9", 
+      "dateModified": "2018-01-01T02:00:00+02:00"
     }, 
     {
       "reasons": [
         "indicator"
       ], 
-      "id": "2de731de207b4a278059e5f864ae51ee", 
-      "dateModified": "2018-04-12T13:54:42.369297+03:00"
+      "id": "7df94051786836f5912e3fd6a780d430", 
+      "dateModified": "2018-01-01T02:00:00+02:00"
     }
   ]
 }

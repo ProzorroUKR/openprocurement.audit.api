@@ -71,6 +71,7 @@ class BaseDocWebTest(base_test.BaseWebTest):
                 'openprocurement.api.utils.uuid4',
                 'openprocurement.audit.api.tests.base.uuid4',
                 'openprocurement.api.models.uuid4',
+                'openprocurement.audit.api.models.uuid4',
             )
         ]
         for p in self.uuid_patches:

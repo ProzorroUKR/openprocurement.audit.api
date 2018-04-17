@@ -1,6 +1,6 @@
 PATCH /api/2.4/monitors/704d5a170b9b31dabe5d0a7e0128cd6e?acc_token=a343a70217743230b896f2ccd41eacf0 HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
-Content-Length: 426
+Content-Length: 422
 Content-Type: application/json
 Host: api-sandbox.openprocurement.org
 
@@ -11,7 +11,7 @@ Host: api-sandbox.openprocurement.org
       "date": "2018-01-01T00:00:00", 
       "documents": [
         {
-          "url": "http://docs-sandbox.openprocurement.org/get/4497b9cffaff439e8207e573fccffd38?KeyID=49787a27&Signature=2Csf2lrZ0tf3h2NMoZ%2F0X3GtffBqU%2FUjKxIMUxVz0J8DLDwSD8Qx0O0IQ7fDbgXFokKWJNhAOdLrvNurDM8vBg%3D%3D", 
+          "url": "http://docs-sandbox.openprocurement.org/get/9044c51a7052386b89557bd68ed34c8b?KeyID=a8968c46&Signature=RyfuJiq4o6FmVYutVLpSMiVkgzDfrWPuOpaCMb98jvtgimDjNr0ZYC8etOKmavZFLThWIO3lnwOWlnC8LpisDg%3D%3D", 
           "title": "lorem.doc", 
           "hash": "md5:00000000000000000000000000000000", 
           "format": "application/msword"
@@ -47,11 +47,11 @@ Content-Type: application/json; charset=UTF-8
         {
           "hash": "md5:00000000000000000000000000000000", 
           "title": "lorem.doc", 
-          "url": "http://docs-sandbox.openprocurement.org/get/4497b9cffaff439e8207e573fccffd38?KeyID=49787a27&Signature=2Csf2lrZ0tf3h2NMoZ%2F0X3GtffBqU%2FUjKxIMUxVz0J8DLDwSD8Qx0O0IQ7fDbgXFokKWJNhAOdLrvNurDM8vBg%3D%3D", 
+          "url": "http://docs-sandbox.openprocurement.org/get/9044c51a7052386b89557bd68ed34c8b?KeyID=a8968c46&Signature=RyfuJiq4o6FmVYutVLpSMiVkgzDfrWPuOpaCMb98jvtgimDjNr0ZYC8etOKmavZFLThWIO3lnwOWlnC8LpisDg%3D%3D", 
           "format": "application/msword", 
           "documentOf": "decision", 
           "datePublished": "2018-01-01T02:00:00+02:00", 
-          "id": "75735e83c1a74206903b640faffafa2f", 
+          "id": "4d939205126e3f48a485552e4d7b4edc", 
           "dateModified": "2018-01-01T02:00:00+02:00"
         }
       ], 

@@ -76,22 +76,25 @@ class BaseFeedResourceTest(BaseWebTest):
         )
         offset = 0
         pages = int(ceil(len(self.expected_ids) / float(self.limit)))
-        for i in range(pages):
+        for i in range(pages + 2):
             response = self.app.get(url)
             self.assertEqual(response.status, '200 OK')
             self.assertEqual(response.content_type, 'application/json')
             self.assertIn("data", response.json)
-            self.assertEqual(self.expected_fields, set(response.json['data'][0]))
-            self.assertEqual([m["id"] for m in response.json['data']],
-                             self.expected_ids[offset:offset + self.limit])
 
-            if i < pages - 1:
-                self.assertIn("next_page", response.json)
-                url = response.json["next_page"]["path"]
+            if i < pages:
+                self.assertEqual(self.expected_fields, set(response.json['data'][0]))
+                self.assertEqual([m["id"] for m in response.json['data']],
+                                 self.expected_ids[offset:offset + self.limit])
                 offset += self.limit
 
+            else:
+                self.assertEqual(response.json['data'], [])
+
+            self.assertIn("next_page", response.json)
+            url = response.json["next_page"]["path"]
         # go back
-        for _ in range(pages - 1):
+        for _ in range(pages):
             self.assertIn("prev_page", response.json)
             response = self.app.get(response.json["prev_page"]["path"])
             self.assertEqual(self.expected_fields, set(response.json['data'][0]))

@@ -9,5 +9,5 @@ Welcome to openprocurement.audit.api documentation!
 
 
    tutorial/index
-   options/index
+   feed/index
    standard/index

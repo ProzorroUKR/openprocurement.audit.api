@@ -311,11 +311,11 @@ class FeedDocsTest(BaseDocWebTest):
         self.create_monitor()
 
         # TODO: why doesn't this make the tender be shown on the next page?
-        self.app.authorization = ('Basic', (self.sas_token, ''))
-        self.app.patch_json(
-            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
-            {'data': {"reasons": ['media', 'public']}}
-        )
+        # self.app.authorization = ('Basic', (self.sas_token, ''))
+        # self.app.patch_json(
+        #     '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+        #     {'data': {"reasons": ['media', 'public']}}
+        # )
 
         with open('docs/source/feed/http/changes-feed-new-last.http', 'w') as self.app.file_obj:
             response = self.app.get(next_url)

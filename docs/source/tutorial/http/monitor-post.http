@@ -21,11 +21,11 @@ Host: api-sandbox.openprocurement.org
 
 201 Created
 Content-Type: application/json; charset=UTF-8
-Location: http://api-sandbox.openprocurement.org/api/2.4/monitors/f8cc1cd3fc4b4eeb823ae3aa3d20679c
+Location: http://api-sandbox.openprocurement.org/api/2.4/monitors/0fe4ca0b1d6c306bb6c3ee43edf17070
 
 {
   "access": {
-    "token": "f181ed94f78549d9b50161b354ab2126"
+    "token": "0ab3edaa2c273d0d9ba2fb312b26054f"
   }, 
   "data": {
     "status": "draft", 
@@ -37,11 +37,11 @@ Location: http://api-sandbox.openprocurement.org/api/2.4/monitors/f8cc1cd3fc4b4e
       "public", 
       "fiscal"
     ], 
-    "monitoring_id": "UA-M-2018-04-11-000001", 
-    "dateModified": "2018-04-11T16:40:33.318699+03:00", 
+    "monitoring_id": "UA-M-2018-01-01-000001", 
+    "dateModified": "2018-01-01T02:00:00+02:00", 
     "owner": "test_sas", 
-    "dateCreated": "2018-04-11T16:40:33.318699+03:00", 
-    "id": "f8cc1cd3fc4b4eeb823ae3aa3d20679c", 
+    "dateCreated": "2018-01-01T02:00:00+02:00", 
+    "id": "0fe4ca0b1d6c306bb6c3ee43edf17070", 
     "tender_id": "ffffffffffffffffffffffffffffffff"
   }
 }

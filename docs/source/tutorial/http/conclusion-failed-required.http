@@ -1,0 +1,33 @@
+PATCH /api/2.4/monitors/0fe4ca0b1d6c306bb6c3ee43edf17070?acc_token=0ab3edaa2c273d0d9ba2fb312b26054f HTTP/1.0
+Authorization: Basic dGVzdF9zYXNfdG9rZW46
+Content-Length: 53
+Content-Type: application/json
+Host: api-sandbox.openprocurement.org
+
+{
+  "data": {
+    "conclusion": {
+      "violationOccurred": true
+    }
+  }
+}
+
+
+422 Unprocessable Entity
+Content-Type: application/json; charset=UTF-8
+
+{
+  "status": "error", 
+  "errors": [
+    {
+      "description": {
+        "violationType": [
+          "This field is required."
+        ]
+      }, 
+      "location": "body", 
+      "name": "conclusion"
+    }
+  ]
+}
+

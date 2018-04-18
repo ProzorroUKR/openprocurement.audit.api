@@ -35,7 +35,7 @@ def validate_patch_monitor_active_status(request):
             request.errors.add('body', 'decision', 'This field is required.')
             raise error_handler(request.errors)
     elif status_current == 'active':
-        if request.validated['data'].get('decision'):
+        if request.json.get("data", {}).get('decision'):
             raise_operation_error(request, 'Can\'t update monitor decision in current {} status'.format(status_current))
     else:
         raise_operation_error(request, 'Can\'t update monitor status to active in current {}'.format(status_current))

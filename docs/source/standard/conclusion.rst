@@ -1,5 +1,3 @@
-.. include:: defs.hrst
-
 .. _Conclusion:
 
 Conclusion
@@ -8,9 +6,41 @@ Conclusion
 Schema
 ------
 
+:violationOccurred:
+    boolean, required
+
+    any violations are found/not found
+
+:violationType:
+    string, required if violationOccurred is True, possible values are:
+        * corruptionDescription
+        * corruptionProcurementMethodType
+        * corruptionPublicDisclosure
+        * corruptionBiddingDocuments
+        * documentsForm
+        * corruptionAwarded
+        * corruptionCancelled
+        * corruptionContracting
+        * corruptionChanges
+        * other
+
+    a type of the violation
+
+:auditFinding:
+    string
+
+    information about the results of monitoring in terms of the stages of the procurement procedure
+
+:stringsAttached:
+    string
+
+    obligation to eliminate violations (violations) of legislation in the field of public procurement
+
+:description:
+    string
+
+    conclusion on the presence or absence of violations of the law
 
 :documents:
-   List of :ref:`document` objects
+    List of :ref:`document` objects
 
-   |ocdsDescription|
-   All documents and attachments related to the tender.

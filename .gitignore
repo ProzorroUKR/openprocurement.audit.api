@@ -14,9 +14,11 @@ dist/
 downloads/
 eggs/
 lib/
-lib64/
+lib64
 parts/
 sdist/
+etc/
+include/
 var/
 *.egg-info/
 .installed.cfg

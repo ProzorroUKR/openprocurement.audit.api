@@ -20,11 +20,11 @@ class MonitorConclusionResourceTest(BaseWebTest):
                     "violationType": "corruptionProcurementMethodType",
                 }
             }},
-            status=422,
+            status=403,
         )
 
     def test_decision_and_conclusion(self):
-        response = self.app.patch_json(
+        self.app.patch_json(
             '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
             {"data": {
                 "status": "active",
@@ -37,11 +37,8 @@ class MonitorConclusionResourceTest(BaseWebTest):
                     "violationOccurred": True,
                     "violationType": "corruptionProcurementMethodType",
                 }
-            }},
+            }}, status=403
         )
-        self.assertEqual(response.status_code, 200)
-        self.assertIn("decision", response.json["data"])
-        self.assertIn("conclusion", response.json["data"])
 
 
 class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):

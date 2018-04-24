@@ -5,7 +5,6 @@ from openprocurement.api.utils import (
     get_now,
     generate_id,
     json_view,
-    set_ownership,
     error_handler)
 from openprocurement.audit.api.utils import (
     save_monitor,
@@ -15,7 +14,7 @@ from openprocurement.audit.api.utils import (
     APIResource,
     generate_monitor_id,
     set_documents_of_type,
-    generate_monitoring_period)
+    generate_monitoring_period, set_ownership)
 from openprocurement.audit.api.design import (
     monitors_real_by_dateModified_view,
     monitors_test_by_dateModified_view,
@@ -28,8 +27,12 @@ from openprocurement.audit.api.design import (
     monitors_real_by_status_dateModified_view,
     monitors_test_by_status_dateModified_view,
 )
-from openprocurement.audit.api.validation import validate_monitor_data, validate_patch_monitor_data, \
-    validate_patch_monitor_status
+from openprocurement.audit.api.validation import (
+    validate_monitor_data,
+    validate_patch_monitor_data,
+    validate_patch_monitor_status,
+    validate_credentials_generate
+)
 from openprocurement.audit.api.design import FIELDS
 from functools import partial
 from logging import getLogger
@@ -387,3 +390,28 @@ class MonitorResource(APIResource):
         LOGGER.info('Updated monitor {}'.format(monitor.id),
                     extra=context_unpack(self.request, {'MESSAGE_ID': 'monitor_patch'}))
         return {'data': monitor.serialize('view')}
+
+
+@op_resource(name='Monitor credentials',
+             path='/monitors/{monitor_id}/credentials',
+             description="Dialogue credentials")
+class MonitorCredentialsResource(APIResource):
+
+    def __init__(self, request, context):
+        super(MonitorCredentialsResource, self).__init__(request, context)
+        self.server = request.registry.couchdb_server
+
+    @json_view(permission='generate_credentials', validators=(validate_credentials_generate,))
+    def patch(self):
+        monitor = self.request.validated['monitor']
+
+        set_ownership(monitor, self.request, 'tender_owner')
+        if save_monitor(self.request):
+            self.LOGGER.info('Generate Monitor credentials {}'.format(monitor.id),
+                             extra=context_unpack(self.request, {'MESSAGE_ID': 'monitor_patch'}))
+            return {
+                'data': monitor.serialize('view'),
+                'access': {
+                    'token': monitor.tender_owner_token
+                }
+            }

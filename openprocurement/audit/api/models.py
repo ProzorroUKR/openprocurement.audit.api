@@ -1,5 +1,6 @@
 from uuid import uuid4
 
+from openprocurement.api.interfaces import IOPContent
 from openprocurement.api.utils import get_now, get_root
 from openprocurement.api.models import Model, Revision, Period
 from openprocurement.api.models import Document as BaseDocument
@@ -11,42 +12,7 @@ from schematics.transforms import whitelist, blacklist
 from schematics.exceptions import ValidationError
 from couchdb_schematics.document import SchematicsDocument
 from pyramid.security import Allow
-
-
-# roles
-plain_role = blacklist(
-    '_attachments', 'revisions',
-) + schematics_embedded_role
-
-create_role = blacklist(
-    'owner_token', 'owner', 'revisions', 'dateModified',
-    'dateCreated', 'monitoringPeriod', 'doc_id', '_attachments',
-    'monitoring_id'
-) + schematics_embedded_role
-
-edit_draft_role = blacklist(
-    'owner_token', 'owner', 'revisions', 'dateModified',
-    'dateCreated', 'monitoringPeriod', 'doc_id', '_attachments',
-    'tender_id', 'monitoring_id'
-) + schematics_embedded_role
-
-edit_active_role = blacklist(
-    'owner_token', 'owner', 'revisions', 'dateModified',
-    'dateCreated', 'monitoringPeriod', 'doc_id', '_attachments',
-    'tender_id', 'monitoring_id'
-) + schematics_embedded_role
-
-view_role = blacklist(
-    'owner_token', '_attachments', 'revisions'
-) + schematics_embedded_role
-
-listing_role = whitelist(
-    'dateModified', 'doc_id'
-)
-
-revision_role = whitelist(
-    'revisions'
-)
+from zope.interface import implementer
 
 
 class Document(BaseDocument):
@@ -81,45 +47,49 @@ class Conclusion(Model):
 class Dialogue(Model):
     class Options:
         roles = {
-            'create': whitelist('title', 'description', 'answer', 'documents'),
-            'view': blacklist('owner_token', 'owner') + schematics_default_role
+            'create': whitelist('title', 'description', 'documents'),
+            'edit': whitelist('answer', 'documents'),
+            'view': schematics_default_role,
+            'default': schematics_default_role,
+            'embedded': schematics_embedded_role,
         }
     id = MD5Type(required=True, default=lambda: uuid4().hex)
 
     title = StringType(required=True)
-    description = StringType()
+    description = StringType(required=True)
     answer = StringType()
     documents = ListType(ModelType(Document), default=list())
-
-    dateSubmitted = IsoDateTimeType()
+    dateSubmitted = IsoDateTimeType(default=get_now())
     dateAnswered = IsoDateTimeType()
-
-    owner_token = StringType()
-    owner = StringType()
-
-    def __local_roles__(self):
-        return dict(
-            [('{}_{}'.format(self.owner, self.owner_token), 'dialogue_owner')]
-        )
-
-    def __acl__(self):
-        return [
-            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'edit_dialogue'),
-            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_dialogue_documents')
-        ]
+    author = StringType()
 
 
+class IMonitor(IOPContent):
+    """
+    Base monitor marker interface
+    """
+
+@implementer(IMonitor)
 class Monitor(SchematicsDocument, Model):
 
     class Options:
         roles = {
-            'plain': plain_role,
-            'revision': revision_role,
-            'create': create_role,
-            'edit_draft': edit_draft_role,
-            'edit_active': edit_active_role,
-            'view': view_role,
-            'listing': listing_role,
+            'plain': blacklist('_attachments', 'revisions') + schematics_embedded_role,
+            'revision': whitelist('revisions'),
+            'create': blacklist(
+                'owner_token', 'owner', 'revisions', 'dateModified', 'dateCreated', 'monitoringPeriod',
+                'doc_id', '_attachments', 'monitoring_id'
+            ) + schematics_embedded_role,
+            'edit_draft': blacklist(
+                'owner_token', 'owner', 'revisions', 'dateModified', 'dateCreated', 'monitoringPeriod',
+                'doc_id', '_attachments', 'tender_id', 'monitoring_id'
+            ) + schematics_embedded_role,
+            'edit_active': blacklist(
+                'owner_token', 'owner', 'revisions', 'dateModified', 'dateCreated', 'monitoringPeriod',
+                'doc_id', '_attachments', 'tender_id', 'monitoring_id', 'decision'
+            ) + schematics_embedded_role,
+            'view': blacklist('owner_token', '_attachments', 'revisions') + schematics_embedded_role,
+            'listing': whitelist('dateModified', 'doc_id'),
             'default': schematics_default_role,
         }
 
@@ -137,28 +107,33 @@ class Monitor(SchematicsDocument, Model):
 
     dateModified = IsoDateTimeType()
     dateCreated = IsoDateTimeType(default=get_now)
-    owner_token = StringType()
     owner = StringType()
+    owner_token = StringType()
+    tender_owner = StringType()
+    tender_owner_token = StringType()
     revisions = ListType(ModelType(Revision), default=list())
     _attachments = DictType(DictType(BaseType), default=dict())
 
     def get_role(self):
-        root = self.__parent__
-        request = root.request
-        context = request.context
-        if request.authenticated_role in ('Administrator',):
-            return request.authenticated_role
-        return 'edit_{}'.format(context.status)
+        role = super(Monitor, self).get_role()
+        status = get_root(self).__parent__.request.context.status
+        return 'edit_{}'.format(status) if role == 'edit' else role
 
     def __local_roles__(self):
-        return dict(
-            [('{}_{}'.format(self.owner, self.owner_token), 'monitor_owner')]
-        )
+        return dict([
+            ('{}_{}'.format(self.owner, self.owner_token), 'monitor_owner'),
+            ('{}_{}'.format(self.tender_owner, self.tender_owner_token), 'tender_owner')
+        ])
 
     def __acl__(self):
         return [
             (Allow, '{}_{}'.format(self.owner, self.owner_token), 'edit_monitor'),
-            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_monitor_documents')
+            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_monitor_documents'),
+            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'edit_dialogue'),
+            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_dialogue_documents'),
+            (Allow, '{}_{}'.format(self.tender_owner, self.tender_owner_token), 'create_dialogue'),
+            (Allow, '{}_{}'.format(self.tender_owner, self.tender_owner_token), 'edit_dialogue'),
+            (Allow, '{}_{}'.format(self.tender_owner, self.tender_owner_token), 'upload_dialogue_documents'),
         ]
 
     def __repr__(self):
@@ -166,7 +141,9 @@ class Monitor(SchematicsDocument, Model):
 
     @serializable(serialized_name='id')
     def doc_id(self):
-        """A property that is serialized by schematics exports."""
+        """
+        A property that is serialized by schematics exports.
+        """
         return self._id
 
     def import_data(self, raw_data, **kw):
@@ -187,7 +164,3 @@ class Monitor(SchematicsDocument, Model):
 
         self._data.update(data)
         return self
-
-    def validate_conclusion(self, data, value):
-        if value and data["status"] != "active":
-            raise ValidationError(u"Can't manage conclusion in current {} monitor status".format(data["status"]))

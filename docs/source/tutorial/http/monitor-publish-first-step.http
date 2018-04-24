@@ -1,6 +1,6 @@
-PATCH /api/2.4/monitors/0fe4ca0b1d6c306bb6c3ee43edf17070?acc_token=0ab3edaa2c273d0d9ba2fb312b26054f HTTP/1.0
+PATCH /api/2.4/monitors/3163b900101339e68c6bcbb724454e4a?acc_token=73c0e8e456fa34a985137da11f00f833 HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
-Content-Length: 408
+Content-Length: 404
 Content-Type: application/json
 Host: api-sandbox.openprocurement.org
 
@@ -10,7 +10,7 @@ Host: api-sandbox.openprocurement.org
       "date": "2018-01-01T00:00:00", 
       "documents": [
         {
-          "url": "http://docs-sandbox.openprocurement.org/get/3163b900101339e68c6bcbb724454e4a?KeyID=a8968c46&Signature=LfsrOI2KA6l2DIlx%2BgBcbxJgdc58d12trrCuhcq4aBU44zPL24DNjmXBTT%2FN8X9zlmFu6%2F5XH87MqOlFTaDMCw%3D%3D", 
+          "url": "http://docs-sandbox.openprocurement.org/get/c207d8b1e8ed3ba3b229742f7813ef0a?KeyID=a8968c46&Signature=gf33hOxTJMLlo2C6veWv5%2BnP9eKBtHpmc2L6VWFkfIgpXivnpsl4MQFGU8M9pCKskhrIfap5I9jc2iw4HHFiBA%3D%3D", 
           "title": "lorem.doc", 
           "hash": "md5:00000000000000000000000000000000", 
           "format": "application/msword"
@@ -42,22 +42,22 @@ Content-Type: application/json; charset=UTF-8
         {
           "hash": "md5:00000000000000000000000000000000", 
           "title": "lorem.doc", 
-          "url": "http://docs-sandbox.openprocurement.org/get/3163b900101339e68c6bcbb724454e4a?KeyID=a8968c46&Signature=LfsrOI2KA6l2DIlx%2BgBcbxJgdc58d12trrCuhcq4aBU44zPL24DNjmXBTT%2FN8X9zlmFu6%2F5XH87MqOlFTaDMCw%3D%3D", 
+          "url": "http://docs-sandbox.openprocurement.org/get/c207d8b1e8ed3ba3b229742f7813ef0a?KeyID=a8968c46&Signature=gf33hOxTJMLlo2C6veWv5%2BnP9eKBtHpmc2L6VWFkfIgpXivnpsl4MQFGU8M9pCKskhrIfap5I9jc2iw4HHFiBA%3D%3D", 
           "format": "application/msword", 
           "documentOf": "decision", 
           "datePublished": "2018-01-01T02:00:00+02:00", 
-          "id": "c207d8b1e8ed3ba3b229742f7813ef0a", 
+          "id": "10fed7f2e8ac30d78e1a074747ff05d9", 
           "dateModified": "2018-01-01T02:00:00+02:00"
         }
       ], 
       "description": "text"
     }, 
     "monitoring_id": "UA-M-2018-01-01-000001", 
-    "id": "0fe4ca0b1d6c306bb6c3ee43edf17070", 
+    "id": "3163b900101339e68c6bcbb724454e4a", 
     "owner": "test_sas", 
     "dateCreated": "2018-01-01T02:00:00+02:00", 
     "dateModified": "2018-01-01T02:00:00+02:00", 
-    "tender_id": "ffffffffffffffffffffffffffffffff"
+    "tender_id": "0ab3edaa2c273d0d9ba2fb312b26054f"
   }
 }
 

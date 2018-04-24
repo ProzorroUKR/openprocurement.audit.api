@@ -2,6 +2,7 @@
 import unittest
 
 from openprocurement.audit.api.tests.base import BaseWebTest, DSWebTestMixin
+from openprocurement.audit.api.tests.utils import get_errors_field_names
 
 
 class MonitorDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
@@ -106,9 +107,10 @@ class MonitorDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
             {'data': self.test_docservice_document_data}, status=403)
         self.assertEqual(response.status, '403 Forbidden')
         self.assertEqual(response.content_type, 'application/json')
+
         self.assertEqual(
-            response.json['errors'][0]["description"],
-            'Can\'t add document in current active monitor status')
+            {('body', 'data')},
+            get_errors_field_names(response, 'Can\'t add document in current active monitor status'))
 
 
 class MonitorConclusionDocumentResourceTest(BaseWebTest, DSWebTestMixin):

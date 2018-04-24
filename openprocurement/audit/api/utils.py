@@ -9,7 +9,7 @@ from schematics.exceptions import ModelValidationError
 from openprocurement.api.models import Revision, Period
 from openprocurement.api.utils import (
     update_logging_context, context_unpack, get_revision_changes,
-    apply_data_patch, error_handler)
+    apply_data_patch, error_handler, generate_id)
 from openprocurement.audit.api.models import Monitor
 from pkg_resources import get_distribution
 from logging import getLogger
@@ -146,6 +146,13 @@ def generate_monitoring_period(date):
     return period
 
 
-def set_documents_of_type(documents, of_type):
-    for document in documents:
-        document.documentOf = of_type
+def set_documents_of_type(data, of_type):
+    for item in data if isinstance(data, list) else [data]:
+        item.documentOf = of_type
+
+
+def set_ownership(data, request, fieldname='owner'):
+    for item in data if isinstance(data, list) else [data]:
+        if not item.get(fieldname):
+            setattr(item, fieldname, request.authenticated_userid)
+        setattr(item, '{}_token'.format(fieldname), generate_id())

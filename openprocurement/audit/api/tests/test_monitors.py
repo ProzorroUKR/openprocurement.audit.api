@@ -2,6 +2,8 @@ from openprocurement.audit.api.tests.base import BaseWebTest
 from math import ceil
 import unittest
 
+from openprocurement.audit.api.tests.utils import get_errors_field_names
+
 
 class MonitorsEmptyListingResourceTest(BaseWebTest):
 
@@ -21,13 +23,16 @@ class MonitorsEmptyListingResourceTest(BaseWebTest):
     def test_post_monitor_sas_empty_body(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.post_json('/monitors', {}, status=422)
-        self.assertEqual(len(response.json.get("errors", [])), 1)
-        self.assertEqual(response.json["errors"][0]["description"], "Data not available")
+        self.assertEqual(
+            {('body', 'data')},
+            get_errors_field_names(response, "Data not available"))
 
     def test_post_monitor_sas_empty_data(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.post_json('/monitors', {"data": {}}, status=422)
-        self.assertEqual(set(e["name"] for e in response.json["errors"]), {"reasons", "tender_id", "procuringStages"})
+        self.assertEqual(
+            {('body', "reasons"), ('body', "tender_id"), ('body', "procuringStages")},
+            get_errors_field_names(response, 'This field is required.'))
 
     def test_post_monitor_sas(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))

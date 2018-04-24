@@ -1,4 +1,4 @@
-PATCH /api/2.4/monitors/0fe4ca0b1d6c306bb6c3ee43edf17070?acc_token=0ab3edaa2c273d0d9ba2fb312b26054f HTTP/1.0
+PATCH /api/2.4/monitors/3163b900101339e68c6bcbb724454e4a?acc_token=73c0e8e456fa34a985137da11f00f833 HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
 Content-Length: 54
 Content-Type: application/json
@@ -25,32 +25,47 @@ Content-Type: application/json; charset=UTF-8
     ], 
     "dialogues": [
       {
-        "title": "Lorem ipsum", 
         "documents": [
           {
             "hash": "md5:00000000000000000000000000000000", 
             "title": "ipsum.doc", 
-            "url": "http://docs-sandbox.openprocurement.org/get/7f4d99f2106d3744b83cb2ed0707d493?KeyID=a8968c46&Signature=aYutR3NWOkduynpX%2FGw%2FBaedGuACyiGZbWJ00RvSWY81wX2PHavACSzJQaSFZMEHUNh7ebhm50kimUAKw4zMAQ%3D%3D", 
+            "url": "http://docs-sandbox.openprocurement.org/get/17579408368c3cbca21e6e80d5b9d25e?KeyID=a8968c46&Signature=0Qv9UpdcPIE6mJWjUncaKODteLNGcSOAngdnX2iO%2B8aMkaG1QS1cEfb2V4agGSc%2BiZTsUBewN6nbTHYQj9Z4CA%3D%3D", 
             "format": "application/msword", 
             "documentOf": "dialogue", 
             "datePublished": "2018-01-01T02:00:00+02:00", 
-            "id": "8c10d4124c9434e59f7c424afda8aa7a", 
+            "id": "862365b4dc1139a6b27326d4a350369d", 
             "dateModified": "2018-01-01T02:00:00+02:00"
           }, 
           {
             "hash": "md5:00000000000000000000000000000000", 
+            "author": "test_sas", 
             "title": "dolor.doc", 
-            "url": "http://docs-sandbox.openprocurement.org/get/db408058407731f58a910280025982f7?KeyID=a8968c46&Signature=ZrMFxQNUt5rnJot%2Fi7YqlhynrPfNxmPIS5tVMM4Bs42tpyzy4Ny8XDNBCkA2kxzBdC46uX6N4aqmHJGc%252Bb%252BhBw%253D%253D", 
+            "url": "http://docs-sandbox.openprocurement.org/get/e59252987ef23f27ac22e5783e6a1456?KeyID=a8968c46&Signature=4j%2FK63h34ahQMNqjdflVMwFPNPJeirAZNgIM46gTpuxKoJXITlWZk8juARZZi0BROwwUKEOWKl2tYs0%252Bm6yEDA%253D%253D", 
             "format": "application/msword", 
             "documentOf": "dialogue", 
             "datePublished": "2018-01-01T02:00:00+02:00", 
-            "id": "e04ff6ad7c703896b03e6c31c8dda9c5", 
+            "id": "f9841d0557b8332b993787e77baaed75", 
+            "dateModified": "2018-01-01T02:00:00+02:00"
+          }, 
+          {
+            "hash": "md5:00000000000000000000000000000000", 
+            "author": "broker", 
+            "title": "dolor.doc", 
+            "url": "http://docs-sandbox.openprocurement.org/get/d686f60628db3f4bb0e2b38664a53db9?KeyID=a8968c46&Signature=I5HkZrRw6gbgJYtSd9ut3W5WKXKSYwQwUAX%2Fx3D0yVD0dHOy%252BIyEmq90X4Cr1I6i23KIxgVKbHRzT4hclLK0DQ%253D%253D", 
+            "format": "application/msword", 
+            "documentOf": "dialogue", 
+            "datePublished": "2018-01-01T02:00:00+02:00", 
+            "id": "327896aa4f073f638b78ddd8139377e7", 
             "dateModified": "2018-01-01T02:00:00+02:00"
           }
         ], 
         "description": "Lorem ipsum dolor sit amet.", 
+        "author": "test_sas", 
+        "title": "Lorem ipsum", 
+        "dateAnswered": "2018-01-01T02:00:00+02:00", 
         "dateSubmitted": "2018-01-01T02:00:00+02:00", 
-        "id": "7c6af64f47653b6499e0c4a929dac255"
+        "answer": "Sit amet", 
+        "id": "7e88fef734203d31a39ec2f18165a3bf"
       }
     ], 
     "reasons": [
@@ -67,32 +82,35 @@ Content-Type: application/json; charset=UTF-8
         {
           "hash": "md5:00000000000000000000000000000000", 
           "title": "lorem.doc", 
-          "url": "http://docs-sandbox.openprocurement.org/get/3163b900101339e68c6bcbb724454e4a?KeyID=a8968c46&Signature=LfsrOI2KA6l2DIlx%2BgBcbxJgdc58d12trrCuhcq4aBU44zPL24DNjmXBTT%2FN8X9zlmFu6%2F5XH87MqOlFTaDMCw%3D%3D", 
+          "url": "http://docs-sandbox.openprocurement.org/get/c207d8b1e8ed3ba3b229742f7813ef0a?KeyID=a8968c46&Signature=gf33hOxTJMLlo2C6veWv5%2BnP9eKBtHpmc2L6VWFkfIgpXivnpsl4MQFGU8M9pCKskhrIfap5I9jc2iw4HHFiBA%3D%3D", 
           "format": "application/msword", 
           "documentOf": "decision", 
           "datePublished": "2018-01-01T02:00:00+02:00", 
-          "id": "c207d8b1e8ed3ba3b229742f7813ef0a", 
+          "id": "10fed7f2e8ac30d78e1a074747ff05d9", 
           "dateModified": "2018-01-01T02:00:00+02:00"
         }, 
         {
           "hash": "md5:00000000000000000000000000000000", 
+          "author": "test_sas", 
           "title": "dolor.doc", 
-          "url": "http://docs-sandbox.openprocurement.org/get/10fed7f2e8ac30d78e1a074747ff05d9?KeyID=a8968c46&Signature=wI7iSkV118s5tbxpTOXvNyj8bSzyL34r2srZs0smCgHfVJ%252BQlZbCiY59a8JB8P%252BgpobdEcKOkeFlNqBT8oYwBw%253D%253D", 
+          "url": "http://docs-sandbox.openprocurement.org/get/347c27f54afe382ba8fc97ed23c82c4a?KeyID=a8968c46&Signature=IjWuiHa9qm3IiUYNaVcewCXMCC8KW%2FoRKYMoGeuiAfENPNaX3E0LHbJMV6n1FeziJwVStp7Sd8kn04zqQ1njDA%253D%253D", 
           "format": "application/msword", 
           "documentOf": "decision", 
           "datePublished": "2018-01-01T02:00:00+02:00", 
-          "id": "a09913cf97833731a790ffd551d205ed", 
+          "id": "8c62c7ea658d38a28272e87132e554ee", 
           "dateModified": "2018-01-01T02:00:00+02:00"
         }
       ], 
       "description": "text"
     }, 
     "monitoring_id": "UA-M-2018-01-01-000001", 
-    "tender_id": "ffffffffffffffffffffffffffffffff", 
-    "id": "0fe4ca0b1d6c306bb6c3ee43edf17070", 
+    "tender_id": "0ab3edaa2c273d0d9ba2fb312b26054f", 
+    "id": "3163b900101339e68c6bcbb724454e4a", 
+    "tender_owner": "broker", 
     "owner": "test_sas", 
     "dateCreated": "2018-01-01T02:00:00+02:00", 
     "dateModified": "2018-01-01T02:00:00+02:00", 
+    "tender_owner_token": "b377ac093f453148913266e33522bf21", 
     "conclusion": {
       "violationOccurred": false
     }

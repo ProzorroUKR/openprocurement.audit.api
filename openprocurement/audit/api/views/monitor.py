@@ -5,7 +5,8 @@ from openprocurement.api.utils import (
     get_now,
     generate_id,
     json_view,
-    error_handler)
+    error_handler
+)
 from openprocurement.audit.api.utils import (
     save_monitor,
     monitor_serialize,
@@ -14,7 +15,9 @@ from openprocurement.audit.api.utils import (
     APIResource,
     generate_monitor_id,
     set_documents_of_type,
-    generate_monitoring_period, set_ownership)
+    generate_monitoring_period,
+    set_ownership
+)
 from openprocurement.audit.api.design import (
     monitors_real_by_dateModified_view,
     monitors_test_by_dateModified_view,
@@ -22,7 +25,6 @@ from openprocurement.audit.api.design import (
     monitors_real_by_local_seq_view,
     monitors_test_by_local_seq_view,
     monitors_by_local_seq_view,
-
     monitors_by_status_dateModified_view,
     monitors_real_by_status_dateModified_view,
     monitors_test_by_status_dateModified_view,
@@ -394,13 +396,8 @@ class MonitorResource(APIResource):
 
 @op_resource(name='Monitor credentials',
              path='/monitors/{monitor_id}/credentials',
-             description="Dialogue credentials")
+             description="Monitor credentials")
 class MonitorCredentialsResource(APIResource):
-
-    def __init__(self, request, context):
-        super(MonitorCredentialsResource, self).__init__(request, context)
-        self.server = request.registry.couchdb_server
-
     @json_view(permission='generate_credentials', validators=(validate_credentials_generate,))
     def patch(self):
         monitor = self.request.validated['monitor']

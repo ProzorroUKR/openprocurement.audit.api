@@ -153,6 +153,5 @@ def set_documents_of_type(data, of_type):
 
 def set_ownership(data, request, fieldname='owner'):
     for item in data if isinstance(data, list) else [data]:
-        if not item.get(fieldname):
-            setattr(item, fieldname, request.authenticated_userid)
+        setattr(item, fieldname, request.authenticated_userid)
         setattr(item, '{}_token'.format(fieldname), generate_id())

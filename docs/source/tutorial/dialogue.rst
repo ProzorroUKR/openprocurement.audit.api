@@ -1,7 +1,7 @@
 Dialogue
 ========
 
-For published dialogue we can start dialogue:
+For published monitor we can start dialogue:
 
 .. include:: http/dialogue-publish.http
     :code:
@@ -18,7 +18,7 @@ We also can get a list of all dialogue documents:
 
 To answer the question as a broker we must get credentials first.
 
-In order to get rights for future contract editing, we need to use this view ``PATCH: /monitors/{id}/credentials?acc_token={tender_token}`` with the API key of the eMall (broker), where tender was generated.
+In order to get rights for future monitor editing, we need to use this view ``PATCH: /monitors/{id}/credentials?acc_token={tender_token}`` with the API key of the eMall (broker), where tender was generated.
 
 In the ``PATCH: /contracts/{id}/credentials?acc_token={tender_token}``:
 
@@ -27,7 +27,6 @@ In the ``PATCH: /contracts/{id}/credentials?acc_token={tender_token}``:
 * ``tender_token`` is tender's token (is used for monitor token generation).
 
 Response will contain ``access.token`` for the contract that can be used for further monitor modification.
-
 
 .. include:: http/dialogue-get-credentials.http
     :code:

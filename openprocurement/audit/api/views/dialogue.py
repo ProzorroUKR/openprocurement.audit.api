@@ -4,15 +4,18 @@ from openprocurement.audit.api.utils import (
     APIResource,
     save_monitor,
     set_documents_of_type,
-    apply_patch, set_ownership)
+    apply_patch, set_ownership
+)
 from openprocurement.api.utils import (
     json_view,
     get_now,
-    context_unpack)
+    context_unpack
+)
 from openprocurement.audit.api.validation import (
     validate_dialogue_data,
     validate_patch_dialogue_data,
-    validate_patch_dialogue_allowed)
+    validate_patch_dialogue_allowed
+)
 
 
 @op_resource(name='Monitor Dialogue',

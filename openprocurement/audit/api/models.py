@@ -64,12 +64,6 @@ class Dialogue(Model):
     author = StringType()
 
 
-class IMonitor(IOPContent):
-    """
-    Base monitor marker interface
-    """
-
-@implementer(IMonitor)
 class Monitor(SchematicsDocument, Model):
 
     class Options:
@@ -78,17 +72,22 @@ class Monitor(SchematicsDocument, Model):
             'revision': whitelist('revisions'),
             'create': blacklist(
                 'owner_token', 'owner', 'revisions', 'dateModified', 'dateCreated', 'monitoringPeriod',
-                'doc_id', '_attachments', 'monitoring_id'
+                'doc_id', '_attachments', 'monitoring_id',
+                'tender_owner_token', 'tender_owner'
             ) + schematics_embedded_role,
             'edit_draft': blacklist(
                 'owner_token', 'owner', 'revisions', 'dateModified', 'dateCreated', 'monitoringPeriod',
-                'doc_id', '_attachments', 'tender_id', 'monitoring_id'
+                'doc_id', '_attachments', 'tender_id', 'monitoring_id',
+                'tender_owner_token', 'tender_owner'
             ) + schematics_embedded_role,
             'edit_active': blacklist(
                 'owner_token', 'owner', 'revisions', 'dateModified', 'dateCreated', 'monitoringPeriod',
-                'doc_id', '_attachments', 'tender_id', 'monitoring_id', 'decision'
+                'doc_id', '_attachments', 'tender_id', 'monitoring_id', 'decision',
+                'tender_owner_token', 'tender_owner'
             ) + schematics_embedded_role,
-            'view': blacklist('owner_token', '_attachments', 'revisions') + schematics_embedded_role,
+            'view': blacklist(
+                'owner_token', 'tender_owner_token', '_attachments', 'revisions'
+            ) + schematics_embedded_role,
             'listing': whitelist('dateModified', 'doc_id'),
             'default': schematics_default_role,
         }
@@ -116,13 +115,13 @@ class Monitor(SchematicsDocument, Model):
 
     def get_role(self):
         role = super(Monitor, self).get_role()
-        status = get_root(self).__parent__.request.context.status
+        status = self.__parent__.request.context.status
         return 'edit_{}'.format(status) if role == 'edit' else role
 
     def __local_roles__(self):
         return dict([
+            ('{}_{}'.format(self.tender_owner, self.tender_owner_token), 'tender_owner'),
             ('{}_{}'.format(self.owner, self.owner_token), 'monitor_owner'),
-            ('{}_{}'.format(self.tender_owner, self.tender_owner_token), 'tender_owner')
         ])
 
     def __acl__(self):

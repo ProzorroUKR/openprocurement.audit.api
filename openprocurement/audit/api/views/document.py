@@ -4,7 +4,9 @@ from openprocurement.audit.api.utils import (
     op_resource,
     apply_patch,
     APIResource,
-    set_ownership, set_documents_of_type)
+    set_ownership,
+    set_documents_of_type
+)
 from openprocurement.api.utils import (
     get_file,
     update_file_content_type,

@@ -55,7 +55,6 @@ class BaseWebTest(unittest.TestCase):
 
         response = self.app.post_json('/monitors', {'data': data})
         monitor = response.json['data']
-        self.monitor_token = response.json['access']['token']
         self.monitor_id = monitor['id']
 
         self.app.authorization = None

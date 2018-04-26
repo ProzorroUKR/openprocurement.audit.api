@@ -141,7 +141,6 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
             )
 
         monitor_id = response.json["data"]["id"]
-        monitor_token = response.json["access"]["token"]
 
         with open('docs/source/tutorial/http/monitors-with-object.http', 'w') as self.app.file_obj:
             response = self.app.get('/monitors')
@@ -150,7 +149,7 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
 
         with open('docs/source/tutorial/http/monitor-publish-wo-decision.http', 'w') as self.app.file_obj:
             self.app.patch_json(
-                '/monitors/{}?acc_token={}'.format(monitor_id, monitor_token),
+                '/monitors/{}'.format(monitor_id),
                 {"data": {"status": "active"}},
                 status=403
             )
@@ -158,7 +157,7 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
         # PUBLISH
         with open('docs/source/tutorial/http/monitor-publish-first-step.http', 'w') as self.app.file_obj:
             self.app.patch_json(
-                '/monitors/{}?acc_token={}'.format(monitor_id, monitor_token),
+                '/monitors/{}'.format(monitor_id),
                 {"data": {
                     "decision": {
                         "description": "text",
@@ -176,7 +175,7 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
 
         with open('docs/source/tutorial/http/monitor-publish-add-document.http', 'w') as self.app.file_obj:
             self.app.post_json(
-                '/monitors/{}/decision/documents?acc_token={}'.format(monitor_id, monitor_token),
+                '/monitors/{}/decision/documents'.format(monitor_id),
                 {"data": {
                     'title': 'dolor.doc',
                     'url': self.generate_docservice_url(),
@@ -188,7 +187,7 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
 
         with open('docs/source/tutorial/http/monitor-publish-second-step.http', 'w') as self.app.file_obj:
             self.app.patch_json(
-                '/monitors/{}?acc_token={}'.format(monitor_id, monitor_token),
+                '/monitors/{}'.format(monitor_id),
                 {"data": {
                     "status": "active"
                 }},
@@ -197,7 +196,7 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
 
         with open('docs/source/tutorial/http/monitor-publish-change.http', 'w') as self.app.file_obj:
             self.app.patch_json(
-                '/monitors/{}?acc_token={}'.format(monitor_id, monitor_token),
+                '/monitors/{}'.format(monitor_id),
                 {"data": {
                     "decision": {
                         "description": "another_text",
@@ -209,7 +208,7 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
         # DIALOGUE
         with open('docs/source/tutorial/http/dialogue-publish.http', 'w') as self.app.file_obj:
             response = self.app.post_json(
-                '/monitors/{}/dialogues?acc_token={}'.format(monitor_id, monitor_token),
+                '/monitors/{}/dialogues'.format(monitor_id),
                 {"data": {
                     "title": "Lorem ipsum",
                     "description": "Lorem ipsum dolor sit amet.",
@@ -227,7 +226,7 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
 
         with open('docs/source/tutorial/http/dialogue-publish-add-document.http', 'w') as self.app.file_obj:
             self.app.post_json(
-                '/monitors/{}/dialogues/{}/documents?acc_token={}'.format(monitor_id, dialogue_id, monitor_token),
+                '/monitors/{}/dialogues/{}/documents'.format(monitor_id, dialogue_id),
                 {"data": {
                     'title': 'dolor.doc',
                     'url': self.generate_docservice_url(),
@@ -239,7 +238,7 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
 
         with open('docs/source/tutorial/http/dialogue-get-documents.http', 'w') as self.app.file_obj:
             self.app.get(
-                '/monitors/{}/dialogues/{}/documents'.format(monitor_id, dialogue_id, monitor_token),
+                '/monitors/{}/dialogues/{}/documents'.format(monitor_id, dialogue_id),
                 status=200
             )
 
@@ -285,7 +284,7 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
         # CONCLUSION
         with open('docs/source/tutorial/http/conclusion-wo-violations.http', 'w') as self.app.file_obj:
             response = self.app.patch_json(
-                '/monitors/{}?acc_token={}'.format(monitor_id, monitor_token),
+                '/monitors/{}'.format(monitor_id),
                 {"data": {
                     "conclusion": {
                         "violationOccurred": False,
@@ -297,7 +296,7 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
 
         with open('docs/source/tutorial/http/conclusion-failed-required.http', 'w') as self.app.file_obj:
             response = self.app.patch_json(
-                '/monitors/{}?acc_token={}'.format(monitor_id, monitor_token),
+                '/monitors/{}'.format(monitor_id),
                 {"data": {
                     "conclusion": {
                         "violationOccurred": True,
@@ -309,7 +308,7 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
 
         with open('docs/source/tutorial/http/conclusion-full.http', 'w') as self.app.file_obj:
             response = self.app.patch_json(
-                '/monitors/{}?acc_token={}'.format(monitor_id, monitor_token),
+                '/monitors/{}'.format(monitor_id),
                 {"data": {
                     "conclusion": {
                         "violationOccurred": True,
@@ -332,7 +331,7 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
 
         with open('docs/source/tutorial/http/conclusion-add-document.http', 'w') as self.app.file_obj:
             self.app.post_json(
-                '/monitors/{}/conclusion/documents?acc_token={}'.format(monitor_id, dialogue_id, monitor_token),
+                '/monitors/{}/conclusion/documents'.format(monitor_id, dialogue_id),
                 {"data": {
                     'title': 'sign.p7s',
                     'url': self.generate_docservice_url(),
@@ -356,11 +355,10 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
         )
 
         monitor_id = response.json["data"]["id"]
-        monitor_token = response.json["access"]["token"]
 
         with open('docs/source/tutorial/http/monitor-publish.http', 'w') as self.app.file_obj:
             self.app.patch_json(
-                '/monitors/{}?acc_token={}'.format(monitor_id, monitor_token),
+                '/monitors/{}'.format(monitor_id),
                 {"data": {
                     "status": "active",
                     "decision": {

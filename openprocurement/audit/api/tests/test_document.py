@@ -29,7 +29,7 @@ class MonitorDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
     def test_monitor_decision_document_get_single(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.patch_json(
-            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}'.format(self.monitor_id),
             {'data': self.test_monitor_activation_data})
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
@@ -51,7 +51,7 @@ class MonitorDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
     def test_monitor_decision_document_get_list(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.patch_json(
-            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}'.format(self.monitor_id),
             {'data': self.test_monitor_activation_data})
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
@@ -68,7 +68,7 @@ class MonitorDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
     def test_monitor_decision_document_download(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.patch_json(
-            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}'.format(self.monitor_id),
             {'data': self.test_monitor_activation_data})
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
@@ -97,13 +97,13 @@ class MonitorDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
     def test_monitor_decision_document_upload_forbidden(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.patch_json(
-            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}'.format(self.monitor_id),
             {'data': self.test_monitor_activation_data})
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
 
-        response = self.app.post_json('/monitors/{}/decision/documents?acc_token={}'.format(
-            self.monitor_id, self.monitor_token),
+        response = self.app.post_json('/monitors/{}/decision/documents'.format(
+            self.monitor_id),
             {'data': self.test_docservice_document_data}, status=403)
         self.assertEqual(response.status, '403 Forbidden')
         self.assertEqual(response.content_type, 'application/json')

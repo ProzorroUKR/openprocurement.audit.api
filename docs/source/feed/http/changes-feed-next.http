@@ -1,4 +1,4 @@
-GET /api/2.4/monitors?feed=changes&opt_fields=reasons&prev_offset=90d3226c2782f976bcf5178faedaf4d1&offset=b22f6be6441db6986b1d33b60e2a6d75&limit=3 HTTP/1.0
+GET /api/2.4/monitors?feed=changes&opt_fields=reasons&prev_offset=b819e83858017b5e792910411f499bed&offset=74ae385d4ca1271e5361664049cdcf67&limit=3 HTTP/1.0
 Host: api-sandbox.openprocurement.org
 
 
@@ -7,30 +7,30 @@ Content-Type: application/json; charset=UTF-8
 
 {
   "next_page": {
-    "path": "/api/2.4/monitors?feed=changes&skip=1&opt_fields=reasons&prev_offset=b22f6be6441db6986b1d33b60e2a6d75&offset=6a356de305fae600049c09dad2849553&limit=3", 
-    "uri": "http://api-sandbox.openprocurement.org/api/2.4/monitors?feed=changes&skip=1&opt_fields=reasons&prev_offset=b22f6be6441db6986b1d33b60e2a6d75&offset=6a356de305fae600049c09dad2849553&limit=3", 
-    "offset": "6a356de305fae600049c09dad2849553"
+    "path": "/api/2.4/monitors?feed=changes&skip=1&opt_fields=reasons&prev_offset=74ae385d4ca1271e5361664049cdcf67&offset=5bd043554ce358753fb5951faae1180a&limit=3", 
+    "uri": "http://api-sandbox.openprocurement.org/api/2.4/monitors?feed=changes&skip=1&opt_fields=reasons&prev_offset=74ae385d4ca1271e5361664049cdcf67&offset=5bd043554ce358753fb5951faae1180a&limit=3", 
+    "offset": "5bd043554ce358753fb5951faae1180a"
   }, 
   "data": [
     {
       "reasons": [
         "indicator"
       ], 
-      "id": "0c90f694958f3d24ab8e6c089e927fb2", 
-      "dateModified": "2018-01-01T02:00:00+02:00"
+      "dateModified": "2018-01-01T02:00:00+02:00", 
+      "id": "dd7383d5f6f23c67bbb963f5bbc63fbd"
     }, 
     {
       "reasons": [
         "indicator"
       ], 
-      "id": "2c1e1fe430f7340495c5d2cdd4a83ad7", 
-      "dateModified": "2018-01-01T02:00:00+02:00"
+      "dateModified": "2018-01-01T02:00:00+02:00", 
+      "id": "7df94051786836f5912e3fd6a780d430"
     }
   ], 
   "prev_page": {
-    "path": "/api/2.4/monitors?feed=changes&limit=3&offset=90d3226c2782f976bcf5178faedaf4d1&opt_fields=reasons", 
-    "uri": "http://api-sandbox.openprocurement.org/api/2.4/monitors?feed=changes&limit=3&offset=90d3226c2782f976bcf5178faedaf4d1&opt_fields=reasons", 
-    "offset": "90d3226c2782f976bcf5178faedaf4d1"
+    "path": "/api/2.4/monitors?feed=changes&limit=3&offset=b819e83858017b5e792910411f499bed&opt_fields=reasons", 
+    "uri": "http://api-sandbox.openprocurement.org/api/2.4/monitors?feed=changes&limit=3&offset=b819e83858017b5e792910411f499bed&opt_fields=reasons", 
+    "offset": "b819e83858017b5e792910411f499bed"
   }
 }
 

@@ -26,18 +26,10 @@ class MonitorResourceTest(BaseWebTest):
             status=403
         )
 
-    def test_patch_without_acc_token(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
-        self.app.patch_json(
-            '/monitors/{}'.format(self.monitor_id),
-            {"data": {"status": "active"}},
-            status=403
-        )
-
     def test_patch_without_decision(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         self.app.patch_json(
-            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}'.format(self.monitor_id),
             {"data": {"status": "active"}},
             status=403
         )
@@ -48,7 +40,7 @@ class MonitorResourceTest(BaseWebTest):
         now_date = datetime.now(TZ)
         end_date = calculate_business_date(now_date, MONITORING_TIME, working_days=True)
         response = self.app.patch_json(
-            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}'.format(self.monitor_id),
             {"data": {
                 "status": "active",
                 "decision": {
@@ -67,7 +59,7 @@ class MonitorResourceTest(BaseWebTest):
     def test_patch_to_active_already_in_active(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.patch_json(
-            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}'.format(self.monitor_id),
             {"data": {
                 "status": "active",
                 "decision": {
@@ -81,7 +73,7 @@ class MonitorResourceTest(BaseWebTest):
         self.assertEqual(response.json['data']["status"], "active")
 
         response = self.app.patch_json(
-            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}'.format(self.monitor_id),
             {"data": {
                 "decision": {
                     "description": "text_changed",

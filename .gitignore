@@ -20,6 +20,7 @@ sdist/
 etc/
 include/
 var/
+src/
 *.egg-info/
 .installed.cfg
 .mr.developer.cfg
@@ -63,3 +64,6 @@ cover/
 output.html
 
 .idea/
+
+auth.ini
+local.cfg

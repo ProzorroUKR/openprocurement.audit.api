@@ -9,6 +9,6 @@ Tutorial
 
    creation
    publishing
-   dialogs
+   dialogue
    conclusion
 

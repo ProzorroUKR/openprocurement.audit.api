@@ -3,7 +3,9 @@ from openprocurement.audit.api.utils import (
     save_monitor,
     op_resource,
     apply_patch,
-    APIResource
+    APIResource,
+    set_ownership,
+    set_documents_of_type
 )
 from openprocurement.api.utils import (
     get_file,
@@ -17,8 +19,10 @@ from openprocurement.api.validation import (
     validate_file_upload,
     validate_patch_document_data,
 )
-from openprocurement.audit.api.validation import validate_document_decision_upload_allowed, \
+from openprocurement.audit.api.validation import (
+    validate_document_decision_upload_allowed,
     validate_document_conclusion_upload_allowed
+)
 
 
 class MonitorsDocumentBaseResource(APIResource):
@@ -42,7 +46,8 @@ class MonitorsDocumentBaseResource(APIResource):
         Monitor Document Upload
         """
         document = upload_file(self.request)
-        document.documentOf = self.document_of
+        set_documents_of_type(document, self.document_of)
+        set_ownership(document, self.request, 'author')
         documents = self.context.documents
         documents.append(document)
         if save_monitor(self.request):
@@ -78,7 +83,8 @@ class MonitorsDocumentBaseResource(APIResource):
         """
         parent = self.request.context.__parent__
         document = upload_file(self.request)
-        document.documentOf = self.document_of
+        set_documents_of_type(document, self.document_of)
+        set_ownership(document, self.request, 'author')
         parent.documents.append(document)
         if save_monitor(self.request):
             self.LOGGER.info('Updated {} monitor document {}'.format(self.document_of, document.id),
@@ -87,15 +93,14 @@ class MonitorsDocumentBaseResource(APIResource):
                                                   {'DOCUMENT_ID': document.id}))
             return {'data': document.serialize("view")}
 
-    @json_view(content_type="application/json",
-               permission='upload_monitor_documents',
+    @json_view(content_type='application/json',
+               permission='edit_monitor_documents',
                validators=(validate_patch_document_data,))
     def patch(self):
         """
         Monitor Document Update
         """
         document = self.request.context
-        document.documentOf = self.document_of
         if apply_patch(self.request, src=document.serialize()):
             update_file_content_type(self.request)
             self.LOGGER.info('Updated {} monitor document {}'.format(self.document_of, document.id),
@@ -115,7 +120,12 @@ class MonitorsDocumentDecisionResource(MonitorsDocumentBaseResource):
     @json_view(permission='upload_monitor_documents',
                validators=(validate_file_upload, validate_document_decision_upload_allowed))
     def collection_post(self):
-        super(MonitorsDocumentDecisionResource, self).collection_post()
+        return super(MonitorsDocumentDecisionResource, self).collection_post()
+
+    @json_view(permission='upload_monitor_documents',
+               validators=(validate_file_update, validate_document_decision_upload_allowed))
+    def put(self):
+        return super(MonitorsDocumentDecisionResource, self).put()
 
 
 @op_resource(name='Monitor Conclusion Documents',
@@ -130,6 +140,11 @@ class MonitorsDocumentConclusionResource(MonitorsDocumentBaseResource):
     def collection_post(self):
         return super(MonitorsDocumentConclusionResource, self).collection_post()
 
+    @json_view(permission='upload_monitor_documents',
+               validators=(validate_file_update, validate_document_conclusion_upload_allowed))
+    def put(self):
+        return super(MonitorsDocumentConclusionResource, self).put()
+
 
 @op_resource(name='Monitor Dialogue Documents',
              collection_path='/monitors/{monitor_id}/dialogues/{dialogue_id}/documents',
@@ -142,3 +157,8 @@ class MonitorsDocumentDialogueResource(MonitorsDocumentBaseResource):
                validators=(validate_file_upload, validate_document_conclusion_upload_allowed,))
     def collection_post(self):
         return super(MonitorsDocumentDialogueResource, self).collection_post()
+
+    @json_view(permission='upload_monitor_documents',
+               validators=(validate_file_update, validate_document_conclusion_upload_allowed))
+    def put(self):
+        return super(MonitorsDocumentDialogueResource, self).put()

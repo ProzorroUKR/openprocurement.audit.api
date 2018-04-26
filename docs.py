@@ -1,6 +1,5 @@
 from freezegun import freeze_time
-from openprocurement.api import utils
-from openprocurement.api.utils import generate_id
+from hashlib import sha512
 from webtest import TestApp
 from datetime import datetime
 import openprocurement.audit.api.tests.base as base_test
@@ -58,15 +57,11 @@ class BaseDocWebTest(base_test.BaseWebTest):
         config = ConfigParser.RawConfigParser()
         config.read(os.path.join(os.path.dirname(__file__), 'openprocurement/audit/api/tests/auth.ini'))
         self.sas_token = config.get("sas", "test_sas")
+        self.broker_token = config.get("brokers", "broker")
 
         self.uuid_counter = 0
-
-        def generate_test_uuid():
-            self.uuid_counter += 1
-            return uuid.uuid3(uuid.UUID(int=0), self.id() + str(self.uuid_counter))
-
         self.uuid_patches = [
-            mock.patch(path, side_effect=generate_test_uuid)
+            mock.patch(path, side_effect=self._generate_test_uuid)
             for path in (
                 'openprocurement.api.utils.uuid4',
                 'openprocurement.audit.api.tests.base.uuid4',
@@ -82,18 +77,22 @@ class BaseDocWebTest(base_test.BaseWebTest):
             p.stop()
         super(BaseDocWebTest, self).tearDown()
 
+    def _generate_test_uuid(self):
+        self.uuid_counter += 1
+        return uuid.uuid3(uuid.UUID(int=0), self.id() + str(self.uuid_counter))
+
 
 class OptionsResourceTest(BaseDocWebTest):
 
     def test_monitor_list_options_query_params(self):
-        with open('docs/source/options/http/monitors-with-options.http', 'w') as self.app.file_obj:
+        with open('docs/source/feed/http/monitors-with-options.http', 'w') as self.app.file_obj:
             self.app.authorization = ('Basic', (self.sas_token, ''))
             response = self.app.post_json(
                 '/monitors',
                 {
                     "options": {"pretty": True},
                     "data": {
-                        "tender_id": "f" * 32,
+                        "tender_id": self._generate_test_uuid().hex,
                         "reasons": ["public", "fiscal"],
                         "procuringStages": ["awarding", "contracting"]
                     }
@@ -102,7 +101,7 @@ class OptionsResourceTest(BaseDocWebTest):
             )
         self.assertEqual(response.status, '201 Created')
 
-        with open('docs/source/options/http/monitors-with-options-query-params.http', 'w') as self.app.file_obj:
+        with open('docs/source/feed/http/monitors-with-options-query-params.http', 'w') as self.app.file_obj:
             response = self.app.get('/monitors?opt_fields=status')
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(len(response.json['data']), 1)
@@ -113,7 +112,13 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
         super(MonitorsResourceTest, self).setUp()
         self.app.app.registry.docservice_url = 'http://docs-sandbox.openprocurement.org'
 
-    def test_monitor_life_cycle(self):
+    @mock.patch('openprocurement.audit.api.validation.TendersClient')
+    def test_monitor_life_cycle(self, mock_api_client):
+        tender_token = self._generate_test_uuid().hex
+        mock_api_client.return_value.extract_credentials.return_value = {
+            'data': {'tender_token': sha512(tender_token).hexdigest()}
+        }
+
         self.app.authorization = ('Basic', (self.sas_token, ''))
 
         with open('docs/source/tutorial/http/monitors-empty.http', 'w') as self.app.file_obj:
@@ -128,7 +133,7 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
             response = self.app.post_json(
                 '/monitors',
                 {"data": {
-                    "tender_id": "f" * 32,
+                    "tender_id": self._generate_test_uuid().hex,
                     "reasons": ["public", "fiscal"],
                     "procuringStages": ["awarding", "contracting"]
                 }},
@@ -219,11 +224,10 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
             )
 
         dialogue_id = response.json['data']['id']
-        dialogue_token = response.json['access']['token']
 
         with open('docs/source/tutorial/http/dialogue-publish-add-document.http', 'w') as self.app.file_obj:
             self.app.post_json(
-                '/monitors/{}/dialogues/{}/documents?acc_token={}'.format(monitor_id, dialogue_id, dialogue_token),
+                '/monitors/{}/dialogues/{}/documents?acc_token={}'.format(monitor_id, dialogue_id, monitor_token),
                 {"data": {
                     'title': 'dolor.doc',
                     'url': self.generate_docservice_url(),
@@ -235,9 +239,48 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
 
         with open('docs/source/tutorial/http/dialogue-get-documents.http', 'w') as self.app.file_obj:
             self.app.get(
-                '/monitors/{}/dialogues/{}/documents'.format(monitor_id, dialogue_id, dialogue_token),
+                '/monitors/{}/dialogues/{}/documents'.format(monitor_id, dialogue_id, monitor_token),
                 status=200
             )
+
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+
+        with open('docs/source/tutorial/http/dialogue-get-credentials.http', 'w') as self.app.file_obj:
+            response = self.app.patch_json(
+                '/monitors/{}/credentials?acc_token={}'.format(monitor_id, tender_token),
+                status=200
+            )
+
+        tender_owner_token = response.json['access']['token']
+
+        with open('docs/source/tutorial/http/dialogue-answer.http', 'w') as self.app.file_obj:
+            self.app.patch_json(
+                '/monitors/{}/dialogues/{}?acc_token={}'.format(monitor_id, dialogue_id, tender_owner_token),
+                {"data": {
+                    'answer': 'Sit amet'
+                }},
+                status=200
+            )
+
+        with open('docs/source/tutorial/http/dialogue-answer-docs.http', 'w') as self.app.file_obj:
+            self.app.post_json(
+                '/monitors/{}/dialogues/{}/documents?acc_token={}'.format(monitor_id, dialogue_id, tender_owner_token),
+                {"data": {
+                    'title': 'dolor.doc',
+                    'url': self.generate_docservice_url(),
+                    'hash': 'md5:' + '0' * 32,
+                    'format': 'application/msword',
+                }},
+                status=201
+            )
+
+        with open('docs/source/tutorial/http/dialogue-get.http', 'w') as self.app.file_obj:
+            self.app.get(
+                '/monitors/{}/dialogues/{}'.format(monitor_id, dialogue_id),
+                status=200
+            )
+
+        self.app.authorization = ('Basic', (self.sas_token, ''))
 
         # CONCLUSION
         with open('docs/source/tutorial/http/conclusion-wo-violations.http', 'w') as self.app.file_obj:
@@ -289,7 +332,7 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
 
         with open('docs/source/tutorial/http/conclusion-add-document.http', 'w') as self.app.file_obj:
             self.app.post_json(
-                '/monitors/{}/conclusion/documents?acc_token={}'.format(monitor_id, dialogue_id, dialogue_token),
+                '/monitors/{}/conclusion/documents?acc_token={}'.format(monitor_id, dialogue_id, monitor_token),
                 {"data": {
                     'title': 'sign.p7s',
                     'url': self.generate_docservice_url(),
@@ -305,7 +348,7 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
         response = self.app.post_json(
             '/monitors',
             {"data": {
-                "tender_id": "f" * 32,
+                "tender_id": self._generate_test_uuid().hex,
                 "reasons": ["public", "fiscal"],
                 "procuringStages": ["awarding", "contracting"]
             }},
@@ -383,7 +426,7 @@ class FeedDocsTest(BaseDocWebTest):
         # TODO: why doesn't this make the tender be shown on the next page?
         # self.app.authorization = ('Basic', (self.sas_token, ''))
         # self.app.patch_json(
-        #     '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+        #     '/monitors/{}?acc_token={}'.format(self.monitor_id, monitor_token),
         #     {'data': {"reasons": ['media', 'public']}}
         # )
 

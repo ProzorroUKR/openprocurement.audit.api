@@ -7,9 +7,9 @@ Content-Type: application/json; charset=UTF-8
 
 {
   "next_page": {
-    "path": "/api/2.4/monitors?feed=changes&opt_fields=reasons&prev_offset=b819e83858017b5e792910411f499bed&offset=74ae385d4ca1271e5361664049cdcf67&limit=3", 
-    "uri": "http://api-sandbox.openprocurement.org/api/2.4/monitors?feed=changes&opt_fields=reasons&prev_offset=b819e83858017b5e792910411f499bed&offset=74ae385d4ca1271e5361664049cdcf67&limit=3", 
-    "offset": "74ae385d4ca1271e5361664049cdcf67"
+    "path": "/api/2.4/monitors?feed=changes&opt_fields=reasons&prev_offset=90d3226c2782f976bcf5178faedaf4d1&offset=b22f6be6441db6986b1d33b60e2a6d75&limit=3", 
+    "uri": "http://api-sandbox.openprocurement.org/api/2.4/monitors?feed=changes&opt_fields=reasons&prev_offset=90d3226c2782f976bcf5178faedaf4d1&offset=b22f6be6441db6986b1d33b60e2a6d75&limit=3", 
+    "offset": "b22f6be6441db6986b1d33b60e2a6d75"
   }, 
   "data": [
     {

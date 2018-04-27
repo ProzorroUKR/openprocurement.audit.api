@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 import mock
+import json
 
 from hashlib import sha512
 from datetime import datetime
@@ -125,6 +126,32 @@ class MonitorDialogueResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.json['data']['title'], 'Lorem ipsum')
         self.assertEqual(response.json['data']['description'], 'Lorem ipsum dolor sit amet')
         self.assertEqual(response.json['data']['dateSubmitted'], datetime.now(TZ).isoformat())
+
+    @mock.patch('restkit.Resource.request')
+    def test_monitor_credentials_tender_owner(self, mock_request):
+        mock_request.return_value = mock.MagicMock(
+            status_int=200,
+            body_string=lambda: json.dumps({'data': {'tender_token': sha512('tender_token').hexdigest()}})
+        )
+
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+        response = self.app.patch_json(
+            '/monitors/{}/credentials?acc_token={}'.format(self.monitor_id, 'tender_token')
+        )
+        self.assertIn("access", response.json)
+        self.assertIn("token", response.json["access"])
+
+        self.assertIs(mock_request.called, True)
+        args, kwargs = mock_request.call_args
+        self.assertEqual(
+            kwargs["path"],
+            '/api/2.0/tenders/{}/extract_credentials'.format(self.initial_data["tender_id"])
+        )
+
+        self.app.patch_json(
+            '/monitors/{}/credentials?acc_token={}'.format(self.monitor_id, 'another_token'),
+            status=403
+        )
 
     @mock.patch('openprocurement.audit.api.validation.TendersClient')
     def test_monitor_owner_patch_dialogue_by_tender_owner(self, mock_api_client):

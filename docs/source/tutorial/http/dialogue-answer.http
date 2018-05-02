@@ -1,4 +1,4 @@
-PATCH /api/2.4/monitors/3163b900101339e68c6bcbb724454e4a/dialogues/7e88fef734203d31a39ec2f18165a3bf?acc_token=b377ac093f453148913266e33522bf21 HTTP/1.0
+PATCH /api/2.4/monitors/3163b900101339e68c6bcbb724454e4a/dialogues/8c10d4124c9434e59f7c424afda8aa7a?acc_token=ac4fddd0d4c3351cae67c8f2440d6527 HTTP/1.0
 Authorization: Basic YnJva2VyOg==
 Content-Length: 32
 Content-Type: application/json
@@ -20,22 +20,22 @@ Content-Type: application/json; charset=UTF-8
       {
         "hash": "md5:00000000000000000000000000000000", 
         "title": "ipsum.doc", 
-        "url": "http://docs-sandbox.openprocurement.org/get/17579408368c3cbca21e6e80d5b9d25e?KeyID=a8968c46&Signature=0Qv9UpdcPIE6mJWjUncaKODteLNGcSOAngdnX2iO%2B8aMkaG1QS1cEfb2V4agGSc%2BiZTsUBewN6nbTHYQj9Z4CA%3D%3D", 
+        "url": "http://docs-sandbox.openprocurement.org/get/454a9cecaf913c0ba6960ed7ad82f951?KeyID=a8968c46&Signature=GVzCGZBrTQpUppo1jRSkcUvlJUCPt4QdfjwAwzGAGn6RZeR6Ae0gvXkjV7e0bsmGdAnybnfb1G7Z%2FIkW%2BOfjDg%3D%3D", 
         "format": "application/msword", 
         "documentOf": "dialogue", 
         "datePublished": "2018-01-01T02:00:00+02:00", 
-        "id": "862365b4dc1139a6b27326d4a350369d", 
+        "id": "db408058407731f58a910280025982f7", 
         "dateModified": "2018-01-01T02:00:00+02:00"
       }, 
       {
         "hash": "md5:00000000000000000000000000000000", 
         "author": "test_sas", 
         "title": "dolor.doc", 
-        "url": "http://docs-sandbox.openprocurement.org/get/e59252987ef23f27ac22e5783e6a1456?KeyID=a8968c46&Signature=4j%2FK63h34ahQMNqjdflVMwFPNPJeirAZNgIM46gTpuxKoJXITlWZk8juARZZi0BROwwUKEOWKl2tYs0%252Bm6yEDA%253D%253D", 
+        "url": "http://docs-sandbox.openprocurement.org/get/f02fb11b9645325e9afed114e6846d8c?KeyID=a8968c46&Signature=mHO%2Frb1pLjUS7nWFddSPmUe%2FWUDhqALymO3iuWdwGk5rj3D3vBRha2dd%2FVWbHDJ9naHP24Fk7XeWNu7HuOtPCw%253D%253D", 
         "format": "application/msword", 
         "documentOf": "dialogue", 
         "datePublished": "2018-01-01T02:00:00+02:00", 
-        "id": "f9841d0557b8332b993787e77baaed75", 
+        "id": "f7d9a24d839b3e85a5a804452ccc3268", 
         "dateModified": "2018-01-01T02:00:00+02:00"
       }
     ], 
@@ -45,7 +45,7 @@ Content-Type: application/json; charset=UTF-8
     "dateAnswered": "2018-01-01T02:00:00+02:00", 
     "dateSubmitted": "2018-01-01T02:00:00+02:00", 
     "answer": "Sit amet", 
-    "id": "7e88fef734203d31a39ec2f18165a3bf"
+    "id": "8c10d4124c9434e59f7c424afda8aa7a"
   }
 }
 

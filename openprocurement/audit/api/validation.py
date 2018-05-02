@@ -62,11 +62,7 @@ def validate_patch_dialogue_data(request):
 
 def validate_patch_dialogue_allowed(request):
     owner = request.validated['dialogue']['author']
-    monitor_owner = request.validated['monitor']['owner']
-    tender_owner = request.validated['monitor']['tender_owner']
-    if owner == monitor_owner and request.authenticated_role == 'monitor_owner':
-        raise_operation_error(request, 'Can\'t edit dialogue')
-    elif owner == tender_owner and request.authenticated_role == 'tender_owner':
+    if request.authenticated_userid == owner:
         raise_operation_error(request, 'Can\'t edit dialogue')
 
 def validate_document_decision_upload_allowed(request):

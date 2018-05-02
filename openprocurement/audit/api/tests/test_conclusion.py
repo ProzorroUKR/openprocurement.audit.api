@@ -12,7 +12,7 @@ class MonitorConclusionResourceTest(BaseWebTest):
 
     def test_fail_in_draft_status(self):
         self.app.patch_json(
-            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}'.format(self.monitor_id),
             {"data": {
                 "conclusion": {
                     "description": "Sor lum far",
@@ -25,7 +25,7 @@ class MonitorConclusionResourceTest(BaseWebTest):
 
     def test_decision_and_conclusion(self):
         self.app.patch_json(
-            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}'.format(self.monitor_id),
             {"data": {
                 "status": "active",
                 "decision": {
@@ -52,7 +52,7 @@ class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):
         self.app.authorization = ('Basic', (self.sas_token, ''))
 
         self.app.patch_json(
-            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}'.format(self.monitor_id),
             {"data": {
                 "status": "active",
                 "decision": {
@@ -64,7 +64,7 @@ class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):
 
     def test_fail_empty(self):
         response = self.app.patch_json(
-            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}'.format(self.monitor_id),
             {"data": {
                 "conclusion": {}
             }},
@@ -77,7 +77,7 @@ class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):
 
     def test_fail_valid_violation_flag(self):
         response = self.app.patch_json(
-            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}'.format(self.monitor_id),
             {"data": {
                 "conclusion": {
                     "violationOccurred": "Nope",
@@ -92,7 +92,7 @@ class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):
 
     def test_fail_required_type(self):
         response = self.app.patch_json(
-            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}'.format(self.monitor_id),
             {"data": {
                 "conclusion": {
                     "violationOccurred": True,
@@ -107,7 +107,7 @@ class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):
 
     def test_fail_valid_type(self):
         response = self.app.patch_json(
-            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}'.format(self.monitor_id),
             {"data": {
                 "conclusion": {
                     "violationOccurred": True,
@@ -123,7 +123,7 @@ class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):
 
     def test_success_no_violations(self):
         response = self.app.patch_json(
-            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}'.format(self.monitor_id),
             {"data": {
                 "conclusion": {
                     "violationOccurred": False,
@@ -136,7 +136,7 @@ class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):
 
     def test_success_minimal(self):
         response = self.app.patch_json(
-            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}'.format(self.monitor_id),
             {"data": {
                 "conclusion": {
                     "violationOccurred": True,
@@ -149,7 +149,7 @@ class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):
 
         # add a document directly to a object
         response = self.app.patch_json(
-            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}'.format(self.monitor_id),
             {"data": {
                 "conclusion": {
                     "documents": [
@@ -169,7 +169,7 @@ class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):
 
         # post another document via the conclusion documents resource url
         response = self.app.post_json(
-            '/monitors/{}/conclusion/documents?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}/conclusion/documents'.format(self.monitor_id),
             {"data": {
                 'title': 'sign.p7s',
                 'url': self.generate_docservice_url(),
@@ -180,7 +180,7 @@ class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.status_code, 201)
 
         response = self.app.get(
-            '/monitors/{}/conclusion/documents?acc_token={}'.format(self.monitor_id, self.monitor_token))
+            '/monitors/{}/conclusion/documents'.format(self.monitor_id))
         self.assertEqual(len(response.json["data"]), 2)
 
     def test_success_full(self):
@@ -206,7 +206,7 @@ class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):
             ]
         }
         response = self.app.patch_json(
-            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}'.format(self.monitor_id),
             {"data": {
                 "conclusion": conclusion
             }}

@@ -34,13 +34,13 @@ class MonitorDialogueResourceTest(BaseWebTest, DSWebTestMixin):
         }
         self.app.authorization = ('Basic', (self.sas_token, ''))
         self.app.patch_json(
-            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}'.format(self.monitor_id),
             {'data': self.test_monitor_activation_data})
 
     def test_dialogue_create_required_fields(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.post_json(
-            '/monitors/{}/dialogues?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}/dialogues'.format(self.monitor_id),
             {'data': {}}, status=422)
         self.assertEqual(response.status, '422 Unprocessable Entity')
         self.assertEqual(response.content_type, 'application/json')
@@ -52,7 +52,7 @@ class MonitorDialogueResourceTest(BaseWebTest, DSWebTestMixin):
     def test_dialogue_create_by_monitor_owner(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.post_json(
-            '/monitors/{}/dialogues?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}/dialogues'.format(self.monitor_id),
             {'data': {
                 'title': 'Lorem ipsum',
                 'description': 'Lorem ipsum dolor sit amet'
@@ -103,7 +103,7 @@ class MonitorDialogueResourceTest(BaseWebTest, DSWebTestMixin):
 
     def test_monitor_owner_patch_dialogue_by_monitor_owner(self):
         response = self.app.post_json(
-            '/monitors/{}/dialogues?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}/dialogues'.format(self.monitor_id),
             {'data': {
                 'title': 'Lorem ipsum',
                 'description': 'Lorem ipsum dolor sit amet'
@@ -112,7 +112,7 @@ class MonitorDialogueResourceTest(BaseWebTest, DSWebTestMixin):
 
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.patch_json(
-            '/monitors/{}/dialogues/{}?acc_token={}'.format(self.monitor_id, dialogue_id, self.monitor_token),
+            '/monitors/{}/dialogues/{}'.format(self.monitor_id, dialogue_id),
             {'data': {
                 'title': 'It’s a trap!',
                 'description': 'Enemy Ships in Sector 47!'
@@ -133,7 +133,7 @@ class MonitorDialogueResourceTest(BaseWebTest, DSWebTestMixin):
         }
 
         response = self.app.post_json(
-            '/monitors/{}/dialogues?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}/dialogues'.format(self.monitor_id),
             {'data': {
                 'title': 'Lorem ipsum',
                 'description': 'Lorem ipsum dolor sit amet'
@@ -176,7 +176,7 @@ class MonitorDialogueResourceTest(BaseWebTest, DSWebTestMixin):
 
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.patch_json(
-            '/monitors/{}/dialogues/{}?acc_token={}'.format(self.monitor_id, dialogue_id, self.monitor_token),
+            '/monitors/{}/dialogues/{}'.format(self.monitor_id, dialogue_id),
             {'data': {
                 'title': 'It’s a trap!',
                 'description': 'Enemy Ships in Sector 47!',
@@ -213,7 +213,7 @@ class MonitorDialogueResourceTest(BaseWebTest, DSWebTestMixin):
         dialogue_id = response.json['data']['id']
 
         response = self.app.patch_json(
-            '/monitors/{}/dialogues/{}?acc_token={}'.format(self.monitor_id, dialogue_id, self.monitor_token),
+            '/monitors/{}/dialogues/{}'.format(self.monitor_id, dialogue_id),
             {'data': {
                 'title': 'It’s a trap!',
                 'description': 'Enemy Ships in Sector 47!',

@@ -346,7 +346,6 @@ class MonitorsResource(APIResource):
         monitor = self.request.validated['monitor']
         monitor.id = generate_id()
         monitor.monitoring_id = generate_monitor_id(get_now(), self.db, self.server_id)
-        set_ownership(monitor, self.request)
         monitor.dateModified = monitor.dateCreated
         save_monitor(self.request)
         LOGGER.info('Created monitor {}'.format(monitor.id),
@@ -355,12 +354,7 @@ class MonitorsResource(APIResource):
                                          {'MONITOR_ID': monitor.id}))
         self.request.response.status = 201
         self.request.response.headers['Location'] = self.request.route_url('Monitor', monitor_id=monitor.id)
-        return {
-            'data': monitor.serialize('view'),
-            'access': {
-                'token': monitor.owner_token
-            }
-        }
+        return {'data': monitor.serialize('view')}
 
 
 @op_resource(name='Monitor', path='/monitors/{monitor_id}')

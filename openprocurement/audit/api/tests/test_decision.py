@@ -15,7 +15,7 @@ class MonitorDecisionResourceTest(BaseWebTest, DSWebTestMixin):
 
     def test_fail_empty(self):
         self.app.patch_json(
-            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}'.format(self.monitor_id),
             {"data": {
                 "decision": {}
             }},
@@ -25,7 +25,7 @@ class MonitorDecisionResourceTest(BaseWebTest, DSWebTestMixin):
     def test_success_minimal(self):
         decision_date = (datetime.now(TZ) - timedelta(days=2))
         response = self.app.patch_json(
-            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}'.format(self.monitor_id),
             {"data": {
                 "decision": {
                     "description": "text",
@@ -42,7 +42,7 @@ class MonitorDecisionResourceTest(BaseWebTest, DSWebTestMixin):
 
         # add a document directly to a object
         response = self.app.patch_json(
-            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}'.format(self.monitor_id),
             {"data": {
                 "decision": {
                     "documents": [
@@ -62,7 +62,7 @@ class MonitorDecisionResourceTest(BaseWebTest, DSWebTestMixin):
 
         # post another document via the decision documents resource url
         response = self.app.post_json(
-            '/monitors/{}/decision/documents?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}/decision/documents'.format(self.monitor_id),
             {"data": {
                 'title': 'sign.p7s',
                 'url': self.generate_docservice_url(),
@@ -73,7 +73,7 @@ class MonitorDecisionResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.status_code, 201)
 
         response = self.app.get(
-            '/monitors/{}/decision/documents?acc_token={}'.format(self.monitor_id, self.monitor_token))
+            '/monitors/{}/decision/documents'.format(self.monitor_id))
         self.assertEqual(len(response.json["data"]), 2)
 
     def test_success_full(self):
@@ -97,7 +97,7 @@ class MonitorDecisionResourceTest(BaseWebTest, DSWebTestMixin):
             ]
         }
         response = self.app.patch_json(
-            '/monitors/{}?acc_token={}'.format(self.monitor_id, self.monitor_token),
+            '/monitors/{}'.format(self.monitor_id),
             {"data": {
                 "decision": decision
             }}

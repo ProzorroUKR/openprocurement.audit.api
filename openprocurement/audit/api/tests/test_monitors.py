@@ -46,13 +46,10 @@ class MonitorsEmptyListingResourceTest(BaseWebTest):
             status=201
         )
 
-        self.assertIn("access", response.json)
-        self.assertIn("token", response.json["access"])
-
         self.assertIn("data", response.json)
         self.assertEqual(
             set(response.json["data"]),
-            {"id", "status", "tender_id", "owner", "dateModified",
+            {"id", "status", "tender_id", "dateModified",
              "dateCreated", "reasons", "monitoring_id", "procuringStages"}
         )
         self.assertEqual(response.json["data"]["status"], "draft")

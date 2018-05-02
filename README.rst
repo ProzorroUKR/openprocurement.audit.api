@@ -10,11 +10,16 @@
     :target: https://coveralls.io/github/raccoongang/openprocurement.audit.api
 
 
+.. image:: https://readthedocs.org/projects/sas-api-raccoongang-my/badge/?version=latest
+    :target: http://sas-api-raccoongang-my.readthedocs.io/en/latest/?badge=latest
+    :alt: Documentation Status
+
+
 
 Installation
 ------------
 -  Clone
--  `python bootstrap.py`
+-  `./bootstrap.sh`
 -  `bin/buildout -N`
 
 Then you can run test

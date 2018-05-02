@@ -71,22 +71,22 @@ class Monitor(SchematicsDocument, Model):
             'plain': blacklist('_attachments', 'revisions') + schematics_embedded_role,
             'revision': whitelist('revisions'),
             'create': blacklist(
-                'owner_token', 'owner', 'revisions', 'dateModified', 'dateCreated', 'monitoringPeriod',
+                'revisions', 'dateModified', 'dateCreated', 'monitoringPeriod',
                 'doc_id', '_attachments', 'monitoring_id',
                 'tender_owner_token', 'tender_owner'
             ) + schematics_embedded_role,
             'edit_draft': blacklist(
-                'owner_token', 'owner', 'revisions', 'dateModified', 'dateCreated', 'monitoringPeriod',
+                'revisions', 'dateModified', 'dateCreated', 'monitoringPeriod',
                 'doc_id', '_attachments', 'tender_id', 'monitoring_id',
                 'tender_owner_token', 'tender_owner'
             ) + schematics_embedded_role,
             'edit_active': blacklist(
-                'owner_token', 'owner', 'revisions', 'dateModified', 'dateCreated', 'monitoringPeriod',
+                'revisions', 'dateModified', 'dateCreated', 'monitoringPeriod',
                 'doc_id', '_attachments', 'tender_id', 'monitoring_id', 'decision',
                 'tender_owner_token', 'tender_owner'
             ) + schematics_embedded_role,
             'view': blacklist(
-                'owner_token', 'tender_owner_token', '_attachments', 'revisions'
+                'tender_owner_token', '_attachments', 'revisions'
             ) + schematics_embedded_role,
             'listing': whitelist('dateModified', 'doc_id'),
             'default': schematics_default_role,
@@ -106,8 +106,6 @@ class Monitor(SchematicsDocument, Model):
 
     dateModified = IsoDateTimeType()
     dateCreated = IsoDateTimeType(default=get_now)
-    owner = StringType()
-    owner_token = StringType()
     tender_owner = StringType()
     tender_owner_token = StringType()
     revisions = ListType(ModelType(Revision), default=list())
@@ -121,15 +119,10 @@ class Monitor(SchematicsDocument, Model):
     def __local_roles__(self):
         return dict([
             ('{}_{}'.format(self.tender_owner, self.tender_owner_token), 'tender_owner'),
-            ('{}_{}'.format(self.owner, self.owner_token), 'monitor_owner'),
         ])
 
     def __acl__(self):
         return [
-            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'edit_monitor'),
-            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_monitor_documents'),
-            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'edit_dialogue'),
-            (Allow, '{}_{}'.format(self.owner, self.owner_token), 'upload_dialogue_documents'),
             (Allow, '{}_{}'.format(self.tender_owner, self.tender_owner_token), 'create_dialogue'),
             (Allow, '{}_{}'.format(self.tender_owner, self.tender_owner_token), 'edit_dialogue'),
             (Allow, '{}_{}'.format(self.tender_owner, self.tender_owner_token), 'upload_dialogue_documents'),

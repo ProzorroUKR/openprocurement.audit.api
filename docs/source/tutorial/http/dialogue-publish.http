@@ -1,4 +1,4 @@
-POST /api/2.4/monitors/3163b900101339e68c6bcbb724454e4a/dialogues?acc_token=73c0e8e456fa34a985137da11f00f833 HTTP/1.0
+POST /api/2.4/monitors/3163b900101339e68c6bcbb724454e4a/dialogues HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
 Content-Length: 408
 Content-Type: application/json
@@ -8,7 +8,7 @@ Host: api-sandbox.openprocurement.org
   "data": {
     "documents": [
       {
-        "url": "http://docs-sandbox.openprocurement.org/get/17579408368c3cbca21e6e80d5b9d25e?KeyID=a8968c46&Signature=0Qv9UpdcPIE6mJWjUncaKODteLNGcSOAngdnX2iO%2B8aMkaG1QS1cEfb2V4agGSc%2BiZTsUBewN6nbTHYQj9Z4CA%3D%3D", 
+        "url": "http://docs-sandbox.openprocurement.org/get/454a9cecaf913c0ba6960ed7ad82f951?KeyID=a8968c46&Signature=GVzCGZBrTQpUppo1jRSkcUvlJUCPt4QdfjwAwzGAGn6RZeR6Ae0gvXkjV7e0bsmGdAnybnfb1G7Z%2FIkW%2BOfjDg%3D%3D", 
         "title": "ipsum.doc", 
         "hash": "md5:00000000000000000000000000000000", 
         "format": "application/msword"
@@ -22,7 +22,7 @@ Host: api-sandbox.openprocurement.org
 
 201 Created
 Content-Type: application/json; charset=UTF-8
-Location: http://api-sandbox.openprocurement.org/api/2.4/monitors/3163b900101339e68c6bcbb724454e4a/dialogues/7e88fef734203d31a39ec2f18165a3bf
+Location: http://api-sandbox.openprocurement.org/api/2.4/monitors/3163b900101339e68c6bcbb724454e4a/dialogues/8c10d4124c9434e59f7c424afda8aa7a
 
 {
   "data": {
@@ -30,11 +30,11 @@ Location: http://api-sandbox.openprocurement.org/api/2.4/monitors/3163b900101339
       {
         "hash": "md5:00000000000000000000000000000000", 
         "title": "ipsum.doc", 
-        "url": "http://docs-sandbox.openprocurement.org/get/17579408368c3cbca21e6e80d5b9d25e?KeyID=a8968c46&Signature=0Qv9UpdcPIE6mJWjUncaKODteLNGcSOAngdnX2iO%2B8aMkaG1QS1cEfb2V4agGSc%2BiZTsUBewN6nbTHYQj9Z4CA%3D%3D", 
+        "url": "http://docs-sandbox.openprocurement.org/get/454a9cecaf913c0ba6960ed7ad82f951?KeyID=a8968c46&Signature=GVzCGZBrTQpUppo1jRSkcUvlJUCPt4QdfjwAwzGAGn6RZeR6Ae0gvXkjV7e0bsmGdAnybnfb1G7Z%2FIkW%2BOfjDg%3D%3D", 
         "format": "application/msword", 
         "documentOf": "dialogue", 
         "datePublished": "2018-01-01T02:00:00+02:00", 
-        "id": "862365b4dc1139a6b27326d4a350369d", 
+        "id": "db408058407731f58a910280025982f7", 
         "dateModified": "2018-01-01T02:00:00+02:00"
       }
     ], 
@@ -42,7 +42,7 @@ Location: http://api-sandbox.openprocurement.org/api/2.4/monitors/3163b900101339
     "title": "Lorem ipsum", 
     "author": "test_sas", 
     "dateSubmitted": "2018-01-01T02:00:00+02:00", 
-    "id": "7e88fef734203d31a39ec2f18165a3bf"
+    "id": "8c10d4124c9434e59f7c424afda8aa7a"
   }
 }
 

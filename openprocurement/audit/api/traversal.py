@@ -17,8 +17,10 @@ class Root(object):
         (Allow, Everyone, 'revision_monitor'),
         (Allow, 'g:brokers', 'generate_credentials'),
         (Allow, 'g:sas', 'create_monitor'),
+        (Allow, 'g:sas', 'edit_monitor'),
         (Allow, 'g:sas', 'upload_monitor_documents'),
         (Allow, 'g:sas', 'create_dialogue'),
+        (Allow, 'g:sas', 'edit_dialogue'),
         (Allow, 'g:sas', 'upload_dialogue_documents'),
     ]
 

@@ -14,66 +14,73 @@ def validate_monitor_data(request):
 
 
 def validate_patch_monitor_data(request):
-    return validate_data(request, Monitor, partial=True)
+    result = validate_data(request, Monitor, partial=True)
+
+    # check sent data that is not allowed in current status
+    # acceptable fields are set in Monitor.Options.roles: edit_draft, edit_active, etc
+    provided = set(request.validated['json_data'].keys())
+    allowed = set(request.validated['data'].keys())
+    difference = provided - allowed
+    if difference:
+        for i in difference:
+            request.errors.add('body', i, "This field isn't expected in the {} status".format(
+                request.validated["monitor"]["status"]))
+        request.errors.status = 422
+        raise error_handler(request.errors)
+
+    return result
+
 
 def validate_patch_monitor_status(request):
-    status = request.validated['data'].get('status', request.context.status)
-
-    if status == 'active':
-        validate_patch_monitor_active_status(request)
-
-    if request.json.get("data", {}).get('decision'):
-        validate_patch_monitor_decision(request)
-
-    if request.json.get("data", {}).get('conclusion'):
-        validate_patch_monitor_conclusion(request)
-
-
-def validate_patch_monitor_active_status(request):
-    status_current = request.context.status
-    if status_current == 'draft':
-        if not request.validated.get("data", {}).get('decision'):
-            request.errors.status = 403
-            request.errors.add('body', 'decision', 'This field is required.')
+    status = request.validated['json_data'].get("status")
+    if status is not None and status != request.context.status:
+        function_name = "_validate_patch_monitor_status_{}_to_{}".format(request.context.status, status)
+        try:
+            func = globals()[function_name]
+        except KeyError:
+            request.errors.add(
+                'body', 'status',
+                "Status update from '{}' to '{}' is not allowed.".format(request.context.status, status)
+            )
+            request.errors.status = 422
             raise error_handler(request.errors)
-    elif status_current == 'active':
-        pass
-    else:
-        raise_operation_error(request, 'Can\'t update monitor status to active in current {}'.format(status_current))
+        else:
+            return func(request)
 
 
-def validate_patch_monitor_decision(request):
-    status_current = request.context.status
-    if status_current != 'draft':
-        raise_operation_error(request, 'Can\'t update monitor decision in current {} status'.format(status_current))
+def _validate_patch_monitor_status_draft_to_active(request):
+    if not request.validated.get("data", {}).get('decision'):
+        request.errors.status = 422
+        request.errors.add('body', 'decision', 'This field is required.')
+        raise error_handler(request.errors)
 
-
-def validate_patch_monitor_conclusion(request):
-    status_current = request.context.status
-    if status_current != 'active':
-        raise_operation_error(request, 'Can\'t update monitor conclusion in current {} status'.format(status_current))
 
 def validate_dialogue_data(request):
     update_logging_context(request, {'DIALOGUE_ID': '__new__'})
     return validate_data(request, Dialogue)
 
+
 def validate_patch_dialogue_data(request):
     return validate_data(request, Dialogue, partial=True)
+
 
 def validate_patch_dialogue_allowed(request):
     owner = request.validated['dialogue']['author']
     if request.authenticated_userid == owner:
         raise_operation_error(request, 'Can\'t edit dialogue')
 
+
 def validate_document_decision_upload_allowed(request):
     status_current = request.validated['monitor'].status
     if status_current != 'draft':
         raise_operation_error(request, 'Can\'t add document in current {} monitor status'.format(status_current))
 
+
 def validate_document_conclusion_upload_allowed(request):
     status_current = request.validated['monitor'].status
     if status_current != 'active':
         raise_operation_error(request, 'Can\'t add document in current {} monitor status'.format(status_current))
+
 
 def validate_credentials_generate(request):
     client = TendersClient(

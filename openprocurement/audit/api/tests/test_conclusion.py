@@ -20,7 +20,7 @@ class MonitorConclusionResourceTest(BaseWebTest):
                     "violationType": "corruptionProcurementMethodType",
                 }
             }},
-            status=403,
+            status=422,
         )
 
     def test_decision_and_conclusion(self):
@@ -37,7 +37,7 @@ class MonitorConclusionResourceTest(BaseWebTest):
                     "violationOccurred": True,
                     "violationType": "corruptionProcurementMethodType",
                 }
-            }}, status=403
+            }}, status=422
         )
 
 

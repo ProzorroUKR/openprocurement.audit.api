@@ -64,6 +64,7 @@ class Dialogue(Model):
 class Monitor(SchematicsDocument, Model):
 
     class Options:
+        _perm_edit_whitelist = whitelist("status", "dialogues")
         roles = {
             'plain': blacklist('_attachments', 'revisions') + schematics_embedded_role,
             'revision': whitelist('revisions'),
@@ -72,16 +73,8 @@ class Monitor(SchematicsDocument, Model):
                 'doc_id', '_attachments', 'monitoring_id',
                 'tender_owner_token', 'tender_owner'
             ) + schematics_embedded_role,
-            'edit_draft': blacklist(
-                'revisions', 'dateModified', 'dateCreated', 'monitoringPeriod',
-                'doc_id', '_attachments', 'tender_id', 'monitoring_id',
-                'tender_owner_token', 'tender_owner'
-            ) + schematics_embedded_role,
-            'edit_active': blacklist(
-                'revisions', 'dateModified', 'dateCreated', 'monitoringPeriod',
-                'doc_id', '_attachments', 'tender_id', 'monitoring_id', 'decision',
-                'tender_owner_token', 'tender_owner'
-            ) + schematics_embedded_role,
+            'edit_draft': whitelist("reasons", "procuringStages", "monitoringPeriod", "decision") + _perm_edit_whitelist,
+            'edit_active': whitelist("conclusion") + _perm_edit_whitelist,
             'view': blacklist(
                 'tender_owner_token', '_attachments', 'revisions'
             ) + schematics_embedded_role,

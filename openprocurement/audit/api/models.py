@@ -1,6 +1,4 @@
 from uuid import uuid4
-
-from openprocurement.api.interfaces import IOPContent
 from openprocurement.api.utils import get_now, get_root
 from openprocurement.api.models import Model, Revision, Period
 from openprocurement.api.models import Document as BaseDocument
@@ -12,7 +10,6 @@ from schematics.transforms import whitelist, blacklist
 from schematics.exceptions import ValidationError
 from couchdb_schematics.document import SchematicsDocument
 from pyramid.security import Allow
-from zope.interface import implementer
 
 
 class Document(BaseDocument):

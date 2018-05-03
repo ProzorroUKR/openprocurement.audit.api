@@ -31,7 +31,7 @@ class MonitorResourceTest(BaseWebTest):
         self.app.patch_json(
             '/monitors/{}'.format(self.monitor_id),
             {"data": {"status": "active"}},
-            status=403
+            status=422
         )
 
     @freeze_time('2018-01-01T12:00:00.000000+03:00')
@@ -72,16 +72,15 @@ class MonitorResourceTest(BaseWebTest):
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["status"], "active")
 
-        response = self.app.patch_json(
+        self.app.patch_json(
             '/monitors/{}'.format(self.monitor_id),
             {"data": {
                 "decision": {
                     "description": "text_changed",
                 }
             }},
-            status=403
+            status=422
         )
-        self.assertEqual(response.status, '403 Forbidden')
 
 
 def suite():

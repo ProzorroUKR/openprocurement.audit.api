@@ -14,8 +14,8 @@ from openprocurement.api.utils import (
 from openprocurement.audit.api.validation import (
     validate_dialogue_data,
     validate_patch_dialogue_data,
-    validate_patch_dialogue_allowed
-)
+    validate_patch_dialogue_allowed,
+    validate_post_dialogue_allowed)
 
 
 @op_resource(name='Monitor Dialogue',
@@ -25,7 +25,7 @@ from openprocurement.audit.api.validation import (
 class DialogueResource(APIResource):
 
     @json_view(content_type='application/json',
-               validators=(validate_dialogue_data,),
+               validators=(validate_dialogue_data, validate_post_dialogue_allowed),
                permission='create_dialogue')
     def collection_post(self):
         """
@@ -36,6 +36,8 @@ class DialogueResource(APIResource):
         dialogue.dateSubmitted = get_now()
         set_ownership(dialogue, self.request, 'author')
         set_documents_of_type(dialogue.documents, 'dialogue')
+        if monitor.status in ('addressed', 'declined'):
+            dialogue.dialogueOf = 'conclusion'
         monitor.dialogues.append(dialogue)
         if save_monitor(self.request):
             self.LOGGER.info('Created monitor dialogue {}'.format(dialogue.id),

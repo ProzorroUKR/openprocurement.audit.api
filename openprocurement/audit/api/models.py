@@ -59,12 +59,13 @@ class Dialogue(Model):
     dateSubmitted = IsoDateTimeType(default=get_now())
     dateAnswered = IsoDateTimeType()
     author = StringType()
+    dialogueOf = StringType(choices=('decision', 'conclusion'), default='decision')
 
 
 class Monitor(SchematicsDocument, Model):
 
     class Options:
-        _perm_edit_whitelist = whitelist("status", "dialogues")
+        _perm_edit_whitelist = whitelist("status")
         roles = {
             'plain': blacklist('_attachments', 'revisions') + schematics_embedded_role,
             'revision': whitelist('revisions'),
@@ -75,6 +76,8 @@ class Monitor(SchematicsDocument, Model):
             ) + schematics_embedded_role,
             'edit_draft': whitelist("reasons", "procuringStages", "monitoringPeriod", "decision") + _perm_edit_whitelist,
             'edit_active': whitelist("conclusion") + _perm_edit_whitelist,
+            'edit_addressed': whitelist() + _perm_edit_whitelist,
+            'edit_declined': whitelist() + _perm_edit_whitelist,
             'view': blacklist(
                 'tender_owner_token', '_attachments', 'revisions'
             ) + schematics_embedded_role,
@@ -84,7 +87,7 @@ class Monitor(SchematicsDocument, Model):
 
     tender_id = MD5Type(required=True)
     monitoring_id = StringType()
-    status = StringType(choices=['draft', 'active'], default='draft')
+    status = StringType(choices=['draft', 'active', 'addressed', 'declined'], default='draft')
 
     reasons = ListType(StringType(choices=['indicator', 'authorities', 'media', 'fiscal', 'public']), required=True)
     procuringStages = ListType(StringType(choices=['planning', 'awarding', 'contracting']), required=True)

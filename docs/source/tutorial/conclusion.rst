@@ -26,3 +26,12 @@ follow the `upload <http://documentservice.api-docs.openprocurement.org>`_ rules
 .. include:: http/conclusion-add-document.http
    :code:
 
+To finalize conclusion process status must be changed to ``addressed`` in case of violations occurred or to ``declined`` otherwise:
+
+.. include:: http/conclusion-addressed.http
+   :code:
+
+Broker can initiate dialogue once after conclusion was provided:
+
+.. include:: http/conclusion-dialogue.http
+   :code:

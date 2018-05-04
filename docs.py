@@ -151,7 +151,7 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
             self.app.patch_json(
                 '/monitors/{}'.format(monitor_id),
                 {"data": {"status": "active"}},
-                status=403
+                status=422
             )
 
         # PUBLISH
@@ -202,7 +202,7 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                         "description": "another_text",
                     }
                 }},
-                status=403
+                status=422
             )
 
         # DIALOGUE
@@ -341,7 +341,35 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                 status=201
             )
 
-    def test_monitor_creation_fast(self):
+        with open('docs/source/tutorial/http/conclusion-addressed.http', 'w') as self.app.file_obj:
+            response = self.app.patch_json(
+                '/monitors/{}'.format(monitor_id),
+                {"data": {
+                    "status": "addressed",
+                }}
+            )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json["data"]["status"], "addressed")
+
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+
+        with open('docs/source/tutorial/http/conclusion-dialogue.http', 'w') as self.app.file_obj:
+            self.app.post_json(
+                '/monitors/{}/dialogues?acc_token={}'.format(monitor_id, tender_owner_token),
+                {"data": {
+                    "title": "Sit amet",
+                    "description": "Sit amet lorem ipsum dolor.",
+                    "documents": [{
+                        'title': 'dolor.doc',
+                        'url': self.generate_docservice_url(),
+                        'hash': 'md5:' + '0' * 32,
+                        'format': 'application/msword',
+                    }]
+                }},
+                status=201
+            )
+
+    def test_monitor_publish_fast(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
 
         response = self.app.post_json(

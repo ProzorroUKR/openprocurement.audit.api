@@ -55,6 +55,25 @@ def _validate_patch_monitor_status_draft_to_active(request):
         raise error_handler(request.errors)
 
 
+def _validate_patch_monitor_status_active_to_addressed(request):
+    _validate_patch_monitor_status_active_to_addressed_or_declined(request)
+    if not request.validated.get("data", {}).get('conclusion').get('violationOccurred'):
+        raise_operation_error(request, 'Can\'t set addressed status to monitor if no violation occurred')
+
+
+def _validate_patch_monitor_status_active_to_declined(request):
+    _validate_patch_monitor_status_active_to_addressed_or_declined(request)
+    if request.validated.get("data", {}).get('conclusion').get('violationOccurred'):
+        raise_operation_error(request, 'Can\'t set declined status to monitor if violation occurred')
+
+
+def _validate_patch_monitor_status_active_to_addressed_or_declined(request):
+    if not request.validated.get("data", {}).get('conclusion'):
+        request.errors.status = 422
+        request.errors.add('body', 'conclusion', 'This field is required.')
+        raise error_handler(request.errors)
+
+
 def validate_dialogue_data(request):
     update_logging_context(request, {'DIALOGUE_ID': '__new__'})
     return validate_data(request, Dialogue)
@@ -64,10 +83,31 @@ def validate_patch_dialogue_data(request):
     return validate_data(request, Dialogue, partial=True)
 
 
+def validate_post_dialogue_allowed(request):
+    monitor = request.validated['monitor']
+    status_current = monitor.status
+    if status_current in ('addressed', 'declined'):
+        if request.authenticated_userid != request.validated['monitor'].tender_owner:
+            raise forbidden(request)
+        if sum(dialogue.dialogueOf == 'conclusion' for dialogue in monitor.dialogues):
+            raise_operation_error(request, 'Can\'t add more than one conclusion dialogue')
+    elif status_current not in ('active',):
+        raise_operation_error(request, 'Can\'t add dialogue in current {} monitor status'.format(status_current))
+
+
 def validate_patch_dialogue_allowed(request):
-    owner = request.validated['dialogue']['author']
+    dialogue = request.validated['dialogue']
+    owner = dialogue['author']
     if request.authenticated_userid == owner:
-        raise_operation_error(request, 'Can\'t edit dialogue')
+        raise forbidden(request)
+    monitor = request.validated['monitor']
+    status_current = monitor.status
+    if dialogue.dialogueOf == 'conclusion' and status_current not in ('addressed', 'declined'):
+        raise_operation_error(request, 'Can\'t edit conclusion dialogue in current {} monitor status'.format(
+            status_current))
+    elif dialogue.dialogueOf == 'decision' and status_current not in ('active',):
+        raise_operation_error(request, 'Can\'t edit decision dialogue in current {} monitor status'.format(
+            status_current))
 
 
 def validate_document_decision_upload_allowed(request):
@@ -93,4 +133,4 @@ def validate_credentials_generate(request):
         if sha512(request.params.get('acc_token')).hexdigest() != response['data']['tender_token']:
             raise forbidden(request)
     except ResourceNotFound:
-        raise_operation_error(request, "Tender {} not found".format(request.validated['monitor'].tender_id))
+        raise_operation_error(request, 'Tender {} not found'.format(request.validated['monitor'].tender_id))

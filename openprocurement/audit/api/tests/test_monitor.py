@@ -82,6 +82,84 @@ class MonitorResourceTest(BaseWebTest):
             status=422
         )
 
+class ActiveMonitorResourceTest(BaseWebTest):
+    def setUp(self):
+        super(ActiveMonitorResourceTest, self).setUp()
+        self.create_monitor()
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.patch_json(
+            '/monitors/{}'.format(self.monitor_id),
+            {"data": {
+                "status": "active",
+                "decision": {
+                    "description": "text",
+                    "date": (datetime.now() + timedelta(days=2)).isoformat()
+                }
+            }}
+        )
+
+    def test_patch_to_declined(self):
+        response = self.app.patch_json(
+            '/monitors/{}'.format(self.monitor_id),
+            {"data": {
+                "conclusion": {
+                    "violationOccurred": False,
+                },
+                "status": "declined",
+            }},
+        )
+
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["status"], "declined")
+
+    def test_patch_to_declined_if_violation_occurred(self):
+        response = self.app.patch_json(
+            '/monitors/{}'.format(self.monitor_id),
+            {"data": {
+                "conclusion": {
+                    "violationOccurred": True,
+                    "violationType": "corruptionProcurementMethodType",
+                },
+                "status": "declined",
+            }},
+            status=403
+        )
+
+        self.assertEqual(response.status, '403 Forbidden')
+        self.assertEqual(response.content_type, 'application/json')
+
+    def test_patch_to_addressed(self):
+        response = self.app.patch_json(
+            '/monitors/{}'.format(self.monitor_id),
+            {"data": {
+                "conclusion": {
+                    "violationOccurred": True,
+                    "violationType": "corruptionProcurementMethodType",
+                },
+                "status": "addressed",
+            }},
+        )
+
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["status"], "addressed")
+
+    def test_patch_to_addressed_if_no_violation_occurred(self):
+        response = self.app.patch_json(
+            '/monitors/{}'.format(self.monitor_id),
+            {"data": {
+                "conclusion": {
+                    "violationOccurred": False,
+                },
+                "status": "addressed",
+            }},
+            status=403
+        )
+
+        self.assertEqual(response.status, '403 Forbidden')
+        self.assertEqual(response.content_type, 'application/json')
+
 
 def suite():
     s = unittest.TestSuite()

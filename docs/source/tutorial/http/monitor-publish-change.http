@@ -13,16 +13,16 @@ Host: api-sandbox.openprocurement.org
 }
 
 
-403 Forbidden
+422 Unprocessable Entity
 Content-Type: application/json; charset=UTF-8
 
 {
   "status": "error", 
   "errors": [
     {
-      "description": "Can't update monitor decision in current active status", 
+      "description": "This field isn't expected in the active status", 
       "location": "body", 
-      "name": "data"
+      "name": "decision"
     }
   ]
 }

@@ -19,24 +19,22 @@ class MonitorDialogueResourceTest(BaseWebTest, DSWebTestMixin):
         super(MonitorDialogueResourceTest, self).setUp()
         self.app.app.registry.docservice_url = 'http://localhost'
         self.create_monitor()
-        self.test_docservice_document_data = {
-            'title': 'lorem.doc',
-            'url': self.generate_docservice_url(),
-            'hash': 'md5:' + '0' * 32,
-            'format': 'application/msword',
-        }
-        self.test_monitor_activation_data = {
-            "status": "active",
-            "decision": {
-                "date": "2015-05-10T23:11:39.720908+03:00",
-                "description": "text",
-                "documents": [self.test_docservice_document_data]
-            }
-        }
         self.app.authorization = ('Basic', (self.sas_token, ''))
         self.app.patch_json(
             '/monitors/{}'.format(self.monitor_id),
-            {'data': self.test_monitor_activation_data})
+            {'data': {
+                "status": "active",
+                "decision": {
+                    "date": "2015-05-10T23:11:39.720908+03:00",
+                    "description": "text",
+                    "documents": [{
+                        'title': 'lorem.doc',
+                        'url': self.generate_docservice_url(),
+                        'hash': 'md5:' + '0' * 32,
+                        'format': 'application/msword',
+                    }]
+                }
+            }})
 
     def test_dialogue_create_required_fields(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
@@ -247,6 +245,90 @@ class MonitorDialogueResourceTest(BaseWebTest, DSWebTestMixin):
                 'answer': 'The Force will be with you. Always.'
             }}, status=403)
         self.assertEqual(response.content_type, 'application/json')
+
+@freeze_time('2018-01-01T12:00:00.000000+03:00')
+class AddressedMonitorDialogueResourceTest(BaseWebTest, DSWebTestMixin):
+
+    def setUp(self):
+        super(AddressedMonitorDialogueResourceTest, self).setUp()
+        self.create_monitor()
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.patch_json(
+            '/monitors/{}'.format(self.monitor_id),
+            {"data": {
+                "status": "active",
+                "decision": {
+                    "date": "2015-05-10T23:11:39.720908+03:00",
+                    "description": "text",
+                }
+            }})
+        self.app.patch_json(
+            '/monitors/{}'.format(self.monitor_id),
+            {"data": {
+                "conclusion": {
+                    "violationOccurred": False,
+                },
+                "status": "declined",
+            }})
+
+    @mock.patch('openprocurement.audit.api.validation.TendersClient')
+    def test_dialogue_create_by_tender_owner(self, mock_api_client):
+        mock_api_client.return_value.extract_credentials.return_value = {
+            'data': {'tender_token': sha512('tender_token').hexdigest()}
+        }
+
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+        response = self.app.patch_json(
+            '/monitors/{}/credentials?acc_token={}'.format(self.monitor_id, 'tender_token')
+        )
+
+        tender_owner_token = response.json['access']['token']
+        response = self.app.post_json(
+            '/monitors/{}/dialogues?acc_token={}'.format(self.monitor_id, tender_owner_token),
+            {'data': {
+                'title': 'Lorem ipsum',
+                'description': 'Lorem ipsum dolor sit amet'
+            }})
+        self.assertEqual(response.status, '201 Created')
+        self.assertEqual(response.content_type, 'application/json')
+
+    @mock.patch('openprocurement.audit.api.validation.TendersClient')
+    def test_dialogue_create_by_tender_owner_multiple(self, mock_api_client):
+        mock_api_client.return_value.extract_credentials.return_value = {
+            'data': {'tender_token': sha512('tender_token').hexdigest()}
+        }
+
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+        response = self.app.patch_json(
+            '/monitors/{}/credentials?acc_token={}'.format(self.monitor_id, 'tender_token')
+        )
+
+        tender_owner_token = response.json['access']['token']
+        response = self.app.post_json(
+            '/monitors/{}/dialogues?acc_token={}'.format(self.monitor_id, tender_owner_token),
+            {'data': {
+                'title': 'Lorem ipsum',
+                'description': 'Lorem ipsum dolor sit amet'
+            }})
+        self.assertEqual(response.status, '201 Created')
+        self.assertEqual(response.content_type, 'application/json')
+
+        self.app.post_json(
+            '/monitors/{}/dialogues?acc_token={}'.format(self.monitor_id, tender_owner_token),
+            {'data': {
+                'title': 'Lorem ipsum',
+                'description': 'Lorem ipsum dolor sit amet'
+            }}, status=403)
+
+    def test_dialogue_create_by_monitor_owner(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        response = self.app.post_json(
+            '/monitors/{}/dialogues'.format(self.monitor_id),
+            {'data': {
+                'title': 'Lorem ipsum',
+                'description': 'Lorem ipsum dolor sit amet'
+            }}, status=403)
+        self.assertEqual(response.status, '403 Forbidden')
 
 
 def suite():

@@ -82,6 +82,14 @@ class MonitorResourceTest(BaseWebTest):
             status=422
         )
 
+        self.app.patch_json(
+            '/monitors/{}'.format(self.monitor_id),
+            {"data": {
+                "status": "draft"
+            }},
+            status=422
+        )
+
 class ActiveMonitorResourceTest(BaseWebTest):
     def setUp(self):
         super(ActiveMonitorResourceTest, self).setUp()

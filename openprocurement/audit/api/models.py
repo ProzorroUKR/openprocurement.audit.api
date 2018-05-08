@@ -13,7 +13,10 @@ from pyramid.security import Allow
 
 
 class Document(BaseDocument):
-    documentOf = StringType(choices=('decision', 'conclusion', 'dialogue'), required=False)
+    documentOf = StringType(
+        choices=('decision', 'conclusion', 'dialogue', 'eliminationReport', 'eliminationResolution'),
+        required=False
+    )
     documentType = StringType()
 
 
@@ -27,11 +30,14 @@ class Conclusion(Model):
     documents = ListType(ModelType(Document), default=list())
 
     violationOccurred = BooleanType(required=True)
-    violationType = StringType(choices=(
-        'corruptionDescription', 'corruptionProcurementMethodType', 'corruptionPublicDisclosure',
-        'corruptionBiddingDocuments', 'documentsForm', 'corruptionAwarded', 'corruptionCancelled',
-        'corruptionContracting', 'corruptionChanges', 'other',
-    ))
+    violationType = ListType(
+        StringType(choices=(
+            'corruptionDescription', 'corruptionProcurementMethodType', 'corruptionPublicDisclosure',
+            'corruptionBiddingDocuments', 'documentsForm', 'corruptionAwarded', 'corruptionCancelled',
+            'corruptionContracting', 'corruptionChanges', 'other',
+        )),
+        default=[]
+    )
     auditFinding = StringType()
     stringsAttached = StringType()
     description = StringType()
@@ -39,6 +45,56 @@ class Conclusion(Model):
     def validate_violationType(self, data, value):
         if data["violationOccurred"] and not value:
             raise ValidationError(u"This field is required.")
+
+
+class EliminationResolution(Model):
+    result = StringType(choices=['completely', 'partly', 'none'])
+    resultByType = DictType(BooleanType)
+    description = StringType()
+    documents = ListType(ModelType(Document), default=list())
+    dateCreated = IsoDateTimeType(default=get_now)
+    dateModified = IsoDateTimeType()
+
+    def validate_resultByType(self, data, value):
+        violations = data["__parent__"].conclusion.violationType
+        if violations:
+            if value is None:
+                raise ValidationError(u"This field is required.")
+            diff = set(violations) ^ set(value.keys())
+            if diff:
+                raise ValidationError(u"The field must only contain the following fields: {}".format(
+                    ", ".join(violations)))
+
+    def import_data(self, raw_data, **kw):
+        for k in ("dateCreated", "dateModified"):
+            if k in raw_data:
+                del raw_data[k]
+
+        obj = super(EliminationResolution, self).import_data(raw_data, **kw)
+        obj.dateModified = get_now() if obj.dateModified else obj.dateCreated
+        return obj
+
+
+class EliminationReport(Model):
+    description = StringType(required=True)
+    documents = ListType(ModelType(Document), default=list())
+    dateCreated = IsoDateTimeType(default=get_now)
+    dateModified = IsoDateTimeType()
+
+    def get_role(self):  # this fixes document validation, because document urls cannot be added when role "edit"
+        return 'create'
+
+    class Options:
+        roles = {
+            'create': whitelist('description', 'documents'),
+            'view': schematics_default_role,
+        }
+
+    def __acl__(self):
+        return [
+            (Allow, '{}_{}'.format(self.__parent__.tender_owner, self.__parent__.tender_owner_token),
+             'edit_elimination_report'),
+        ]
 
 
 class Dialogue(Model):
@@ -76,7 +132,8 @@ class Monitor(SchematicsDocument, Model):
             ) + schematics_embedded_role,
             'edit_draft': whitelist("reasons", "procuringStages", "monitoringPeriod", "decision") + _perm_edit_whitelist,
             'edit_active': whitelist("conclusion") + _perm_edit_whitelist,
-            'edit_addressed': whitelist() + _perm_edit_whitelist,
+            'edit_addressed': whitelist("eliminationResolution") + _perm_edit_whitelist,
+            'edit_complete': whitelist(),
             'edit_declined': whitelist() + _perm_edit_whitelist,
             'view': blacklist(
                 'tender_owner_token', '_attachments', 'revisions'
@@ -87,7 +144,7 @@ class Monitor(SchematicsDocument, Model):
 
     tender_id = MD5Type(required=True)
     monitoring_id = StringType()
-    status = StringType(choices=['draft', 'active', 'addressed', 'declined'], default='draft')
+    status = StringType(choices=['draft', 'active', 'addressed', 'declined', 'complete'], default='draft')
 
     reasons = ListType(StringType(choices=['indicator', 'authorities', 'media', 'fiscal', 'public']), required=True)
     procuringStages = ListType(StringType(choices=['planning', 'awarding', 'contracting']), required=True)
@@ -95,6 +152,8 @@ class Monitor(SchematicsDocument, Model):
 
     decision = ModelType(Decision)
     conclusion = ModelType(Conclusion)
+    eliminationReport = ModelType(EliminationReport)
+    eliminationResolution = ModelType(EliminationResolution)
     dialogues = ListType(ModelType(Dialogue), default=list())
 
     dateModified = IsoDateTimeType()
@@ -103,6 +162,10 @@ class Monitor(SchematicsDocument, Model):
     tender_owner_token = StringType()
     revisions = ListType(ModelType(Revision), default=list())
     _attachments = DictType(DictType(BaseType), default=dict())
+
+    def validate_eliminationResolution(self, data, value):
+        if value is not None and data["eliminationReport"] is None:
+            raise ValidationError(u"Elimination report hasn't been provided.")
 
     def get_role(self):
         role = super(Monitor, self).get_role()
@@ -117,6 +180,7 @@ class Monitor(SchematicsDocument, Model):
     def __acl__(self):
         return [
             (Allow, '{}_{}'.format(self.tender_owner, self.tender_owner_token), 'create_dialogue'),
+            (Allow, '{}_{}'.format(self.tender_owner, self.tender_owner_token), 'create_elimination_report'),
             (Allow, '{}_{}'.format(self.tender_owner, self.tender_owner_token), 'edit_dialogue'),
             (Allow, '{}_{}'.format(self.tender_owner, self.tender_owner_token), 'upload_dialogue_documents'),
         ]

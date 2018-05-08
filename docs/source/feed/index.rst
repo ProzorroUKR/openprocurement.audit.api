@@ -1,5 +1,5 @@
 
-.. _standard:
+.. _feed:
 
 Feed
 ========

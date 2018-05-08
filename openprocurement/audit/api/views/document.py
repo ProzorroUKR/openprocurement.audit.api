@@ -162,3 +162,21 @@ class MonitorsDocumentDialogueResource(MonitorsDocumentBaseResource):
                validators=(validate_file_update, validate_document_conclusion_upload_allowed))
     def put(self):
         return super(MonitorsDocumentDialogueResource, self).put()
+
+
+@op_resource(name='Monitor Elimination Report Documents',
+             collection_path='/monitors/{monitor_id}/eliminationReport/documents',
+             path='/monitors/{monitor_id}/eliminationReport/documents/{document_id}',
+             description="Monitor Elimination Report related binary files (PDFs, etc.)")
+class MonitorsDocumentEliminationResource(MonitorsDocumentBaseResource):
+    document_of = 'eliminationReport'
+
+    @json_view(permission='edit_elimination_report',
+               validators=(validate_file_upload,))
+    def collection_post(self):
+        return super(MonitorsDocumentEliminationResource, self).collection_post()
+
+    @json_view(permission='edit_elimination_report',
+               validators=(validate_file_update,))
+    def patch(self):
+        return super(MonitorsDocumentEliminationResource, self).patch()

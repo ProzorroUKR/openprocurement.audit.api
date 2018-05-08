@@ -111,14 +111,14 @@ class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):
             {"data": {
                 "conclusion": {
                     "violationOccurred": True,
-                    "violationType": "bloodyViolator",
+                    "violationType": ["bloodTraitor"],
                 }
             }},
             status=422
         )
         self.assertIn(
             "Value must be one of (",
-            response.json["errors"][0]["description"]["violationType"][0],
+            response.json["errors"][0]["description"]["violationType"][0][0],
         )
 
     def test_success_no_violations(self):
@@ -140,7 +140,7 @@ class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):
             {"data": {
                 "conclusion": {
                     "violationOccurred": True,
-                    "violationType": "corruptionProcurementMethodType",
+                    "violationType": ["corruptionProcurementMethodType"],
                 }
             }}
         )
@@ -186,7 +186,7 @@ class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):
     def test_success_full(self):
         conclusion = {
             "violationOccurred": True,
-            "violationType": "corruptionProcurementMethodType",
+            "violationType": ["corruptionProcurementMethodType"],
             "auditFinding": "Ring around the rosies",
             "stringsAttached": "Pocket full of posies",
             "description": "Ashes, ashes, we all fall down",

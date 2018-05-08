@@ -5,7 +5,7 @@ from restkit import ResourceNotFound
 from hashlib import sha512
 
 from openprocurement_client.client import TendersClient
-from openprocurement.audit.api.models import Monitor, Dialogue
+from openprocurement.audit.api.models import Monitor, Dialogue, EliminationReport
 
 
 def validate_monitor_data(request):
@@ -23,7 +23,7 @@ def validate_patch_monitor_data(request):
     difference = provided - allowed
     if difference:
         for i in difference:
-            request.errors.add('body', i, "This field isn't expected in the {} status".format(
+            request.errors.add('body', i, "This field cannot be updated in the {} status".format(
                 request.validated["monitor"]["status"]))
         request.errors.status = 422
         raise error_handler(request.errors)
@@ -72,6 +72,12 @@ def _validate_patch_monitor_status_active_to_addressed_or_declined(request):
         request.errors.status = 422
         request.errors.add('body', 'conclusion', 'This field is required.')
         raise error_handler(request.errors)
+
+
+def _validate_patch_monitor_status_addressed_to_complete(request):
+    if not request.validated.get("data", {}).get('eliminationResolution'):
+        request.errors.status = 422
+        request.errors.add('body', 'eliminationResolution', 'This field is required.')
 
 
 def validate_dialogue_data(request):
@@ -134,3 +140,22 @@ def validate_credentials_generate(request):
             raise forbidden(request)
     except ResourceNotFound:
         raise_operation_error(request, 'Tender {} not found'.format(request.validated['monitor'].tender_id))
+
+
+def _validate_elimination_report_status(request):
+    monitor = request.validated['monitor']
+    if monitor.status != "addressed":
+        request.errors.status = 422
+        request.errors.add('body', 'eliminationResolution',
+                           'Can\'t update in current {} monitor status'.format(monitor.status))
+        raise error_handler(request.errors)
+
+
+def validate_elimination_report_data(request):
+    _validate_elimination_report_status(request)
+    return validate_data(request, EliminationReport)
+
+
+def validate_patch_elimination_report_data(request):
+    _validate_elimination_report_status(request)
+    return validate_data(request, EliminationReport, partial=True)

@@ -20,7 +20,7 @@ Content-Type: application/json; charset=UTF-8
   "status": "error", 
   "errors": [
     {
-      "description": "This field isn't expected in the active status", 
+      "description": "This field cannot be updated in the active status", 
       "location": "body", 
       "name": "decision"
     }

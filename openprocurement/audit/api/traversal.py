@@ -43,11 +43,22 @@ def factory(request):
         return decision_factory(request)
     elif 'conclusion' in request.path.split('/'):
         return conclusion_factory(request)
+    elif 'eliminationReport' in request.path.split('/'):
+        return elimination_factory(request)
     elif request.matchdict.get('dialogue_id'):
         return dialogue_factory(request)
     elif request.matchdict.get('document_id'):
         return get_item(request.monitor, 'document', request)
     return request.monitor
+
+
+def elimination_factory(request):
+    if request.matchdict.get('document_id'):
+        return get_item(request.monitor.eliminationReport, 'document', request)
+    if request.method == "PUT":
+        return request.monitor
+    else:
+        return request.monitor.eliminationReport
 
 
 def dialogue_factory(request):

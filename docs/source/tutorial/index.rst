@@ -1,5 +1,5 @@
 
-.. _standard:
+.. _tutorial:
 
 Tutorial
 ========
@@ -11,4 +11,6 @@ Tutorial
    publishing
    dialogue
    conclusion
+   eliminationReport
+   eliminationResolution
 

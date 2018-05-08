@@ -312,7 +312,7 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                 {"data": {
                     "conclusion": {
                         "violationOccurred": True,
-                        "violationType": "corruptionProcurementMethodType",
+                        "violationType": ["documentsForm", "corruptionAwarded"],
                         "auditFinding": "Ring around the rosies",
                         "stringsAttached": "Pocket full of posies",
                         "description": "Ashes, ashes, we all fall down",
@@ -367,6 +367,71 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                     }]
                 }},
                 status=201
+            )
+
+        # ELIMINATION REPORT
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+        with open('docs/source/tutorial/http/elimination-report-post.http', 'w') as self.app.file_obj:
+            response = self.app.put_json(
+                '/monitors/{}/eliminationReport?acc_token={}'.format(monitor_id, tender_owner_token),
+                {"data": {
+                    "description": "The procurement requirements have been fixed and the changes are attached.",
+                    "documents": [
+                        {
+                            'title': 'requirements.doc',
+                            'url': self.generate_docservice_url(),
+                            'hash': 'md5:' + '0' * 32,
+                            'format': 'application/msword',
+                        }
+                    ],
+                }},
+            )
+            self.assertEqual(response.status_code, 200)
+
+        with open('docs/source/tutorial/http/elimination-report-edit.http', 'w') as self.app.file_obj:
+            response = self.app.patch_json(
+                '/monitors/{}/eliminationReport?acc_token={}'.format(monitor_id, tender_owner_token),
+                {"data": {
+                    "description": "The procurement requirements have been fixed and the changes are attached. "
+                                   "But unfortunately the award cannot be changed as "
+                                   "the procurement is in its final state.",
+                }},
+            )
+            self.assertEqual(response.status_code, 200)
+
+        # ELIMINATION RESOLUTION
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+
+        with open('docs/source/tutorial/http/elimination-resolution-post.http', 'w') as self.app.file_obj:
+            self.app.patch_json(
+                '/monitors/{}'.format(monitor_id),
+                {"data": {
+                    "eliminationResolution": {
+                        "result": "partly",
+                        "resultByType": {
+                            "documentsForm": "eliminated",
+                            "corruptionAwarded": "not_eliminated",
+                        },
+                        "description": "The award hasn't been fixed.",
+                        "documents": [
+                            {
+                                'title': 'sign.p7s',
+                                'url': self.generate_docservice_url(),
+                                'hash': 'md5:' + '0' * 32,
+                                'format': 'application/pkcs7-signature',
+                            }
+                        ]
+                    },
+                }},
+            )
+
+        with open('docs/source/tutorial/http/monitor-to-complete.http', 'w') as self.app.file_obj:
+            self.app.patch_json(
+                '/monitors/{}'.format(monitor_id),
+                {"data": {
+                    "status": "complete",
+                }},
+                status=200
             )
 
     def test_monitor_publish_fast(self):

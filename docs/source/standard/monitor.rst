@@ -71,6 +71,6 @@ Schema
    :ref:`conclusion`
 
 :revisions:
-   List of :ref:`revision` objects, auto-generated
+   List of revision objects, auto-generated
 
    Historical changes to Tender object properties.

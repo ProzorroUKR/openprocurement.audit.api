@@ -131,7 +131,10 @@ Content-Type: application/json; charset=UTF-8
           "dateModified": "2018-01-01T02:00:00+02:00"
         }
       ], 
-      "violationType": "corruptionProcurementMethodType", 
+      "violationType": [
+        "documentsForm", 
+        "corruptionAwarded"
+      ], 
       "description": "Ashes, ashes, we all fall down", 
       "stringsAttached": "Pocket full of posies", 
       "auditFinding": "Ring around the rosies", 

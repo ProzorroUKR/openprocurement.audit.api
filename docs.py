@@ -409,8 +409,8 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                     "eliminationResolution": {
                         "result": "partly",
                         "resultByType": {
-                            "documentsForm": True,
-                            "corruptionAwarded": False,
+                            "documentsForm": "eliminated",
+                            "corruptionAwarded": "not_eliminated",
                         },
                         "description": "The award hasn't been fixed.",
                         "documents": [

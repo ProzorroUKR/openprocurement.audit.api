@@ -77,8 +77,8 @@ class MonitorEliminationBaseTest(BaseWebTest, DSWebTestMixin):
                 "eliminationResolution": {
                     "result": "partly",
                     "resultByType": {
-                        "corruptionProcurementMethodType": True,
-                        "corruptionAwarded": False,
+                        "corruptionProcurementMethodType": "eliminated",
+                        "corruptionAwarded": "not_eliminated",
                     },
                     "description": "Do you have spare crutches?",
                     "documents": [
@@ -157,8 +157,8 @@ class MonitorEliminationResourceTest(MonitorEliminationBaseTest):
         request_data = {
             "result": "partly",
             "resultByType": {
-                "corruptionProcurementMethodType": True,
-                "corruptionAwarded": False,
+                "corruptionProcurementMethodType": "eliminated",
+                "corruptionAwarded": "not_eliminated",
             },
             "description": "Do you have spare crutches?",
             "documents": [
@@ -343,7 +343,7 @@ class UpdateEliminationResourceTest(MonitorEliminationBaseTest):
         request_data = {
             "result": "partly",
             "resultByType": {
-                "corruptionChanges": True,
+                "corruptionChanges": "eliminated",
             }
         }
         self.app.patch_json(
@@ -359,7 +359,7 @@ class UpdateEliminationResourceTest(MonitorEliminationBaseTest):
         request_data = {
             "result": "partly",
             "resultByType": {
-                "corruptionProcurementMethodType": True,
+                "corruptionProcurementMethodType": "eliminated",
                 "corruptionAwarded": "Nope",
             }
         }
@@ -376,8 +376,8 @@ class UpdateEliminationResourceTest(MonitorEliminationBaseTest):
         request_data = {
             "result": "partly",
             "resultByType": {
-                "corruptionProcurementMethodType": True,
-                "corruptionAwarded": False,
+                "corruptionProcurementMethodType": "eliminated",
+                "corruptionAwarded": "not_eliminated",
             },
             "description": "Do you have spare crutches?",
             "dateCreated": "2000-02-02T09:00:00+02:00",

@@ -49,7 +49,7 @@ class Conclusion(Model):
 
 class EliminationResolution(Model):
     result = StringType(choices=['completely', 'partly', 'none'])
-    resultByType = DictType(BooleanType)
+    resultByType = DictType(StringType(choices=['eliminated', 'not_eliminated', 'no_mechanism']))
     description = StringType()
     documents = ListType(ModelType(Document), default=list())
     dateCreated = IsoDateTimeType(default=get_now)

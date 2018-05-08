@@ -101,7 +101,7 @@ class MonitorsDocumentBaseResource(APIResource):
         Monitor Document Update
         """
         document = self.request.context
-        if apply_patch(self.request, src=document.serialize()):
+        if apply_patch(self.request):
             update_file_content_type(self.request)
             self.LOGGER.info('Updated {} monitor document {}'.format(self.document_of, document.id),
                              extra=context_unpack(self.request,

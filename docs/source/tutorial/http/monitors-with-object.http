@@ -8,13 +8,13 @@ Content-Type: application/json; charset=UTF-8
 
 {
   "next_page": {
-    "path": "/api/2.4/monitors?skip=1&offset_doc_id=3163b900101339e68c6bcbb724454e4a&prev_offset=2018-01-01T02%3A00%3A00%2B02%3A00&offset=2018-01-01T02%3A00%3A00%2B02%3A00&limit=1000&prev_offset_doc_id=3163b900101339e68c6bcbb724454e4a", 
-    "uri": "http://api-sandbox.openprocurement.org/api/2.4/monitors?skip=1&offset_doc_id=3163b900101339e68c6bcbb724454e4a&prev_offset=2018-01-01T02%3A00%3A00%2B02%3A00&offset=2018-01-01T02%3A00%3A00%2B02%3A00&limit=1000&prev_offset_doc_id=3163b900101339e68c6bcbb724454e4a", 
+    "path": "/api/2.4/monitors?skip=1&offset_doc_id=7d4c3be20b003356b5b097e9b476c8a1&prev_offset=2018-01-01T02%3A00%3A00%2B02%3A00&offset=2018-01-01T02%3A00%3A00%2B02%3A00&limit=1000&prev_offset_doc_id=7d4c3be20b003356b5b097e9b476c8a1", 
+    "uri": "http://api-sandbox.openprocurement.org/api/2.4/monitors?skip=1&offset_doc_id=7d4c3be20b003356b5b097e9b476c8a1&prev_offset=2018-01-01T02%3A00%3A00%2B02%3A00&offset=2018-01-01T02%3A00%3A00%2B02%3A00&limit=1000&prev_offset_doc_id=7d4c3be20b003356b5b097e9b476c8a1", 
     "offset": "2018-01-01T02:00:00+02:00"
   }, 
   "data": [
     {
-      "id": "3163b900101339e68c6bcbb724454e4a", 
+      "id": "7d4c3be20b003356b5b097e9b476c8a1", 
       "dateModified": "2018-01-01T02:00:00+02:00"
     }
   ]

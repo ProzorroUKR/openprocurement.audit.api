@@ -228,9 +228,9 @@ class UpdateEliminationResourceTest(MonitorEliminationBaseTest):
             "documents": [
                 {
                     'title': 'and this.doc',
-                    'url': self.generate_docservice_url(),
-                    'hash': 'md5:' + '0' * 32,
-                    'format': 'application/msword',
+                    'url': self.generate_docservice_url() + "#1",
+                    'hash': 'md5:' + '1' * 32,
+                    'format': 'application/json',
                 }
             ],
         }
@@ -247,6 +247,9 @@ class UpdateEliminationResourceTest(MonitorEliminationBaseTest):
         self.assertEqual(data["dateCreated"], "2018-01-01T11:00:00+02:00")
         self.assertEqual(data["dateModified"], "2018-01-02T11:30:00+02:00")
         self.assertEqual(data["documents"][0]["title"], request_data["documents"][0]["title"])
+        self.assertEqual(data["documents"][0]["url"], request_data["documents"][0]["url"])
+        self.assertEqual(data["documents"][0]["hash"], request_data["documents"][0]["hash"])
+        self.assertEqual(data["documents"][0]["format"], request_data["documents"][0]["format"])
         self.assertNotIn("resolution", data)
 
     def test_forbidden_sas_post_document(self):
@@ -306,7 +309,6 @@ class UpdateEliminationResourceTest(MonitorEliminationBaseTest):
             'format': 'application/msword',
         }
         doc_to_update = self.elimination["documents"][0]
-        print(doc_to_update)
 
         response = self.app.patch_json(
             '/monitors/{}/eliminationReport/documents/{}?acc_token={}'.format(

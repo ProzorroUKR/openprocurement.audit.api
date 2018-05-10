@@ -81,12 +81,13 @@ class EliminationReport(Model):
     dateCreated = IsoDateTimeType(default=get_now)
     dateModified = IsoDateTimeType()
 
-    def get_role(self):  # this fixes document validation, because document urls cannot be added when role "edit"
-        return 'create'
+    # def get_role(self):  # this fixes document validation, because document urls cannot be added when role "edit"
+    #     return 'create'
 
     class Options:
         roles = {
             'create': whitelist('description', 'documents'),
+            'edit': whitelist('description', 'documents'),
             'view': schematics_default_role,
         }
 

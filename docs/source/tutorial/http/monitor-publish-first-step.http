@@ -1,4 +1,4 @@
-PATCH /api/2.4/monitors/3163b900101339e68c6bcbb724454e4a HTTP/1.0
+PATCH /api/2.4/monitors/7d4c3be20b003356b5b097e9b476c8a1 HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
 Content-Length: 408
 Content-Type: application/json
@@ -10,7 +10,7 @@ Host: api-sandbox.openprocurement.org
       "date": "2018-01-01T00:00:00", 
       "documents": [
         {
-          "url": "http://docs-sandbox.openprocurement.org/get/73c0e8e456fa34a985137da11f00f833?KeyID=a8968c46&Signature=bxqQrDV8p%2FVETl8X21kVprIYFC705mOtenplRlIO3EuYBiFF%2FSV6brFL%2BrvLPg98WoFTjqosQX6kByhSXJQNBg%3D%3D", 
+          "url": "http://docs-sandbox.openprocurement.org/get/8c62c7ea658d38a28272e87132e554ee?KeyID=a8968c46&Signature=twA5liTmEI%2FED9LvOkTKtU6%2B86iHioW5NwbO26XufQL9luF1%2BdweTajMuxoJWj0HKpmNPD9svx0j13iMCMsuCQ%3D%3D", 
           "title": "lorem.doc", 
           "hash": "md5:00000000000000000000000000000000", 
           "format": "application/msword"
@@ -42,18 +42,66 @@ Content-Type: application/json; charset=UTF-8
         {
           "hash": "md5:00000000000000000000000000000000", 
           "title": "lorem.doc", 
-          "url": "http://docs-sandbox.openprocurement.org/get/73c0e8e456fa34a985137da11f00f833?KeyID=a8968c46&Signature=bxqQrDV8p%2FVETl8X21kVprIYFC705mOtenplRlIO3EuYBiFF%2FSV6brFL%2BrvLPg98WoFTjqosQX6kByhSXJQNBg%3D%3D", 
+          "url": "http://docs-sandbox.openprocurement.org/get/8c62c7ea658d38a28272e87132e554ee?KeyID=a8968c46&Signature=twA5liTmEI%2FED9LvOkTKtU6%2B86iHioW5NwbO26XufQL9luF1%2BdweTajMuxoJWj0HKpmNPD9svx0j13iMCMsuCQ%3D%3D", 
           "format": "application/msword", 
           "documentOf": "decision", 
           "datePublished": "2018-01-01T02:00:00+02:00", 
-          "id": "7d4c3be20b003356b5b097e9b476c8a1", 
+          "id": "0c4f76937b743567b01ca60bc33f8192", 
           "dateModified": "2018-01-01T02:00:00+02:00"
         }
       ], 
       "description": "text"
     }, 
     "monitoring_id": "UA-M-2018-01-01-000001", 
-    "id": "3163b900101339e68c6bcbb724454e4a", 
+    "id": "7d4c3be20b003356b5b097e9b476c8a1", 
+    "parties": [
+      {
+        "name": "The State Audit Service of Ukraine", 
+        "roles": [
+          "create"
+        ], 
+        "address": {
+          "postalCode": "04070", 
+          "countryName": "Ukraine", 
+          "streetAddress": "Petra Sahaidachnoho St, 4", 
+          "region": "Kyiv", 
+          "locality": "Kyiv"
+        }, 
+        "contactPoint": {
+          "name": "Oleksii Kovalenko", 
+          "telephone": "0440000000"
+        }, 
+        "identifier": {
+          "scheme": "UA-EDR", 
+          "id": "40165856", 
+          "uri": "http://www.dkrs.gov.ua"
+        }, 
+        "id": "73c0e8e456fa34a985137da11f00f833"
+      }, 
+      {
+        "name": "The State Audit Service of Ukraine", 
+        "roles": [
+          "decision"
+        ], 
+        "address": {
+          "postalCode": "04070", 
+          "countryName": "Ukraine", 
+          "streetAddress": "Petra Sahaidachnoho St, 4", 
+          "region": "Kyiv", 
+          "locality": "Kyiv"
+        }, 
+        "contactPoint": {
+          "name": "John Doe", 
+          "telephone": "0440000000"
+        }, 
+        "identifier": {
+          "scheme": "UA-EDR", 
+          "id": "40165856", 
+          "uri": "http://www.dkrs.gov.ua"
+        }, 
+        "id": "384f8515437e3a639634566fdbf01e56"
+      }
+    ], 
     "dateCreated": "2018-01-01T02:00:00+02:00", 
     "dateModified": "2018-01-01T02:00:00+02:00", 
     "tender_id": "0ab3edaa2c273d0d9ba2fb312b26054f"

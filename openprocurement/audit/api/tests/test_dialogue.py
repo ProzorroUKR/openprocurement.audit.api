@@ -161,7 +161,13 @@ class MonitorDialogueResourceTest(BaseWebTest, DSWebTestMixin):
             '/monitors/{}/dialogues'.format(self.monitor_id),
             {'data': {
                 'title': 'Lorem ipsum',
-                'description': 'Lorem ipsum dolor sit amet'
+                'description': 'Lorem ipsum dolor sit amet',
+                'documents': [{
+                    'title': 'lorem.doc',
+                    'url': self.generate_docservice_url(),
+                    'hash': 'md5:' + '0' * 32,
+                    'format': 'application/msword',
+                }]
             }})
         dialogue_id = response.json['data']['id']
 
@@ -174,7 +180,7 @@ class MonitorDialogueResourceTest(BaseWebTest, DSWebTestMixin):
         response = self.app.patch_json(
             '/monitors/{}/dialogues/{}?acc_token={}'.format(self.monitor_id, dialogue_id, tender_owner_token),
             {'data': {
-                'answer': 'Gotcha',
+                'answer': 'Gotcha'
             }})
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')

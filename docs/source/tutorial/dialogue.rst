@@ -3,6 +3,11 @@
 Dialogue
 ========
 
+Let's provide party that will be used as related party for our dialogue:
+
+.. include:: http/dialogue-party.http
+    :code:
+
 For published monitor we can start dialogue:
 
 .. include:: http/dialogue-publish.http

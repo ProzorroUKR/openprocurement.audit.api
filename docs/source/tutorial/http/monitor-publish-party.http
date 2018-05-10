@@ -1,0 +1,62 @@
+POST /api/2.4/monitors/7d4c3be20b003356b5b097e9b476c8a1/parties HTTP/1.0
+Authorization: Basic dGVzdF9zYXNfdG9rZW46
+Content-Length: 377
+Content-Type: application/json
+Host: api-sandbox.openprocurement.org
+
+{
+  "data": {
+    "contactPoint": {
+      "name": "John Doe", 
+      "telephone": "0440000000"
+    }, 
+    "identifier": {
+      "scheme": "UA-EDR", 
+      "id": "40165856", 
+      "uri": "http://www.dkrs.gov.ua"
+    }, 
+    "name": "The State Audit Service of Ukraine", 
+    "roles": [
+      "decision"
+    ], 
+    "address": {
+      "countryName": "Ukraine", 
+      "postalCode": "04070", 
+      "region": "Kyiv", 
+      "streetAddress": "Petra Sahaidachnoho St, 4", 
+      "locality": "Kyiv"
+    }
+  }
+}
+
+
+201 Created
+Content-Type: application/json; charset=UTF-8
+Location: http://api-sandbox.openprocurement.org/api/2.4/monitors/7d4c3be20b003356b5b097e9b476c8a1/parties/384f8515437e3a639634566fdbf01e56
+
+{
+  "data": {
+    "name": "The State Audit Service of Ukraine", 
+    "roles": [
+      "decision"
+    ], 
+    "address": {
+      "postalCode": "04070", 
+      "countryName": "Ukraine", 
+      "streetAddress": "Petra Sahaidachnoho St, 4", 
+      "region": "Kyiv", 
+      "locality": "Kyiv"
+    }, 
+    "contactPoint": {
+      "name": "John Doe", 
+      "telephone": "0440000000"
+    }, 
+    "identifier": {
+      "scheme": "UA-EDR", 
+      "id": "40165856", 
+      "uri": "http://www.dkrs.gov.ua"
+    }, 
+    "id": "384f8515437e3a639634566fdbf01e56"
+  }
+}
+

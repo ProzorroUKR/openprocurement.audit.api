@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 from openprocurement.api.utils import update_logging_context, raise_operation_error, error_handler, forbidden
-from openprocurement.api.validation import validate_data
+from openprocurement.api.validation import validate_data, validate_json_data
 from restkit import ResourceNotFound
 from hashlib import sha512
 
 from openprocurement_client.client import TendersClient
-from openprocurement.audit.api.models import Monitor, Dialogue, EliminationReport
+from openprocurement.audit.api.models import Monitor, Dialogue, EliminationReport, Party
 
 
 def validate_monitor_data(request):
@@ -14,7 +14,7 @@ def validate_monitor_data(request):
 
 
 def validate_patch_monitor_data(request):
-    result = validate_data(request, Monitor, partial=True)
+    data = validate_data(request, Monitor, partial=True)
 
     # check sent data that is not allowed in current status
     # acceptable fields are set in Monitor.Options.roles: edit_draft, edit_active, etc
@@ -28,7 +28,7 @@ def validate_patch_monitor_data(request):
         request.errors.status = 422
         raise error_handler(request.errors)
 
-    return result
+    return data
 
 
 def validate_patch_monitor_status(request):
@@ -87,6 +87,15 @@ def validate_dialogue_data(request):
 
 def validate_patch_dialogue_data(request):
     return validate_data(request, Dialogue, partial=True)
+
+
+def validate_party_data(request):
+    update_logging_context(request, {'PARTY_ID': '__new__'})
+    return validate_data(request, Party)
+
+
+def validate_patch_party_data(request):
+    return validate_data(request, Party, partial=True)
 
 
 def validate_post_dialogue_allowed(request):

@@ -4,7 +4,8 @@ from openprocurement.audit.api.utils import (
     APIResource,
     save_monitor,
     set_documents_of_type,
-    apply_patch, set_ownership
+    apply_patch,
+    set_ownership
 )
 from openprocurement.api.utils import (
     json_view,
@@ -15,7 +16,8 @@ from openprocurement.audit.api.validation import (
     validate_dialogue_data,
     validate_patch_dialogue_data,
     validate_patch_dialogue_allowed,
-    validate_post_dialogue_allowed)
+    validate_post_dialogue_allowed
+)
 
 
 @op_resource(name='Monitor Dialogue',
@@ -70,9 +72,8 @@ class DialogueResource(APIResource):
         """
         Post a dialogue resolution
         """
-        dialogue = self.request.validated['dialogue']
-        dialogue.dateAnswered = get_now()
-        apply_patch(self.request, src=self.request.context.serialize())
+        self.request.context.dateAnswered = get_now()
+        apply_patch(self.request)
         self.LOGGER.info('Updated dialogue {}'.format(self.request.context.id),
                          extra=context_unpack(self.request, {'MESSAGE_ID': 'dialogue_patch'}))
         return {'data': self.request.context.serialize('view')}

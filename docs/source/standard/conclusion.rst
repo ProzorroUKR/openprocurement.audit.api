@@ -12,7 +12,10 @@ Schema
     any violations are found/not found
 
 :violationType:
-    string, required if violationOccurred is True, possible values are:
+    string, required if violationOccurred is True
+
+    Possible values are:
+
         * corruptionDescription
         * corruptionProcurementMethodType
         * corruptionPublicDisclosure

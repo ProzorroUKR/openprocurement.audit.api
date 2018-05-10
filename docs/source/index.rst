@@ -1,7 +1,7 @@
 Welcome to openprocurement.audit.api documentation!
 ===================================================
 
-.. title:: Audit API
+.. title:: Monitoring API
 
 .. toctree::
    :maxdepth: 2

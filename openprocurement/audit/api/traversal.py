@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from openprocurement.api.traversal import get_item
-
 from pyramid.security import (
     ALL_PERMISSIONS,
     Allow,
@@ -22,11 +20,32 @@ class Root(object):
         (Allow, 'g:sas', 'create_dialogue'),
         (Allow, 'g:sas', 'edit_dialogue'),
         (Allow, 'g:sas', 'upload_dialogue_documents'),
+        (Allow, 'g:sas', 'create_party'),
+        (Allow, 'g:sas', 'edit_party'),
     ]
 
     def __init__(self, request):
         self.request = request
         self.db = request.registry.db
+
+
+def get_item(parent, key, request):
+    request.validated['{}_id'.format(key)] = request.matchdict['{}_id'.format(key)]
+    plural = '{}ies'.format(key[0:-1]) if key[-1] == 'y' else '{}s'.format(key)
+    items = [i for i in getattr(parent, plural, []) if i.id == request.matchdict['{}_id'.format(key)]]
+    if not items:
+        from openprocurement.api.utils import error_handler
+        request.errors.add('url', '{}_id'.format(key), 'Not Found')
+        request.errors.status = 404
+        raise error_handler(request.errors)
+    else:
+        if key == 'document':
+            request.validated[plural] = items
+        item = items[-1]
+        request.validated[key] = item
+        request.validated['id'] = request.matchdict['{}_id'.format(key)]
+        item.__parent__ = parent
+        return item
 
 
 def factory(request):
@@ -47,6 +66,9 @@ def factory(request):
         return elimination_factory(request)
     elif request.matchdict.get('dialogue_id'):
         return dialogue_factory(request)
+    elif request.matchdict.get('party_id'):
+        print '========', get_item(request.monitor, 'party', request)
+        return get_item(request.monitor, 'party', request)
     elif request.matchdict.get('document_id'):
         return get_item(request.monitor, 'document', request)
     return request.monitor

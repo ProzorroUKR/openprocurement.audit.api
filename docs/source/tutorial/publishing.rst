@@ -6,8 +6,12 @@ We are supposed to change the status of our monitor to publish it:
 .. include:: http/monitor-publish-wo-decision.http
     :code:
 
+Let's provide our publish party:
 
-Let's provide our decision.
+.. include:: http/monitor-publish-party.http
+    :code:
+
+Let's provide our decision:
 
 .. include:: http/monitor-publish-first-step.http
     :code:

@@ -1,5 +1,5 @@
-Creation of a monitoring object
-===============================
+Creation
+========
 
 Let's look at the list:
 
@@ -11,7 +11,7 @@ It's empty. But we can try posting new objects:
 .. include:: http/monitor-post-empty-body.http
     :code:
 
-Let's provide the required fields:
+Let's provide the required fields and some additional information:
 
 .. include:: http/monitor-post.http
     :code:

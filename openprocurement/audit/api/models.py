@@ -1,6 +1,6 @@
 from uuid import uuid4
-from openprocurement.api.utils import get_now, get_root
-from openprocurement.api.models import Model, Revision, Period
+from openprocurement.api.utils import get_now
+from openprocurement.api.models import Model, Revision, Period, Identifier, Address, ContactPoint
 from openprocurement.api.models import Document as BaseDocument
 from openprocurement.api.models import schematics_embedded_role, schematics_default_role, IsoDateTimeType, ListType
 from schematics.types import StringType, MD5Type, BaseType, BooleanType
@@ -101,7 +101,7 @@ class Dialogue(Model):
     class Options:
         roles = {
             'create': whitelist('title', 'description', 'documents'),
-            'edit': whitelist('answer', 'documents'),
+            'edit': whitelist('answer'),
             'view': schematics_default_role,
             'default': schematics_default_role,
             'embedded': schematics_embedded_role,
@@ -116,21 +116,44 @@ class Dialogue(Model):
     dateAnswered = IsoDateTimeType()
     author = StringType()
     dialogueOf = StringType(choices=('decision', 'conclusion'), default='decision')
+    relatedParty = StringType()
+
+    def validate_relatedParty(self, data, value):
+        if value and isinstance(data['__parent__'], Model) and value not in [i.id for i in data['__parent__'].parties]:
+            raise ValidationError(u"relatedParty should be one of parties")
+
+
+class Party(Model):
+    class Options:
+        roles = {
+            'create': schematics_embedded_role,
+            'edit': schematics_embedded_role,
+            'embedded': schematics_embedded_role,
+            'view': schematics_default_role,
+        }
+    id = MD5Type(required=True, default=lambda: uuid4().hex)
+
+    name = StringType(required=True)
+    identifier = ModelType(Identifier, required=True)
+    additionalIdentifiers = ListType(ModelType(Identifier))
+    address = ModelType(Address, required=True)
+    contactPoint = ModelType(ContactPoint, required=True)
+    roles = ListType(StringType(choices=('create', 'decision', 'conclusion', 'dialogue')), default=list())
 
 
 class Monitor(SchematicsDocument, Model):
 
     class Options:
-        _perm_edit_whitelist = whitelist("status")
+        _perm_edit_whitelist = whitelist("status", "reasons", "procuringStages", "parties")
         roles = {
             'plain': blacklist('_attachments', 'revisions') + schematics_embedded_role,
             'revision': whitelist('revisions'),
             'create': blacklist(
-                'revisions', 'dateModified', 'dateCreated', 'monitoringPeriod',
+                'revisions', 'dateModified', 'dateCreated',
                 'doc_id', '_attachments', 'monitoring_id',
-                'tender_owner_token', 'tender_owner'
+                'tender_owner_token', 'tender_owner',
             ) + schematics_embedded_role,
-            'edit_draft': whitelist("reasons", "procuringStages", "monitoringPeriod", "decision") + _perm_edit_whitelist,
+            'edit_draft': whitelist("decision") + _perm_edit_whitelist,
             'edit_active': whitelist("conclusion") + _perm_edit_whitelist,
             'edit_addressed': whitelist("eliminationResolution") + _perm_edit_whitelist,
             'edit_complete': whitelist(),
@@ -155,6 +178,8 @@ class Monitor(SchematicsDocument, Model):
     eliminationReport = ModelType(EliminationReport)
     eliminationResolution = ModelType(EliminationResolution)
     dialogues = ListType(ModelType(Dialogue), default=list())
+
+    parties = ListType(ModelType(Party), default=list())
 
     dateModified = IsoDateTimeType()
     dateCreated = IsoDateTimeType(default=get_now)

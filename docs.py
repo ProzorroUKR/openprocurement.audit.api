@@ -135,7 +135,29 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                 {"data": {
                     "tender_id": self._generate_test_uuid().hex,
                     "reasons": ["public", "fiscal"],
-                    "procuringStages": ["awarding", "contracting"]
+                    "procuringStages": ["awarding", "contracting"],
+                    "parties": [{
+                        "name": "The State Audit Service of Ukraine",
+                        "contactPoint": {
+                            "name": "Oleksii Kovalenko",
+                            "telephone": "0440000000"
+                        },
+                        "identifier": {
+                            "scheme": "UA-EDR",
+                            "id": "40165856",
+                            "uri": "http://www.dkrs.gov.ua"
+                        },
+                        "address": {
+                            "countryName": "Ukraine",
+                            "postalCode": "04070",
+                            "region": "Kyiv",
+                            "streetAddress": "Petra Sahaidachnoho St, 4",
+                            "locality": "Kyiv"
+                        },
+                        "roles": [
+                            "create"
+                        ]
+                    }]
                 }},
                 status=201
             )
@@ -155,6 +177,34 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
             )
 
         # PUBLISH
+        with open('docs/source/tutorial/http/monitor-publish-party.http', 'w') as self.app.file_obj:
+            response = self.app.post_json(
+                '/monitors/{}/parties'.format(monitor_id),
+                {"data": {
+                    "name": "The State Audit Service of Ukraine",
+                    "contactPoint": {
+                        "name": "John Doe",
+                        "telephone": "0440000000"
+                    },
+                    "identifier": {
+                        "scheme": "UA-EDR",
+                        "id": "40165856",
+                        "uri": "http://www.dkrs.gov.ua"
+                    },
+                    "address": {
+                        "countryName": "Ukraine",
+                        "postalCode": "04070",
+                        "region": "Kyiv",
+                        "streetAddress": "Petra Sahaidachnoho St, 4",
+                        "locality": "Kyiv"
+                    },
+                    "roles": [
+                        "decision"
+                    ]
+                }},
+                status=201
+            )
+
         with open('docs/source/tutorial/http/monitor-publish-first-step.http', 'w') as self.app.file_obj:
             self.app.patch_json(
                 '/monitors/{}'.format(monitor_id),
@@ -206,6 +256,36 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
             )
 
         # DIALOGUE
+        with open('docs/source/tutorial/http/dialogue-party.http', 'w') as self.app.file_obj:
+            response = self.app.post_json(
+                '/monitors/{}/parties'.format(monitor_id),
+                {"data": {
+                    "name": "The State Audit Service of Ukraine",
+                    "contactPoint": {
+                        "name": "Jane Doe",
+                        "telephone": "0440000000"
+                    },
+                    "identifier": {
+                        "scheme": "UA-EDR",
+                        "id": "40165856",
+                        "uri": "http://www.dkrs.gov.ua"
+                    },
+                    "address": {
+                        "countryName": "Ukraine",
+                        "postalCode": "04070",
+                        "region": "Kyiv",
+                        "streetAddress": "Petra Sahaidachnoho St, 4",
+                        "locality": "Kyiv"
+                    },
+                    "roles": [
+                        "dialogue"
+                    ]
+                }},
+                status=201
+            )
+
+        party_id = response.json['data']['id']
+
         with open('docs/source/tutorial/http/dialogue-publish.http', 'w') as self.app.file_obj:
             response = self.app.post_json(
                 '/monitors/{}/dialogues'.format(monitor_id),
@@ -217,7 +297,8 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                         'url': self.generate_docservice_url(),
                         'hash': 'md5:' + '0' * 32,
                         'format': 'application/msword',
-                    }]
+                    }],
+                    "relatedParty": party_id
                 }},
                 status=201
             )

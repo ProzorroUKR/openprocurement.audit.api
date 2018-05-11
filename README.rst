@@ -1,17 +1,17 @@
-.. image:: https://travis-ci.org/raccoongang/openprocurement.audit.api.svg
-    :target: https://travis-ci.org/raccoongang/openprocurement.audit.api
+.. image:: https://travis-ci.org/ProzorroUKR/openprocurement.audit.api.svg
+    :target: https://travis-ci.org/ProzorroUKR/openprocurement.audit.api
 
 
 .. image:: https://img.shields.io/hexpm/l/plug.svg
-    :target: https://github.com/raccoongang/openprocurement.audit.api/blob/master/LICENSE.txt
+    :target: https://github.com/ProzorroUKR/openprocurement.audit.api/blob/master/LICENSE.txt
 
 
-.. image:: https://coveralls.io/repos/github/raccoongang/openprocurement.audit.api/badge.svg
-    :target: https://coveralls.io/github/raccoongang/openprocurement.audit.api
+.. image:: https://coveralls.io/repos/github/ProzorroUKR/openprocurement.audit.api/badge.svg
+    :target: https://coveralls.io/github/ProzorroUKR/openprocurement.audit.api
 
 
-.. image:: https://readthedocs.org/projects/sas-api-raccoongang-my/badge/?version=latest
-    :target: http://sas-api-raccoongang-my.readthedocs.io/en/latest/?badge=latest
+.. image:: https://readthedocs.org/projects/prozorro-audit-api/badge/?version=latest
+    :target: http://prozorro-audit-api.readthedocs.io/en/latest/?badge=latest
     :alt: Documentation Status
 
 

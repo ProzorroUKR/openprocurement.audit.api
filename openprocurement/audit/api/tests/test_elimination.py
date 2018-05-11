@@ -228,9 +228,9 @@ class UpdateEliminationResourceTest(MonitorEliminationBaseTest):
             "documents": [
                 {
                     'title': 'and this.doc',
-                    'url': self.generate_docservice_url(),
-                    'hash': 'md5:' + '0' * 32,
-                    'format': 'application/msword',
+                    'url': self.generate_docservice_url() + "#1",
+                    'hash': 'md5:' + '1' * 32,
+                    'format': 'application/json',
                 }
             ],
         }
@@ -247,6 +247,9 @@ class UpdateEliminationResourceTest(MonitorEliminationBaseTest):
         self.assertEqual(data["dateCreated"], "2018-01-01T11:00:00+02:00")
         self.assertEqual(data["dateModified"], "2018-01-02T11:30:00+02:00")
         self.assertEqual(data["documents"][0]["title"], request_data["documents"][0]["title"])
+        self.assertEqual(data["documents"][0]["url"], request_data["documents"][0]["url"])
+        self.assertEqual(data["documents"][0]["hash"], request_data["documents"][0]["hash"])
+        self.assertEqual(data["documents"][0]["format"], request_data["documents"][0]["format"])
         self.assertNotIn("resolution", data)
 
     def test_forbidden_sas_post_document(self):
@@ -297,7 +300,7 @@ class UpdateEliminationResourceTest(MonitorEliminationBaseTest):
         self.assertEqual(len(data["documents"]), 2)
         self.assertEqual(data["documents"][1]["title"], document["title"])
 
-    def test_success_update_document(self):
+    def test_success_patch_document(self):
         self.app.authorization = ('Basic', (self.broker_token, ''))
         document = {
             'title': 'another.txt',
@@ -306,7 +309,6 @@ class UpdateEliminationResourceTest(MonitorEliminationBaseTest):
             'format': 'application/msword',
         }
         doc_to_update = self.elimination["documents"][0]
-        print(doc_to_update)
 
         response = self.app.patch_json(
             '/monitors/{}/eliminationReport/documents/{}?acc_token={}'.format(
@@ -322,6 +324,41 @@ class UpdateEliminationResourceTest(MonitorEliminationBaseTest):
         self.assertEqual(len(data["documents"]), 1)
         self.assertEqual(data["documents"][0]["id"], doc_to_update["id"])
         self.assertEqual(data["documents"][0]["title"], document["title"])
+
+    def test_success_put_document(self):
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+        document = {
+            'title': 'my_new_file.txt',
+            'url': self.generate_docservice_url(),
+            'hash': 'md5:' + '0' * 32,
+            'format': 'text/css',
+        }
+        doc_to_update = self.elimination["documents"][0]
+
+        response = self.app.put_json(
+            '/monitors/{}/eliminationReport/documents/{}?acc_token={}'.format(
+                self.monitor_id, doc_to_update["id"], self.tender_owner_token
+            ),
+            {"data": document},
+        )
+        self.assertEqual(response.status_code, 200)
+
+        self.app.authorization = None
+        response = self.app.get('/monitors/{}'.format(self.monitor_id))
+        data = response.json["data"]["eliminationReport"]
+        self.assertEqual(len(data["documents"]), 2)
+
+        response = self.app.get(
+            '/monitors/{}/eliminationReport/documents/{}'.format(
+                self.monitor_id, doc_to_update["id"]
+            ),
+            {"data": document},
+        )
+        self.assertEqual(response.status_code, 200)
+        resp_data = response.json["data"]
+        self.assertEqual(resp_data["title"], document["title"])
+        # self.assertEqual(resp_data["url"], document["url"])
+        self.assertEqual(resp_data["format"], document["format"])
 
     def test_fail_update_resolution_wo_result_by_type(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))

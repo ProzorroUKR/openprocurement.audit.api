@@ -87,6 +87,7 @@ class EliminationReport(Model):
     class Options:
         roles = {
             'create': whitelist('description', 'documents'),
+            'edit': whitelist('description', 'documents'),
             'view': schematics_default_role,
         }
 

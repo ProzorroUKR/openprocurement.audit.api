@@ -180,3 +180,8 @@ class MonitorsDocumentEliminationResource(MonitorsDocumentBaseResource):
                validators=(validate_file_update,))
     def patch(self):
         return super(MonitorsDocumentEliminationResource, self).patch()
+
+    @json_view(permission='edit_elimination_report',
+               validators=(validate_file_update,))
+    def put(self):
+        return super(MonitorsDocumentEliminationResource, self).put()

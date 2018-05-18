@@ -86,7 +86,7 @@ class EliminationReport(Report):
 class Dialogue(Model):
     class Options:
         roles = {
-            'create': whitelist('title', 'description', 'documents'),
+            'create': whitelist('title', 'description', 'documents', 'relatedParty'),
             'edit': whitelist('answer'),
             'view': schematics_default_role,
             'default': schematics_default_role,
@@ -106,7 +106,7 @@ class Dialogue(Model):
 
     def validate_relatedParty(self, data, value):
         if value and isinstance(data['__parent__'], Model) and value not in [i.id for i in data['__parent__'].parties]:
-            raise ValidationError(u"relatedParty should be one of parties")
+            raise ValidationError(u"relatedParty should be one of parties.")
 
 
 class Party(Model):
@@ -191,7 +191,7 @@ class Monitoring(SchematicsDocument, Model):
 
     def validate_monitoringDetails(self, *args, **kw):
         if self.mode and self.mode == 'test' and self.monitoringDetails and self.monitoringDetails != '':
-            raise ValidationError(u"monitoringDetails should be used with mode test")
+            raise ValidationError(u"monitoringDetails should be used with mode test.")
 
     def get_role(self):
         role = super(Monitoring, self).get_role()

@@ -43,6 +43,7 @@ Content-Type: application/json; charset=UTF-8
     "author": "test_sas", 
     "title": "Lorem ipsum", 
     "dateAnswered": "2018-01-04T02:05:00+02:00", 
+    "relatedParty": "46f99862f11f3255b9e5e51cfbdccdf9", 
     "dateSubmitted": "2018-01-03T02:05:00+02:00", 
     "answer": "Sit amet", 
     "id": "a645272a8138307b8bc75bfd28650911", 

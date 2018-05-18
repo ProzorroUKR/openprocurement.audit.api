@@ -41,6 +41,7 @@ Location: http://api-sandbox.openprocurement.org/api/2.4/monitorings/3f193d61e4c
     "description": "Lorem ipsum dolor sit amet.", 
     "title": "Lorem ipsum", 
     "author": "test_sas", 
+    "relatedParty": "46f99862f11f3255b9e5e51cfbdccdf9", 
     "dateSubmitted": "2018-01-03T02:05:00+02:00", 
     "id": "a645272a8138307b8bc75bfd28650911", 
     "dialogueOf": "decision"

@@ -112,8 +112,77 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
         super(MonitorsResourceTest, self).setUp()
         self.app.app.registry.docservice_url = 'http://docs-sandbox.openprocurement.org'
 
+        self.party_creator = {
+            "name": "The State Audit Service of Ukraine",
+            "contactPoint": {
+                "name": "Oleksii Kovalenko",
+                "telephone": "0440000000"
+            },
+            "identifier": {
+                "scheme": "UA-EDR",
+                "id": "40165856",
+                "uri": "http://www.dkrs.gov.ua"
+            },
+            "address": {
+                "countryName": "Ukraine",
+                "postalCode": "04070",
+                "region": "Kyiv",
+                "streetAddress": "Petra Sahaidachnoho St, 4",
+                "locality": "Kyiv"
+            },
+            "roles": [
+                "create"
+            ]
+        }
+
+        self.party_decision = {
+            "name": "The State Audit Service of Ukraine",
+            "contactPoint": {
+                "name": "John Doe",
+                "telephone": "0440000000"
+            },
+            "identifier": {
+                "scheme": "UA-EDR",
+                "id": "40165856",
+                "uri": "http://www.dkrs.gov.ua"
+            },
+            "address": {
+                "countryName": "Ukraine",
+                "postalCode": "04070",
+                "region": "Kyiv",
+                "streetAddress": "Petra Sahaidachnoho St, 4",
+                "locality": "Kyiv"
+            },
+            "roles": [
+                "decision"
+            ]
+        }
+
+        self.party_dialogue = {
+            "name": "The State Audit Service of Ukraine",
+            "contactPoint": {
+                "name": "Jane Doe",
+                "telephone": "0440000000"
+            },
+            "identifier": {
+                "scheme": "UA-EDR",
+                "id": "40165856",
+                "uri": "http://www.dkrs.gov.ua"
+            },
+            "address": {
+                "countryName": "Ukraine",
+                "postalCode": "04070",
+                "region": "Kyiv",
+                "streetAddress": "Petra Sahaidachnoho St, 4",
+                "locality": "Kyiv"
+            },
+            "roles": [
+                "dialogue"
+            ]
+        }
+
     @mock.patch('openprocurement.audit.api.validation.TendersClient')
-    def test_monitor_life_cycle(self, mock_api_client):
+    def test_monitor_life_cycle_with_violations(self, mock_api_client):
         tender_token = self._generate_test_uuid().hex
         mock_api_client.return_value.extract_credentials.return_value = {
             'data': {'tender_token': sha512(tender_token).hexdigest()}
@@ -136,158 +205,398 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                     "tender_id": self._generate_test_uuid().hex,
                     "reasons": ["public", "fiscal"],
                     "procuringStages": ["awarding", "contracting"],
-                    "parties": [{
-                        "name": "The State Audit Service of Ukraine",
-                        "contactPoint": {
-                            "name": "Oleksii Kovalenko",
-                            "telephone": "0440000000"
-                        },
-                        "identifier": {
-                            "scheme": "UA-EDR",
-                            "id": "40165856",
-                            "uri": "http://www.dkrs.gov.ua"
-                        },
-                        "address": {
-                            "countryName": "Ukraine",
-                            "postalCode": "04070",
-                            "region": "Kyiv",
-                            "streetAddress": "Petra Sahaidachnoho St, 4",
-                            "locality": "Kyiv"
-                        },
-                        "roles": [
-                            "create"
-                        ]
-                    }]
+                    "parties": [self.party_creator]
                 }},
                 status=201
             )
 
-        monitor_id = response.json["data"]["id"]
+            monitor_id = response.json["data"]["id"]
 
         with open('docs/source/tutorial/http/monitors-with-object.http', 'w') as self.app.file_obj:
             response = self.app.get('/monitors')
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(len(response.json['data']), 1)
 
-        with open('docs/source/tutorial/http/monitor-publish-wo-decision.http', 'w') as self.app.file_obj:
-            self.app.patch_json(
-                '/monitors/{}'.format(monitor_id),
-                {"data": {"status": "active"}},
-                status=422
-            )
+        with freeze_time("2018.01.02 00:00"):
+            with open('docs/source/tutorial/http/monitor-publish-wo-decision.http', 'w') as self.app.file_obj:
+                self.app.patch_json(
+                    '/monitors/{}'.format(monitor_id),
+                    {"data": {"status": "active"}},
+                    status=422
+                )
 
         # PUBLISH
-        with open('docs/source/tutorial/http/monitor-publish-party.http', 'w') as self.app.file_obj:
-            response = self.app.post_json(
-                '/monitors/{}/parties'.format(monitor_id),
-                {"data": {
-                    "name": "The State Audit Service of Ukraine",
-                    "contactPoint": {
-                        "name": "John Doe",
-                        "telephone": "0440000000"
-                    },
-                    "identifier": {
-                        "scheme": "UA-EDR",
-                        "id": "40165856",
-                        "uri": "http://www.dkrs.gov.ua"
-                    },
-                    "address": {
-                        "countryName": "Ukraine",
-                        "postalCode": "04070",
-                        "region": "Kyiv",
-                        "streetAddress": "Petra Sahaidachnoho St, 4",
-                        "locality": "Kyiv"
-                    },
-                    "roles": [
-                        "decision"
-                    ]
-                }},
-                status=201
+        with freeze_time("2018.01.02 01:00"):
+            with open('docs/source/tutorial/http/monitor-publish-party.http', 'w') as self.app.file_obj:
+                self.app.post_json(
+                    '/monitors/{}/parties'.format(monitor_id),
+                    {"data": self.party_decision},
+                    status=201
+                )
+
+        with freeze_time("2018.01.02 01:05"):
+            with open('docs/source/tutorial/http/monitor-publish-first-step.http', 'w') as self.app.file_obj:
+                self.app.patch_json(
+                    '/monitors/{}'.format(monitor_id),
+                    {"data": {
+                        "decision": {
+                            "description": "text",
+                            "date": datetime.now().isoformat(),
+                            "documents": [{
+                                'title': 'lorem.doc',
+                                'url': self.generate_docservice_url(),
+                                'hash': 'md5:' + '0' * 32,
+                                'format': 'application/msword',
+                            }]
+                        }
+                    }},
+                    status=200
+                )
+
+        with freeze_time("2018.01.02 01:10"):
+            with open('docs/source/tutorial/http/monitor-publish-add-document.http', 'w') as self.app.file_obj:
+                self.app.post_json(
+                    '/monitors/{}/decision/documents'.format(monitor_id),
+                    {"data": {
+                        'title': 'dolor.doc',
+                        'url': self.generate_docservice_url(),
+                        'hash': 'md5:' + '0' * 32,
+                        'format': 'application/msword',
+                    }},
+                    status=201
+                )
+
+        with freeze_time("2018.01.02 01:15"):
+            with open('docs/source/tutorial/http/monitor-publish-second-step.http', 'w') as self.app.file_obj:
+                self.app.patch_json(
+                    '/monitors/{}'.format(monitor_id),
+                    {"data": {
+                        "status": "active"
+                    }},
+                    status=200
+                )
+
+        with freeze_time("2018.01.02 01:20"):
+            with open('docs/source/tutorial/http/monitor-publish-change.http', 'w') as self.app.file_obj:
+                self.app.patch_json(
+                    '/monitors/{}'.format(monitor_id),
+                    {"data": {
+                        "decision": {
+                            "description": "another_text",
+                        }
+                    }},
+                    status=422
+                )
+
+        # DIALOGUE
+        with freeze_time("2018.01.03 00:00"):
+            with open('docs/source/tutorial/http/dialogue-party.http', 'w') as self.app.file_obj:
+                response = self.app.post_json(
+                    '/monitors/{}/parties'.format(monitor_id),
+                    {"data": self.party_dialogue},
+                    status=201
+                )
+
+        party_id = response.json['data']['id']
+
+        with freeze_time("2018.01.03 00:05"):
+            with open('docs/source/tutorial/http/dialogue-publish.http', 'w') as self.app.file_obj:
+                response = self.app.post_json(
+                    '/monitors/{}/dialogues'.format(monitor_id),
+                    {"data": {
+                        "title": "Lorem ipsum",
+                        "description": "Lorem ipsum dolor sit amet.",
+                        "documents": [{
+                            'title': 'ipsum.doc',
+                            'url': self.generate_docservice_url(),
+                            'hash': 'md5:' + '0' * 32,
+                            'format': 'application/msword',
+                        }],
+                        "relatedParty": party_id
+                    }},
+                    status=201
+                )
+
+        dialogue_id = response.json['data']['id']
+
+        with freeze_time("2018.01.03 00:10"):
+            with open('docs/source/tutorial/http/dialogue-publish-add-document.http', 'w') as self.app.file_obj:
+                self.app.post_json(
+                    '/monitors/{}/dialogues/{}/documents'.format(monitor_id, dialogue_id),
+                    {"data": {
+                        'title': 'dolor.doc',
+                        'url': self.generate_docservice_url(),
+                        'hash': 'md5:' + '0' * 32,
+                        'format': 'application/msword',
+                    }},
+                    status=201
+                )
+
+        with open('docs/source/tutorial/http/dialogue-get-documents.http', 'w') as self.app.file_obj:
+            self.app.get(
+                '/monitors/{}/dialogues/{}/documents'.format(monitor_id, dialogue_id),
+                status=200
             )
 
-        with open('docs/source/tutorial/http/monitor-publish-first-step.http', 'w') as self.app.file_obj:
-            self.app.patch_json(
-                '/monitors/{}'.format(monitor_id),
-                {"data": {
-                    "decision": {
-                        "description": "text",
-                        "date": datetime.now().isoformat(),
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+
+        with freeze_time("2018.01.04 00:00"):
+            with open('docs/source/tutorial/http/dialogue-get-credentials.http', 'w') as self.app.file_obj:
+                response = self.app.patch_json(
+                    '/monitors/{}/credentials?acc_token={}'.format(monitor_id, tender_token),
+                    status=200
+                )
+
+        tender_owner_token = response.json['access']['token']
+
+        with freeze_time("2018.01.04 00:05"):
+            with open('docs/source/tutorial/http/dialogue-answer.http', 'w') as self.app.file_obj:
+                self.app.patch_json(
+                    '/monitors/{}/dialogues/{}?acc_token={}'.format(monitor_id, dialogue_id, tender_owner_token),
+                    {"data": {
+                        'answer': 'Sit amet'
+                    }},
+                    status=200
+                )
+
+        with freeze_time("2018.01.04 00:10"):
+            with open('docs/source/tutorial/http/dialogue-answer-docs.http', 'w') as self.app.file_obj:
+                self.app.post_json(
+                    '/monitors/{}/dialogues/{}/documents?acc_token={}'.format(monitor_id, dialogue_id, tender_owner_token),
+                    {"data": {
+                        'title': 'dolor.doc',
+                        'url': self.generate_docservice_url(),
+                        'hash': 'md5:' + '0' * 32,
+                        'format': 'application/msword',
+                    }},
+                    status=201
+                )
+
+        with open('docs/source/tutorial/http/dialogue-get.http', 'w') as self.app.file_obj:
+            self.app.get(
+                '/monitors/{}/dialogues/{}'.format(monitor_id, dialogue_id),
+                status=200
+            )
+
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+
+        # CONCLUSION
+        with freeze_time("2018.01.05 00:00"):
+            with open('docs/source/tutorial/http/conclusion-wo-violations.http', 'w') as self.app.file_obj:
+                response = self.app.patch_json(
+                    '/monitors/{}'.format(monitor_id),
+                    {"data": {
+                        "conclusion": {
+                            "violationOccurred": False,
+                        }
+                    }},
+                )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertIs(response.json["data"]["conclusion"]["violationOccurred"], False)
+
+        with freeze_time("2018.01.05 00:10"):
+            with open('docs/source/tutorial/http/conclusion-failed-required.http', 'w') as self.app.file_obj:
+                response = self.app.patch_json(
+                    '/monitors/{}'.format(monitor_id),
+                    {"data": {
+                        "conclusion": {
+                            "violationOccurred": True,
+                        }
+                    }},
+                    status=422
+                )
+
+        self.assertEqual(len(response.json["errors"]), 1)
+
+        with freeze_time("2018.01.05 00:15"):
+            with open('docs/source/tutorial/http/conclusion-full.http', 'w') as self.app.file_obj:
+                response = self.app.patch_json(
+                    '/monitors/{}'.format(monitor_id),
+                    {"data": {
+                        "conclusion": {
+                            "violationOccurred": True,
+                            "violationType": ["documentsForm", "corruptionAwarded"],
+                            "auditFinding": "Ring around the rosies",
+                            "stringsAttached": "Pocket full of posies",
+                            "description": "Ashes, ashes, we all fall down",
+                            "documents": [
+                                {
+                                    'title': 'New document(2).doc',
+                                    'url': self.generate_docservice_url(),
+                                    'hash': 'md5:' + '0' * 32,
+                                    'format': 'application/msword',
+                                }
+                            ]
+                        }
+                    }}
+                )
+            self.assertEqual(response.status_code, 200)
+
+        with freeze_time("2018.01.05 00:20"):
+            with open('docs/source/tutorial/http/conclusion-add-document.http', 'w') as self.app.file_obj:
+                self.app.post_json(
+                    '/monitors/{}/conclusion/documents'.format(monitor_id, dialogue_id),
+                    {"data": {
+                        'title': 'sign.p7s',
+                        'url': self.generate_docservice_url(),
+                        'hash': 'md5:' + '0' * 32,
+                        'format': 'application/pkcs7-signature',
+                    }},
+                    status=201
+                )
+
+        with freeze_time("2018.01.05 00:25"):
+            with open('docs/source/tutorial/http/conclusion-addressed.http', 'w') as self.app.file_obj:
+                response = self.app.patch_json(
+                    '/monitors/{}'.format(monitor_id),
+                    {"data": {
+                        "status": "addressed",
+                    }}
+                )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json["data"]["status"], "addressed")
+
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+
+        with freeze_time("2018.01.06 00:00"):
+            with open('docs/source/tutorial/http/conclusion-dialogue.http', 'w') as self.app.file_obj:
+                self.app.post_json(
+                    '/monitors/{}/dialogues?acc_token={}'.format(monitor_id, tender_owner_token),
+                    {"data": {
+                        "title": "Sit amet",
+                        "description": "Sit amet lorem ipsum dolor.",
                         "documents": [{
-                            'title': 'lorem.doc',
+                            'title': 'dolor.doc',
                             'url': self.generate_docservice_url(),
                             'hash': 'md5:' + '0' * 32,
                             'format': 'application/msword',
                         }]
-                    }
-                }},
-                status=200
-            )
+                    }},
+                    status=201
+                )
 
-        with open('docs/source/tutorial/http/monitor-publish-add-document.http', 'w') as self.app.file_obj:
-            self.app.post_json(
-                '/monitors/{}/decision/documents'.format(monitor_id),
+        # ELIMINATION REPORT
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+
+        with freeze_time("2018.01.07 00:00"):
+            with open('docs/source/tutorial/http/elimination-report-post.http', 'w') as self.app.file_obj:
+                response = self.app.put_json(
+                    '/monitors/{}/eliminationReport?acc_token={}'.format(monitor_id, tender_owner_token),
+                    {"data": {
+                        "description": "The procurement requirements have been fixed and the changes are attached.",
+                        "documents": [
+                            {
+                                'title': 'requirements.doc',
+                                'url': self.generate_docservice_url(),
+                                'hash': 'md5:' + '0' * 32,
+                                'format': 'application/msword',
+                            }
+                        ],
+                    }},
+                )
+
+        self.assertEqual(response.status_code, 200)
+
+        with freeze_time("2018.01.08 00:00"):
+            with open('docs/source/tutorial/http/elimination-report-edit.http', 'w') as self.app.file_obj:
+                response = self.app.patch_json(
+                    '/monitors/{}/eliminationReport?acc_token={}'.format(monitor_id, tender_owner_token),
+                    {"data": {
+                        "description": "The procurement requirements have been fixed and the changes are attached. "
+                                       "But unfortunately the award cannot be changed as "
+                                       "the procurement is in its final state.",
+                    }},
+                )
+
+        self.assertEqual(response.status_code, 200)
+
+        # ELIMINATION RESOLUTION
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+
+        with freeze_time("2018.01.09 00:00"):
+            with open('docs/source/tutorial/http/elimination-resolution-post.http', 'w') as self.app.file_obj:
+                self.app.patch_json(
+                    '/monitors/{}'.format(monitor_id),
+                    {"data": {
+                        "eliminationResolution": {
+                            "result": "partly",
+                            "resultByType": {
+                                "documentsForm": "eliminated",
+                                "corruptionAwarded": "not_eliminated",
+                            },
+                            "description": "The award hasn't been fixed.",
+                            "documents": [
+                                {
+                                    'title': 'sign.p7s',
+                                    'url': self.generate_docservice_url(),
+                                    'hash': 'md5:' + '0' * 32,
+                                    'format': 'application/pkcs7-signature',
+                                }
+                            ]
+                        },
+                    }},
+                )
+
+        with freeze_time("2018.01.10 00:00"):
+            with open('docs/source/tutorial/http/monitor-to-completed.http', 'w') as self.app.file_obj:
+                self.app.patch_json(
+                    '/monitors/{}'.format(monitor_id),
+                    {"data": {
+                        "status": "completed",
+                    }},
+                    status=200
+                )
+
+    def test_monitor_life_cycle_with_no_violations(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+
+        with freeze_time("2018.01.01 00:00"):
+            response = self.app.post_json(
+                '/monitors',
                 {"data": {
-                    'title': 'dolor.doc',
-                    'url': self.generate_docservice_url(),
-                    'hash': 'md5:' + '0' * 32,
-                    'format': 'application/msword',
+                    "tender_id": self._generate_test_uuid().hex,
+                    "reasons": ["public", "fiscal"],
+                    "procuringStages": ["awarding", "contracting"],
+                    "parties": [self.party_creator]
                 }},
                 status=201
             )
 
-        with open('docs/source/tutorial/http/monitor-publish-second-step.http', 'w') as self.app.file_obj:
-            self.app.patch_json(
-                '/monitors/{}'.format(monitor_id),
-                {"data": {
-                    "status": "active"
-                }},
-                status=200
-            )
+        monitor_id = response.json["data"]["id"]
 
-        with open('docs/source/tutorial/http/monitor-publish-change.http', 'w') as self.app.file_obj:
-            self.app.patch_json(
-                '/monitors/{}'.format(monitor_id),
-                {"data": {
-                    "decision": {
-                        "description": "another_text",
-                    }
-                }},
-                status=422
-            )
+        with freeze_time("2018.01.02 00:00"):
+            with open('docs/source/tutorial/http/monitor-publish.http', 'w') as self.app.file_obj:
+                self.app.patch_json(
+                    '/monitors/{}'.format(monitor_id),
+                    {"data": {
+                        "status": "active",
+                        "decision": {
+                            "description": "text",
+                            "date": datetime.now().isoformat(),
+                            "documents": [{
+                                'title': 'lorem.doc',
+                                'url': self.generate_docservice_url(),
+                                'hash': 'md5:' + '0' * 32,
+                                'format': 'application/msword',
+                            }]
+                        }
+                    }},
+                    status=200
+                )
 
-        # DIALOGUE
-        with open('docs/source/tutorial/http/dialogue-party.http', 'w') as self.app.file_obj:
+        with freeze_time("2018.01.03 00:00"):
             response = self.app.post_json(
                 '/monitors/{}/parties'.format(monitor_id),
-                {"data": {
-                    "name": "The State Audit Service of Ukraine",
-                    "contactPoint": {
-                        "name": "Jane Doe",
-                        "telephone": "0440000000"
-                    },
-                    "identifier": {
-                        "scheme": "UA-EDR",
-                        "id": "40165856",
-                        "uri": "http://www.dkrs.gov.ua"
-                    },
-                    "address": {
-                        "countryName": "Ukraine",
-                        "postalCode": "04070",
-                        "region": "Kyiv",
-                        "streetAddress": "Petra Sahaidachnoho St, 4",
-                        "locality": "Kyiv"
-                    },
-                    "roles": [
-                        "dialogue"
-                    ]
-                }},
+                {"data": self.party_dialogue},
                 status=201
             )
 
         party_id = response.json['data']['id']
 
-        with open('docs/source/tutorial/http/dialogue-publish.http', 'w') as self.app.file_obj:
-            response = self.app.post_json(
+        with freeze_time("2018.01.03 00:10"):
+            self.app.post_json(
                 '/monitors/{}/dialogues'.format(monitor_id),
                 {"data": {
                     "title": "Lorem ipsum",
@@ -303,234 +612,44 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                 status=201
             )
 
-        dialogue_id = response.json['data']['id']
-
-        with open('docs/source/tutorial/http/dialogue-publish-add-document.http', 'w') as self.app.file_obj:
-            self.app.post_json(
-                '/monitors/{}/dialogues/{}/documents'.format(monitor_id, dialogue_id),
-                {"data": {
-                    'title': 'dolor.doc',
-                    'url': self.generate_docservice_url(),
-                    'hash': 'md5:' + '0' * 32,
-                    'format': 'application/msword',
-                }},
-                status=201
-            )
-
-        with open('docs/source/tutorial/http/dialogue-get-documents.http', 'w') as self.app.file_obj:
-            self.app.get(
-                '/monitors/{}/dialogues/{}/documents'.format(monitor_id, dialogue_id),
-                status=200
-            )
-
-        self.app.authorization = ('Basic', (self.broker_token, ''))
-
-        with open('docs/source/tutorial/http/dialogue-get-credentials.http', 'w') as self.app.file_obj:
-            response = self.app.patch_json(
-                '/monitors/{}/credentials?acc_token={}'.format(monitor_id, tender_token),
-                status=200
-            )
-
-        tender_owner_token = response.json['access']['token']
-
-        with open('docs/source/tutorial/http/dialogue-answer.http', 'w') as self.app.file_obj:
+        with freeze_time("2018.01.04 00:00"):
             self.app.patch_json(
-                '/monitors/{}/dialogues/{}?acc_token={}'.format(monitor_id, dialogue_id, tender_owner_token),
-                {"data": {
-                    'answer': 'Sit amet'
-                }},
-                status=200
-            )
-
-        with open('docs/source/tutorial/http/dialogue-answer-docs.http', 'w') as self.app.file_obj:
-            self.app.post_json(
-                '/monitors/{}/dialogues/{}/documents?acc_token={}'.format(monitor_id, dialogue_id, tender_owner_token),
-                {"data": {
-                    'title': 'dolor.doc',
-                    'url': self.generate_docservice_url(),
-                    'hash': 'md5:' + '0' * 32,
-                    'format': 'application/msword',
-                }},
-                status=201
-            )
-
-        with open('docs/source/tutorial/http/dialogue-get.http', 'w') as self.app.file_obj:
-            self.app.get(
-                '/monitors/{}/dialogues/{}'.format(monitor_id, dialogue_id),
-                status=200
-            )
-
-        self.app.authorization = ('Basic', (self.sas_token, ''))
-
-        # CONCLUSION
-        with open('docs/source/tutorial/http/conclusion-wo-violations.http', 'w') as self.app.file_obj:
-            response = self.app.patch_json(
                 '/monitors/{}'.format(monitor_id),
                 {"data": {
                     "conclusion": {
                         "violationOccurred": False,
-                    }
-                }},
-            )
-            self.assertEqual(response.status_code, 200)
-            self.assertIs(response.json["data"]["conclusion"]["violationOccurred"], False)
-
-        with open('docs/source/tutorial/http/conclusion-failed-required.http', 'w') as self.app.file_obj:
-            response = self.app.patch_json(
-                '/monitors/{}'.format(monitor_id),
-                {"data": {
-                    "conclusion": {
-                        "violationOccurred": True,
-                    }
-                }},
-                status=422
-            )
-        self.assertEqual(len(response.json["errors"]), 1)
-
-        with open('docs/source/tutorial/http/conclusion-full.http', 'w') as self.app.file_obj:
-            response = self.app.patch_json(
-                '/monitors/{}'.format(monitor_id),
-                {"data": {
-                    "conclusion": {
-                        "violationOccurred": True,
-                        "violationType": ["documentsForm", "corruptionAwarded"],
-                        "auditFinding": "Ring around the rosies",
-                        "stringsAttached": "Pocket full of posies",
-                        "description": "Ashes, ashes, we all fall down",
-                        "documents": [
-                            {
-                                'title': 'New document(2).doc',
-                                'url': self.generate_docservice_url(),
-                                'hash': 'md5:' + '0' * 32,
-                                'format': 'application/msword',
-                            }
-                        ]
-                    }
-                }}
-            )
-        self.assertEqual(response.status_code, 200)
-
-        with open('docs/source/tutorial/http/conclusion-add-document.http', 'w') as self.app.file_obj:
-            self.app.post_json(
-                '/monitors/{}/conclusion/documents'.format(monitor_id, dialogue_id),
-                {"data": {
-                    'title': 'sign.p7s',
-                    'url': self.generate_docservice_url(),
-                    'hash': 'md5:' + '0' * 32,
-                    'format': 'application/pkcs7-signature',
-                }},
-                status=201
-            )
-
-        with open('docs/source/tutorial/http/conclusion-addressed.http', 'w') as self.app.file_obj:
-            response = self.app.patch_json(
-                '/monitors/{}'.format(monitor_id),
-                {"data": {
-                    "status": "addressed",
-                }}
-            )
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.json["data"]["status"], "addressed")
-
-        self.app.authorization = ('Basic', (self.broker_token, ''))
-
-        with open('docs/source/tutorial/http/conclusion-dialogue.http', 'w') as self.app.file_obj:
-            self.app.post_json(
-                '/monitors/{}/dialogues?acc_token={}'.format(monitor_id, tender_owner_token),
-                {"data": {
-                    "title": "Sit amet",
-                    "description": "Sit amet lorem ipsum dolor.",
-                    "documents": [{
-                        'title': 'dolor.doc',
-                        'url': self.generate_docservice_url(),
-                        'hash': 'md5:' + '0' * 32,
-                        'format': 'application/msword',
-                    }]
-                }},
-                status=201
-            )
-
-        # ELIMINATION REPORT
-        self.app.authorization = ('Basic', (self.broker_token, ''))
-        with open('docs/source/tutorial/http/elimination-report-post.http', 'w') as self.app.file_obj:
-            response = self.app.put_json(
-                '/monitors/{}/eliminationReport?acc_token={}'.format(monitor_id, tender_owner_token),
-                {"data": {
-                    "description": "The procurement requirements have been fixed and the changes are attached.",
-                    "documents": [
-                        {
-                            'title': 'requirements.doc',
-                            'url': self.generate_docservice_url(),
-                            'hash': 'md5:' + '0' * 32,
-                            'format': 'application/msword',
-                        }
-                    ],
-                }},
-            )
-            self.assertEqual(response.status_code, 200)
-
-        with open('docs/source/tutorial/http/elimination-report-edit.http', 'w') as self.app.file_obj:
-            response = self.app.patch_json(
-                '/monitors/{}/eliminationReport?acc_token={}'.format(monitor_id, tender_owner_token),
-                {"data": {
-                    "description": "The procurement requirements have been fixed and the changes are attached. "
-                                   "But unfortunately the award cannot be changed as "
-                                   "the procurement is in its final state.",
-                }},
-            )
-            self.assertEqual(response.status_code, 200)
-
-        # ELIMINATION RESOLUTION
-        self.app.authorization = ('Basic', (self.sas_token, ''))
-
-        with open('docs/source/tutorial/http/elimination-resolution-post.http', 'w') as self.app.file_obj:
-            self.app.patch_json(
-                '/monitors/{}'.format(monitor_id),
-                {"data": {
-                    "eliminationResolution": {
-                        "result": "partly",
-                        "resultByType": {
-                            "documentsForm": "eliminated",
-                            "corruptionAwarded": "not_eliminated",
-                        },
-                        "description": "The award hasn't been fixed.",
-                        "documents": [
-                            {
-                                'title': 'sign.p7s',
-                                'url': self.generate_docservice_url(),
-                                'hash': 'md5:' + '0' * 32,
-                                'format': 'application/pkcs7-signature',
-                            }
-                        ]
                     },
+                    "status": "declined"
                 }},
             )
 
-        with open('docs/source/tutorial/http/monitor-to-complete.http', 'w') as self.app.file_obj:
-            self.app.patch_json(
-                '/monitors/{}'.format(monitor_id),
-                {"data": {
-                    "status": "complete",
-                }},
-                status=200
-            )
+        with freeze_time("2018.01.05 00:00"):
+            with open('docs/source/tutorial/http/monitor-to-closed.http', 'w') as self.app.file_obj:
+                self.app.patch_json(
+                    '/monitors/{}'.format(monitor_id),
+                    {"data": {
+                        "status": "closed",
+                    }}
+                )
 
-    def test_monitor_publish_fast(self):
+    def test_monitor_life_cycle_stopped(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
 
-        response = self.app.post_json(
-            '/monitors',
-            {"data": {
-                "tender_id": self._generate_test_uuid().hex,
-                "reasons": ["public", "fiscal"],
-                "procuringStages": ["awarding", "contracting"]
-            }},
-            status=201
-        )
+        with freeze_time("2018.01.01 00:00"):
+            response = self.app.post_json(
+                '/monitors',
+                {"data": {
+                    "tender_id": self._generate_test_uuid().hex,
+                    "reasons": ["public", "fiscal"],
+                    "procuringStages": ["awarding", "contracting"],
+                    "parties": [self.party_creator]
+                }},
+                status=201
+            )
 
         monitor_id = response.json["data"]["id"]
 
-        with open('docs/source/tutorial/http/monitor-publish.http', 'w') as self.app.file_obj:
+        with freeze_time("2018.01.02 00:00"):
             self.app.patch_json(
                 '/monitors/{}'.format(monitor_id),
                 {"data": {
@@ -548,6 +667,18 @@ class MonitorsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                 }},
                 status=200
             )
+
+        with freeze_time("2018.01.03 00:00"):
+            with open('docs/source/tutorial/http/monitor-to-stopped.http', 'w') as self.app.file_obj:
+                self.app.patch_json(
+                    '/monitors/{}'.format(monitor_id),
+                    {"data": {
+                        "stopping": {
+                            "description": "Complaint was created"
+                        },
+                        "status": "stopped",
+                    }}
+                )
 
 
 class FeedDocsTest(BaseDocWebTest):
@@ -588,7 +719,6 @@ class FeedDocsTest(BaseDocWebTest):
         next_url = response.json["next_page"]["path"]
 
         with open('docs/source/feed/http/changes-feed-new-next.http', 'w') as self.app.file_obj:
-            print(next_url)
             response = self.app.get(next_url)
             self.assertEqual(len(response.json["data"]), 0)
             self.assertIn("next_page", response.json)

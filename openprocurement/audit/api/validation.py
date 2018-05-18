@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from openprocurement.api.utils import update_logging_context, raise_operation_error, error_handler, forbidden
-from openprocurement.api.validation import validate_data, validate_json_data
+from openprocurement.api.validation import validate_data
 from restkit import ResourceNotFound
 from hashlib import sha512
 
@@ -74,10 +74,19 @@ def _validate_patch_monitor_status_active_to_addressed_or_declined(request):
         raise error_handler(request.errors)
 
 
-def _validate_patch_monitor_status_addressed_to_complete(request):
+def _validate_patch_monitor_status_addressed_to_completed(request):
     if not request.validated.get("data", {}).get('eliminationResolution'):
         request.errors.status = 422
         request.errors.add('body', 'eliminationResolution', 'This field is required.')
+
+def _validate_patch_monitor_status_declined_to_closed(request):
+    pass
+
+def _validate_patch_monitor_status_active_to_stopped(request):
+    if not request.validated.get("data", {}).get('stopping'):
+        request.errors.status = 422
+        request.errors.add('body', 'stopping', 'This field is required.')
+        raise error_handler(request.errors)
 
 
 def validate_dialogue_data(request):

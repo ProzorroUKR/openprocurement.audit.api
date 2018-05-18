@@ -1,4 +1,4 @@
-PATCH /api/2.4/monitors/7d4c3be20b003356b5b097e9b476c8a1 HTTP/1.0
+PATCH /api/2.4/monitors/7dcb9da2d97c3c9b90008d5e994a0016 HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
 Content-Length: 30
 Content-Type: application/json
@@ -26,38 +26,38 @@ Content-Type: application/json; charset=UTF-8
       "fiscal"
     ], 
     "monitoringPeriod": {
-      "startDate": "2018-01-01T02:00:00+02:00", 
-      "endDate": "2018-01-26T00:00:00+02:00"
+      "startDate": "2018-01-02T03:15:00+02:00", 
+      "endDate": "2018-01-26T03:15:00+02:00"
     }, 
     "decision": {
-      "date": "2018-01-01T00:00:00+02:00", 
+      "date": "2018-01-02T01:05:00+02:00", 
+      "dateCreated": "2018-01-02T03:05:00+02:00", 
       "documents": [
         {
           "hash": "md5:00000000000000000000000000000000", 
           "title": "lorem.doc", 
-          "url": "http://docs-sandbox.openprocurement.org/get/8c62c7ea658d38a28272e87132e554ee?KeyID=a8968c46&Signature=twA5liTmEI%2FED9LvOkTKtU6%2B86iHioW5NwbO26XufQL9luF1%2BdweTajMuxoJWj0HKpmNPD9svx0j13iMCMsuCQ%3D%3D", 
+          "url": "http://docs-sandbox.openprocurement.org/get/73739201695136e0a39b20aff81e32fe?KeyID=a8968c46&Signature=hv2UJlQmig%2BKs6RVZymi7SP5YrKeRO%2Fprvfm3pPVWVjfYai05qhr5aQF4Hyt7aKpIRCMOMPfI%2FFIln8E6Y4JAw%3D%3D", 
           "format": "application/msword", 
-          "documentOf": "decision", 
-          "datePublished": "2018-01-01T02:00:00+02:00", 
-          "id": "0c4f76937b743567b01ca60bc33f8192", 
-          "dateModified": "2018-01-01T02:00:00+02:00"
+          "datePublished": "2018-01-02T03:05:00+02:00", 
+          "id": "a73f8521fcad37438b672e67657622b1", 
+          "dateModified": "2018-01-02T03:05:00+02:00"
         }, 
         {
           "hash": "md5:00000000000000000000000000000000", 
           "author": "test_sas", 
           "title": "dolor.doc", 
-          "url": "http://docs-sandbox.openprocurement.org/get/c028f34e55793bea98de4b3c2ed49170?KeyID=a8968c46&Signature=lOT0S4LMFTx3CylZ0HemA4FP8DVvLwO4e9R5mGnBaSkpTdzD%2FVysBImq1iHGmqsblamSXrhCwCPZ0NvSzLHWDA%253D%253D", 
+          "url": "http://docs-sandbox.openprocurement.org/get/6b5be0ea83403afd87f55044b3236d04?KeyID=a8968c46&Signature=nnP8QtuNxX%252BrrK%252BhSoi1DXaduOMvvvuW4vvnI%252BgSFvloN9H5hqkdphaswIZTTmP%2FHjgHLUbnjRxAnVlEJm3tDA%253D%253D", 
           "format": "application/msword", 
-          "documentOf": "decision", 
-          "datePublished": "2018-01-01T02:00:00+02:00", 
-          "id": "33398d1e5b4737c696ea62e7ecff32f4", 
-          "dateModified": "2018-01-01T02:00:00+02:00"
+          "datePublished": "2018-01-02T03:10:00+02:00", 
+          "id": "e0b5e3aea19f3dd391ad7348444266a0", 
+          "dateModified": "2018-01-02T03:10:00+02:00"
         }
       ], 
-      "description": "text"
+      "description": "text", 
+      "datePublished": "2018-01-02T03:15:00+02:00"
     }, 
     "monitoring_id": "UA-M-2018-01-01-000001", 
-    "id": "7d4c3be20b003356b5b097e9b476c8a1", 
+    "id": "7dcb9da2d97c3c9b90008d5e994a0016", 
     "parties": [
       {
         "name": "The State Audit Service of Ukraine", 
@@ -80,7 +80,7 @@ Content-Type: application/json; charset=UTF-8
           "id": "40165856", 
           "uri": "http://www.dkrs.gov.ua"
         }, 
-        "id": "73c0e8e456fa34a985137da11f00f833"
+        "id": "48bc62e5fd4934509657d9281fadaa6e"
       }, 
       {
         "name": "The State Audit Service of Ukraine", 
@@ -103,12 +103,12 @@ Content-Type: application/json; charset=UTF-8
           "id": "40165856", 
           "uri": "http://www.dkrs.gov.ua"
         }, 
-        "id": "384f8515437e3a639634566fdbf01e56"
+        "id": "91fc14d7d7ee35f8bb67131144c380ee"
       }
     ], 
     "dateCreated": "2018-01-01T02:00:00+02:00", 
-    "dateModified": "2018-01-01T02:00:00+02:00", 
-    "tender_id": "0ab3edaa2c273d0d9ba2fb312b26054f"
+    "dateModified": "2018-01-02T03:15:00+02:00", 
+    "tender_id": "2ff6462b265e3c2dad22cb2ad32ab7ec"
   }
 }
 

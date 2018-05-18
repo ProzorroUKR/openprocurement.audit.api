@@ -67,7 +67,6 @@ def factory(request):
     elif request.matchdict.get('dialogue_id'):
         return dialogue_factory(request)
     elif request.matchdict.get('party_id'):
-        print '========', get_item(request.monitor, 'party', request)
         return get_item(request.monitor, 'party', request)
     elif request.matchdict.get('document_id'):
         return get_item(request.monitor, 'document', request)

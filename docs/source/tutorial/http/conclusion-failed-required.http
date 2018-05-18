@@ -1,4 +1,4 @@
-PATCH /api/2.4/monitors/7d4c3be20b003356b5b097e9b476c8a1 HTTP/1.0
+PATCH /api/2.4/monitors/7dcb9da2d97c3c9b90008d5e994a0016 HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
 Content-Length: 53
 Content-Type: application/json

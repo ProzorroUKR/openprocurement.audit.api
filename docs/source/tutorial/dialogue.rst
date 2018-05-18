@@ -1,7 +1,7 @@
 .. _dialogue:
 
-Dialogue
-========
+Make a Dialogue
+===============
 
 Let's provide party that will be used as related party for our dialogue:
 

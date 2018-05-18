@@ -132,7 +132,7 @@ class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):
         )
         self.assertEqual(response.status_code, 200)
         self.assertIn("conclusion", response.json["data"])
-        self.assertEqual(response.json["data"]["conclusion"], {'violationOccurred': False})
+        self.assertEqual(response.json["data"]["conclusion"]["violationOccurred"], False)
 
     def test_success_minimal(self):
         response = self.app.patch_json(

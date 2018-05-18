@@ -1,6 +1,6 @@
-POST /api/2.4/monitors/7d4c3be20b003356b5b097e9b476c8a1/dialogues?acc_token=53050cc95d6b3ae9b56d5a5ef408c6cc HTTP/1.0
+POST /api/2.4/monitors/7dcb9da2d97c3c9b90008d5e994a0016/dialogues?acc_token=8bf7aa51d7fb38eab9d5c4e77863e613 HTTP/1.0
 Authorization: Basic YnJva2VyOg==
-Content-Length: 405
+Content-Length: 407
 Content-Type: application/json
 Host: api-sandbox.openprocurement.org
 
@@ -8,7 +8,7 @@ Host: api-sandbox.openprocurement.org
   "data": {
     "documents": [
       {
-        "url": "http://docs-sandbox.openprocurement.org/get/c7abf9c6931b3cbfbc789bbfcbb5e2f4?KeyID=a8968c46&Signature=Lm0pkeGNuZiZmLxWv29wA%2FtFCHU5aWUQZ8zQLhoBzdk7DjcR52%2Fxpi8yLohkLTL7lTfvSsNdJz9xCTsm2yuFDA%3D%3D", 
+        "url": "http://docs-sandbox.openprocurement.org/get/8b5a17c4d5ed367ca3d5aebf44398f4f?KeyID=a8968c46&Signature=vB%2F9u0uSK%2Bse3eIRkQtUMU2TIYjEdVSBQlJUWwUMzDj%2FX54YOLyQHVOCJAXGqsInjmZSe9WyjyvnzQf2tPHVBQ%3D%3D", 
         "title": "dolor.doc", 
         "hash": "md5:00000000000000000000000000000000", 
         "format": "application/msword"
@@ -22,7 +22,7 @@ Host: api-sandbox.openprocurement.org
 
 201 Created
 Content-Type: application/json; charset=UTF-8
-Location: http://api-sandbox.openprocurement.org/api/2.4/monitors/7d4c3be20b003356b5b097e9b476c8a1/dialogues/f69b07a9d206309fb916edaa9788a404
+Location: http://api-sandbox.openprocurement.org/api/2.4/monitors/7dcb9da2d97c3c9b90008d5e994a0016/dialogues/26e78e4c363b318aa9c91576b965416c
 
 {
   "data": {
@@ -30,19 +30,18 @@ Location: http://api-sandbox.openprocurement.org/api/2.4/monitors/7d4c3be20b0033
       {
         "hash": "md5:00000000000000000000000000000000", 
         "title": "dolor.doc", 
-        "url": "http://docs-sandbox.openprocurement.org/get/c7abf9c6931b3cbfbc789bbfcbb5e2f4?KeyID=a8968c46&Signature=Lm0pkeGNuZiZmLxWv29wA%2FtFCHU5aWUQZ8zQLhoBzdk7DjcR52%2Fxpi8yLohkLTL7lTfvSsNdJz9xCTsm2yuFDA%3D%3D", 
+        "url": "http://docs-sandbox.openprocurement.org/get/8b5a17c4d5ed367ca3d5aebf44398f4f?KeyID=a8968c46&Signature=vB%2F9u0uSK%2Bse3eIRkQtUMU2TIYjEdVSBQlJUWwUMzDj%2FX54YOLyQHVOCJAXGqsInjmZSe9WyjyvnzQf2tPHVBQ%3D%3D", 
         "format": "application/msword", 
-        "documentOf": "dialogue", 
-        "datePublished": "2018-01-01T02:00:00+02:00", 
-        "id": "5085d736ec9d30edb62f7380e9924012", 
-        "dateModified": "2018-01-01T02:00:00+02:00"
+        "datePublished": "2018-01-06T02:00:00+02:00", 
+        "id": "336635328af33d5f80ec442683fabc6f", 
+        "dateModified": "2018-01-06T02:00:00+02:00"
       }
     ], 
     "description": "Sit amet lorem ipsum dolor.", 
     "title": "Sit amet", 
     "author": "broker", 
-    "dateSubmitted": "2018-01-01T02:00:00+02:00", 
-    "id": "f69b07a9d206309fb916edaa9788a404", 
+    "dateSubmitted": "2018-01-06T02:00:00+02:00", 
+    "id": "26e78e4c363b318aa9c91576b965416c", 
     "dialogueOf": "conclusion"
   }
 }

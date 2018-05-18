@@ -1,7 +1,7 @@
 from uuid import uuid4
 from openprocurement.api.utils import get_now
 from openprocurement.api.models import Model, Revision, Period, Identifier, Address, ContactPoint
-from openprocurement.api.models import Document as BaseDocument
+from openprocurement.api.models import Document
 from openprocurement.api.models import schematics_embedded_role, schematics_default_role, IsoDateTimeType, ListType
 from schematics.types import StringType, MD5Type, BaseType, BooleanType
 from schematics.types.serializable import serializable
@@ -12,23 +12,18 @@ from couchdb_schematics.document import SchematicsDocument
 from pyramid.security import Allow
 
 
-class Document(BaseDocument):
-    documentOf = StringType(
-        choices=('decision', 'conclusion', 'dialogue', 'eliminationReport', 'eliminationResolution'),
-        required=False
-    )
-    documentType = StringType()
-
-
-class Decision(Model):
+class Report(Model):
     description = StringType(required=True)
+    documents = ListType(ModelType(Document), default=list())
+    dateCreated = IsoDateTimeType(default=get_now)
+    datePublished = IsoDateTimeType()
+
+
+class Decision(Report):
     date = IsoDateTimeType(required=True)
-    documents = ListType(ModelType(Document), default=list())
 
 
-class Conclusion(Model):
-    documents = ListType(ModelType(Document), default=list())
-
+class Conclusion(Report):
     violationOccurred = BooleanType(required=True)
     violationType = ListType(
         StringType(choices=(
@@ -40,20 +35,20 @@ class Conclusion(Model):
     )
     auditFinding = StringType()
     stringsAttached = StringType()
-    description = StringType()
+    description = StringType(required=False)
 
     def validate_violationType(self, data, value):
         if data["violationOccurred"] and not value:
             raise ValidationError(u"This field is required.")
 
+class Stopping(Report):
+    pass
 
-class EliminationResolution(Model):
+
+class EliminationResolution(Report):
     result = StringType(choices=['completely', 'partly', 'none'])
     resultByType = DictType(StringType(choices=['eliminated', 'not_eliminated', 'no_mechanism']))
-    description = StringType()
-    documents = ListType(ModelType(Document), default=list())
-    dateCreated = IsoDateTimeType(default=get_now)
-    dateModified = IsoDateTimeType()
+    description = StringType(required=False)
 
     def validate_resultByType(self, data, value):
         violations = data["__parent__"].conclusion.violationType
@@ -65,20 +60,8 @@ class EliminationResolution(Model):
                 raise ValidationError(u"The field must only contain the following fields: {}".format(
                     ", ".join(violations)))
 
-    def import_data(self, raw_data, **kw):
-        for k in ("dateCreated", "dateModified"):
-            if k in raw_data:
-                del raw_data[k]
 
-        obj = super(EliminationResolution, self).import_data(raw_data, **kw)
-        obj.dateModified = get_now() if obj.dateModified else obj.dateCreated
-        return obj
-
-
-class EliminationReport(Model):
-    description = StringType(required=True)
-    documents = ListType(ModelType(Document), default=list())
-    dateCreated = IsoDateTimeType(default=get_now)
+class EliminationReport(Report):
     dateModified = IsoDateTimeType()
 
     def get_role(self):  # this fixes document validation, because document urls cannot be added when role "edit"
@@ -153,12 +136,14 @@ class Monitor(SchematicsDocument, Model):
                 'revisions', 'dateModified', 'dateCreated',
                 'doc_id', '_attachments', 'monitoring_id',
                 'tender_owner_token', 'tender_owner',
+                'monitoringPeriod', 'eliminationPeriod'
             ) + schematics_embedded_role,
             'edit_draft': whitelist("decision") + _perm_edit_whitelist,
-            'edit_active': whitelist("conclusion") + _perm_edit_whitelist,
+            'edit_active': whitelist("conclusion", "stopping") + _perm_edit_whitelist,
             'edit_addressed': whitelist("eliminationResolution") + _perm_edit_whitelist,
-            'edit_complete': whitelist(),
             'edit_declined': whitelist() + _perm_edit_whitelist,
+            'edit_completed': whitelist(),
+            'edit_closed': whitelist(),
             'view': blacklist(
                 'tender_owner_token', '_attachments', 'revisions'
             ) + schematics_embedded_role,
@@ -168,7 +153,10 @@ class Monitor(SchematicsDocument, Model):
 
     tender_id = MD5Type(required=True)
     monitoring_id = StringType()
-    status = StringType(choices=['draft', 'active', 'addressed', 'declined', 'complete'], default='draft')
+    status = StringType(choices=[
+        'draft', 'active', 'addressed', 'declined',
+        'completed', 'closed', 'stopped'
+    ], default='draft')
 
     reasons = ListType(StringType(choices=['indicator', 'authorities', 'media', 'fiscal', 'public']), required=True)
     procuringStages = ListType(StringType(choices=['planning', 'awarding', 'contracting']), required=True)
@@ -178,7 +166,9 @@ class Monitor(SchematicsDocument, Model):
     conclusion = ModelType(Conclusion)
     eliminationReport = ModelType(EliminationReport)
     eliminationResolution = ModelType(EliminationResolution)
+    eliminationPeriod = ModelType(Period)
     dialogues = ListType(ModelType(Dialogue), default=list())
+    stopping = ModelType(Stopping)
 
     parties = ListType(ModelType(Party), default=list())
 

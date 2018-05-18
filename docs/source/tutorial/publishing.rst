@@ -1,5 +1,5 @@
-Publishing
-==========
+Decision Publishing
+===================
 
 We are supposed to change the status of our monitor to publish it:
 

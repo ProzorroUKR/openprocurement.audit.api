@@ -43,7 +43,6 @@ class MonitorDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         document_data = response.json['data']
 
         self.assertEqual(document_data['title'], 'lorem.doc')
-        self.assertEqual(document_data['documentOf'], 'decision')
         self.assertIn('Signature=', document_data["url"])
         self.assertIn('KeyID=', document_data["url"])
         self.assertNotIn('Expires=', document_data["url"])

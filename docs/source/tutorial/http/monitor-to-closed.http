@@ -1,0 +1,134 @@
+PATCH /api/2.4/monitors/79659f71728e3a30ac3dcb69a3a47d80 HTTP/1.0
+Authorization: Basic dGVzdF9zYXNfdG9rZW46
+Content-Length: 30
+Content-Type: application/json
+Host: api-sandbox.openprocurement.org
+
+{
+  "data": {
+    "status": "closed"
+  }
+}
+
+
+200 OK
+Content-Type: application/json; charset=UTF-8
+
+{
+  "data": {
+    "status": "closed", 
+    "eliminationPeriod": {
+      "startDate": "2018-01-04T02:00:00+02:00", 
+      "endDate": "2018-01-10T02:00:00+02:00"
+    }, 
+    "dialogues": [
+      {
+        "documents": [
+          {
+            "hash": "md5:00000000000000000000000000000000", 
+            "title": "ipsum.doc", 
+            "url": "http://docs-sandbox.openprocurement.org/get/b6a304f298a73da8bcfdfad2e71e7d30?KeyID=a8968c46&Signature=wEi2yGqaVkpbgRipsQUW1FqlEyq1izr8%2B%2BQkzmkI%2F%2FUWMa%2BwRC8lfRFR0INwt04faOJIY560pQcj%2FcbC8VuuDQ%3D%3D", 
+            "format": "application/msword", 
+            "datePublished": "2018-01-03T02:10:00+02:00", 
+            "id": "30f559ad8a4b3b9baf08d7140db34b83", 
+            "dateModified": "2018-01-03T02:10:00+02:00"
+          }
+        ], 
+        "description": "Lorem ipsum dolor sit amet.", 
+        "title": "Lorem ipsum", 
+        "author": "test_sas", 
+        "dateSubmitted": "2018-01-03T02:10:00+02:00", 
+        "id": "b8299e9b6edc3e0f8b7d1de0cfd347c8", 
+        "dialogueOf": "decision"
+      }
+    ], 
+    "reasons": [
+      "public", 
+      "fiscal"
+    ], 
+    "monitoringPeriod": {
+      "startDate": "2018-01-02T02:00:00+02:00", 
+      "endDate": "2018-01-26T02:00:00+02:00"
+    }, 
+    "decision": {
+      "date": "2018-01-02T00:00:00+02:00", 
+      "dateCreated": "2018-01-02T02:00:00+02:00", 
+      "documents": [
+        {
+          "hash": "md5:00000000000000000000000000000000", 
+          "title": "lorem.doc", 
+          "url": "http://docs-sandbox.openprocurement.org/get/00b80a9defc53a8c9c187d276edc3121?KeyID=a8968c46&Signature=L2x37hDzokBFEeM7DLe0Z548ONBcjh1tqdl0orEXizLqwU2NBTlOq5bW%2By3t4aHhzkMIV%2BD89pSyYI%2FxS%2BTJBQ%3D%3D", 
+          "format": "application/msword", 
+          "datePublished": "2018-01-02T02:00:00+02:00", 
+          "id": "55041c4cf9973dcd9e65a34a0db94712", 
+          "dateModified": "2018-01-02T02:00:00+02:00"
+        }
+      ], 
+      "description": "text", 
+      "datePublished": "2018-01-02T02:00:00+02:00"
+    }, 
+    "monitoring_id": "UA-M-2018-01-01-000001", 
+    "tender_id": "1a8ab1b4a46b3d1bbd9dacb7675ae49f", 
+    "id": "79659f71728e3a30ac3dcb69a3a47d80", 
+    "parties": [
+      {
+        "name": "The State Audit Service of Ukraine", 
+        "roles": [
+          "create"
+        ], 
+        "address": {
+          "postalCode": "04070", 
+          "countryName": "Ukraine", 
+          "streetAddress": "Petra Sahaidachnoho St, 4", 
+          "region": "Kyiv", 
+          "locality": "Kyiv"
+        }, 
+        "contactPoint": {
+          "name": "Oleksii Kovalenko", 
+          "telephone": "0440000000"
+        }, 
+        "identifier": {
+          "scheme": "UA-EDR", 
+          "id": "40165856", 
+          "uri": "http://www.dkrs.gov.ua"
+        }, 
+        "id": "1aafe33e425d368387fde35bb2ef401d"
+      }, 
+      {
+        "name": "The State Audit Service of Ukraine", 
+        "roles": [
+          "dialogue"
+        ], 
+        "address": {
+          "postalCode": "04070", 
+          "countryName": "Ukraine", 
+          "streetAddress": "Petra Sahaidachnoho St, 4", 
+          "region": "Kyiv", 
+          "locality": "Kyiv"
+        }, 
+        "contactPoint": {
+          "name": "Jane Doe", 
+          "telephone": "0440000000"
+        }, 
+        "identifier": {
+          "scheme": "UA-EDR", 
+          "id": "40165856", 
+          "uri": "http://www.dkrs.gov.ua"
+        }, 
+        "id": "dce3e35594ef3df28de251a716dc28ac"
+      }
+    ], 
+    "dateCreated": "2018-01-01T02:00:00+02:00", 
+    "procuringStages": [
+      "awarding", 
+      "contracting"
+    ], 
+    "dateModified": "2018-01-05T02:00:00+02:00", 
+    "conclusion": {
+      "dateCreated": "2018-01-04T02:00:00+02:00", 
+      "violationOccurred": false, 
+      "datePublished": "2018-01-04T02:00:00+02:00"
+    }
+  }
+}
+

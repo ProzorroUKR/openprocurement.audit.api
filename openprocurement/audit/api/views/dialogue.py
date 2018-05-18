@@ -3,7 +3,6 @@ from openprocurement.audit.api.utils import (
     op_resource,
     APIResource,
     save_monitor,
-    set_documents_of_type,
     apply_patch,
     set_ownership
 )
@@ -37,7 +36,6 @@ class DialogueResource(APIResource):
         dialogue = self.request.validated['dialogue']
         dialogue.dateSubmitted = get_now()
         set_ownership(dialogue, self.request, 'author')
-        set_documents_of_type(dialogue.documents, 'dialogue')
         if monitor.status in ('addressed', 'declined'):
             dialogue.dialogueOf = 'conclusion'
         monitor.dialogues.append(dialogue)

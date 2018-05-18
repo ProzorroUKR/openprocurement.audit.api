@@ -30,7 +30,7 @@ class EliminationReportResource(APIResource):
     def put(self):
         elimination = self.request.validated['eliminationreport']
         elimination.dateModified = elimination.dateCreated
-        apply_patch(self.request, data=dict(eliminationReport=elimination), src=self.request.context.serialize())
+        apply_patch(self.request, data=dict(eliminationReport=elimination))
         self.LOGGER.info('Updated elimination {}'.format(self.request.context.id),
                          extra=context_unpack(self.request, {'MESSAGE_ID': 'elimination_put'}))
         return {'data': elimination.serialize('view')}

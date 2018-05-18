@@ -1,6 +1,5 @@
 from couchdb import ResourceConflict
 from gevent import sleep
-from openprocurement.audit.api.constraints import MONITORING_TIME
 from openprocurement.audit.api.traversal import factory
 from functools import partial
 from cornice.resource import resource
@@ -139,16 +138,11 @@ def generate_monitor_id(ctime, db, server_id=''):
     return 'UA-M-{:04}-{:02}-{:02}-{:06}{}'.format(
         ctime.year, ctime.month, ctime.day, index, server_id and '-' + server_id)
 
-def generate_monitoring_period(date):
+def generate_period(date, delta):
     period = Period()
     period.startDate = date
-    period.endDate = calculate_business_date(date, MONITORING_TIME, working_days=True)
+    period.endDate = calculate_business_date(date, delta, working_days=True)
     return period
-
-
-def set_documents_of_type(data, of_type):
-    for item in data if isinstance(data, list) else [data]:
-        item.documentOf = of_type
 
 
 def set_ownership(data, request, fieldname='owner'):

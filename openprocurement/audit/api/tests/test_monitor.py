@@ -168,6 +168,58 @@ class ActiveMonitorResourceTest(BaseWebTest):
         self.assertEqual(response.status, '403 Forbidden')
         self.assertEqual(response.content_type, 'application/json')
 
+    def test_patch_to_stopped(self):
+        response = self.app.patch_json(
+            '/monitors/{}'.format(self.monitor_id),
+            {"data": {
+                "status": "stopped",
+                "stopping": {
+                    "description": "Whisper words of wisdom - let it be."
+                }
+            }},
+        )
+
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["status"], "stopped")
+
+
+class DeclinedMonitorResourceTest(BaseWebTest):
+    def setUp(self):
+        super(DeclinedMonitorResourceTest, self).setUp()
+        self.create_monitor()
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.patch_json(
+            '/monitors/{}'.format(self.monitor_id),
+            {"data": {
+                "status": "active",
+                "decision": {
+                    "description": "text",
+                    "date": (datetime.now() + timedelta(days=2)).isoformat()
+                }
+            }}
+        )
+        self.app.patch_json(
+            '/monitors/{}'.format(self.monitor_id),
+            {"data": {
+                "conclusion": {
+                    "violationOccurred": False,
+                },
+                "status": "declined",
+            }},
+        )
+
+    def test_patch_to_closed(self):
+        response = self.app.patch_json(
+            '/monitors/{}'.format(self.monitor_id),
+            {"data": {
+                "status": "closed",
+            }},
+        )
+
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["status"], "closed")
 
 def suite():
     s = unittest.TestSuite()

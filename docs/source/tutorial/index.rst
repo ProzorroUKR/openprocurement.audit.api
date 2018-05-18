@@ -13,4 +13,7 @@ Tutorial
    conclusion
    eliminationReport
    eliminationResolution
+   completing
+   closing
+   stopping
 

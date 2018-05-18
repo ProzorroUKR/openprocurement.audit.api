@@ -1,4 +1,4 @@
-POST /api/2.4/monitors/7d4c3be20b003356b5b097e9b476c8a1/parties HTTP/1.0
+POST /api/2.4/monitors/7dcb9da2d97c3c9b90008d5e994a0016/parties HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
 Content-Length: 377
 Content-Type: application/json
@@ -32,7 +32,7 @@ Host: api-sandbox.openprocurement.org
 
 201 Created
 Content-Type: application/json; charset=UTF-8
-Location: http://api-sandbox.openprocurement.org/api/2.4/monitors/7d4c3be20b003356b5b097e9b476c8a1/parties/e5553048b92d3afa90e6477503021dc5
+Location: http://api-sandbox.openprocurement.org/api/2.4/monitors/7dcb9da2d97c3c9b90008d5e994a0016/parties/7d524ae16ecb321494f5058e7ac6ca7b
 
 {
   "data": {
@@ -56,7 +56,7 @@ Location: http://api-sandbox.openprocurement.org/api/2.4/monitors/7d4c3be20b0033
       "id": "40165856", 
       "uri": "http://www.dkrs.gov.ua"
     }, 
-    "id": "e5553048b92d3afa90e6477503021dc5"
+    "id": "7d524ae16ecb321494f5058e7ac6ca7b"
   }
 }
 

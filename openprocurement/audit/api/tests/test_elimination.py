@@ -94,6 +94,7 @@ class MonitorEliminationBaseTest(BaseWebTest, DSWebTestMixin):
         )
 
 
+@freeze_time('2018-01-01T11:00:00+02:00')
 class MonitorEliminationResourceTest(MonitorEliminationBaseTest):
 
     def setUp(self):
@@ -417,8 +418,6 @@ class UpdateEliminationResourceTest(MonitorEliminationBaseTest):
                 "corruptionAwarded": "not_eliminated",
             },
             "description": "Do you have spare crutches?",
-            "dateCreated": "2000-02-02T09:00:00+02:00",
-            "dateModified": "1990-02-02T09:00:00+02:00",
             "documents": [
                 {
                     'title': 'sign.p7s',
@@ -443,7 +442,6 @@ class UpdateEliminationResourceTest(MonitorEliminationBaseTest):
         self.assertEqual(resolution["resultByType"], request_data["resultByType"])
         self.assertEqual(resolution["description"], request_data["description"])
         self.assertEqual(resolution["dateCreated"], "2018-01-01T11:00:00+02:00")
-        self.assertEqual(resolution["dateModified"], "2018-01-01T11:00:00+02:00")
         self.assertEqual(len(resolution["documents"]), len(request_data["documents"]))
 
     def test_fail_change_status(self):
@@ -476,10 +474,10 @@ class ResolutionMonitorResourceTest(MonitorEliminationBaseTest):
         response = self.app.patch_json(
             '/monitors/{}'.format(self.monitor_id),
             {"data": {
-                "status": "complete",
+                "status": "completed",
             }},
         )
-        self.assertEqual(response.json["data"]["status"], "complete")
+        self.assertEqual(response.json["data"]["status"], "completed")
 
         # can't update resolution
         self.app.patch_json(

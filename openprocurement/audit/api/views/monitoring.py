@@ -7,6 +7,9 @@ from openprocurement.api.utils import (
     json_view,
     error_handler
 )
+
+from openprocurement.audit.api.constraints import MONITORING_TIME, ELIMINATION_PERIOD_TIME, \
+    ELIMINATION_PERIOD_NO_VIOLATIONS_TIME
 from openprocurement.audit.api.utils import (
     save_monitor,
     monitor_serialize,
@@ -14,8 +17,7 @@ from openprocurement.audit.api.utils import (
     op_resource,
     APIResource,
     generate_monitor_id,
-    set_documents_of_type,
-    generate_monitoring_period,
+    generate_period,
     set_ownership
 )
 from openprocurement.audit.api.design import (
@@ -371,16 +373,24 @@ class MonitorResource(APIResource):
     def patch(self):
         monitor = self.request.validated['monitor']
         monitor_old_status = monitor.status
-        now = get_now()
 
         apply_patch(self.request, save=False, src=self.request.validated['monitor_src'])
 
-        monitor.dateModified = now
-        if monitor_old_status == 'draft':
-            if monitor.decision is not None:
-                set_documents_of_type(monitor.decision.documents, 'decision')
-            if monitor.status == 'active':
-                monitor.monitoringPeriod = generate_monitoring_period(now)
+        monitor.dateModified = get_now()
+        if monitor_old_status == 'draft' and monitor.status == 'active':
+            monitor.monitoringPeriod = generate_period(monitor.dateModified, MONITORING_TIME)
+            monitor.decision.datePublished = monitor.dateModified
+        elif monitor_old_status == 'active' and monitor.status == 'addressed':
+            monitor.conclusion.datePublished = monitor.dateModified
+            monitor.eliminationPeriod = generate_period(monitor.dateModified, ELIMINATION_PERIOD_TIME)
+        elif monitor_old_status == 'active' and monitor.status == 'declined':
+            monitor.eliminationPeriod = generate_period(monitor.dateModified, ELIMINATION_PERIOD_NO_VIOLATIONS_TIME)
+            monitor.conclusion.datePublished = monitor.dateModified
+        elif monitor_old_status == 'addressed' and monitor.status == 'completed':
+            monitor.eliminationReport.datePublished = monitor.dateModified
+            monitor.eliminationReport.eliminationResolution = monitor.dateModified
+        elif monitor_old_status == 'active' and monitor.status == 'stopped':
+            monitor.stopping.datePublished = monitor.dateModified
 
         save_monitor(self.request)
         LOGGER.info('Updated monitor {}'.format(monitor.id),

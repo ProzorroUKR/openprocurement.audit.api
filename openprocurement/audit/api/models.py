@@ -1,4 +1,6 @@
 from uuid import uuid4
+
+from openprocurement.api.constants import SANDBOX_MODE
 from openprocurement.api.utils import get_now
 from openprocurement.api.models import Model, Revision, Period, Identifier, Address, ContactPoint
 from openprocurement.api.models import Document
@@ -179,9 +181,17 @@ class Monitoring(SchematicsDocument, Model):
     revisions = ListType(ModelType(Revision), default=list())
     _attachments = DictType(DictType(BaseType), default=dict())
 
+    mode = StringType(choices=['test'])
+    if SANDBOX_MODE:
+        monitoringDetails = StringType()
+
     def validate_eliminationResolution(self, data, value):
         if value is not None and data["eliminationReport"] is None:
             raise ValidationError(u"Elimination report hasn't been provided.")
+
+    def validate_monitoringDetails(self, *args, **kw):
+        if self.mode and self.mode == 'test' and self.monitoringDetails and self.monitoringDetails != '':
+            raise ValidationError(u"monitoringDetails should be used with mode test")
 
     def get_role(self):
         role = super(Monitoring, self).get_role()

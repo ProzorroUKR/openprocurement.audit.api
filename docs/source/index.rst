@@ -11,3 +11,4 @@ Welcome to openprocurement.audit.api documentation!
    tutorial/index
    feed/index
    standard/index
+   acceleration

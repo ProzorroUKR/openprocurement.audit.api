@@ -184,6 +184,7 @@ class ActiveMonitoringResourceTest(BaseWebTest):
         self.assertEqual(response.json['data']["status"], "stopped")
 
 
+@freeze_time('2018-01-01T12:00:00.000000+03:00')
 class DeclinedMonitoringResourceTest(BaseWebTest):
     def setUp(self):
         super(DeclinedMonitoringResourceTest, self).setUp()
@@ -209,6 +210,7 @@ class DeclinedMonitoringResourceTest(BaseWebTest):
             }},
         )
 
+    @freeze_time('2018-01-20T12:00:00.000000+03:00')
     def test_patch_to_closed(self):
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),

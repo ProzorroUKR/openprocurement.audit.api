@@ -381,13 +381,16 @@ class MonitoringResource(APIResource):
 
         monitoring.dateModified = get_now()
         if monitoring_old_status == 'draft' and monitoring.status == 'active':
-            monitoring.monitoringPeriod = generate_period(monitoring.dateModified, MONITORING_TIME)
+            monitoring.monitoringPeriod = generate_period(
+                monitoring.dateModified, MONITORING_TIME, self.context)
             monitoring.decision.datePublished = monitoring.dateModified
         elif monitoring_old_status == 'active' and monitoring.status == 'addressed':
             monitoring.conclusion.datePublished = monitoring.dateModified
-            monitoring.eliminationPeriod = generate_period(monitoring.dateModified, ELIMINATION_PERIOD_TIME)
+            monitoring.eliminationPeriod = generate_period(
+                monitoring.dateModified, ELIMINATION_PERIOD_TIME, self.context)
         elif monitoring_old_status == 'active' and monitoring.status == 'declined':
-            monitoring.eliminationPeriod = generate_period(monitoring.dateModified, ELIMINATION_PERIOD_NO_VIOLATIONS_TIME)
+            monitoring.eliminationPeriod = generate_period(
+                monitoring.dateModified, ELIMINATION_PERIOD_NO_VIOLATIONS_TIME, self.context)
             monitoring.conclusion.datePublished = monitoring.dateModified
         elif monitoring_old_status == 'addressed' and monitoring.status == 'completed':
             monitoring.eliminationReport.datePublished = monitoring.dateModified

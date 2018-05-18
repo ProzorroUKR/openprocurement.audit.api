@@ -455,6 +455,7 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         )
 
 
+@freeze_time('2018-01-01T12:00:00.000000+03:00')
 class ResolutionMonitoringResourceTest(MonitoringEliminationBaseTest):
 
     def setUp(self):
@@ -469,6 +470,7 @@ class ResolutionMonitoringResourceTest(MonitoringEliminationBaseTest):
         )
         self.assertEqual(response.status_code, 200)
 
+    @freeze_time('2018-01-20T12:00:00.000000+03:00')
     def test_success_change_status(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.patch_json(

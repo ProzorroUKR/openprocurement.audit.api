@@ -3,7 +3,7 @@ from gevent import sleep
 from openprocurement.audit.api.traversal import factory
 from functools import partial
 from cornice.resource import resource
-from openprocurement.tender.core.utils import calculate_business_date
+from openprocurement.tender.core.utils import calculate_business_date as calculate_business_date_base
 from schematics.exceptions import ModelValidationError
 from openprocurement.api.models import Revision, Period
 from openprocurement.api.utils import (
@@ -12,11 +12,14 @@ from openprocurement.api.utils import (
 from openprocurement.audit.api.models import Monitoring
 from pkg_resources import get_distribution
 from logging import getLogger
+from re import compile
 
 PKG = get_distribution(__package__)
 LOGGER = getLogger(PKG.project_name)
 
 op_resource = partial(resource, error_handler=error_handler, factory=factory)
+
+ACCELERATOR_RE = compile(r'accelerator=(?P<accelerator>\d+)')
 
 
 class APIResource(object):
@@ -138,10 +141,10 @@ def generate_monitoring_id(ctime, db, server_id=''):
     return 'UA-M-{:04}-{:02}-{:02}-{:06}{}'.format(
         ctime.year, ctime.month, ctime.day, index, server_id and '-' + server_id)
 
-def generate_period(date, delta):
+def generate_period(date, delta, context):
     period = Period()
     period.startDate = date
-    period.endDate = calculate_business_date(date, delta, working_days=True)
+    period.endDate = calculate_business_date(date, delta, context, True)
     return period
 
 
@@ -149,3 +152,13 @@ def set_ownership(data, request, fieldname='owner'):
     for item in data if isinstance(data, list) else [data]:
         setattr(item, fieldname, request.authenticated_userid)
         setattr(item, '{}_token'.format(fieldname), generate_id())
+
+def calculate_business_date(date_obj, timedelta_obj, context=None,
+                            working_days=False):
+    if context and 'monitoringDetails' in context and context['monitoringDetails']:
+        re_obj = ACCELERATOR_RE.search(context['monitoringDetails'])
+        if re_obj and 'accelerator' in re_obj.groupdict():
+            return date_obj + (timedelta_obj / int(re_obj.groupdict()['accelerator']))
+    if working_days:
+        return calculate_business_date_base(date_obj, timedelta_obj, context, working_days)
+    return date_obj + timedelta_obj

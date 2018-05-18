@@ -47,19 +47,19 @@ class BaseWebTest(unittest.TestCase):
     def tearDown(self):
         del self.couchdb_server[self.db.name]
 
-    def create_monitor(self, **kwargs):
+    def create_monitoring(self, **kwargs):
 
         data = deepcopy(self.initial_data)
         data.update(kwargs)
         self.app.authorization = ('Basic', (self.sas_token, ''))
 
-        response = self.app.post_json('/monitors', {'data': data})
-        monitor = response.json['data']
-        self.monitor_id = monitor['id']
+        response = self.app.post_json('/monitorings', {'data': data})
+        monitoring = response.json['data']
+        self.monitoring_id = monitoring['id']
 
         self.app.authorization = None
 
-        return monitor
+        return monitoring
 
 
 class DSWebTestMixin(object):

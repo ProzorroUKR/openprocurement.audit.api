@@ -1,0 +1,23 @@
+GET /api/2.4/monitorings?opt_fields=status HTTP/1.0
+Authorization: Basic dGVzdF9zYXNfdG9rZW46
+Host: api-sandbox.openprocurement.org
+
+
+200 OK
+Content-Type: application/json; charset=UTF-8
+
+{
+  "next_page": {
+    "path": "/api/2.4/monitorings?skip=1&offset_doc_id=1561a438535b31dda5be2b429b942b8e&opt_fields=status&prev_offset=2018-01-01T02%3A00%3A00%2B02%3A00&offset=2018-01-01T02%3A00%3A00%2B02%3A00&limit=1000&prev_offset_doc_id=1561a438535b31dda5be2b429b942b8e", 
+    "uri": "http://api-sandbox.openprocurement.org/api/2.4/monitorings?skip=1&offset_doc_id=1561a438535b31dda5be2b429b942b8e&opt_fields=status&prev_offset=2018-01-01T02%3A00%3A00%2B02%3A00&offset=2018-01-01T02%3A00%3A00%2B02%3A00&limit=1000&prev_offset_doc_id=1561a438535b31dda5be2b429b942b8e", 
+    "offset": "2018-01-01T02:00:00+02:00"
+  }, 
+  "data": [
+    {
+      "status": "draft", 
+      "dateModified": "2018-01-01T02:00:00+02:00", 
+      "id": "1561a438535b31dda5be2b429b942b8e"
+    }
+  ]
+}
+

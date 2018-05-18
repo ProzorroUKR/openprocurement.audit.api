@@ -1,12 +1,12 @@
-POST /api/2.4/monitors/7d4c3be20b003356b5b097e9b476c8a1/conclusion/documents HTTP/1.0
+POST /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/conclusion/documents HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
-Content-Length: 329
+Content-Length: 327
 Content-Type: application/json
 Host: api-sandbox.openprocurement.org
 
 {
   "data": {
-    "url": "http://docs-sandbox.openprocurement.org/get/34a62b853d5c3ada9b7d7a727e8b2d84?KeyID=a8968c46&Signature=Xk5hyZb%2FNsO4ufOeD0Di2Ftj3RmNzpbuVPnsam5yUnXisM3%2FlPFhfhktIIk5wEHpfrrba9RwqS71bdQSiYfZCg%3D%3D", 
+    "url": "http://docs-sandbox.openprocurement.org/get/075695726bc939f5920f0b1045d7cb64?KeyID=a8968c46&Signature=rb7%2FLfuT5WaMuxCpx0OxV6aoFLzURUlRbsE3YjPnFzCqMgs8fwNe6hBaZY2QNEU3yGWOiIYPtyvHgbI9suChBQ%3D%3D", 
     "title": "sign.p7s", 
     "hash": "md5:00000000000000000000000000000000", 
     "format": "application/pkcs7-signature"
@@ -16,19 +16,18 @@ Host: api-sandbox.openprocurement.org
 
 201 Created
 Content-Type: application/json; charset=UTF-8
-Location: http://api-sandbox.openprocurement.org/api/2.4/monitors/7d4c3be20b003356b5b097e9b476c8a1/conclusion/documents/3afca1077761371e9e09d51e7101cce3
+Location: http://api-sandbox.openprocurement.org/api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/conclusion/documents/cdeada4f7130388ea9b8c32425b18770
 
 {
   "data": {
     "hash": "md5:00000000000000000000000000000000", 
     "author": "test_sas", 
     "title": "sign.p7s", 
-    "url": "http://docs-sandbox.openprocurement.org/get/34a62b853d5c3ada9b7d7a727e8b2d84?KeyID=a8968c46&Signature=a0pt9pARyv3Lpwuuar%252BgfGaWp2I2zMhl1pHEr%252BbkZ8hkV12goQ8pe%2FqKnALUXXQOmiQ4RYGS4KRcLUtV%2FBOfBQ%253D%253D", 
+    "url": "http://docs-sandbox.openprocurement.org/get/075695726bc939f5920f0b1045d7cb64?KeyID=a8968c46&Signature=64pbEi0a0MzMCwt%252B%252B7EiK4p94CqZgyd%252B%2F0q8ibesbo3r79SyuQWDms0qkuZh%2FEaLM5NhLzFme10ay7d1f37yDw%253D%253D", 
     "format": "application/pkcs7-signature", 
-    "documentOf": "conclusion", 
-    "datePublished": "2018-01-01T02:00:00+02:00", 
-    "id": "3afca1077761371e9e09d51e7101cce3", 
-    "dateModified": "2018-01-01T02:00:00+02:00"
+    "datePublished": "2018-01-05T02:20:00+02:00", 
+    "id": "cdeada4f7130388ea9b8c32425b18770", 
+    "dateModified": "2018-01-05T02:20:00+02:00"
   }
 }
 

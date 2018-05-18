@@ -2,7 +2,7 @@
 from openprocurement.audit.api.utils import (
     op_resource,
     APIResource,
-    save_monitor,
+    save_monitoring,
     apply_patch,
 )
 from openprocurement.api.utils import (
@@ -15,10 +15,10 @@ from openprocurement.audit.api.validation import (
 )
 
 
-@op_resource(name='Monitor Party',
-             collection_path='/monitors/{monitor_id}/parties',
-             path='/monitors/{monitor_id}/parties/{party_id}',
-             description='Monitor Parties')
+@op_resource(name='Monitoring Party',
+             collection_path='/monitorings/{monitoring_id}/parties',
+             path='/monitorings/{monitoring_id}/parties/{party_id}',
+             description='Monitoring Parties')
 class PartyResource(APIResource):
 
     @json_view(content_type='application/json',
@@ -27,27 +27,27 @@ class PartyResource(APIResource):
         """
         Post a party
         """
-        monitor = self.context
+        monitoring = self.context
         party = self.request.validated['party']
-        monitor.parties.append(party)
-        if save_monitor(self.request):
-            self.LOGGER.info('Created monitor party {}'.format(party.id),
+        monitoring.parties.append(party)
+        if save_monitoring(self.request):
+            self.LOGGER.info('Created monitoring party {}'.format(party.id),
                              extra=context_unpack(self.request,
-                                                  {'MESSAGE_ID': 'monitor_party_create'},
+                                                  {'MESSAGE_ID': 'monitoring_party_create'},
                                                   {'party_id': party.id}))
             self.request.response.status = 201
             self.request.response.headers['Location'] = self.request.route_url(
-                'Monitor Party', monitor_id=monitor.id, party_id=party.id)
+                'Monitoring Party', monitoring_id=monitoring.id, party_id=party.id)
             return {'data': party.serialize('view')}
 
-    @json_view(permission='view_monitor')
+    @json_view(permission='view_monitoring')
     def collection_get(self):
         """
         List of parties
         """
         return {'data': [i.serialize('view') for i in self.context.parties]}
 
-    @json_view(permission='view_monitor')
+    @json_view(permission='view_monitoring')
     def get(self):
         """
         Retrieving the party

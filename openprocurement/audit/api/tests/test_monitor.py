@@ -7,21 +7,21 @@ from datetime import datetime, timedelta
 from openprocurement.tender.core.utils import calculate_business_date
 
 
-class MonitorResourceTest(BaseWebTest):
+class MonitoringResourceTest(BaseWebTest):
 
     def setUp(self):
-        super(MonitorResourceTest, self).setUp()
-        self.create_monitor()
+        super(MonitoringResourceTest, self).setUp()
+        self.create_monitoring()
 
     def test_get(self):
-        response = self.app.get('/monitors/{}'.format(self.monitor_id))
+        response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
-        self.assertEqual(response.json['data']["id"], self.monitor_id)
+        self.assertEqual(response.json['data']["id"], self.monitoring_id)
 
     def test_patch_forbidden_url(self):
         self.app.patch_json(
-            '/monitors/{}'.format(self.monitor_id),
+            '/monitorings/{}'.format(self.monitoring_id),
             {"status": "active"},
             status=403
         )
@@ -29,7 +29,7 @@ class MonitorResourceTest(BaseWebTest):
     def test_patch_without_decision(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         self.app.patch_json(
-            '/monitors/{}'.format(self.monitor_id),
+            '/monitorings/{}'.format(self.monitoring_id),
             {"data": {"status": "active"}},
             status=422
         )
@@ -40,7 +40,7 @@ class MonitorResourceTest(BaseWebTest):
         now_date = datetime.now(TZ)
         end_date = calculate_business_date(now_date, MONITORING_TIME, working_days=True)
         response = self.app.patch_json(
-            '/monitors/{}'.format(self.monitor_id),
+            '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
                 "status": "active",
                 "decision": {
@@ -59,7 +59,7 @@ class MonitorResourceTest(BaseWebTest):
     def test_patch_to_active_already_in_active(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.patch_json(
-            '/monitors/{}'.format(self.monitor_id),
+            '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
                 "status": "active",
                 "decision": {
@@ -73,7 +73,7 @@ class MonitorResourceTest(BaseWebTest):
         self.assertEqual(response.json['data']["status"], "active")
 
         self.app.patch_json(
-            '/monitors/{}'.format(self.monitor_id),
+            '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
                 "decision": {
                     "description": "text_changed",
@@ -83,20 +83,20 @@ class MonitorResourceTest(BaseWebTest):
         )
 
         self.app.patch_json(
-            '/monitors/{}'.format(self.monitor_id),
+            '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
                 "status": "draft"
             }},
             status=422
         )
 
-class ActiveMonitorResourceTest(BaseWebTest):
+class ActiveMonitoringResourceTest(BaseWebTest):
     def setUp(self):
-        super(ActiveMonitorResourceTest, self).setUp()
-        self.create_monitor()
+        super(ActiveMonitoringResourceTest, self).setUp()
+        self.create_monitoring()
         self.app.authorization = ('Basic', (self.sas_token, ''))
         self.app.patch_json(
-            '/monitors/{}'.format(self.monitor_id),
+            '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
                 "status": "active",
                 "decision": {
@@ -108,7 +108,7 @@ class ActiveMonitorResourceTest(BaseWebTest):
 
     def test_patch_to_declined(self):
         response = self.app.patch_json(
-            '/monitors/{}'.format(self.monitor_id),
+            '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
                 "conclusion": {
                     "violationOccurred": False,
@@ -123,7 +123,7 @@ class ActiveMonitorResourceTest(BaseWebTest):
 
     def test_patch_to_declined_if_violation_occurred(self):
         response = self.app.patch_json(
-            '/monitors/{}'.format(self.monitor_id),
+            '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
                 "conclusion": {
                     "violationOccurred": True,
@@ -139,7 +139,7 @@ class ActiveMonitorResourceTest(BaseWebTest):
 
     def test_patch_to_addressed(self):
         response = self.app.patch_json(
-            '/monitors/{}'.format(self.monitor_id),
+            '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
                 "conclusion": {
                     "violationOccurred": True,
@@ -155,7 +155,7 @@ class ActiveMonitorResourceTest(BaseWebTest):
 
     def test_patch_to_addressed_if_no_violation_occurred(self):
         response = self.app.patch_json(
-            '/monitors/{}'.format(self.monitor_id),
+            '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
                 "conclusion": {
                     "violationOccurred": False,
@@ -168,10 +168,64 @@ class ActiveMonitorResourceTest(BaseWebTest):
         self.assertEqual(response.status, '403 Forbidden')
         self.assertEqual(response.content_type, 'application/json')
 
+    def test_patch_to_stopped(self):
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "status": "stopped",
+                "stopping": {
+                    "description": "Whisper words of wisdom - let it be."
+                }
+            }},
+        )
+
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["status"], "stopped")
+
+
+@freeze_time('2018-01-01T12:00:00.000000+03:00')
+class DeclinedMonitoringResourceTest(BaseWebTest):
+    def setUp(self):
+        super(DeclinedMonitoringResourceTest, self).setUp()
+        self.create_monitoring()
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "status": "active",
+                "decision": {
+                    "description": "text",
+                    "date": (datetime.now() + timedelta(days=2)).isoformat()
+                }
+            }}
+        )
+        self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "conclusion": {
+                    "violationOccurred": False,
+                },
+                "status": "declined",
+            }},
+        )
+
+    @freeze_time('2018-01-20T12:00:00.000000+03:00')
+    def test_patch_to_closed(self):
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "status": "closed",
+            }},
+        )
+
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["status"], "closed")
 
 def suite():
     s = unittest.TestSuite()
-    s.addTest(unittest.makeSuite(MonitorResourceTest))
+    s.addTest(unittest.makeSuite(MonitoringResourceTest))
     return s
 
 

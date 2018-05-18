@@ -1,5 +1,5 @@
-Conclusion
-==========
+Conclusion Publishing
+=====================
 
 
 Conclusion object contains results about any violations have been found during monitoring.
@@ -34,4 +34,9 @@ To finalize conclusion process status must be changed to ``addressed`` in case o
 Broker can initiate dialogue once after conclusion was provided:
 
 .. include:: http/conclusion-dialogue.http
+   :code:
+
+In case of no violations occurred SAS-employer can close monitoring by changing status to ``closed``:
+
+.. include:: http/monitoring-to-closed.http
    :code:

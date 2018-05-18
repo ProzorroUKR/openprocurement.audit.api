@@ -15,12 +15,12 @@ from openprocurement.audit.api.validation import (
 )
 
 
-@op_resource(name='Monitor Elimination',
-             path='/monitors/{monitor_id}/eliminationReport',
+@op_resource(name='Monitoring Elimination',
+             path='/monitorings/{monitoring_id}/eliminationReport',
              description='Elimination of the violation')
 class EliminationReportResource(APIResource):
 
-    @json_view(permission='view_monitor')
+    @json_view(permission='view_monitoring')
     def get(self):
         return {'data': self.context.serialize('view')}
 
@@ -30,7 +30,7 @@ class EliminationReportResource(APIResource):
     def put(self):
         elimination = self.request.validated['eliminationreport']
         elimination.dateModified = elimination.dateCreated
-        apply_patch(self.request, data=dict(eliminationReport=elimination), src=self.request.context.serialize())
+        apply_patch(self.request, data=dict(eliminationReport=elimination))
         self.LOGGER.info('Updated elimination {}'.format(self.request.context.id),
                          extra=context_unpack(self.request, {'MESSAGE_ID': 'elimination_put'}))
         return {'data': elimination.serialize('view')}

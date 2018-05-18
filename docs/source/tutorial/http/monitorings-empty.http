@@ -1,4 +1,4 @@
-GET /api/2.4/monitors HTTP/1.0
+GET /api/2.4/monitorings HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
 Host: api-sandbox.openprocurement.org
 

@@ -1,7 +1,7 @@
 Violation Elimination Report
 ============================
 
-As soon as the monitor in ``addressed`` status, its tender owner can provide a report about violation eliminations:
+As soon as the monitoring in ``addressed`` status, its tender owner can provide a report about violation eliminations:
 
 .. include:: http/elimination-report-post.http
    :code:

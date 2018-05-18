@@ -7,32 +7,37 @@ from openprocurement.api.utils import (
     json_view,
     error_handler
 )
+
+from openprocurement.audit.api.constraints import (
+    MONITORING_TIME,
+    ELIMINATION_PERIOD_TIME,
+    ELIMINATION_PERIOD_NO_VIOLATIONS_TIME
+)
 from openprocurement.audit.api.utils import (
-    save_monitor,
-    monitor_serialize,
+    save_monitoring,
+    monitoring_serialize,
     apply_patch,
     op_resource,
     APIResource,
-    generate_monitor_id,
-    set_documents_of_type,
-    generate_monitoring_period,
+    generate_monitoring_id,
+    generate_period,
     set_ownership
 )
 from openprocurement.audit.api.design import (
-    monitors_real_by_dateModified_view,
-    monitors_test_by_dateModified_view,
-    monitors_by_dateModified_view,
-    monitors_real_by_local_seq_view,
-    monitors_test_by_local_seq_view,
-    monitors_by_local_seq_view,
-    monitors_by_status_dateModified_view,
-    monitors_real_by_status_dateModified_view,
-    monitors_test_by_status_dateModified_view,
+    monitorings_real_by_dateModified_view,
+    monitorings_test_by_dateModified_view,
+    monitorings_by_dateModified_view,
+    monitorings_real_by_local_seq_view,
+    monitorings_test_by_local_seq_view,
+    monitorings_by_local_seq_view,
+    monitorings_by_status_dateModified_view,
+    monitorings_real_by_status_dateModified_view,
+    monitorings_test_by_status_dateModified_view,
 )
 from openprocurement.audit.api.validation import (
-    validate_monitor_data,
-    validate_patch_monitor_data,
-    validate_patch_monitor_status,
+    validate_monitoring_data,
+    validate_patch_monitoring_data,
+    validate_patch_monitoring_status,
     validate_credentials_generate
 )
 from openprocurement.audit.api.design import FIELDS
@@ -42,19 +47,19 @@ from logging import getLogger
 LOGGER = getLogger(__name__)
 
 VIEW_MAP = {
-    u'': monitors_real_by_dateModified_view,
-    u'test': monitors_test_by_dateModified_view,
-    u'_all_': monitors_by_dateModified_view,
+    u'': monitorings_real_by_dateModified_view,
+    u'test': monitorings_test_by_dateModified_view,
+    u'_all_': monitorings_by_dateModified_view,
 }
 STATUS_VIEW_MAP = {
-    u'': monitors_real_by_status_dateModified_view,
-    u'test': monitors_test_by_status_dateModified_view,
-    u'_all_': monitors_by_status_dateModified_view,
+    u'': monitorings_real_by_status_dateModified_view,
+    u'test': monitorings_test_by_status_dateModified_view,
+    u'_all_': monitorings_by_status_dateModified_view,
 }
 CHANGES_VIEW_MAP = {
-    u'': monitors_real_by_local_seq_view,
-    u'test': monitors_test_by_local_seq_view,
-    u'_all_': monitors_by_local_seq_view,
+    u'': monitorings_real_by_local_seq_view,
+    u'test': monitorings_test_by_local_seq_view,
+    u'_all_': monitorings_by_local_seq_view,
 }
 FEED = {
     u'dateModified': VIEW_MAP,
@@ -63,20 +68,20 @@ FEED = {
 }
 
 
-@op_resource(name='Monitors', path='/monitors')
-class MonitorsResource(APIResource):
+@op_resource(name='Monitorings', path='/monitorings')
+class MonitoringsResource(APIResource):
 
     def __init__(self, request, context):
-        super(MonitorsResource, self).__init__(request, context)
+        super(MonitoringsResource, self).__init__(request, context)
 
         self.VIEW_MAP = VIEW_MAP
         self.STATUS_VIEW_MAP = STATUS_VIEW_MAP
         self.CHANGES_VIEW_MAP = CHANGES_VIEW_MAP
         self.FEED = FEED
         self.FIELDS = FIELDS
-        self.serialize_func = monitor_serialize
-        self.object_name_for_listing = 'Monitors'
-        self.log_message_id = 'monitor_list_custom'
+        self.serialize_func = monitoring_serialize
+        self.object_name_for_listing = 'Monitorings'
+        self.log_message_id = 'monitoring_list_custom'
 
         self.feed_params = {}
         self.paging_params = {}
@@ -340,69 +345,80 @@ class MonitorsResource(APIResource):
         return self.format_result(view)
 
     @json_view(content_type='application/json',
-               permission='create_monitor',
-               validators=(validate_monitor_data,))
+               permission='create_monitoring',
+               validators=(validate_monitoring_data,))
     def post(self):
-        monitor = self.request.validated['monitor']
-        monitor.id = generate_id()
-        monitor.monitoring_id = generate_monitor_id(get_now(), self.db, self.server_id)
-        monitor.dateModified = monitor.dateCreated
-        save_monitor(self.request)
-        LOGGER.info('Created monitor {}'.format(monitor.id),
+        monitoring = self.request.validated['monitoring']
+        monitoring.id = generate_id()
+        monitoring.monitoring_id = generate_monitoring_id(get_now(), self.db, self.server_id)
+        monitoring.dateModified = monitoring.dateCreated
+        save_monitoring(self.request)
+        LOGGER.info('Created monitoring {}'.format(monitoring.id),
                     extra=context_unpack(self.request,
-                                         {'MESSAGE_ID': 'monitor_create'},
-                                         {'MONITOR_ID': monitor.id}))
+                                         {'MESSAGE_ID': 'monitoring_create'},
+                                         {'MONITORING_ID': monitoring.id}))
         self.request.response.status = 201
-        self.request.response.headers['Location'] = self.request.route_url('Monitor', monitor_id=monitor.id)
-        return {'data': monitor.serialize('view')}
+        self.request.response.headers['Location'] = self.request.route_url('Monitoring', monitoring_id=monitoring.id)
+        return {'data': monitoring.serialize('view')}
 
 
-@op_resource(name='Monitor', path='/monitors/{monitor_id}')
-class MonitorResource(APIResource):
+@op_resource(name='Monitoring', path='/monitorings/{monitoring_id}')
+class MonitoringResource(APIResource):
 
-    @json_view(permission='view_monitor')
+    @json_view(permission='view_monitoring')
     def get(self):
-        monitor = self.request.validated['monitor']
-        return {'data': monitor.serialize('view')}
+        monitoring = self.request.validated['monitoring']
+        return {'data': monitoring.serialize('view')}
 
     @json_view(content_type='application/json',
-               validators=(validate_patch_monitor_data, validate_patch_monitor_status),
-               permission='edit_monitor')
+               validators=(validate_patch_monitoring_data, validate_patch_monitoring_status),
+               permission='edit_monitoring')
     def patch(self):
-        monitor = self.request.validated['monitor']
-        monitor_old_status = monitor.status
-        now = get_now()
+        monitoring = self.request.validated['monitoring']
+        monitoring_old_status = monitoring.status
 
-        apply_patch(self.request, save=False, src=self.request.validated['monitor_src'])
+        apply_patch(self.request, save=False, src=self.request.validated['monitoring_src'])
 
-        monitor.dateModified = now
-        if monitor_old_status == 'draft':
-            if monitor.decision is not None:
-                set_documents_of_type(monitor.decision.documents, 'decision')
-            if monitor.status == 'active':
-                monitor.monitoringPeriod = generate_monitoring_period(now)
+        monitoring.dateModified = get_now()
+        if monitoring_old_status == 'draft' and monitoring.status == 'active':
+            monitoring.monitoringPeriod = generate_period(
+                monitoring.dateModified, MONITORING_TIME, self.context)
+            monitoring.decision.datePublished = monitoring.dateModified
+        elif monitoring_old_status == 'active' and monitoring.status == 'addressed':
+            monitoring.conclusion.datePublished = monitoring.dateModified
+            monitoring.eliminationPeriod = generate_period(
+                monitoring.dateModified, ELIMINATION_PERIOD_TIME, self.context)
+        elif monitoring_old_status == 'active' and monitoring.status == 'declined':
+            monitoring.eliminationPeriod = generate_period(
+                monitoring.dateModified, ELIMINATION_PERIOD_NO_VIOLATIONS_TIME, self.context)
+            monitoring.conclusion.datePublished = monitoring.dateModified
+        elif monitoring_old_status == 'addressed' and monitoring.status == 'completed':
+            monitoring.eliminationReport.datePublished = monitoring.dateModified
+            monitoring.eliminationReport.eliminationResolution = monitoring.dateModified
+        elif monitoring_old_status == 'active' and monitoring.status == 'stopped':
+            monitoring.stopping.datePublished = monitoring.dateModified
 
-        save_monitor(self.request)
-        LOGGER.info('Updated monitor {}'.format(monitor.id),
-                    extra=context_unpack(self.request, {'MESSAGE_ID': 'monitor_patch'}))
-        return {'data': monitor.serialize('view')}
+        save_monitoring(self.request)
+        LOGGER.info('Updated monitoring {}'.format(monitoring.id),
+                    extra=context_unpack(self.request, {'MESSAGE_ID': 'monitoring_patch'}))
+        return {'data': monitoring.serialize('view')}
 
 
-@op_resource(name='Monitor credentials',
-             path='/monitors/{monitor_id}/credentials',
-             description="Monitor credentials")
-class MonitorCredentialsResource(APIResource):
+@op_resource(name='Monitoring credentials',
+             path='/monitorings/{monitoring_id}/credentials',
+             description="Monitoring credentials")
+class MonitoringCredentialsResource(APIResource):
     @json_view(permission='generate_credentials', validators=(validate_credentials_generate,))
     def patch(self):
-        monitor = self.request.validated['monitor']
+        monitoring = self.request.validated['monitoring']
 
-        set_ownership(monitor, self.request, 'tender_owner')
-        if save_monitor(self.request):
-            self.LOGGER.info('Generate Monitor credentials {}'.format(monitor.id),
-                             extra=context_unpack(self.request, {'MESSAGE_ID': 'monitor_patch'}))
+        set_ownership(monitoring, self.request, 'tender_owner')
+        if save_monitoring(self.request):
+            self.LOGGER.info('Generate Monitoring credentials {}'.format(monitoring.id),
+                             extra=context_unpack(self.request, {'MESSAGE_ID': 'monitoring_patch'}))
             return {
-                'data': monitor.serialize('view'),
+                'data': monitoring.serialize('view'),
                 'access': {
-                    'token': monitor.tender_owner_token
+                    'token': monitoring.tender_owner_token
                 }
             }

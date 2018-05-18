@@ -5,39 +5,39 @@ import unittest
 from openprocurement.audit.api.tests.utils import get_errors_field_names
 
 
-class MonitorsEmptyListingResourceTest(BaseWebTest):
+class MonitoringsEmptyListingResourceTest(BaseWebTest):
 
     def test_get(self):
-        response = self.app.get('/monitors')
+        response = self.app.get('/monitorings')
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data'], [])
 
-    def test_post_monitor_without_authorisation(self):
-        self.app.post_json('/monitors', {}, status=403)
+    def test_post_monitoring_without_authorisation(self):
+        self.app.post_json('/monitorings', {}, status=403)
 
-    def test_post_monitor_broker(self):
+    def test_post_monitoring_broker(self):
         self.app.authorization = ('Basic', (self.broker_token, ''))
-        self.app.post_json('/monitors', {}, status=403)
+        self.app.post_json('/monitorings', {}, status=403)
 
-    def test_post_monitor_sas_empty_body(self):
+    def test_post_monitoring_sas_empty_body(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
-        response = self.app.post_json('/monitors', {}, status=422)
+        response = self.app.post_json('/monitorings', {}, status=422)
         self.assertEqual(
             {('body', 'data')},
             get_errors_field_names(response, "Data not available"))
 
-    def test_post_monitor_sas_empty_data(self):
+    def test_post_monitoring_sas_empty_data(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
-        response = self.app.post_json('/monitors', {"data": {}}, status=422)
+        response = self.app.post_json('/monitorings', {"data": {}}, status=422)
         self.assertEqual(
             {('body', "reasons"), ('body', "tender_id"), ('body', "procuringStages")},
             get_errors_field_names(response, 'This field is required.'))
 
-    def test_post_monitor_sas(self):
+    def test_post_monitoring_sas(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.post_json(
-            '/monitors',
+            '/monitorings',
             {"data": {
                 "tender_id": "f" * 32,
                 "reasons": ["public", "fiscal"],
@@ -68,12 +68,12 @@ class BaseFeedResourceTest(BaseWebTest):
 
         self.expected_ids = []
         for i in range(19):
-            monitor = self.create_monitor()
-            self.expected_ids.append(monitor["id"])
+            monitoring = self.create_monitoring()
+            self.expected_ids.append(monitoring["id"])
 
     def test_pagination(self):
         # go through the feed forward
-        url = '/monitors?limit={}&feed={}&opt_fields={}&descending={}&status={}'.format(
+        url = '/monitorings?limit={}&feed={}&opt_fields={}&descending={}&status={}'.format(
             self.limit, self.feed, self.fields, self.descending, self.status
         )
         offset = 0
@@ -142,8 +142,8 @@ class StatusFeedResourceTest(BaseFeedResourceTest):
 
         self.expected_ids = []
         for i in range(13):
-            monitor = self.create_monitor(status="active")
-            self.expected_ids.append(monitor["id"])
+            monitoring = self.create_monitoring(status="active")
+            self.expected_ids.append(monitoring["id"])
 
 
 class StatusFeedCustomFieldsResourceTest(BaseFeedResourceTest):
@@ -157,8 +157,8 @@ class StatusFeedCustomFieldsResourceTest(BaseFeedResourceTest):
 
         self.expected_ids = []
         for i in range(13):
-            monitor = self.create_monitor(status="active")
-            self.expected_ids.append(monitor["id"])
+            monitoring = self.create_monitoring(status="active")
+            self.expected_ids.append(monitoring["id"])
 
 
 class StatusDescFeedResourceTest(BaseFeedResourceTest):
@@ -170,12 +170,12 @@ class StatusDescFeedResourceTest(BaseFeedResourceTest):
         self.expected_ids = list(reversed(self.expected_ids))
 
         for i in range(13):
-            self.create_monitor(status="active")
+            self.create_monitoring(status="active")
 
 
 def suite():
     s = unittest.TestSuite()
-    s.addTest(unittest.makeSuite(MonitorsEmptyListingResourceTest))
+    s.addTest(unittest.makeSuite(MonitoringsEmptyListingResourceTest))
     s.addTest(unittest.makeSuite(BaseFeedResourceTest))
     s.addTest(unittest.makeSuite(DescendingFeedResourceTest))
     s.addTest(unittest.makeSuite(ChangesFeedResourceTest))

@@ -11,8 +11,8 @@ Tutorial
    publishing
    dialogue
    conclusion
-   eliminationReport
-   eliminationResolution
+   report
+   resolution
    completing
    closing
    stopping

@@ -11,12 +11,12 @@ class Root(object):
     __parent__ = None
     __acl__ = [
         (Allow, Everyone, 'view_listing'),
-        (Allow, Everyone, 'view_monitor'),
-        (Allow, Everyone, 'revision_monitor'),
+        (Allow, Everyone, 'view_monitoring'),
+        (Allow, Everyone, 'revision_monitoring'),
         (Allow, 'g:brokers', 'generate_credentials'),
-        (Allow, 'g:sas', 'create_monitor'),
-        (Allow, 'g:sas', 'edit_monitor'),
-        (Allow, 'g:sas', 'upload_monitor_documents'),
+        (Allow, 'g:sas', 'create_monitoring'),
+        (Allow, 'g:sas', 'edit_monitoring'),
+        (Allow, 'g:sas', 'upload_monitoring_documents'),
         (Allow, 'g:sas', 'create_dialogue'),
         (Allow, 'g:sas', 'edit_dialogue'),
         (Allow, 'g:sas', 'upload_dialogue_documents'),
@@ -49,15 +49,15 @@ def get_item(parent, key, request):
 
 
 def factory(request):
-    request.validated['monitor_src'] = {}
+    request.validated['monitoring_src'] = {}
     root = Root(request)
-    if not request.matchdict or not request.matchdict.get('monitor_id'):
+    if not request.matchdict or not request.matchdict.get('monitoring_id'):
         return root
-    request.validated['monitor_id'] = request.matchdict['monitor_id']
-    request.monitor.__parent__ = root
-    request.validated['monitor'] = request.validated['db_doc'] = request.monitor
+    request.validated['monitoring_id'] = request.matchdict['monitoring_id']
+    request.monitoring.__parent__ = root
+    request.validated['monitoring'] = request.validated['db_doc'] = request.monitoring
     if request.method != 'GET':
-        request.validated['monitor_src'] = request.monitor.serialize('plain')
+        request.validated['monitoring_src'] = request.monitoring.serialize('plain')
     if 'decision' in request.path.split('/'):
         return decision_factory(request)
     elif 'conclusion' in request.path.split('/'):
@@ -67,23 +67,23 @@ def factory(request):
     elif request.matchdict.get('dialogue_id'):
         return dialogue_factory(request)
     elif request.matchdict.get('party_id'):
-        return get_item(request.monitor, 'party', request)
+        return get_item(request.monitoring, 'party', request)
     elif request.matchdict.get('document_id'):
-        return get_item(request.monitor, 'document', request)
-    return request.monitor
+        return get_item(request.monitoring, 'document', request)
+    return request.monitoring
 
 
 def elimination_factory(request):
     if request.matchdict.get('document_id'):
-        return get_item(request.monitor.eliminationReport, 'document', request)
+        return get_item(request.monitoring.eliminationReport, 'document', request)
     if request.method == "PUT":
-        return request.monitor
+        return request.monitoring
     else:
-        return request.monitor.eliminationReport
+        return request.monitoring.eliminationReport
 
 
 def dialogue_factory(request):
-    dialogue = get_item(request.monitor, 'dialogue', request)
+    dialogue = get_item(request.monitoring, 'dialogue', request)
     if request.matchdict.get('document_id'):
         return get_item(dialogue, 'document', request)
     return dialogue
@@ -91,11 +91,11 @@ def dialogue_factory(request):
 
 def decision_factory(request):
     if request.matchdict.get('document_id'):
-        return get_item(request.monitor.decision, 'document', request)
-    return request.monitor.decision
+        return get_item(request.monitoring.decision, 'document', request)
+    return request.monitoring.decision
 
 
 def conclusion_factory(request):
     if request.matchdict.get('document_id'):
-        return get_item(request.monitor.conclusion, 'document', request)
-    return request.monitor.conclusion
+        return get_item(request.monitoring.conclusion, 'document', request)
+    return request.monitoring.conclusion

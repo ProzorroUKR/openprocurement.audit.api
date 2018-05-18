@@ -1,8 +1,8 @@
-Complete Monitor
-================
+Complete Monitoring
+===================
 
 
-When the elimination report is posted, SAS-employee can move the monitor to ``complete`` status
+When the elimination report is posted, SAS-employee can move the monitoring to ``completed`` status
 
-.. include:: http/monitor-to-complete.http
+.. include:: http/monitoring-to-completed.http
    :code:

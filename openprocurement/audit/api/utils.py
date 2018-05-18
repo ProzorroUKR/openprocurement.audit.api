@@ -9,7 +9,7 @@ from openprocurement.api.models import Revision, Period
 from openprocurement.api.utils import (
     update_logging_context, context_unpack, get_revision_changes,
     apply_data_patch, error_handler, generate_id)
-from openprocurement.audit.api.models import Monitor
+from openprocurement.audit.api.models import Monitoring
 from pkg_resources import get_distribution
 from logging import getLogger
 
@@ -31,19 +31,19 @@ class APIResource(object):
         self.LOGGER = getLogger(type(self).__module__)
 
 
-def monitor_serialize(request, monitor_data, fields):
-    monitor = request.monitor_from_data(monitor_data, raise_error=False)
-    monitor.__parent__ = request.context
-    return {i: j for i, j in monitor.serialize("view").items() if i in fields}
+def monitoring_serialize(request, monitoring_data, fields):
+    monitoring = request.monitoring_from_data(monitoring_data, raise_error=False)
+    monitoring.__parent__ = request.context
+    return {i: j for i, j in monitoring.serialize("view").items() if i in fields}
 
 
-def save_monitor(request):
-    monitor = request.validated['monitor']
-    patch = get_revision_changes(request.validated['monitor_src'], monitor.serialize("plain"))
+def save_monitoring(request):
+    monitoring = request.validated['monitoring']
+    patch = get_revision_changes(request.validated['monitoring_src'], monitoring.serialize("plain"))
     if patch:
-        add_revision(request, monitor, patch)
+        add_revision(request, monitoring, patch)
         try:
-            monitor.store(request.registry.db)
+            monitoring.store(request.registry.db)
         except ModelValidationError, e:  # pragma: no cover
             for i in e.message:
                 request.errors.add('body', i, e.message[i])
@@ -52,8 +52,8 @@ def save_monitor(request):
             request.errors.add('body', 'data', str(e))
         else:
             LOGGER.info(
-                'Saved monitor {}'.format(monitor.id),
-                extra=context_unpack(request, {'MESSAGE_ID': 'save_monitor'})
+                'Saved monitoring {}'.format(monitoring.id),
+                extra=context_unpack(request, {'MESSAGE_ID': 'save_monitoring'})
             )
             return True
 
@@ -64,7 +64,7 @@ def apply_patch(request, data=None, save=True, src=None):
     if patch:
         request.context.import_data(patch)
         if save:
-            return save_monitor(request)
+            return save_monitoring(request)
 
 
 def add_revision(request, item, changes):
@@ -79,42 +79,42 @@ def add_revision(request, item, changes):
 def set_logging_context(event):
     request = event.request
     params = {}
-    if 'monitor' in request.validated:
-        params['MONITOR_REV'] = request.validated['monitor'].rev
-        params['MONITOR_ID'] = request.validated['monitor'].id
+    if 'monitoring' in request.validated:
+        params['MONITOR_REV'] = request.validated['monitoring'].rev
+        params['MONITOR_ID'] = request.validated['monitoring'].id
     update_logging_context(request, params)
 
 
-def monitor_from_data(request, data, raise_error=True, create=True):
+def monitoring_from_data(request, data, raise_error=True, create=True):
     if create:
-        return Monitor(data)
-    return Monitor
+        return Monitoring(data)
+    return Monitoring
 
 
-def extract_monitor_adapter(request, monitor_id):
+def extract_monitoring_adapter(request, monitoring_id):
     db = request.registry.db
-    doc = db.get(monitor_id)
-    if doc is not None and doc.get('doc_type') == 'monitor':
-        request.errors.add('url', 'monitor_id', 'Archived')
+    doc = db.get(monitoring_id)
+    if doc is not None and doc.get('doc_type') == 'monitoring':
+        request.errors.add('url', 'monitoring_id', 'Archived')
         request.errors.status = 410
         raise error_handler(request.errors)
-    elif doc is None or doc.get('doc_type') != 'Monitor':
-        request.errors.add('url', 'monitor_id', 'Not Found')
+    elif doc is None or doc.get('doc_type') != 'Monitoring':
+        request.errors.add('url', 'monitoring_id', 'Not Found')
         request.errors.status = 404
         raise error_handler(request.errors)
 
-    return request.monitor_from_data(doc)
+    return request.monitoring_from_data(doc)
 
 
-def extract_monitor(request):
-    monitor_id = request.matchdict.get('monitor_id')
-    return extract_monitor_adapter(request, monitor_id) if monitor_id else None
+def extract_monitoring(request):
+    monitoring_id = request.matchdict.get('monitoring_id')
+    return extract_monitoring_adapter(request, monitoring_id) if monitoring_id else None
 
 
-def generate_monitor_id(ctime, db, server_id=''):
-    """ Generate ID for new monitor in format "UA-M-YYYY-MM-DD-NNNNNN" + ["-server_id"]
+def generate_monitoring_id(ctime, db, server_id=''):
+    """ Generate ID for new monitoring in format "UA-M-YYYY-MM-DD-NNNNNN" + ["-server_id"]
         YYYY - year, MM - month (start with 1), DD - day, NNNNNN - sequence number per 1 day
-        and save monitors count per day in database document with _id = "monitorID" 
+        and save monitorings count per day in database document with _id = "monitoringID" 
         as { key, value } = { "2015-12-03": 2 }
     :param ctime: system date-time
     :param db: couchdb database object
@@ -122,13 +122,13 @@ def generate_monitor_id(ctime, db, server_id=''):
     :return: planID in "UA-M-2015-05-08-000005"
     """
     key = ctime.date().isoformat()
-    monitor_id_doc = 'monitorID_' + server_id if server_id else 'monitorID'
+    monitoring_id_doc = 'monitoringID_' + server_id if server_id else 'monitoringID'
     while True:
         try:
-            monitor_id = db.get(monitor_id_doc, {'_id': monitor_id_doc})
-            index = monitor_id.get(key, 1)
-            monitor_id[key] = index + 1
-            db.save(monitor_id)
+            monitoring_id = db.get(monitoring_id_doc, {'_id': monitoring_id_doc})
+            index = monitoring_id.get(key, 1)
+            monitoring_id[key] = index + 1
+            db.save(monitoring_id)
         except ResourceConflict:  # pragma: no cover
             pass
         except Exception:  # pragma: no cover

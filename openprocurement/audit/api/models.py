@@ -125,7 +125,7 @@ class Party(Model):
     roles = ListType(StringType(choices=('create', 'decision', 'conclusion', 'dialogue')), default=list())
 
 
-class Monitor(SchematicsDocument, Model):
+class Monitoring(SchematicsDocument, Model):
 
     class Options:
         _perm_edit_whitelist = whitelist("status", "reasons", "procuringStages", "parties")
@@ -184,7 +184,7 @@ class Monitor(SchematicsDocument, Model):
             raise ValidationError(u"Elimination report hasn't been provided.")
 
     def get_role(self):
-        role = super(Monitor, self).get_role()
+        role = super(Monitoring, self).get_role()
         status = self.__parent__.request.context.status
         return 'edit_{}'.format(status) if role == 'edit' else role
 

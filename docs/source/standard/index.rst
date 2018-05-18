@@ -10,7 +10,7 @@ areas that were not covered by it.
 .. toctree::
    :maxdepth: 1
 
-   monitor
+   monitoring
    document
    conclusion
    decision

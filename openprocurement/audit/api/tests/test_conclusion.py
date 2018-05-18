@@ -3,16 +3,16 @@ import unittest
 from datetime import datetime
 
 
-class MonitorConclusionResourceTest(BaseWebTest):
+class MonitoringConclusionResourceTest(BaseWebTest):
 
     def setUp(self):
-        super(MonitorConclusionResourceTest, self).setUp()
-        self.create_monitor()
+        super(MonitoringConclusionResourceTest, self).setUp()
+        self.create_monitoring()
         self.app.authorization = ('Basic', (self.sas_token, ''))
 
     def test_fail_in_draft_status(self):
         self.app.patch_json(
-            '/monitors/{}'.format(self.monitor_id),
+            '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
                 "conclusion": {
                     "description": "Sor lum far",
@@ -25,7 +25,7 @@ class MonitorConclusionResourceTest(BaseWebTest):
 
     def test_decision_and_conclusion(self):
         self.app.patch_json(
-            '/monitors/{}'.format(self.monitor_id),
+            '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
                 "status": "active",
                 "decision": {
@@ -41,18 +41,18 @@ class MonitorConclusionResourceTest(BaseWebTest):
         )
 
 
-class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):
+class ActiveMonitoringConclusionResourceTest(BaseWebTest, DSWebTestMixin):
 
     def setUp(self):
-        super(ActiveMonitorConclusionResourceTest, self).setUp()
+        super(ActiveMonitoringConclusionResourceTest, self).setUp()
 
         self.app.app.registry.docservice_url = 'http://localhost'
 
-        self.create_monitor()
+        self.create_monitoring()
         self.app.authorization = ('Basic', (self.sas_token, ''))
 
         self.app.patch_json(
-            '/monitors/{}'.format(self.monitor_id),
+            '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
                 "status": "active",
                 "decision": {
@@ -64,7 +64,7 @@ class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):
 
     def test_fail_empty(self):
         response = self.app.patch_json(
-            '/monitors/{}'.format(self.monitor_id),
+            '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
                 "conclusion": {}
             }},
@@ -77,7 +77,7 @@ class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):
 
     def test_fail_valid_violation_flag(self):
         response = self.app.patch_json(
-            '/monitors/{}'.format(self.monitor_id),
+            '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
                 "conclusion": {
                     "violationOccurred": "Nope",
@@ -92,7 +92,7 @@ class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):
 
     def test_fail_required_type(self):
         response = self.app.patch_json(
-            '/monitors/{}'.format(self.monitor_id),
+            '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
                 "conclusion": {
                     "violationOccurred": True,
@@ -107,7 +107,7 @@ class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):
 
     def test_fail_valid_type(self):
         response = self.app.patch_json(
-            '/monitors/{}'.format(self.monitor_id),
+            '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
                 "conclusion": {
                     "violationOccurred": True,
@@ -123,7 +123,7 @@ class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):
 
     def test_success_no_violations(self):
         response = self.app.patch_json(
-            '/monitors/{}'.format(self.monitor_id),
+            '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
                 "conclusion": {
                     "violationOccurred": False,
@@ -136,7 +136,7 @@ class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):
 
     def test_success_minimal(self):
         response = self.app.patch_json(
-            '/monitors/{}'.format(self.monitor_id),
+            '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
                 "conclusion": {
                     "violationOccurred": True,
@@ -149,7 +149,7 @@ class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):
 
         # add a document directly to a object
         response = self.app.patch_json(
-            '/monitors/{}'.format(self.monitor_id),
+            '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
                 "conclusion": {
                     "documents": [
@@ -169,7 +169,7 @@ class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):
 
         # post another document via the conclusion documents resource url
         response = self.app.post_json(
-            '/monitors/{}/conclusion/documents'.format(self.monitor_id),
+            '/monitorings/{}/conclusion/documents'.format(self.monitoring_id),
             {"data": {
                 'title': 'sign.p7s',
                 'url': self.generate_docservice_url(),
@@ -180,7 +180,7 @@ class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.status_code, 201)
 
         response = self.app.get(
-            '/monitors/{}/conclusion/documents'.format(self.monitor_id))
+            '/monitorings/{}/conclusion/documents'.format(self.monitoring_id))
         self.assertEqual(len(response.json["data"]), 2)
 
     def test_success_full(self):
@@ -206,7 +206,7 @@ class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):
             ]
         }
         response = self.app.patch_json(
-            '/monitors/{}'.format(self.monitor_id),
+            '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
                 "conclusion": conclusion
             }}
@@ -225,7 +225,7 @@ class ActiveMonitorConclusionResourceTest(BaseWebTest, DSWebTestMixin):
 
 def suite():
     s = unittest.TestSuite()
-    s.addTest(unittest.makeSuite(MonitorConclusionResourceTest))
+    s.addTest(unittest.makeSuite(MonitoringConclusionResourceTest))
     return s
 
 

@@ -38,5 +38,5 @@ Broker can initiate dialogue once after conclusion was provided:
 
 In case of no violations occurred SAS-employer can close monitoring by changing status to ``closed``:
 
-.. include:: http/monitor-to-closed.http
+.. include:: http/monitoring-to-closed.http
    :code:

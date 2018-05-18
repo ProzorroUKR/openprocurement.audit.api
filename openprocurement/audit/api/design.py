@@ -17,8 +17,8 @@ def add_design():
             setattr(design, i, j)
 
 
-monitors_by_status_dateModified_view = ViewDefinition('monitors', 'by_status_dateModified', '''function(doc) {
-    if(doc.doc_type == 'Monitor') {
+monitorings_by_status_dateModified_view = ViewDefinition('monitorings', 'by_status_dateModified', '''function(doc) {
+    if(doc.doc_type == 'Monitoring') {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {
@@ -29,8 +29,8 @@ monitors_by_status_dateModified_view = ViewDefinition('monitors', 'by_status_dat
     }
 }''' % FIELDS)
 
-monitors_real_by_status_dateModified_view = ViewDefinition('monitors', 'real_by_status_dateModified', '''function(doc) {
-    if(doc.doc_type == 'Monitor' && !doc.mode) {
+monitorings_real_by_status_dateModified_view = ViewDefinition('monitorings', 'real_by_status_dateModified', '''function(doc) {
+    if(doc.doc_type == 'Monitoring' && !doc.mode) {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {
@@ -41,8 +41,8 @@ monitors_real_by_status_dateModified_view = ViewDefinition('monitors', 'real_by_
     }
 }''' % FIELDS)
 
-monitors_test_by_status_dateModified_view = ViewDefinition('monitors', 'test_by_status_dateModified', '''function(doc) {
-    if(doc.doc_type == 'Monitor' && doc.mode == 'test') {
+monitorings_test_by_status_dateModified_view = ViewDefinition('monitorings', 'test_by_status_dateModified', '''function(doc) {
+    if(doc.doc_type == 'Monitoring' && doc.mode == 'test') {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {
@@ -53,8 +53,8 @@ monitors_test_by_status_dateModified_view = ViewDefinition('monitors', 'test_by_
     }
 }''' % FIELDS)
 
-monitors_by_dateModified_view = ViewDefinition('monitors', 'by_dateModified', '''function(doc) {
-    if(doc.doc_type == 'Monitor') {
+monitorings_by_dateModified_view = ViewDefinition('monitorings', 'by_dateModified', '''function(doc) {
+    if(doc.doc_type == 'Monitoring') {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {
@@ -65,8 +65,8 @@ monitors_by_dateModified_view = ViewDefinition('monitors', 'by_dateModified', ''
     }
 }''' % FIELDS)
 
-monitors_real_by_dateModified_view = ViewDefinition('monitors', 'real_by_dateModified', '''function(doc) {
-    if(doc.doc_type == 'Monitor' && !doc.mode) {
+monitorings_real_by_dateModified_view = ViewDefinition('monitorings', 'real_by_dateModified', '''function(doc) {
+    if(doc.doc_type == 'Monitoring' && !doc.mode) {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {
@@ -77,8 +77,8 @@ monitors_real_by_dateModified_view = ViewDefinition('monitors', 'real_by_dateMod
     }
 }''' % FIELDS)
 
-monitors_test_by_dateModified_view = ViewDefinition('monitors', 'test_by_dateModified', '''function(doc) {
-    if(doc.doc_type == 'Monitor' && doc.mode == 'test') {
+monitorings_test_by_dateModified_view = ViewDefinition('monitorings', 'test_by_dateModified', '''function(doc) {
+    if(doc.doc_type == 'Monitoring' && doc.mode == 'test') {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {
@@ -89,8 +89,8 @@ monitors_test_by_dateModified_view = ViewDefinition('monitors', 'test_by_dateMod
     }
 }''' % FIELDS)
 
-monitors_by_local_seq_view = ViewDefinition('monitors', 'by_local_seq', '''function(doc) {
-    if(doc.doc_type == 'Monitor') {
+monitorings_by_local_seq_view = ViewDefinition('monitorings', 'by_local_seq', '''function(doc) {
+    if(doc.doc_type == 'Monitoring') {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {
@@ -101,8 +101,8 @@ monitors_by_local_seq_view = ViewDefinition('monitors', 'by_local_seq', '''funct
     }
 }''' % CHANGES_FIELDS)
 
-monitors_real_by_local_seq_view = ViewDefinition('monitors', 'real_by_local_seq', '''function(doc) {
-    if(doc.doc_type == 'Monitor' && !doc.mode) {
+monitorings_real_by_local_seq_view = ViewDefinition('monitorings', 'real_by_local_seq', '''function(doc) {
+    if(doc.doc_type == 'Monitoring' && !doc.mode) {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {
@@ -113,8 +113,8 @@ monitors_real_by_local_seq_view = ViewDefinition('monitors', 'real_by_local_seq'
     }
 }''' % CHANGES_FIELDS)
 
-monitors_test_by_local_seq_view = ViewDefinition('monitors', 'test_by_local_seq', '''function(doc) {
-    if(doc.doc_type == 'Monitor' && doc.mode == 'test') {
+monitorings_test_by_local_seq_view = ViewDefinition('monitorings', 'test_by_local_seq', '''function(doc) {
+    if(doc.doc_type == 'Monitoring' && doc.mode == 'test') {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {

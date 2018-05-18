@@ -1,7 +1,7 @@
-Close Monitor
-=============
+Close Monitoring
+================
 
-As soon as the monitor in ``declined`` status, SAS-employee can terminate monitor with ``closed`` status
+As soon as the monitoring in ``declined`` status, SAS-employee can terminate monitoring with ``closed`` status
 
-.. include:: http/monitor-to-closed.http
+.. include:: http/monitoring-to-closed.http
    :code:

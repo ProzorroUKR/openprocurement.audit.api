@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from openprocurement.audit.api.utils import (
-    save_monitor,
+    save_monitoring,
     op_resource,
     apply_patch,
     APIResource,
@@ -24,13 +24,13 @@ from openprocurement.audit.api.validation import (
 )
 
 
-class MonitorsDocumentBaseResource(APIResource):
+class MonitoringsDocumentBaseResource(APIResource):
     document_of = None
 
-    @json_view(permission='view_monitor')
+    @json_view(permission='view_monitoring')
     def collection_get(self):
         """
-        Monitor Documents List
+        Monitoring Documents List
         """
         documents = self.context.documents
         if not self.request.params.get('all', ''):
@@ -38,20 +38,20 @@ class MonitorsDocumentBaseResource(APIResource):
             documents = sorted(documents_top, key=lambda i: i['dateModified'])
         return {'data': [document.serialize("view") for document in documents]}
 
-    @json_view(permission='upload_monitor_documents',
+    @json_view(permission='upload_monitoring_documents',
                validators=(validate_file_upload,))
     def collection_post(self):
         """
-        Monitor Document Upload
+        Monitoring Document Upload
         """
         document = upload_file(self.request)
         set_ownership(document, self.request, 'author')
         documents = self.context.documents
         documents.append(document)
-        if save_monitor(self.request):
-            self.LOGGER.info('Created {} monitor document {}'.format(self.document_of, document.id),
+        if save_monitoring(self.request):
+            self.LOGGER.info('Created {} monitoring document {}'.format(self.document_of, document.id),
                              extra=context_unpack(self.request,
-                                                  {'MESSAGE_ID': 'monitor_document_create'},
+                                                  {'MESSAGE_ID': 'monitoring_document_create'},
                                                   {'DOCUMENT_ID': document.id}))
             route = self.request.matched_route.name.replace("collection_", "")
             location = self.request.current_route_url(document_id=document.id, _route_name=route, _query={})
@@ -59,10 +59,10 @@ class MonitorsDocumentBaseResource(APIResource):
             self.request.response.headers['Location'] = location
             return {'data': document.serialize("view")}
 
-    @json_view(permission='view_monitor')
+    @json_view(permission='view_monitoring')
     def get(self):
         """
-        Monitor Document Read
+        Monitoring Document Read
         """
         if self.request.params.get('download'):
             return get_file(self.request)
@@ -73,112 +73,112 @@ class MonitorsDocumentBaseResource(APIResource):
         document_data['previousVersions'] = versions_data
         return {'data': document_data}
 
-    @json_view(permission='upload_monitor_documents',
+    @json_view(permission='upload_monitoring_documents',
                validators=(validate_file_update,))
     def put(self):
         """
-        Monitor Document Update
+        Monitoring Document Update
         """
         parent = self.request.context.__parent__
         document = upload_file(self.request)
         set_ownership(document, self.request, 'author')
         parent.documents.append(document)
-        if save_monitor(self.request):
-            self.LOGGER.info('Updated {} monitor document {}'.format(self.document_of, document.id),
+        if save_monitoring(self.request):
+            self.LOGGER.info('Updated {} monitoring document {}'.format(self.document_of, document.id),
                              extra=context_unpack(self.request,
-                                                  {'MESSAGE_ID': 'monitor_document_put'},
+                                                  {'MESSAGE_ID': 'monitoring_document_put'},
                                                   {'DOCUMENT_ID': document.id}))
             return {'data': document.serialize("view")}
 
     @json_view(content_type='application/json',
-               permission='edit_monitor_documents',
+               permission='edit_monitoring_documents',
                validators=(validate_patch_document_data,))
     def patch(self):
         """
-        Monitor Document Update
+        Monitoring Document Update
         """
         document = self.request.context
         if apply_patch(self.request):
             update_file_content_type(self.request)
-            self.LOGGER.info('Updated {} monitor document {}'.format(self.document_of, document.id),
+            self.LOGGER.info('Updated {} monitoring document {}'.format(self.document_of, document.id),
                              extra=context_unpack(self.request,
-                                                  {'MESSAGE_ID': 'monitor_document_patch'},
+                                                  {'MESSAGE_ID': 'monitoring_document_patch'},
                                                   {'DOCUMENT_ID': document.id}))
             return {'data': self.request.context.serialize("view")}
 
 
-@op_resource(name='Monitor Decision Documents',
-             collection_path='/monitors/{monitor_id}/decision/documents',
-             path='/monitors/{monitor_id}/decision/documents/{document_id}',
-             description="Monitor Decision related binary files (PDFs, etc.)")
-class MonitorsDocumentDecisionResource(MonitorsDocumentBaseResource):
+@op_resource(name='Monitoring Decision Documents',
+             collection_path='/monitorings/{monitoring_id}/decision/documents',
+             path='/monitorings/{monitoring_id}/decision/documents/{document_id}',
+             description="Monitoring Decision related binary files (PDFs, etc.)")
+class MonitoringsDocumentDecisionResource(MonitoringsDocumentBaseResource):
     document_of = 'decision'
 
-    @json_view(permission='upload_monitor_documents',
+    @json_view(permission='upload_monitoring_documents',
                validators=(validate_file_upload, validate_document_decision_upload_allowed))
     def collection_post(self):
-        return super(MonitorsDocumentDecisionResource, self).collection_post()
+        return super(MonitoringsDocumentDecisionResource, self).collection_post()
 
-    @json_view(permission='upload_monitor_documents',
+    @json_view(permission='upload_monitoring_documents',
                validators=(validate_file_update, validate_document_decision_upload_allowed))
     def put(self):
-        return super(MonitorsDocumentDecisionResource, self).put()
+        return super(MonitoringsDocumentDecisionResource, self).put()
 
 
-@op_resource(name='Monitor Conclusion Documents',
-             collection_path='/monitors/{monitor_id}/conclusion/documents',
-             path='/monitors/{monitor_id}/conclusion/documents/{document_id}',
-             description="Monitor Conclusion related binary files (PDFs, etc.)")
-class MonitorsDocumentConclusionResource(MonitorsDocumentBaseResource):
+@op_resource(name='Monitoring Conclusion Documents',
+             collection_path='/monitorings/{monitoring_id}/conclusion/documents',
+             path='/monitorings/{monitoring_id}/conclusion/documents/{document_id}',
+             description="Monitoring Conclusion related binary files (PDFs, etc.)")
+class MonitoringsDocumentConclusionResource(MonitoringsDocumentBaseResource):
     document_of = 'conclusion'
 
-    @json_view(permission='upload_monitor_documents',
+    @json_view(permission='upload_monitoring_documents',
                validators=(validate_file_upload, validate_document_conclusion_upload_allowed))
     def collection_post(self):
-        return super(MonitorsDocumentConclusionResource, self).collection_post()
+        return super(MonitoringsDocumentConclusionResource, self).collection_post()
 
-    @json_view(permission='upload_monitor_documents',
+    @json_view(permission='upload_monitoring_documents',
                validators=(validate_file_update, validate_document_conclusion_upload_allowed))
     def put(self):
-        return super(MonitorsDocumentConclusionResource, self).put()
+        return super(MonitoringsDocumentConclusionResource, self).put()
 
 
-@op_resource(name='Monitor Dialogue Documents',
-             collection_path='/monitors/{monitor_id}/dialogues/{dialogue_id}/documents',
-             path='/monitors/{monitor_id}/dialogues/{dialogue_id}/documents/{document_id}',
-             description="Monitor Conclusion related binary files (PDFs, etc.)")
-class MonitorsDocumentDialogueResource(MonitorsDocumentBaseResource):
+@op_resource(name='Monitoring Dialogue Documents',
+             collection_path='/monitorings/{monitoring_id}/dialogues/{dialogue_id}/documents',
+             path='/monitorings/{monitoring_id}/dialogues/{dialogue_id}/documents/{document_id}',
+             description="Monitoring Conclusion related binary files (PDFs, etc.)")
+class MonitoringsDocumentDialogueResource(MonitoringsDocumentBaseResource):
     document_of = 'dialogue'
 
     @json_view(permission='upload_dialogue_documents',
                validators=(validate_file_upload, validate_document_conclusion_upload_allowed,))
     def collection_post(self):
-        return super(MonitorsDocumentDialogueResource, self).collection_post()
+        return super(MonitoringsDocumentDialogueResource, self).collection_post()
 
-    @json_view(permission='upload_monitor_documents',
+    @json_view(permission='upload_monitoring_documents',
                validators=(validate_file_update, validate_document_conclusion_upload_allowed))
     def put(self):
-        return super(MonitorsDocumentDialogueResource, self).put()
+        return super(MonitoringsDocumentDialogueResource, self).put()
 
 
-@op_resource(name='Monitor Elimination Report Documents',
-             collection_path='/monitors/{monitor_id}/eliminationReport/documents',
-             path='/monitors/{monitor_id}/eliminationReport/documents/{document_id}',
-             description="Monitor Elimination Report related binary files (PDFs, etc.)")
-class MonitorsDocumentEliminationResource(MonitorsDocumentBaseResource):
+@op_resource(name='Monitoring Elimination Report Documents',
+             collection_path='/monitorings/{monitoring_id}/eliminationReport/documents',
+             path='/monitorings/{monitoring_id}/eliminationReport/documents/{document_id}',
+             description="Monitoring Elimination Report related binary files (PDFs, etc.)")
+class MonitoringsDocumentEliminationResource(MonitoringsDocumentBaseResource):
     document_of = 'eliminationReport'
 
     @json_view(permission='edit_elimination_report',
                validators=(validate_file_upload,))
     def collection_post(self):
-        return super(MonitorsDocumentEliminationResource, self).collection_post()
+        return super(MonitoringsDocumentEliminationResource, self).collection_post()
 
     @json_view(permission='edit_elimination_report',
                validators=(validate_file_update,))
     def patch(self):
-        return super(MonitorsDocumentEliminationResource, self).patch()
+        return super(MonitoringsDocumentEliminationResource, self).patch()
 
     @json_view(permission='edit_elimination_report',
                validators=(validate_file_update,))
     def put(self):
-        return super(MonitorsDocumentEliminationResource, self).put()
+        return super(MonitoringsDocumentEliminationResource, self).put()

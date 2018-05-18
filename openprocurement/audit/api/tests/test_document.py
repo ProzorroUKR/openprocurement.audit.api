@@ -5,19 +5,19 @@ from openprocurement.audit.api.tests.base import BaseWebTest, DSWebTestMixin
 from openprocurement.audit.api.tests.utils import get_errors_field_names
 
 
-class MonitorDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
+class MonitoringDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
 
     def setUp(self):
-        super(MonitorDecisionDocumentResourceTest, self).setUp()
+        super(MonitoringDecisionDocumentResourceTest, self).setUp()
         self.app.app.registry.docservice_url = 'http://localhost'
-        self.create_monitor()
+        self.create_monitoring()
         self.test_docservice_document_data = {
             'title': 'lorem.doc',
             'url': self.generate_docservice_url(),
             'hash': 'md5:' + '0' * 32,
             'format': 'application/msword',
         }
-        self.test_monitor_activation_data = {
+        self.test_monitoring_activation_data = {
             "status": "active",
             "decision": {
                 "date": "2015-05-10T23:11:39.720908+03:00",
@@ -26,17 +26,17 @@ class MonitorDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
             }
         }
 
-    def test_monitor_decision_document_get_single(self):
+    def test_monitoring_decision_document_get_single(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.patch_json(
-            '/monitors/{}'.format(self.monitor_id),
-            {'data': self.test_monitor_activation_data})
+            '/monitorings/{}'.format(self.monitoring_id),
+            {'data': self.test_monitoring_activation_data})
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
 
         document_id = response.json['data']['decision']['documents'][-1]['id']
 
-        response = self.app.get('/monitors/{}/decision/documents/{}'.format(self.monitor_id, document_id))
+        response = self.app.get('/monitorings/{}/decision/documents/{}'.format(self.monitoring_id, document_id))
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
 
@@ -47,15 +47,15 @@ class MonitorDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertIn('KeyID=', document_data["url"])
         self.assertNotIn('Expires=', document_data["url"])
 
-    def test_monitor_decision_document_get_list(self):
+    def test_monitoring_decision_document_get_list(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.patch_json(
-            '/monitors/{}'.format(self.monitor_id),
-            {'data': self.test_monitor_activation_data})
+            '/monitorings/{}'.format(self.monitoring_id),
+            {'data': self.test_monitoring_activation_data})
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
 
-        response = self.app.get('/monitors/{}/decision/documents'.format(self.monitor_id))
+        response = self.app.get('/monitorings/{}/decision/documents'.format(self.monitoring_id))
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
 
@@ -64,11 +64,11 @@ class MonitorDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         document_data = response.json['data'][-1]
         self.assertEqual(document_data['title'], 'lorem.doc')
 
-    def test_monitor_decision_document_download(self):
+    def test_monitoring_decision_document_download(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.patch_json(
-            '/monitors/{}'.format(self.monitor_id),
-            {'data': self.test_monitor_activation_data})
+            '/monitorings/{}'.format(self.monitoring_id),
+            {'data': self.test_monitoring_activation_data})
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
 
@@ -76,8 +76,8 @@ class MonitorDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         key = document_data["url"].split('/')[-1].split('?')[0]
         document_id = document_data['id']
 
-        response = self.app.get('/monitors/{}/decision/documents/{}?download=some_id'.format(
-            self.monitor_id, document_id), status=404)
+        response = self.app.get('/monitorings/{}/decision/documents/{}?download=some_id'.format(
+            self.monitoring_id, document_id), status=404)
         self.assertEqual(response.status, '404 Not Found')
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['status'], 'error')
@@ -85,42 +85,42 @@ class MonitorDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
             {'description': 'Not Found', 'location': 'url', 'name': 'download'}
         ])
 
-        response = self.app.get('/monitors/{}/decision/documents/{}?download={}'.format(
-            self.monitor_id, document_id, key))
+        response = self.app.get('/monitorings/{}/decision/documents/{}?download={}'.format(
+            self.monitoring_id, document_id, key))
         self.assertEqual(response.status, '302 Moved Temporarily')
         self.assertIn('http://localhost/get/', response.location)
         self.assertIn('Signature=', response.location)
         self.assertIn('KeyID=', response.location)
         self.assertNotIn('Expires=', response.location)
 
-    def test_monitor_decision_document_upload_forbidden(self):
+    def test_monitoring_decision_document_upload_forbidden(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.patch_json(
-            '/monitors/{}'.format(self.monitor_id),
-            {'data': self.test_monitor_activation_data})
+            '/monitorings/{}'.format(self.monitoring_id),
+            {'data': self.test_monitoring_activation_data})
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
 
-        response = self.app.post_json('/monitors/{}/decision/documents'.format(
-            self.monitor_id),
+        response = self.app.post_json('/monitorings/{}/decision/documents'.format(
+            self.monitoring_id),
             {'data': self.test_docservice_document_data}, status=403)
         self.assertEqual(response.status, '403 Forbidden')
         self.assertEqual(response.content_type, 'application/json')
 
         self.assertEqual(
             {('body', 'data')},
-            get_errors_field_names(response, 'Can\'t add document in current active monitor status'))
+            get_errors_field_names(response, 'Can\'t add document in current active monitoring status'))
 
 
-class MonitorConclusionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
+class MonitoringConclusionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
     # TODO: Add tests on conclusion functionality ready
     pass
 
 
 def suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(MonitorDecisionDocumentResourceTest))
-    suite.addTest(unittest.makeSuite(MonitorConclusionDocumentResourceTest))
+    suite.addTest(unittest.makeSuite(MonitoringDecisionDocumentResourceTest))
+    suite.addTest(unittest.makeSuite(MonitoringConclusionDocumentResourceTest))
     return suite
 
 

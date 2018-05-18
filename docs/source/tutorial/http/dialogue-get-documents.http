@@ -1,4 +1,4 @@
-GET /api/2.4/monitors/7dcb9da2d97c3c9b90008d5e994a0016/dialogues/227145948d543d0db9df660efb76a40c/documents HTTP/1.0
+GET /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/dialogues/a645272a8138307b8bc75bfd28650911/documents HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
 Host: api-sandbox.openprocurement.org
 
@@ -11,20 +11,20 @@ Content-Type: application/json; charset=UTF-8
     {
       "hash": "md5:00000000000000000000000000000000", 
       "title": "ipsum.doc", 
-      "url": "http://docs-sandbox.openprocurement.org/get/bb3746a18b223c7db1515edbcbda446b?KeyID=a8968c46&Signature=P1cfuvxSgPE5rN1qT7v8%2FP%2FlTYlpGUonsuZTUchMbx3%2FtStdV7mM7tBDs6xczt2JxKI55yoJL16xM6VcEVhbDw%3D%3D", 
+      "url": "http://docs-sandbox.openprocurement.org/get/6b3c1606801930d58b7f7baf99fec6b6?KeyID=a8968c46&Signature=eFSOP9d8niGQnzcJ6RBW8JvCQjI5p2s5LKXURu7mvgUDYEL0oqPRzsPFfBs6y28RMkMmdvcs9vh3Kpp5oflNCg%3D%3D", 
       "format": "application/msword", 
       "datePublished": "2018-01-03T02:05:00+02:00", 
-      "id": "223c32787a4a3b95993873fa5d10577a", 
+      "id": "0a1f71453ec5321c8a8a1c2c22edbba6", 
       "dateModified": "2018-01-03T02:05:00+02:00"
     }, 
     {
       "hash": "md5:00000000000000000000000000000000", 
       "author": "test_sas", 
       "title": "dolor.doc", 
-      "url": "http://docs-sandbox.openprocurement.org/get/ce020e75832b3fea9038609be3f12ff6?KeyID=a8968c46&Signature=MCD%252BQBHFGmohCNSXGtQwLpmu9IPdGtHJ2IR75nc3xW%2FWWnbs36a5shinn%2FXpSV8KWf%252BV8i4a503B7BzqO%2FQBCw%253D%253D", 
+      "url": "http://docs-sandbox.openprocurement.org/get/34a0751d03a136bf884aa1ed12ca2a02?KeyID=a8968c46&Signature=aqpYbtrrdjWxQKxNifRQZwFxDGd44p0vQW4nAR8ZdyFL%2FrQxjPnwyQDa46K87gJ%2FoEnmmhmqoIDrECJcCEdxCQ%253D%253D", 
       "format": "application/msword", 
       "datePublished": "2018-01-03T02:10:00+02:00", 
-      "id": "981f81fbcdcb34409fcb6a1074e8a4e1", 
+      "id": "64cc9fc2c22c39948076f4e28c774a82", 
       "dateModified": "2018-01-03T02:10:00+02:00"
     }
   ]

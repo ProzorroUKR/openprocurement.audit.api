@@ -8,7 +8,7 @@ Let's provide party that will be used as related party for our dialogue:
 .. include:: http/dialogue-party.http
     :code:
 
-For published monitor we can start dialogue:
+For published monitoring we can start dialogue:
 
 .. include:: http/dialogue-publish.http
     :code:
@@ -25,15 +25,15 @@ We also can get a list of all dialogue documents:
 
 To answer the question as a broker we must get credentials first.
 
-In order to get rights for future monitor editing, we need to use this view ``PATCH: /monitors/{id}/credentials?acc_token={tender_token}`` with the API key of the eMall (broker), where tender was generated.
+In order to get rights for future monitoring editing, we need to use this view ``PATCH: /monitorings/{id}/credentials?acc_token={tender_token}`` with the API key of the eMall (broker), where tender was generated.
 
 In the ``PATCH: /contracts/{id}/credentials?acc_token={tender_token}``:
 
-* ``id`` stands for monitor id,
+* ``id`` stands for monitoring id,
 
-* ``tender_token`` is tender's token (is used for monitor token generation).
+* ``tender_token`` is tender's token (is used for monitoring token generation).
 
-Response will contain ``access.token`` for the contract that can be used for further monitor modification.
+Response will contain ``access.token`` for the contract that can be used for further monitoring modification.
 
 .. include:: http/dialogue-get-credentials.http
     :code:

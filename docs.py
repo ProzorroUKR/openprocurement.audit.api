@@ -539,7 +539,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                     }},
                 )
 
-        with freeze_time("2018.01.10 00:00"):
+        with freeze_time("2018.01.25 00:00"):
             with open('docs/source/tutorial/http/monitoring-to-completed.http', 'w') as self.app.file_obj:
                 self.app.patch_json(
                     '/monitorings/{}'.format(monitoring_id),
@@ -623,7 +623,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                 }},
             )
 
-        with freeze_time("2018.01.05 00:00"):
+        with freeze_time("2018.01.11 00:00"):
             with open('docs/source/tutorial/http/monitoring-to-closed.http', 'w') as self.app.file_obj:
                 self.app.patch_json(
                     '/monitorings/{}'.format(monitoring_id),

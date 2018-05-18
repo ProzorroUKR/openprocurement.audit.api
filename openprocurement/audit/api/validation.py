@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from openprocurement.api.utils import update_logging_context, raise_operation_error, error_handler, forbidden
+from openprocurement.api.utils import update_logging_context, raise_operation_error, error_handler, forbidden, get_now
 from openprocurement.api.validation import validate_data
 from restkit import ResourceNotFound
 from hashlib import sha512
@@ -75,12 +75,17 @@ def _validate_patch_monitoring_status_active_to_addressed_or_declined(request):
 
 
 def _validate_patch_monitoring_status_addressed_to_completed(request):
+    monitoring = request.validated['monitoring']
+    if not get_now() > monitoring.eliminationPeriod.endDate:
+        raise_operation_error(request, 'Can\'t change status to completed before elimination period ends.')
     if not request.validated.get("data", {}).get('eliminationResolution'):
         request.errors.status = 422
         request.errors.add('body', 'eliminationResolution', 'This field is required.')
 
 def _validate_patch_monitoring_status_declined_to_closed(request):
-    pass
+    monitoring = request.validated['monitoring']
+    if not get_now() > monitoring.eliminationPeriod.endDate:
+        raise_operation_error(request, 'Can\'t change status to closed before elimination period ends.')
 
 def _validate_patch_monitoring_status_active_to_stopped(request):
     if not request.validated.get("data", {}).get('stopping'):

@@ -134,7 +134,7 @@ Content-Type: application/json; charset=UTF-8
         }
       ], 
       "dateModified": "2018-01-08T02:00:00+02:00", 
-      "datePublished": "2018-01-10T02:00:00+02:00"
+      "datePublished": "2018-01-25T02:00:00+02:00"
     }, 
     "tender_id": "0830383a594534f98cbb0a12bbd401ac", 
     "id": "3f193d61e4ca3863a60e29557b338073", 
@@ -235,7 +235,7 @@ Content-Type: application/json; charset=UTF-8
       "awarding", 
       "contracting"
     ], 
-    "dateModified": "2018-01-10T02:00:00+02:00", 
+    "dateModified": "2018-01-25T02:00:00+02:00", 
     "conclusion": {
       "documents": [
         {

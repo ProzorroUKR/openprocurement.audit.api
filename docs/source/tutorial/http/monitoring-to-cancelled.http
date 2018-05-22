@@ -1,0 +1,67 @@
+PATCH /api/2.4/monitorings/3919763fd2a13d18b74bfb0839c49245 HTTP/1.0
+Authorization: Basic dGVzdF9zYXNfdG9rZW46
+Content-Length: 81
+Content-Type: application/json
+Host: api-sandbox.openprocurement.org
+
+{
+  "data": {
+    "status": "cancelled", 
+    "cancellation": {
+      "description": "Some reason"
+    }
+  }
+}
+
+
+200 OK
+Content-Type: application/json; charset=UTF-8
+
+{
+  "data": {
+    "status": "cancelled", 
+    "procuringStages": [
+      "awarding", 
+      "contracting"
+    ], 
+    "reasons": [
+      "public", 
+      "fiscal"
+    ], 
+    "monitoring_id": "UA-M-2018-01-01-000001", 
+    "cancellation": {
+      "description": "Some reason", 
+      "dateCreated": "2018-01-03T02:00:00+02:00"
+    }, 
+    "parties": [
+      {
+        "name": "The State Audit Service of Ukraine", 
+        "roles": [
+          "create"
+        ], 
+        "address": {
+          "postalCode": "04070", 
+          "countryName": "Ukraine", 
+          "streetAddress": "Petra Sahaidachnoho St, 4", 
+          "region": "Kyiv", 
+          "locality": "Kyiv"
+        }, 
+        "contactPoint": {
+          "name": "Oleksii Kovalenko", 
+          "telephone": "0440000000"
+        }, 
+        "identifier": {
+          "scheme": "UA-EDR", 
+          "id": "40165856", 
+          "uri": "http://www.dkrs.gov.ua"
+        }, 
+        "id": "15abb1804bcc3a0fbf1db832b1ad3a6f"
+      }
+    ], 
+    "dateModified": "2018-01-03T02:00:00+02:00", 
+    "dateCreated": "2018-01-01T02:00:00+02:00", 
+    "id": "3919763fd2a13d18b74bfb0839c49245", 
+    "tender_id": "46d875da36cc34228abd10ad929a0ade"
+  }
+}
+

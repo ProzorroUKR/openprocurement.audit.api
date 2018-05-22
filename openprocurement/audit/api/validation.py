@@ -88,22 +88,22 @@ def _validate_patch_monitoring_status_declined_to_closed(request):
         raise_operation_error(request, 'Can\'t change status to closed before elimination period ends.')
 
 def _validate_patch_monitoring_status_active_to_stopped(request):
-    _validate_patch_monitoring_status_to_stopped(request)
+    _validate_patch_monitoring_status_to_stopped_or_cancelled(request)
 
 
 def _validate_patch_monitoring_status_addressed_to_stopped(request):
-    _validate_patch_monitoring_status_to_stopped(request)
+    _validate_patch_monitoring_status_to_stopped_or_cancelled(request)
 
 
 def _validate_patch_monitoring_status_declined_to_stopped(request):
-    _validate_patch_monitoring_status_to_stopped(request)
+    _validate_patch_monitoring_status_to_stopped_or_cancelled(request)
 
 
-def _validate_patch_monitoring_status_declined_to_cancelled(request):
-    _validate_patch_monitoring_status_to_stopped(request)
+def _validate_patch_monitoring_status_draft_to_cancelled(request):
+    _validate_patch_monitoring_status_to_stopped_or_cancelled(request)
 
 
-def _validate_patch_monitoring_status_to_stopped(request):
+def _validate_patch_monitoring_status_to_stopped_or_cancelled(request):
     if not request.validated.get('data', {}).get('cancellation'):
         request.errors.status = 422
         request.errors.add('body', 'stopping', 'This field is required.')

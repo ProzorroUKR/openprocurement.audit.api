@@ -173,7 +173,7 @@ class ActiveMonitoringResourceTest(BaseWebTest):
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
                 "status": "stopped",
-                "stopping": {
+                "cancellation": {
                     "description": "Whisper words of wisdom - let it be."
                 }
             }},

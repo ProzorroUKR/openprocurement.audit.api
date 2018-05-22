@@ -14,6 +14,7 @@ areas that were not covered by it.
    document
    conclusion
    decision
+   cancellation
    party
    date
    period

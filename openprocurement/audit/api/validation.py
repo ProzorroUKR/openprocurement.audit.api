@@ -23,8 +23,8 @@ def validate_patch_monitoring_data(request):
     difference = provided - allowed
     if difference:
         for i in difference:
-            request.errors.add('body', i, "This field cannot be updated in the {} status".format(
-                request.validated["monitoring"]["status"]))
+            request.errors.add('body', i, 'This field cannot be updated in the {} status'.format(
+                request.validated['monitoring']['status']))
         request.errors.status = 422
         raise error_handler(request.errors)
 
@@ -32,15 +32,15 @@ def validate_patch_monitoring_data(request):
 
 
 def validate_patch_monitoring_status(request):
-    status = request.validated['json_data'].get("status")
+    status = request.validated['json_data'].get('status')
     if status is not None and status != request.context.status:
-        function_name = "_validate_patch_monitoring_status_{}_to_{}".format(request.context.status, status)
+        function_name = '_validate_patch_monitoring_status_{}_to_{}'.format(request.context.status, status)
         try:
             func = globals()[function_name]
         except KeyError:
             request.errors.add(
                 'body', 'status',
-                "Status update from '{}' to '{}' is not allowed.".format(request.context.status, status)
+                'Status update from "{}" to "{}" is not allowed.'.format(request.context.status, status)
             )
             request.errors.status = 422
             raise error_handler(request.errors)
@@ -49,7 +49,7 @@ def validate_patch_monitoring_status(request):
 
 
 def _validate_patch_monitoring_status_draft_to_active(request):
-    if not request.validated.get("data", {}).get('decision'):
+    if not request.validated.get('data', {}).get('decision'):
         request.errors.status = 422
         request.errors.add('body', 'decision', 'This field is required.')
         raise error_handler(request.errors)
@@ -57,18 +57,18 @@ def _validate_patch_monitoring_status_draft_to_active(request):
 
 def _validate_patch_monitoring_status_active_to_addressed(request):
     _validate_patch_monitoring_status_active_to_addressed_or_declined(request)
-    if not request.validated.get("data", {}).get('conclusion').get('violationOccurred'):
+    if not request.validated.get('data', {}).get('conclusion').get('violationOccurred'):
         raise_operation_error(request, 'Can\'t set addressed status to monitoring if no violation occurred')
 
 
 def _validate_patch_monitoring_status_active_to_declined(request):
     _validate_patch_monitoring_status_active_to_addressed_or_declined(request)
-    if request.validated.get("data", {}).get('conclusion').get('violationOccurred'):
+    if request.validated.get('data', {}).get('conclusion').get('violationOccurred'):
         raise_operation_error(request, 'Can\'t set declined status to monitoring if violation occurred')
 
 
 def _validate_patch_monitoring_status_active_to_addressed_or_declined(request):
-    if not request.validated.get("data", {}).get('conclusion'):
+    if not request.validated.get('data', {}).get('conclusion'):
         request.errors.status = 422
         request.errors.add('body', 'conclusion', 'This field is required.')
         raise error_handler(request.errors)
@@ -78,7 +78,7 @@ def _validate_patch_monitoring_status_addressed_to_completed(request):
     monitoring = request.validated['monitoring']
     if not get_now() > monitoring.eliminationPeriod.endDate:
         raise_operation_error(request, 'Can\'t change status to completed before elimination period ends.')
-    if not request.validated.get("data", {}).get('eliminationResolution'):
+    if not request.validated.get('data', {}).get('eliminationResolution'):
         request.errors.status = 422
         request.errors.add('body', 'eliminationResolution', 'This field is required.')
 
@@ -88,7 +88,23 @@ def _validate_patch_monitoring_status_declined_to_closed(request):
         raise_operation_error(request, 'Can\'t change status to closed before elimination period ends.')
 
 def _validate_patch_monitoring_status_active_to_stopped(request):
-    if not request.validated.get("data", {}).get('stopping'):
+    _validate_patch_monitoring_status_to_stopped_or_cancelled(request)
+
+
+def _validate_patch_monitoring_status_addressed_to_stopped(request):
+    _validate_patch_monitoring_status_to_stopped_or_cancelled(request)
+
+
+def _validate_patch_monitoring_status_declined_to_stopped(request):
+    _validate_patch_monitoring_status_to_stopped_or_cancelled(request)
+
+
+def _validate_patch_monitoring_status_draft_to_cancelled(request):
+    _validate_patch_monitoring_status_to_stopped_or_cancelled(request)
+
+
+def _validate_patch_monitoring_status_to_stopped_or_cancelled(request):
+    if not request.validated.get('data', {}).get('cancellation'):
         request.errors.status = 422
         request.errors.add('body', 'stopping', 'This field is required.')
         raise error_handler(request.errors)
@@ -167,7 +183,7 @@ def validate_credentials_generate(request):
 
 def _validate_elimination_report_status(request):
     monitoring = request.validated['monitoring']
-    if monitoring.status != "addressed":
+    if monitoring.status != 'addressed':
         request.errors.status = 422
         request.errors.add('body', 'eliminationResolution',
                            'Can\'t update in current {} monitoring status'.format(monitoring.status))

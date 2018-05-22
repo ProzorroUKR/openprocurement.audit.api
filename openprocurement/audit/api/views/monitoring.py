@@ -396,7 +396,11 @@ class MonitoringResource(APIResource):
             monitoring.eliminationReport.datePublished = monitoring.dateModified
             monitoring.eliminationReport.eliminationResolution = monitoring.dateModified
         elif monitoring_old_status == 'active' and monitoring.status == 'stopped':
-            monitoring.stopping.datePublished = monitoring.dateModified
+            monitoring.cancellation.datePublished = monitoring.dateModified
+        elif monitoring_old_status == 'declined' and monitoring.status == 'stopped':
+            monitoring.cancellation.datePublished = monitoring.dateModified
+        elif monitoring_old_status == 'addressed' and monitoring.status == 'stopped':
+            monitoring.cancellation.datePublished = monitoring.dateModified
 
         save_monitoring(self.request)
         LOGGER.info('Updated monitoring {}'.format(monitoring.id),

@@ -673,10 +673,39 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                 self.app.patch_json(
                     '/monitorings/{}'.format(monitoring_id),
                     {"data": {
-                        "stopping": {
+                        "cancellation": {
                             "description": "Complaint was created"
                         },
                         "status": "stopped",
+                    }}
+                )
+
+    def test_monitoring_life_cycle_cancelled(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+
+        with freeze_time("2018.01.01 00:00"):
+            response = self.app.post_json(
+                '/monitorings',
+                {"data": {
+                    "tender_id": self._generate_test_uuid().hex,
+                    "reasons": ["public", "fiscal"],
+                    "procuringStages": ["awarding", "contracting"],
+                    "parties": [self.party_creator]
+                }},
+                status=201
+            )
+
+        monitoring_id = response.json["data"]["id"]
+
+        with freeze_time("2018.01.03 00:00"):
+            with open('docs/source/tutorial/http/monitoring-to-cancelled.http', 'w') as self.app.file_obj:
+                self.app.patch_json(
+                    '/monitorings/{}'.format(monitoring_id),
+                    {"data": {
+                        "cancellation": {
+                            "description": "Some reason"
+                        },
+                        "status": "cancelled",
                     }}
                 )
 

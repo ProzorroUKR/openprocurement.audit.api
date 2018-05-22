@@ -90,6 +90,22 @@ class MonitoringResourceTest(BaseWebTest):
             status=422
         )
 
+    def test_patch_to_cancelled(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "status": "cancelled",
+                "cancellation": {
+                    "description": "text"
+                }
+            }}
+        )
+
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["status"], "cancelled")
+
 class ActiveMonitoringResourceTest(BaseWebTest):
     def setUp(self):
         super(ActiveMonitoringResourceTest, self).setUp()
@@ -173,7 +189,51 @@ class ActiveMonitoringResourceTest(BaseWebTest):
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
                 "status": "stopped",
-                "stopping": {
+                "cancellation": {
+                    "description": "Whisper words of wisdom - let it be."
+                }
+            }},
+        )
+
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["status"], "stopped")
+
+
+@freeze_time('2018-01-01T12:00:00.000000+03:00')
+class AddressedMonitoringResourceTest(BaseWebTest):
+    def setUp(self):
+        super(AddressedMonitoringResourceTest, self).setUp()
+        self.create_monitoring()
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "status": "active",
+                "decision": {
+                    "description": "text",
+                    "date": (datetime.now() + timedelta(days=2)).isoformat()
+                }
+            }}
+        )
+        self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "conclusion": {
+                    "description": "Some text",
+                    "violationOccurred": True,
+                    "violationType": ["corruptionProcurementMethodType", "corruptionAwarded"],
+                },
+                "status": "addressed",
+            }},
+        )
+
+    def test_patch_to_stopped(self):
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "status": "stopped",
+                "cancellation": {
                     "description": "Whisper words of wisdom - let it be."
                 }
             }},
@@ -222,6 +282,21 @@ class DeclinedMonitoringResourceTest(BaseWebTest):
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["status"], "closed")
+
+    def test_patch_to_stopped(self):
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "status": "stopped",
+                "cancellation": {
+                    "description": "Whisper words of wisdom - let it be."
+                }
+            }},
+        )
+
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["status"], "stopped")
 
 def suite():
     s = unittest.TestSuite()

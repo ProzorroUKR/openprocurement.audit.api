@@ -16,4 +16,5 @@ Tutorial
    completing
    closing
    stopping
+   cancellation
 

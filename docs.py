@@ -673,7 +673,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                 self.app.patch_json(
                     '/monitorings/{}'.format(monitoring_id),
                     {"data": {
-                        "stopping": {
+                        "cancellation": {
                             "description": "Complaint was created"
                         },
                         "status": "stopped",

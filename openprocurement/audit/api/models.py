@@ -140,10 +140,10 @@ class Monitoring(SchematicsDocument, Model):
                 'tender_owner_token', 'tender_owner',
                 'monitoringPeriod', 'eliminationPeriod'
             ) + schematics_embedded_role,
-            'edit_draft': whitelist("decision") + _perm_edit_whitelist,
-            'edit_active': whitelist("conclusion", "stopping") + _perm_edit_whitelist,
-            'edit_addressed': whitelist("eliminationResolution") + _perm_edit_whitelist,
-            'edit_declined': whitelist() + _perm_edit_whitelist,
+            'edit_draft': whitelist("decision", "cancellation") + _perm_edit_whitelist,
+            'edit_active': whitelist("conclusion", "cancellation") + _perm_edit_whitelist,
+            'edit_addressed': whitelist("eliminationResolution", "cancellation") + _perm_edit_whitelist,
+            'edit_declined': whitelist("cancellation") + _perm_edit_whitelist,
             'edit_completed': whitelist(),
             'edit_closed': whitelist(),
             'view': blacklist(
@@ -157,7 +157,7 @@ class Monitoring(SchematicsDocument, Model):
     monitoring_id = StringType()
     status = StringType(choices=[
         'draft', 'active', 'addressed', 'declined',
-        'completed', 'closed', 'stopped'
+        'completed', 'closed', 'stopped', 'cancelled'
     ], default='draft')
 
     reasons = ListType(StringType(choices=['indicator', 'authorities', 'media', 'fiscal', 'public']), required=True)
@@ -170,7 +170,7 @@ class Monitoring(SchematicsDocument, Model):
     eliminationResolution = ModelType(EliminationResolution)
     eliminationPeriod = ModelType(Period)
     dialogues = ListType(ModelType(Dialogue), default=list())
-    stopping = ModelType(Stopping)
+    cancellation = ModelType(Stopping)
 
     parties = ListType(ModelType(Party), default=list())
 

@@ -17,6 +17,14 @@ def add_design():
             setattr(design, i, j)
 
 
+# the view below is used for an internal system monitoring
+monitorings_all_view = ViewDefinition('monitorings', 'all', '''function(doc) {
+    if(doc.doc_type == 'Monitoring') {
+        emit(doc.monitoring_id, null);
+    }
+}''')
+
+
 monitorings_by_status_dateModified_view = ViewDefinition('monitorings', 'by_status_dateModified', '''function(doc) {
     if(doc.doc_type == 'Monitoring') {
         var fields=%s, data={};

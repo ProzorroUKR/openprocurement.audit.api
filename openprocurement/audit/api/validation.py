@@ -106,7 +106,7 @@ def _validate_patch_monitoring_status_draft_to_cancelled(request):
 def _validate_patch_monitoring_status_to_stopped_or_cancelled(request):
     if not request.validated.get('data', {}).get('cancellation'):
         request.errors.status = 422
-        request.errors.add('body', 'stopping', 'This field is required.')
+        request.errors.add('body', 'cancellation', 'This field is required.')
         raise error_handler(request.errors)
 
 

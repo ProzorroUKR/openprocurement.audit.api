@@ -1,9 +1,9 @@
 .. include:: defs.hrst
 
-.. _Stopping:
+.. _Cancellation:
 
-Stopping
-========
+Cancellation
+============
 
 Schema
 ------

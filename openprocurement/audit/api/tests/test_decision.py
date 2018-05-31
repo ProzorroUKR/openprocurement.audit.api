@@ -72,8 +72,7 @@ class MonitoringDecisionResourceTest(BaseWebTest, DSWebTestMixin):
         )
         self.assertEqual(response.status_code, 201)
 
-        response = self.app.get(
-            '/monitorings/{}/decision/documents'.format(self.monitoring_id))
+        response = self.app.get('/monitorings/{}/decision/documents'.format(self.monitoring_id))
         self.assertEqual(len(response.json["data"]), 2)
 
     def test_success_full(self):
@@ -109,6 +108,49 @@ class MonitoringDecisionResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.json['data']["decision"]["description"], "text")
         self.assertEqual(response.json['data']["decision"]["date"], decision_date.isoformat())
         self.assertEqual(len(response.json['data']["decision"]["documents"]), 2)
+
+    def test_visibility(self):
+        self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "decision": {
+                    "description": "text",
+                    "date": datetime.now(TZ).isoformat()
+                }
+            }}
+        )
+
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["decision"]["description"], "text")
+
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+        response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertNotIn('decision', response.json['data'])
+
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "status": "active"
+            }}
+        )
+
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["decision"]["description"], "text")
+
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+        response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["decision"]["description"], "text")
 
 
 def suite():

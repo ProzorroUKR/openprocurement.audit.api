@@ -395,6 +395,8 @@ class MonitoringResource(APIResource):
         elif monitoring_old_status == 'addressed' and monitoring.status == 'completed':
             monitoring.eliminationReport.datePublished = monitoring.dateModified
             monitoring.eliminationReport.eliminationResolution = monitoring.dateModified
+        elif monitoring_old_status == 'draft' and monitoring.status == 'cancelled':
+            monitoring.cancellation.datePublished = monitoring.dateModified
         elif monitoring_old_status == 'active' and monitoring.status == 'stopped':
             monitoring.cancellation.datePublished = monitoring.dateModified
         elif monitoring_old_status == 'declined' and monitoring.status == 'stopped':

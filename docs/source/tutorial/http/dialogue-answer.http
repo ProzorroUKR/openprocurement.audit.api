@@ -1,4 +1,4 @@
-PATCH /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/dialogues/a645272a8138307b8bc75bfd28650911?acc_token=1e53f131580932a3a962f3fe8dec3ea6 HTTP/1.0
+PATCH /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/dialogues/0a1f71453ec5321c8a8a1c2c22edbba6?acc_token=9d744c58b942352783fb74b13143d83d HTTP/1.0
 Authorization: Basic YnJva2VyOg==
 Content-Length: 32
 Content-Type: application/json
@@ -19,21 +19,22 @@ Content-Type: application/json; charset=UTF-8
     "documents": [
       {
         "hash": "md5:00000000000000000000000000000000", 
+        "author": "test_sas", 
         "title": "ipsum.doc", 
-        "url": "http://docs-sandbox.openprocurement.org/get/6b3c1606801930d58b7f7baf99fec6b6?KeyID=a8968c46&Signature=eFSOP9d8niGQnzcJ6RBW8JvCQjI5p2s5LKXURu7mvgUDYEL0oqPRzsPFfBs6y28RMkMmdvcs9vh3Kpp5oflNCg%3D%3D", 
+        "url": "http://docs-sandbox.openprocurement.org/get/8d841a585bc83b32a59c84259f2da7db?KeyID=a8968c46&Signature=vNWgmUXOImujOmvYchMx2oMxz6q2wO8hwMTwe9Q1ESyuFnQm92pfRbwnx59i%2FNW6n5gxQo7wk2h2Fqq4Drz3CQ%3D%3D", 
         "format": "application/msword", 
         "datePublished": "2018-01-03T02:05:00+02:00", 
-        "id": "0a1f71453ec5321c8a8a1c2c22edbba6", 
+        "id": "34a0751d03a136bf884aa1ed12ca2a02", 
         "dateModified": "2018-01-03T02:05:00+02:00"
       }, 
       {
         "hash": "md5:00000000000000000000000000000000", 
         "author": "test_sas", 
         "title": "dolor.doc", 
-        "url": "http://docs-sandbox.openprocurement.org/get/34a0751d03a136bf884aa1ed12ca2a02?KeyID=a8968c46&Signature=aqpYbtrrdjWxQKxNifRQZwFxDGd44p0vQW4nAR8ZdyFL%2FrQxjPnwyQDa46K87gJ%2FoEnmmhmqoIDrECJcCEdxCQ%253D%253D", 
+        "url": "http://docs-sandbox.openprocurement.org/get/54f3206ee6e838388a7ade83aa3e320b?KeyID=a8968c46&Signature=l1q3e3YfOlgBmlaLbYcLrPahcV4O6zjCRBUFwIaARE43%252BOmJkwhwtoM78Wn8naeKbavSnoF20vu1BANXkMtMBg%253D%253D", 
         "format": "application/msword", 
         "datePublished": "2018-01-03T02:10:00+02:00", 
-        "id": "64cc9fc2c22c39948076f4e28c774a82", 
+        "id": "aef26e1612da390ebce4733b3f5b66cd", 
         "dateModified": "2018-01-03T02:10:00+02:00"
       }
     ], 
@@ -41,10 +42,10 @@ Content-Type: application/json; charset=UTF-8
     "author": "test_sas", 
     "title": "Lorem ipsum", 
     "dateAnswered": "2018-01-04T02:05:00+02:00", 
-    "relatedParty": "46f99862f11f3255b9e5e51cfbdccdf9", 
+    "relatedParty": "a8522817b4003f4aa62deb36821d476c", 
     "dateSubmitted": "2018-01-03T02:05:00+02:00", 
     "answer": "Sit amet", 
-    "id": "a645272a8138307b8bc75bfd28650911", 
+    "id": "0a1f71453ec5321c8a8a1c2c22edbba6", 
     "dialogueOf": "decision"
   }
 }

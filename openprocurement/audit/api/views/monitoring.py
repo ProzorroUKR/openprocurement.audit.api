@@ -381,10 +381,12 @@ class MonitoringResource(APIResource):
 
         monitoring.dateModified = get_now()
         if monitoring_old_status == 'draft' and monitoring.status == 'active':
+            set_ownership(monitoring.decision.documents, self.request, 'author')
             monitoring.monitoringPeriod = generate_period(
                 monitoring.dateModified, MONITORING_TIME, self.context)
             monitoring.decision.datePublished = monitoring.dateModified
         elif monitoring_old_status == 'active' and monitoring.status == 'addressed':
+            set_ownership(monitoring.conclusion.documents, self.request, 'author')
             monitoring.conclusion.datePublished = monitoring.dateModified
             monitoring.eliminationPeriod = generate_period(
                 monitoring.dateModified, ELIMINATION_PERIOD_TIME, self.context)
@@ -395,13 +397,13 @@ class MonitoringResource(APIResource):
         elif monitoring_old_status == 'addressed' and monitoring.status == 'completed':
             monitoring.eliminationReport.datePublished = monitoring.dateModified
             monitoring.eliminationReport.eliminationResolution = monitoring.dateModified
-        elif monitoring_old_status == 'draft' and monitoring.status == 'cancelled':
-            monitoring.cancellation.datePublished = monitoring.dateModified
-        elif monitoring_old_status == 'active' and monitoring.status == 'stopped':
-            monitoring.cancellation.datePublished = monitoring.dateModified
-        elif monitoring_old_status == 'declined' and monitoring.status == 'stopped':
-            monitoring.cancellation.datePublished = monitoring.dateModified
-        elif monitoring_old_status == 'addressed' and monitoring.status == 'stopped':
+        elif any([
+            monitoring_old_status == 'draft' and monitoring.status == 'cancelled',
+            monitoring_old_status == 'active' and monitoring.status == 'stopped',
+            monitoring_old_status == 'declined' and monitoring.status == 'stopped',
+            monitoring_old_status == 'addressed' and monitoring.status == 'stopped'
+        ]):
+            set_ownership(monitoring.cancellation.documents, self.request, 'author')
             monitoring.cancellation.datePublished = monitoring.dateModified
 
         save_monitoring(self.request)

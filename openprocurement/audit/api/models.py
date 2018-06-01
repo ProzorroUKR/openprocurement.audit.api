@@ -35,12 +35,20 @@ class Conclusion(Report):
         )),
         default=[]
     )
+    otherViolationType = StringType()
     auditFinding = StringType()
     stringsAttached = StringType()
     description = StringType(required=False)
 
     def validate_violationType(self, data, value):
         if data["violationOccurred"] and not value:
+            raise ValidationError(u"This field is required.")
+
+        if value and "other" not in value:  # drop other type description
+            data["otherViolationType"] = None
+
+    def validate_otherViolationType(self, data, value):
+        if "other" in data["violationType"] and not value:
             raise ValidationError(u"This field is required.")
 
 class Stopping(Report):

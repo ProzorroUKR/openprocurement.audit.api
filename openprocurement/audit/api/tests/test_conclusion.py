@@ -183,6 +183,44 @@ class ActiveMonitoringConclusionResourceTest(BaseWebTest, DSWebTestMixin):
             '/monitorings/{}/conclusion/documents'.format(self.monitoring_id))
         self.assertEqual(len(response.json["data"]), 2)
 
+    def test_fail_violation_other(self):
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "conclusion": {
+                    "violationOccurred": True,
+                    "violationType": ["corruptionProcurementMethodType", "other"],
+                }
+            }},
+            status=422
+        )
+        self.assertEqual(
+            response.json['errors'],
+            [{u'description': {u'otherViolationType': [u'This field is required.']},
+              u'location': u'body', u'name': u'conclusion'}])
+
+    def test_success_violation_other(self):
+        data = {
+            "conclusion": {
+                "violationOccurred": True,
+                "violationType": ["corruptionProcurementMethodType", "other"],
+                "otherViolationType": "being too conciliatory",
+            }
+        }
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": data},
+        )
+        self.assertEqual(response.json['data']["conclusion"]["otherViolationType"],
+                         data["conclusion"]["otherViolationType"])
+
+        patch_data = {"conclusion": {"violationType": ["corruptionProcurementMethodType"]}}
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": patch_data},
+        )
+        self.assertNotIn("otherViolationType", response.json['data']["conclusion"])
+
     def test_success_full(self):
         conclusion = {
             "violationOccurred": True,

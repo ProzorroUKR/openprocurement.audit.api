@@ -433,6 +433,22 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                 )
             self.assertEqual(response.status_code, 200)
 
+        with freeze_time("2018.01.05 00:17"):
+            with open('docs/source/tutorial/http/conclusion-other-validation.http', 'w') as self.app.file_obj:
+                response = self.app.patch_json(
+                    '/monitorings/{}'.format(monitoring_id),
+                    {"data": {
+                        "conclusion": {
+                            "violationType": ["documentsForm", "corruptionAwarded", "other"],
+                        }
+                    }},
+                    status=422
+                )
+                self.assertEqual(
+                    response.json['errors'],
+                    [{u'description': {u'otherViolationType': [u'This field is required.']},
+                      u'location': u'body', u'name': u'conclusion'}])
+
         with freeze_time("2018.01.05 00:20"):
             with open('docs/source/tutorial/http/conclusion-add-document.http', 'w') as self.app.file_obj:
                 self.app.post_json(

@@ -19,6 +19,12 @@ Let's provide all the possible fields:
 .. include::  http/conclusion-full.http
    :code:
 
+If you want add a violation that is not on the list, you can add `other` to the list.
+In this case you are supposed to provide details of the violation:
+
+.. include::  http/conclusion-other-validation.http
+   :code:
+
 
 Also we can add documents one by one. Documents uploading should
 follow the `upload <http://documentservice.api-docs.openprocurement.org>`_ rules.

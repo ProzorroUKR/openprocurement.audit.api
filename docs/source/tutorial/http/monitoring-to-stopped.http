@@ -24,6 +24,7 @@ Content-Type: application/json; charset=UTF-8
       "awarding", 
       "contracting"
     ], 
+    "tender_id": "23a0e490908e3a04b7e75381738bb49d", 
     "reasons": [
       "public", 
       "fiscal"
@@ -38,6 +39,7 @@ Content-Type: application/json; charset=UTF-8
       "documents": [
         {
           "hash": "md5:00000000000000000000000000000000", 
+          "author": "test_sas", 
           "title": "lorem.doc", 
           "url": "http://docs-sandbox.openprocurement.org/get/ab7f702a2dec39f2b59e7334bcf7034c?KeyID=a8968c46&Signature=c6q865%2FuXogRVxTZr%2BtFaab642BFxYLFeG%2B13r9z%2FjarXgC2XXx0q%2FMftbIGjNsODts%2FRVJNysMjX%2FBxdEHdBQ%3D%3D", 
           "format": "application/msword", 
@@ -76,14 +78,13 @@ Content-Type: application/json; charset=UTF-8
         "id": "be546d6519ee37a597df5c1ca71ddd18"
       }
     ], 
-    "dateModified": "2018-01-03T02:00:00+02:00", 
     "dateCreated": "2018-01-01T02:00:00+02:00", 
-    "cancellation": {
+    "dateModified": "2018-01-03T02:00:00+02:00", 
+    "conclusion": {
       "dateCreated": "2018-01-03T02:00:00+02:00", 
       "description": "Complaint was created", 
       "datePublished": "2018-01-03T02:00:00+02:00"
-    }, 
-    "tender_id": "23a0e490908e3a04b7e75381738bb49d"
+    }
   }
 }
 

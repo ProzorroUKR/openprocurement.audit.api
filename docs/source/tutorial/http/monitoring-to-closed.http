@@ -26,20 +26,21 @@ Content-Type: application/json; charset=UTF-8
         "documents": [
           {
             "hash": "md5:00000000000000000000000000000000", 
+            "author": "test_sas", 
             "title": "ipsum.doc", 
-            "url": "http://docs-sandbox.openprocurement.org/get/43edf6572bb83e04bd146b3921c58241?KeyID=a8968c46&Signature=Apf7n4UAy6rQQ43AJmZ1VCEfRCSY4ogQ5aJxRibn19NWSuSlMgKGhCFy3gcaXU61%2B2VUIKoEu9GIcGPTuDxPAw%3D%3D", 
+            "url": "http://docs-sandbox.openprocurement.org/get/f262c3d19bd432f7bd155a3c44c9737d?KeyID=a8968c46&Signature=0tku1oWt6Eq0Pdrj1HwZZswT5ih5WpnEX9xR2YXwNoX5iW5fILEH7895Wyc8GQF1JMmm6G%2BJWEhx2x7xhargDg%3D%3D", 
             "format": "application/msword", 
             "datePublished": "2018-01-03T02:10:00+02:00", 
-            "id": "0437d13146b6349eb56fcc9e4ba3adf3", 
+            "id": "ec71b16d3caa3262b0f0963f18a2436e", 
             "dateModified": "2018-01-03T02:10:00+02:00"
           }
         ], 
         "description": "Lorem ipsum dolor sit amet.", 
         "title": "Lorem ipsum", 
         "author": "test_sas", 
-        "relatedParty": "5a07741afc0e3ee4897b8b93131a45f7", 
+        "relatedParty": "43edf6572bb83e04bd146b3921c58241", 
         "dateSubmitted": "2018-01-03T02:10:00+02:00", 
-        "id": "dea7f37b85e63c3aa2751d350e873b4d", 
+        "id": "543f689f1feb33b294d930b7618211c1", 
         "dialogueOf": "decision"
       }
     ], 
@@ -57,6 +58,7 @@ Content-Type: application/json; charset=UTF-8
       "documents": [
         {
           "hash": "md5:00000000000000000000000000000000", 
+          "author": "test_sas", 
           "title": "lorem.doc", 
           "url": "http://docs-sandbox.openprocurement.org/get/043595b64f033d37bc0bbdfbfd0285fa?KeyID=a8968c46&Signature=W7Jz8OfDurOjcKcxhRLnNMRMJeK3TkcnfNk8U2TiCpYGKs1fcD09misXBLkFnCHUEwjwSim3djUj9x4%2BRGorAw%3D%3D", 
           "format": "application/msword", 
@@ -116,7 +118,7 @@ Content-Type: application/json; charset=UTF-8
           "id": "40165856", 
           "uri": "http://www.dkrs.gov.ua"
         }, 
-        "id": "5a07741afc0e3ee4897b8b93131a45f7"
+        "id": "43edf6572bb83e04bd146b3921c58241"
       }
     ], 
     "dateCreated": "2018-01-01T02:00:00+02:00", 

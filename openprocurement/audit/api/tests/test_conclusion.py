@@ -260,6 +260,50 @@ class ActiveMonitoringConclusionResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(resp_conclusion["description"], conclusion["description"])
         self.assertEqual(len(resp_conclusion["documents"]), 2)
 
+    def test_visibility(self):
+        self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "conclusion": {
+                    "description": "text",
+                    "violationOccurred": True,
+                    "violationType": ["corruptionProcurementMethodType"],
+                }
+            }}
+        )
+
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["conclusion"]["description"], "text")
+
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+        response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertNotIn('conclusion', response.json['data'])
+
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "status": "addressed"
+            }}
+        )
+
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["conclusion"]["description"], "text")
+
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+        response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["conclusion"]["description"], "text")
+
 
 def suite():
     s = unittest.TestSuite()

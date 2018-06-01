@@ -1,6 +1,6 @@
-POST /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/dialogues?acc_token=1e53f131580932a3a962f3fe8dec3ea6 HTTP/1.0
+POST /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/dialogues?acc_token=9d744c58b942352783fb74b13143d83d HTTP/1.0
 Authorization: Basic YnJva2VyOg==
-Content-Length: 403
+Content-Length: 411
 Content-Type: application/json
 Host: api-sandbox.openprocurement.org
 
@@ -8,7 +8,7 @@ Host: api-sandbox.openprocurement.org
   "data": {
     "documents": [
       {
-        "url": "http://docs-sandbox.openprocurement.org/get/20b5e4bbb6a236c5b8b123ab7270d4dd?KeyID=a8968c46&Signature=9fpAhnkWnyo894ap0G2C5YDmCMLJQ3%2FhlX7rN5arDdIGrAdJ0gEIn33cnyEooB35blhylq16N1mnUqkvHDpOCg%3D%3D", 
+        "url": "http://docs-sandbox.openprocurement.org/get/5cf782aa00b23c7b88e7c89ccd236ad3?KeyID=a8968c46&Signature=bX4mqiLpGvEVf%2FU26CQ%2BQ5RoVZ2eD0qP092%2FOEGrsYBnITtAW%2BDWp4nKE%2FXXd4hpMMZGmyeywbbeSiNSqgizBA%3D%3D", 
         "title": "dolor.doc", 
         "hash": "md5:00000000000000000000000000000000", 
         "format": "application/msword"
@@ -22,18 +22,19 @@ Host: api-sandbox.openprocurement.org
 
 201 Created
 Content-Type: application/json; charset=UTF-8
-Location: http://api-sandbox.openprocurement.org/api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/dialogues/d6fba9ef31a73c33a753f982fb46677d
+Location: http://api-sandbox.openprocurement.org/api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/dialogues/63e27aa49f4b362daea6c7ccbdd876a0
 
 {
   "data": {
     "documents": [
       {
         "hash": "md5:00000000000000000000000000000000", 
+        "author": "broker", 
         "title": "dolor.doc", 
-        "url": "http://docs-sandbox.openprocurement.org/get/20b5e4bbb6a236c5b8b123ab7270d4dd?KeyID=a8968c46&Signature=9fpAhnkWnyo894ap0G2C5YDmCMLJQ3%2FhlX7rN5arDdIGrAdJ0gEIn33cnyEooB35blhylq16N1mnUqkvHDpOCg%3D%3D", 
+        "url": "http://docs-sandbox.openprocurement.org/get/5cf782aa00b23c7b88e7c89ccd236ad3?KeyID=a8968c46&Signature=bX4mqiLpGvEVf%2FU26CQ%2BQ5RoVZ2eD0qP092%2FOEGrsYBnITtAW%2BDWp4nKE%2FXXd4hpMMZGmyeywbbeSiNSqgizBA%3D%3D", 
         "format": "application/msword", 
         "datePublished": "2018-01-06T02:00:00+02:00", 
-        "id": "b4326ddbe1483897b753cc873d5e91e7", 
+        "id": "049724062f0f3970a180d140964f4636", 
         "dateModified": "2018-01-06T02:00:00+02:00"
       }
     ], 
@@ -41,7 +42,7 @@ Location: http://api-sandbox.openprocurement.org/api/2.4/monitorings/3f193d61e4c
     "title": "Sit amet", 
     "author": "broker", 
     "dateSubmitted": "2018-01-06T02:00:00+02:00", 
-    "id": "d6fba9ef31a73c33a753f982fb46677d", 
+    "id": "63e27aa49f4b362daea6c7ccbdd876a0", 
     "dialogueOf": "conclusion"
   }
 }

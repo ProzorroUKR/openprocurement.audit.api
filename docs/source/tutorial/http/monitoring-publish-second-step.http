@@ -35,6 +35,7 @@ Content-Type: application/json; charset=UTF-8
       "documents": [
         {
           "hash": "md5:00000000000000000000000000000000", 
+          "author": "test_sas", 
           "title": "lorem.doc", 
           "url": "http://docs-sandbox.openprocurement.org/get/ccc82cd7c15037ec8540f7a32569c869?KeyID=a8968c46&Signature=jnixFE8PN8sVNw%2FDpTkiRodfUL74elJ38fQBflS2e53CvQDsev52o18XxsiqZLAw9%2BcGKl7NixbccfgiUDiYDQ%3D%3D", 
           "format": "application/msword", 

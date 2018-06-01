@@ -51,7 +51,7 @@ class Conclusion(Report):
         if "other" in data["violationType"] and not value:
             raise ValidationError(u"This field is required.")
 
-class Stopping(Report):
+class Cancellation(Report):
     pass
 
 
@@ -154,8 +154,11 @@ class Monitoring(SchematicsDocument, Model):
             'edit_declined': whitelist("cancellation") + _perm_edit_whitelist,
             'edit_completed': whitelist(),
             'edit_closed': whitelist(),
+            'edit_stopped': whitelist(),
+            'edit_cancelled': whitelist(),
             'view': blacklist(
-                'tender_owner_token', '_attachments', 'revisions'
+                'tender_owner_token', '_attachments', 'revisions',
+                'decision', 'conclusion', 'cancellation'
             ) + schematics_embedded_role,
             'listing': whitelist('dateModified', 'doc_id'),
             'default': schematics_default_role,
@@ -178,7 +181,7 @@ class Monitoring(SchematicsDocument, Model):
     eliminationResolution = ModelType(EliminationResolution)
     eliminationPeriod = ModelType(Period)
     dialogues = ListType(ModelType(Dialogue), default=list())
-    cancellation = ModelType(Stopping)
+    cancellation = ModelType(Cancellation)
 
     parties = ListType(ModelType(Party), default=list())
 
@@ -192,6 +195,21 @@ class Monitoring(SchematicsDocument, Model):
     mode = StringType(choices=['test'])
     if SANDBOX_MODE:
         monitoringDetails = StringType()
+
+    @serializable(serialized_name='decision', serialize_when_none=False, type=ModelType(Decision))
+    def monitoring_decision(self):
+        if self.decision and self.decision.datePublished or self.__parent__.request.authenticated_role == 'sas':
+            return self.decision
+
+    @serializable(serialized_name='conclusion', serialize_when_none=False, type=ModelType(Conclusion))
+    def monitoring_conclusion(self):
+        if self.conclusion and self.conclusion.datePublished or self.__parent__.request.authenticated_role == 'sas':
+            return self.conclusion
+
+    @serializable(serialized_name='conclusion', serialize_when_none=False, type=ModelType(Cancellation))
+    def monitoring_cancellation(self):
+        if self.cancellation and self.cancellation.datePublished or self.__parent__.request.authenticated_role == 'sas':
+            return self.cancellation
 
     def validate_eliminationResolution(self, data, value):
         if value is not None and data["eliminationReport"] is None:

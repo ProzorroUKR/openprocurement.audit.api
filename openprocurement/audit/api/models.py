@@ -51,6 +51,7 @@ class Conclusion(Report):
         if "other" in data["violationType"] and not value:
             raise ValidationError(u"This field is required.")
 
+
 class Cancellation(Report):
     pass
 
@@ -89,6 +90,14 @@ class EliminationReport(Report):
             (Allow, '{}_{}'.format(self.__parent__.tender_owner, self.__parent__.tender_owner_token),
              'edit_elimination_report'),
         ]
+
+
+class Appeal(Report):
+    class Options:
+        roles = {
+            'create': whitelist('description', 'documents'),
+            'view': schematics_default_role,
+        }
 
 
 class Dialogue(Model):
@@ -182,6 +191,7 @@ class Monitoring(SchematicsDocument, Model):
     eliminationPeriod = ModelType(Period)
     dialogues = ListType(ModelType(Dialogue), default=list())
     cancellation = ModelType(Cancellation)
+    appeal = ModelType(Appeal)
 
     parties = ListType(ModelType(Party), default=list())
 
@@ -233,6 +243,7 @@ class Monitoring(SchematicsDocument, Model):
         return [
             (Allow, '{}_{}'.format(self.tender_owner, self.tender_owner_token), 'create_dialogue'),
             (Allow, '{}_{}'.format(self.tender_owner, self.tender_owner_token), 'create_elimination_report'),
+            (Allow, '{}_{}'.format(self.tender_owner, self.tender_owner_token), 'create_appeal'),
             (Allow, '{}_{}'.format(self.tender_owner, self.tender_owner_token), 'edit_dialogue'),
             (Allow, '{}_{}'.format(self.tender_owner, self.tender_owner_token), 'upload_dialogue_documents'),
         ]

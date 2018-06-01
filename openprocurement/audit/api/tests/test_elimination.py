@@ -446,12 +446,20 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
 
     def test_fail_change_status(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
-        self.app.patch_json(
+        response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
-                "status": "complete",
+                "status": "completed",
             }},
-            status=422
+            status=403
+        )
+        self.assertEqual(
+            response.json["errors"],
+            [{
+                'description': "Can't change status to completed before elimination period ends.",
+                'location': 'body',
+                'name': 'data'
+            }]
         )
 
 

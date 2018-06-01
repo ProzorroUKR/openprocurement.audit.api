@@ -1,0 +1,33 @@
+POST /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/appeal/documents?acc_token=9d744c58b942352783fb74b13143d83d HTTP/1.0
+Authorization: Basic YnJva2VyOg==
+Content-Length: 330
+Content-Type: application/json
+Host: api-sandbox.openprocurement.org
+
+{
+  "data": {
+    "url": "http://docs-sandbox.openprocurement.org/get/1701d621ccb839bfac261422da1d1136?KeyID=a8968c46&Signature=hnnDkpte8CxyApH4tiU6VooDtR2FRoJBFARzBQl2%2FMZuOXWmXu7ITCwGM6nlRUw4jKRJ4jrwLx%2Fx3A4H9hRnBg%3D%3D", 
+    "title": "another-letter.doc", 
+    "hash": "md5:00000000000000000000000000000000", 
+    "format": "application/msword"
+  }
+}
+
+
+201 Created
+Content-Type: application/json; charset=UTF-8
+Location: http://api-sandbox.openprocurement.org/api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/appeal/documents/0e23f4e2581d3b58a41389eecc5afcca
+
+{
+  "data": {
+    "hash": "md5:00000000000000000000000000000000", 
+    "author": "broker", 
+    "title": "another-letter.doc", 
+    "url": "http://docs-sandbox.openprocurement.org/get/1701d621ccb839bfac261422da1d1136?KeyID=a8968c46&Signature=eaK4x9lu9jyLxS2i6Xc6iZ2ruVVQsz%2FUNHduSNZTLWIkTE%252B57Yui0TN%252Br4sl8wYNTeg0JwaHUKjkjlxYnYoWAw%253D%253D", 
+    "format": "application/msword", 
+    "datePublished": "2018-01-06T10:00:00+02:00", 
+    "id": "0e23f4e2581d3b58a41389eecc5afcca", 
+    "dateModified": "2018-01-06T10:00:00+02:00"
+  }
+}
+

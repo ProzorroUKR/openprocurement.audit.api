@@ -493,6 +493,66 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                     status=201
                 )
 
+        # APPEAL
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+
+        with freeze_time("2018.01.06 07:00"):
+            with open('docs/source/tutorial/http/post-appeal.http', 'w') as self.app.file_obj:
+                response = self.app.put_json(
+                    '/monitorings/{}/appeal?acc_token={}'.format(monitoring_id, tender_owner_token),
+                    {"data": {
+                        "description": "Appeal description",
+                        "documents": [{
+                            'title': 'letter.doc',
+                            'url': self.generate_docservice_url(),
+                            'hash': 'md5:' + '0' * 32,
+                            'format': 'application/msword',
+                        }]
+                    }},
+                )
+                appeal_doc_id = response.json["data"]["documents"][0]["id"]
+
+        another_document = {
+            'title': 'another-letter.doc',
+            'url': self.generate_docservice_url(),
+            'hash': 'md5:' + '0' * 32,
+            'format': 'application/msword',
+        }
+
+        with freeze_time("2018.01.06 07:30"):
+            with open('docs/source/tutorial/http/post-appeal-again.http', 'w') as self.app.file_obj:
+                self.app.put_json(
+                    '/monitorings/{}/appeal?acc_token={}'.format(monitoring_id, tender_owner_token),
+                    {"data": {
+                        "description": "Addition to the appeal description",
+                        "documents": [another_document]
+                    }},
+                    status=403
+                )
+
+        with freeze_time("2018.01.06 08:00"):
+            with open('docs/source/tutorial/http/post-doc-appeal.http', 'w') as self.app.file_obj:
+                self.app.post_json(
+                    '/monitorings/{}/appeal/documents?acc_token={}'.format(monitoring_id, tender_owner_token),
+                    {"data": another_document},
+                )
+
+        with freeze_time("2018.01.06 08:15"):
+            with open('docs/source/tutorial/http/patch-doc-appeal.http', 'w') as self.app.file_obj:
+                self.app.patch_json(
+                    '/monitorings/{}/appeal/documents/{}?acc_token={}'.format(
+                        monitoring_id,
+                        appeal_doc_id,
+                        tender_owner_token
+                    ),
+                    {"data": {
+                        'title': 'letter(0).doc',
+                        'url': self.generate_docservice_url(),
+                        'hash': 'md5:' + '0' * 32,
+                        'format': 'application/json',
+                    }},
+                )
+
         # ELIMINATION REPORT
         self.app.authorization = ('Basic', (self.broker_token, ''))
 

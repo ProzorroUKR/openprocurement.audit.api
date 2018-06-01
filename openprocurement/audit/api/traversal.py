@@ -64,12 +64,22 @@ def factory(request):
         return conclusion_factory(request)
     elif 'eliminationReport' in request.path.split('/'):
         return elimination_factory(request)
+    elif 'appeal' in request.path.split('/'):
+        return appeal_factory(request)
     elif request.matchdict.get('dialogue_id'):
         return dialogue_factory(request)
     elif request.matchdict.get('party_id'):
         return get_item(request.monitoring, 'party', request)
     elif request.matchdict.get('document_id'):
         return get_item(request.monitoring, 'document', request)
+    return request.monitoring
+
+
+def appeal_factory(request):
+    if request.monitoring.appeal:
+        if request.matchdict.get('document_id'):
+            return get_item(request.monitoring.appeal, 'document', request)
+        return request.monitoring.appeal
     return request.monitoring
 
 

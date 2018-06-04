@@ -153,6 +153,12 @@ def set_ownership(data, request, fieldname='owner'):
         setattr(item, fieldname, request.authenticated_userid)
         setattr(item, '{}_token'.format(fieldname), generate_id())
 
+
+def set_author(data, request, fieldname='author'):
+    for item in data if isinstance(data, list) else [data]:
+        setattr(item, fieldname, request.monitoring_role)
+
+
 def calculate_business_date(date_obj, timedelta_obj, context=None,
                             working_days=False):
     if context and 'monitoringDetails' in context and context['monitoringDetails']:
@@ -162,3 +168,14 @@ def calculate_business_date(date_obj, timedelta_obj, context=None,
     if working_days:
         return calculate_business_date_base(date_obj, timedelta_obj, context, working_days)
     return date_obj + timedelta_obj
+
+
+def get_access_token(request):
+    token = request.params.get('acc_token') or request.headers.get('X-Access-Token')
+    if not token and request.method in ['POST', 'PUT', 'PATCH'] and request.content_type == 'application/json':
+        try:
+            json = request.json_body
+        except ValueError:
+            json = None
+        token = isinstance(json, dict) and json.get('access', {}).get('token')
+    return token

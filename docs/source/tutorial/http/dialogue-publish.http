@@ -1,16 +1,16 @@
 POST /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/dialogues HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
-Content-Length: 458
+Content-Length: 464
 Content-Type: application/json
 Host: api-sandbox.openprocurement.org
 
 {
   "data": {
     "title": "Lorem ipsum", 
-    "relatedParty": "a8522817b4003f4aa62deb36821d476c", 
+    "relatedParty": "08c7d830025f391ba6b57584516df9a3", 
     "documents": [
       {
-        "url": "http://docs-sandbox.openprocurement.org/get/8d841a585bc83b32a59c84259f2da7db?KeyID=a8968c46&Signature=vNWgmUXOImujOmvYchMx2oMxz6q2wO8hwMTwe9Q1ESyuFnQm92pfRbwnx59i%2FNW6n5gxQo7wk2h2Fqq4Drz3CQ%3D%3D", 
+        "url": "http://docs-sandbox.openprocurement.org/get/46f99862f11f3255b9e5e51cfbdccdf9?KeyID=a8968c46&Signature=S%2F7YPXl9GB6WoXTa9zBDjlOMHgSlhYd26FNAxv4IUvouHLs4rCLHmnDNJCnn%2Fd7vi%2FWChIMV2k5eLM5qjR%2BpDw%3D%3D", 
         "title": "ipsum.doc", 
         "hash": "md5:00000000000000000000000000000000", 
         "format": "application/msword"
@@ -23,28 +23,28 @@ Host: api-sandbox.openprocurement.org
 
 201 Created
 Content-Type: application/json; charset=UTF-8
-Location: http://api-sandbox.openprocurement.org/api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/dialogues/0a1f71453ec5321c8a8a1c2c22edbba6
+Location: http://api-sandbox.openprocurement.org/api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/dialogues/f0ef0fc1e96638e8b2f09e00726d4a23
 
 {
   "data": {
     "documents": [
       {
         "hash": "md5:00000000000000000000000000000000", 
-        "author": "test_sas", 
+        "author": "monitoring_owner", 
         "title": "ipsum.doc", 
-        "url": "http://docs-sandbox.openprocurement.org/get/8d841a585bc83b32a59c84259f2da7db?KeyID=a8968c46&Signature=vNWgmUXOImujOmvYchMx2oMxz6q2wO8hwMTwe9Q1ESyuFnQm92pfRbwnx59i%2FNW6n5gxQo7wk2h2Fqq4Drz3CQ%3D%3D", 
+        "url": "http://docs-sandbox.openprocurement.org/get/46f99862f11f3255b9e5e51cfbdccdf9?KeyID=a8968c46&Signature=S%2F7YPXl9GB6WoXTa9zBDjlOMHgSlhYd26FNAxv4IUvouHLs4rCLHmnDNJCnn%2Fd7vi%2FWChIMV2k5eLM5qjR%2BpDw%3D%3D", 
         "format": "application/msword", 
         "datePublished": "2018-01-03T02:05:00+02:00", 
-        "id": "34a0751d03a136bf884aa1ed12ca2a02", 
+        "id": "ed6552fca74d3ab7a1acbdd6cd79b685", 
         "dateModified": "2018-01-03T02:05:00+02:00"
       }
     ], 
     "description": "Lorem ipsum dolor sit amet.", 
     "title": "Lorem ipsum", 
-    "author": "test_sas", 
-    "relatedParty": "a8522817b4003f4aa62deb36821d476c", 
+    "author": "monitoring_owner", 
+    "relatedParty": "08c7d830025f391ba6b57584516df9a3", 
     "dateSubmitted": "2018-01-03T02:05:00+02:00", 
-    "id": "0a1f71453ec5321c8a8a1c2c22edbba6", 
+    "id": "f0ef0fc1e96638e8b2f09e00726d4a23", 
     "dialogueOf": "decision"
   }
 }

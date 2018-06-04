@@ -4,8 +4,8 @@ from openprocurement.audit.api.utils import (
     APIResource,
     save_monitoring,
     apply_patch,
-    set_ownership
-)
+    set_ownership,
+    set_author)
 from openprocurement.api.utils import (
     json_view,
     get_now,
@@ -35,8 +35,8 @@ class DialogueResource(APIResource):
         monitoring = self.context
         dialogue = self.request.validated['dialogue']
         dialogue.dateSubmitted = get_now()
-        set_ownership(dialogue, self.request, 'author')
-        set_ownership(dialogue.documents, self.request, 'author')
+        set_author(dialogue, self.request, 'author')
+        set_author(dialogue.documents, self.request, 'author')
         if monitoring.status in ('addressed', 'declined'):
             dialogue.dialogueOf = 'conclusion'
         monitoring.dialogues.append(dialogue)

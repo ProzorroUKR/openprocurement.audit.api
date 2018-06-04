@@ -198,17 +198,20 @@ class Monitoring(SchematicsDocument, Model):
 
     @serializable(serialized_name='decision', serialize_when_none=False, type=ModelType(Decision))
     def monitoring_decision(self):
-        if self.decision and self.decision.datePublished or self.__parent__.request.authenticated_role == 'sas':
+        role = self.__parent__.request.monitoring_role
+        if self.decision and self.decision.datePublished or role in ('sas', 'monitoring_owner'):
             return self.decision
 
     @serializable(serialized_name='conclusion', serialize_when_none=False, type=ModelType(Conclusion))
     def monitoring_conclusion(self):
-        if self.conclusion and self.conclusion.datePublished or self.__parent__.request.authenticated_role == 'sas':
+        role = self.__parent__.request.monitoring_role
+        if self.conclusion and self.conclusion.datePublished or role in ('sas', 'monitoring_owner'):
             return self.conclusion
 
     @serializable(serialized_name='conclusion', serialize_when_none=False, type=ModelType(Cancellation))
     def monitoring_cancellation(self):
-        if self.cancellation and self.cancellation.datePublished or self.__parent__.request.authenticated_role == 'sas':
+        role = self.__parent__.request.monitoring_role
+        if self.cancellation and self.cancellation.datePublished or role in ('sas', 'monitoring_owner'):
             return self.cancellation
 
     def validate_eliminationResolution(self, data, value):
@@ -227,6 +230,7 @@ class Monitoring(SchematicsDocument, Model):
     def __local_roles__(self):
         return dict([
             ('{}_{}'.format(self.tender_owner, self.tender_owner_token), 'tender_owner'),
+            ('g:sas', 'monitoring_owner'),
         ])
 
     def __acl__(self):

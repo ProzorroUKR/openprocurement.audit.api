@@ -1,6 +1,6 @@
-PUT /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/eliminationReport?acc_token=9d744c58b942352783fb74b13143d83d HTTP/1.0
+PUT /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/eliminationReport?acc_token=080f0f4d99b137d9bc9073da60e2247c HTTP/1.0
 Authorization: Basic YnJva2VyOg==
-Content-Length: 442
+Content-Length: 438
 Content-Type: application/json
 Host: api-sandbox.openprocurement.org
 
@@ -8,7 +8,7 @@ Host: api-sandbox.openprocurement.org
   "data": {
     "documents": [
       {
-        "url": "http://docs-sandbox.openprocurement.org/get/09e43a75ff2234ba9b3e6fe054fc1c81?KeyID=a8968c46&Signature=7QGPjbGPNY%2FzOtVCHAnUt%2FMAphXcnVRk3UH2K%2FztIIKhL2kd3KW7XJeABbkBzZWvRegr1U8%2BFyxb7jdaThYqCQ%3D%3D", 
+        "url": "http://docs-sandbox.openprocurement.org/get/d10a57580b723a1f8a70ad0b63676fbe?KeyID=a8968c46&Signature=Xo71bIAsiSXQZs%2FALVtFNyYz3jxlP7fgm3jUX0AN8QiTnl37OgtmFPZS%2BN8BHasF9HTtNZ1ldEpuqeLwcsT6Cw%3D%3D", 
         "title": "requirements.doc", 
         "hash": "md5:00000000000000000000000000000000", 
         "format": "application/msword"
@@ -29,10 +29,10 @@ Content-Type: application/json; charset=UTF-8
       {
         "hash": "md5:00000000000000000000000000000000", 
         "title": "requirements.doc", 
-        "url": "http://docs-sandbox.openprocurement.org/get/09e43a75ff2234ba9b3e6fe054fc1c81?KeyID=a8968c46&Signature=7QGPjbGPNY%2FzOtVCHAnUt%2FMAphXcnVRk3UH2K%2FztIIKhL2kd3KW7XJeABbkBzZWvRegr1U8%2BFyxb7jdaThYqCQ%3D%3D", 
+        "url": "http://docs-sandbox.openprocurement.org/get/d10a57580b723a1f8a70ad0b63676fbe?KeyID=a8968c46&Signature=Xo71bIAsiSXQZs%2FALVtFNyYz3jxlP7fgm3jUX0AN8QiTnl37OgtmFPZS%2BN8BHasF9HTtNZ1ldEpuqeLwcsT6Cw%3D%3D", 
         "format": "application/msword", 
         "datePublished": "2018-01-07T02:00:00+02:00", 
-        "id": "b067a74969693a33b9a730433642dd49", 
+        "id": "2dcc8d5c73ed39698e3d68ef3de22372", 
         "dateModified": "2018-01-07T02:00:00+02:00"
       }
     ], 

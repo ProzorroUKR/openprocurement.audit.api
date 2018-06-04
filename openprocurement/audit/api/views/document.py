@@ -5,7 +5,7 @@ from openprocurement.audit.api.utils import (
     apply_patch,
     APIResource,
     set_ownership,
-)
+    set_author)
 from openprocurement.api.utils import (
     get_file,
     update_file_content_type,
@@ -45,7 +45,7 @@ class MonitoringsDocumentBaseResource(APIResource):
         Monitoring Document Upload
         """
         document = upload_file(self.request)
-        set_ownership(document, self.request, 'author')
+        set_author(document, self.request, 'author')
         documents = self.context.documents
         documents.append(document)
         if save_monitoring(self.request):
@@ -81,7 +81,7 @@ class MonitoringsDocumentBaseResource(APIResource):
         """
         parent = self.request.context.__parent__
         document = upload_file(self.request)
-        set_ownership(document, self.request, 'author')
+        set_author(document, self.request, 'author')
         parent.documents.append(document)
         if save_monitoring(self.request):
             self.LOGGER.info('Updated {} monitoring document {}'.format(self.document_of, document.id),

@@ -174,14 +174,12 @@ def validate_credentials_generate(request):
     if not token:
         raise_operation_error(request, 'No access token was provided')
 
-    client = TendersClient(
-        request.registry.api_token,
-        host_url=request.registry.api_server,
-        api_version=request.registry.api_version,
-    )
-
     try:
-        response = client.extract_credentials(request.validated['monitoring'].tender_id)
+        response = TendersClient(
+            request.registry.api_token,
+            host_url=request.registry.api_server,
+            api_version=request.registry.api_version,
+        ).extract_credentials(request.validated['monitoring'].tender_id)
     except ResourceNotFound:
         raise_operation_error(request, 'Tender {} not found'.format(request.validated['monitoring'].tender_id))
     else:

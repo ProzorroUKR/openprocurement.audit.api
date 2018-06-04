@@ -1,6 +1,5 @@
 from uuid import uuid4
 
-from openprocurement.api.auth import authenticated_role, get_local_roles
 from openprocurement.api.constants import SANDBOX_MODE
 from openprocurement.api.utils import get_now
 from openprocurement.api.models import Model, Revision, Period, Identifier, Address, ContactPoint

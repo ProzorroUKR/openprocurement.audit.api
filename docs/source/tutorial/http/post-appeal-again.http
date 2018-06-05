@@ -1,0 +1,35 @@
+PUT /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/appeal?acc_token=9d744c58b942352783fb74b13143d83d HTTP/1.0
+Authorization: Basic YnJva2VyOg==
+Content-Length: 400
+Content-Type: application/json
+Host: api-sandbox.openprocurement.org
+
+{
+  "data": {
+    "documents": [
+      {
+        "url": "http://docs-sandbox.openprocurement.org/get/1701d621ccb839bfac261422da1d1136?KeyID=a8968c46&Signature=hnnDkpte8CxyApH4tiU6VooDtR2FRoJBFARzBQl2%2FMZuOXWmXu7ITCwGM6nlRUw4jKRJ4jrwLx%2Fx3A4H9hRnBg%3D%3D", 
+        "title": "another-letter.doc", 
+        "hash": "md5:00000000000000000000000000000000", 
+        "format": "application/msword"
+      }
+    ], 
+    "description": "Addition to the appeal description"
+  }
+}
+
+
+403 Forbidden
+Content-Type: application/json; charset=UTF-8
+
+{
+  "status": "error", 
+  "errors": [
+    {
+      "description": "Can't post another appeal", 
+      "location": "body", 
+      "name": "data"
+    }
+  ]
+}
+

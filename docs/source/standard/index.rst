@@ -15,6 +15,7 @@ areas that were not covered by it.
    conclusion
    decision
    cancellation
+   appeal
    party
    date
    period

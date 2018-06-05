@@ -182,3 +182,26 @@ class MonitoringsDocumentEliminationResource(MonitoringsDocumentBaseResource):
                validators=(validate_file_update,))
     def put(self):
         return super(MonitoringsDocumentEliminationResource, self).put()
+
+
+@op_resource(name='Monitoring Appeal Documents',
+             collection_path='/monitorings/{monitoring_id}/appeal/documents',
+             path='/monitorings/{monitoring_id}/appeal/documents/{document_id}',
+             description="Monitoring Appeal related binary files (PDFs, etc.)")
+class AppealDocumentResource(MonitoringsDocumentBaseResource):
+    document_of = 'appeal'
+
+    @json_view(permission='create_appeal',
+               validators=(validate_file_upload,))
+    def collection_post(self):
+        return super(AppealDocumentResource, self).collection_post()
+
+    @json_view(permission='create_appeal',
+               validators=(validate_file_update,))
+    def patch(self):
+        return super(AppealDocumentResource, self).patch()
+
+    @json_view(permission='create_appeal',
+               validators=(validate_file_update,))
+    def put(self):
+        return super(AppealDocumentResource, self).put()

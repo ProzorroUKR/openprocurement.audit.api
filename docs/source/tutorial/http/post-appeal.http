@@ -1,0 +1,44 @@
+PUT /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/appeal?acc_token=9d744c58b942352783fb74b13143d83d HTTP/1.0
+Authorization: Basic YnJva2VyOg==
+Content-Length: 382
+Content-Type: application/json
+Host: api-sandbox.openprocurement.org
+
+{
+  "data": {
+    "documents": [
+      {
+        "url": "http://docs-sandbox.openprocurement.org/get/7850c79389b33a93851c884cad4c69ef?KeyID=a8968c46&Signature=j%2FzwKfKs7vhDJogZDovA%2F2P1Q9TAOAHs5WnV5POcn6sfeKSAnUo%2FxdzQyOWdmtcA5xF%2Frdzs%2BR7jxwF4ZxBmAw%3D%3D", 
+        "title": "letter.doc", 
+        "hash": "md5:00000000000000000000000000000000", 
+        "format": "application/msword"
+      }
+    ], 
+    "description": "Appeal description"
+  }
+}
+
+
+200 OK
+Content-Type: application/json; charset=UTF-8
+
+{
+  "data": {
+    "dateCreated": "2018-01-06T09:00:00+02:00", 
+    "documents": [
+      {
+        "hash": "md5:00000000000000000000000000000000", 
+        "author": "broker", 
+        "title": "letter.doc", 
+        "url": "http://docs-sandbox.openprocurement.org/get/7850c79389b33a93851c884cad4c69ef?KeyID=a8968c46&Signature=j%2FzwKfKs7vhDJogZDovA%2F2P1Q9TAOAHs5WnV5POcn6sfeKSAnUo%2FxdzQyOWdmtcA5xF%2Frdzs%2BR7jxwF4ZxBmAw%3D%3D", 
+        "format": "application/msword", 
+        "datePublished": "2018-01-06T09:00:00+02:00", 
+        "id": "ea34e5b460df3d338861f37142dc8764", 
+        "dateModified": "2018-01-06T09:00:00+02:00"
+      }
+    ], 
+    "description": "Appeal description", 
+    "datePublished": "2018-01-06T09:00:00+02:00"
+  }
+}
+

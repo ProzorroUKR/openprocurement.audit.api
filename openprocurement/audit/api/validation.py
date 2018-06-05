@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from hashlib import sha512
+from restkit import ResourceNotFound
 
 from openprocurement.api.utils import update_logging_context, raise_operation_error, error_handler, forbidden, get_now
 from openprocurement.api.validation import validate_data
 from openprocurement_client.client import TendersClient
-from restkit import ResourceNotFound
 
-from openprocurement.audit.api.models import Monitoring, Dialogue, EliminationReport, Party
 from openprocurement.audit.api.utils import get_access_token
+from openprocurement.audit.api.models import Monitoring, Dialogue, EliminationReport, Party, Appeal
 
 
 def validate_monitoring_data(request):
@@ -204,3 +204,16 @@ def validate_elimination_report_data(request):
 def validate_patch_elimination_report_data(request):
     _validate_elimination_report_status(request)
     return validate_data(request, EliminationReport, partial=True)
+
+
+def validate_appeal_data(request):
+    monitoring = request.validated['monitoring']
+    if monitoring.appeal is not None:
+        raise_operation_error(request, "Can't post another appeal")
+
+    if monitoring.conclusion is None or monitoring.conclusion.datePublished is None:
+        request.errors.status = 422
+        request.errors.add('body', 'appeal', 'Can\'t post before conclusion is published')
+        raise error_handler(request.errors)
+
+    return validate_data(request, Appeal)

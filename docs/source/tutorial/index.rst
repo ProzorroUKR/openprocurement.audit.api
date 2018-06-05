@@ -11,6 +11,7 @@ Tutorial
    publishing
    dialogue
    conclusion
+   appeal
    report
    resolution
    completing

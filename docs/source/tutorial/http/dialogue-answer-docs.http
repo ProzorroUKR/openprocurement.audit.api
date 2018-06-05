@@ -1,4 +1,4 @@
-POST /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/dialogues/0a1f71453ec5321c8a8a1c2c22edbba6/documents?acc_token=9d744c58b942352783fb74b13143d83d HTTP/1.0
+POST /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/dialogues/f0ef0fc1e96638e8b2f09e00726d4a23/documents?acc_token=080f0f4d99b137d9bc9073da60e2247c HTTP/1.0
 Authorization: Basic YnJva2VyOg==
 Content-Length: 323
 Content-Type: application/json
@@ -6,7 +6,7 @@ Host: api-sandbox.openprocurement.org
 
 {
   "data": {
-    "url": "http://docs-sandbox.openprocurement.org/get/2a73ab9646ee3b899ecbb07361966d89?KeyID=a8968c46&Signature=JBl8LGeIBdj5uFJo9ghXu1vOWyyKC2%2FCbvSXhLNWFphPel5JkwW7loKZkb%2BHJ2CjO68%2BDbtrkN920pJwV9qbDQ%3D%3D", 
+    "url": "http://docs-sandbox.openprocurement.org/get/fb9408dd46443edf8cf85a851da3bc83?KeyID=a8968c46&Signature=R7YXJB4Lhtq4prcd4MJgwaUfoQQKATEuyOwh2VjE%2FT7bRwsb2Sm%2FShmF6AskA%2BFLozBq8YQbjnanB02PbgBZAw%3D%3D", 
     "title": "dolor.doc", 
     "hash": "md5:00000000000000000000000000000000", 
     "format": "application/msword"
@@ -16,17 +16,17 @@ Host: api-sandbox.openprocurement.org
 
 201 Created
 Content-Type: application/json; charset=UTF-8
-Location: http://api-sandbox.openprocurement.org/api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/dialogues/0a1f71453ec5321c8a8a1c2c22edbba6/documents/3df142fc4c8c3dca893126bea1b14c35
+Location: http://api-sandbox.openprocurement.org/api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/dialogues/f0ef0fc1e96638e8b2f09e00726d4a23/documents/9baadfc6bcf53ba6a12f5977dded9e1a
 
 {
   "data": {
     "hash": "md5:00000000000000000000000000000000", 
-    "author": "broker", 
+    "author": "tender_owner", 
     "title": "dolor.doc", 
-    "url": "http://docs-sandbox.openprocurement.org/get/2a73ab9646ee3b899ecbb07361966d89?KeyID=a8968c46&Signature=nTSS9T5LSB7dqk1geNHPLCZzpRHNQMGbDZeGZ26P8qiPXoJb7d8JBOa0GS7xBRXlNLeq4MWhN9lAsxAPM94lAg%253D%253D", 
+    "url": "http://docs-sandbox.openprocurement.org/get/fb9408dd46443edf8cf85a851da3bc83?KeyID=a8968c46&Signature=HpS6JJAjj9YLIe0uHia%252Bg8v3ZD%252B%2F42W7areeF5kxR1d9IBMVbBxJBYzoYDxj1QjhQdO%252BIJTjxiDEu8%252BUs%2FsRDQ%253D%253D", 
     "format": "application/msword", 
     "datePublished": "2018-01-04T02:10:00+02:00", 
-    "id": "3df142fc4c8c3dca893126bea1b14c35", 
+    "id": "9baadfc6bcf53ba6a12f5977dded9e1a", 
     "dateModified": "2018-01-04T02:10:00+02:00"
   }
 }

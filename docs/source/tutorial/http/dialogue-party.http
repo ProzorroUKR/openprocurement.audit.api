@@ -32,7 +32,7 @@ Host: api-sandbox.openprocurement.org
 
 201 Created
 Content-Type: application/json; charset=UTF-8
-Location: http://api-sandbox.openprocurement.org/api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/parties/a8522817b4003f4aa62deb36821d476c
+Location: http://api-sandbox.openprocurement.org/api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/parties/08c7d830025f391ba6b57584516df9a3
 
 {
   "data": {
@@ -56,7 +56,7 @@ Location: http://api-sandbox.openprocurement.org/api/2.4/monitorings/3f193d61e4c
       "id": "40165856", 
       "uri": "http://www.dkrs.gov.ua"
     }, 
-    "id": "a8522817b4003f4aa62deb36821d476c"
+    "id": "08c7d830025f391ba6b57584516df9a3"
   }
 }
 

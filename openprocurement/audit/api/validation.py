@@ -1,10 +1,12 @@
 # -*- coding: utf-8 -*-
+from hashlib import sha512
+from restkit import ResourceNotFound
+
 from openprocurement.api.utils import update_logging_context, raise_operation_error, error_handler, forbidden, get_now
 from openprocurement.api.validation import validate_data
-from restkit import ResourceNotFound
-from hashlib import sha512
-
 from openprocurement_client.client import TendersClient
+
+from openprocurement.audit.api.utils import get_access_token
 from openprocurement.audit.api.models import Monitoring, Dialogue, EliminationReport, Party, Appeal
 
 
@@ -132,7 +134,7 @@ def validate_post_dialogue_allowed(request):
     monitoring = request.validated['monitoring']
     status_current = monitoring.status
     if status_current in ('addressed', 'declined'):
-        if request.authenticated_userid != request.validated['monitoring'].tender_owner:
+        if request.authenticated_userid != monitoring.tender_owner:
             raise forbidden(request)
         if sum(dialogue.dialogueOf == 'conclusion' for dialogue in monitoring.dialogues):
             raise_operation_error(request, 'Can\'t add more than one conclusion dialogue')
@@ -142,8 +144,8 @@ def validate_post_dialogue_allowed(request):
 
 def validate_patch_dialogue_allowed(request):
     dialogue = request.validated['dialogue']
-    owner = dialogue['author']
-    if request.authenticated_userid == owner:
+    author = dialogue['author']
+    if request.monitoring_role == author:
         raise forbidden(request)
     monitoring = request.validated['monitoring']
     status_current = monitoring.status
@@ -168,17 +170,21 @@ def validate_document_conclusion_upload_allowed(request):
 
 
 def validate_credentials_generate(request):
-    client = TendersClient(
-        request.registry.api_token,
-        host_url=request.registry.api_server,
-        api_version=request.registry.api_version,
-    )
+    token = get_access_token(request)
+    if not token:
+        raise_operation_error(request, 'No access token was provided')
+
     try:
-        response = client.extract_credentials(request.validated['monitoring'].tender_id)
-        if sha512(request.params.get('acc_token')).hexdigest() != response['data']['tender_token']:
-            raise forbidden(request)
+        response = TendersClient(
+            request.registry.api_token,
+            host_url=request.registry.api_server,
+            api_version=request.registry.api_version,
+        ).extract_credentials(request.validated['monitoring'].tender_id)
     except ResourceNotFound:
         raise_operation_error(request, 'Tender {} not found'.format(request.validated['monitoring'].tender_id))
+    else:
+        if sha512(token).hexdigest() != response['data']['tender_token']:
+            raise forbidden(request)
 
 
 def _validate_elimination_report_status(request):

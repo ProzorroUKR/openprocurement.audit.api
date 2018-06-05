@@ -21,8 +21,8 @@ from openprocurement.audit.api.utils import (
     APIResource,
     generate_monitoring_id,
     generate_period,
-    set_ownership
-)
+    set_ownership,
+    set_author)
 from openprocurement.audit.api.design import (
     monitorings_real_by_dateModified_view,
     monitorings_test_by_dateModified_view,
@@ -381,12 +381,12 @@ class MonitoringResource(APIResource):
 
         monitoring.dateModified = get_now()
         if monitoring_old_status == 'draft' and monitoring.status == 'active':
-            set_ownership(monitoring.decision.documents, self.request, 'author')
+            set_author(monitoring.decision.documents, self.request, 'author')
             monitoring.monitoringPeriod = generate_period(
                 monitoring.dateModified, MONITORING_TIME, self.context)
             monitoring.decision.datePublished = monitoring.dateModified
         elif monitoring_old_status == 'active' and monitoring.status == 'addressed':
-            set_ownership(monitoring.conclusion.documents, self.request, 'author')
+            set_author(monitoring.conclusion.documents, self.request, 'author')
             monitoring.conclusion.datePublished = monitoring.dateModified
             monitoring.eliminationPeriod = generate_period(
                 monitoring.dateModified, ELIMINATION_PERIOD_TIME, self.context)
@@ -403,7 +403,7 @@ class MonitoringResource(APIResource):
             monitoring_old_status == 'declined' and monitoring.status == 'stopped',
             monitoring_old_status == 'addressed' and monitoring.status == 'stopped'
         ]):
-            set_ownership(monitoring.cancellation.documents, self.request, 'author')
+            set_author(monitoring.cancellation.documents, self.request, 'author')
             monitoring.cancellation.datePublished = monitoring.dateModified
 
         save_monitoring(self.request)

@@ -156,7 +156,10 @@ def set_ownership(data, request, fieldname='owner'):
 
 def set_author(data, request, fieldname='author'):
     for item in data if isinstance(data, list) else [data]:
-        setattr(item, fieldname, request.monitoring_role)
+        setattr(item, fieldname, get_monitoring_role(request.authenticated_role))
+
+def get_monitoring_role(role):
+    return 'monitoring_owner' if role == 'sas' else 'tender_owner'
 
 
 def calculate_business_date(date_obj, timedelta_obj, context=None,

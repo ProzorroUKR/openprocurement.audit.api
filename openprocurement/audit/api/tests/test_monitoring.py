@@ -199,6 +199,7 @@ class ActiveMonitoringResourceTest(BaseWebTest):
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["status"], "stopped")
+        self.assertIn('cancellation', response.json['data'])
 
 
 @freeze_time('2018-01-01T12:00:00.000000+03:00')
@@ -243,6 +244,7 @@ class AddressedMonitoringResourceTest(BaseWebTest):
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["status"], "stopped")
+        self.assertIn('cancellation', response.json['data'])
 
 
 @freeze_time('2018-01-01T12:00:00.000000+03:00')
@@ -298,6 +300,7 @@ class DeclinedMonitoringResourceTest(BaseWebTest):
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["status"], "stopped")
+        self.assertIn('cancellation', response.json['data'])
 
 
 def suite():

@@ -21,6 +21,33 @@ Content-Type: application/json; charset=UTF-8
       "startDate": "2018-01-05T02:25:00+02:00", 
       "endDate": "2018-01-22T02:25:00+02:00"
     }, 
+    "appeal": {
+      "dateCreated": "2018-01-06T09:00:00+02:00", 
+      "documents": [
+        {
+          "hash": "md5:00000000000000000000000000000000", 
+          "author": "broker", 
+          "title": "letter(0).doc", 
+          "url": "http://docs-sandbox.openprocurement.org/get/714870073df1301e8f75b2ebd07e867c?KeyID=a8968c46&Signature=3lQAdLZPvSWChJPTmjpsByS0rVkJZpQnD83UcaUTvZuMgMghkY1W8n7I3TJuUfhIZif%2BgvpGSqq6BltkAk%2BWAg%3D%3D", 
+          "format": "application/json", 
+          "datePublished": "2018-01-06T09:00:00+02:00", 
+          "id": "2dcc8d5c73ed39698e3d68ef3de22372", 
+          "dateModified": "2018-01-06T09:00:00+02:00"
+        }, 
+        {
+          "hash": "md5:00000000000000000000000000000000", 
+          "author": "tender_owner", 
+          "title": "another-letter.doc", 
+          "url": "http://docs-sandbox.openprocurement.org/get/f660dd9bf4b23e229e18511469a4c22c?KeyID=a8968c46&Signature=cAvVIOChBTPQEfDxgqy5yiBwi7Vq5pub2SnKepKf%2FD3dBTVdPIDJIl%2FDmpuFRMVYSArIoy2ECJjdETwWeE8RAw%253D%253D", 
+          "format": "application/msword", 
+          "datePublished": "2018-01-06T10:00:00+02:00", 
+          "id": "0a76aea25eff35bd85875b70af7d347c", 
+          "dateModified": "2018-01-06T10:00:00+02:00"
+        }
+      ], 
+      "description": "Appeal description", 
+      "datePublished": "2018-01-06T09:00:00+02:00"
+    }, 
     "dialogues": [
       {
         "documents": [
@@ -130,10 +157,10 @@ Content-Type: application/json; charset=UTF-8
         {
           "hash": "md5:00000000000000000000000000000000", 
           "title": "requirements.doc", 
-          "url": "http://docs-sandbox.openprocurement.org/get/d10a57580b723a1f8a70ad0b63676fbe?KeyID=a8968c46&Signature=Xo71bIAsiSXQZs%2FALVtFNyYz3jxlP7fgm3jUX0AN8QiTnl37OgtmFPZS%2BN8BHasF9HTtNZ1ldEpuqeLwcsT6Cw%3D%3D", 
+          "url": "http://docs-sandbox.openprocurement.org/get/e4727d0d58d83a13abb86a15563c9ad8?KeyID=a8968c46&Signature=zIBcSL6LKIUFwe6557bs9bsn8GsFqqN6ebsFQ7102P7B4Asy3BmEyQ6VMcPUwe3P5OlCb5kSalDv9kOed8SgDA%3D%3D", 
           "format": "application/msword", 
           "datePublished": "2018-01-07T02:00:00+02:00", 
-          "id": "2dcc8d5c73ed39698e3d68ef3de22372", 
+          "id": "608bcbb28660351fa2870274f2f36010", 
           "dateModified": "2018-01-07T02:00:00+02:00"
         }
       ], 
@@ -149,10 +176,10 @@ Content-Type: application/json; charset=UTF-8
         {
           "hash": "md5:00000000000000000000000000000000", 
           "title": "sign.p7s", 
-          "url": "http://docs-sandbox.openprocurement.org/get/a98799e46b8635cc8e007a420868989a?KeyID=a8968c46&Signature=1pQNkVcnccS%2FU9Le3tM1KE4jGHhqkHPTpeR8e7NuyWfevJHlYGPgkKJblQfcTiH5mpU8sId3VglqbO%2F8n7UoDQ%3D%3D", 
+          "url": "http://docs-sandbox.openprocurement.org/get/6ae52624bf25326fb952e255f495a921?KeyID=a8968c46&Signature=4V2t3wVF9xclYspQiz%2B9ZyTjOiCsQPM2y7NclOHlp02ZFkuxFKdA0%2F2K27Wn%2FX7SY1LmhK7mJOPmFpHirzuEBQ%3D%3D", 
           "format": "application/pkcs7-signature", 
           "datePublished": "2018-01-09T02:00:00+02:00", 
-          "id": "a8704548e3ee34e9acf82f68198f41e3", 
+          "id": "4ff806ed7da9307cb467ec13b145e987", 
           "dateModified": "2018-01-09T02:00:00+02:00"
         }
       ], 

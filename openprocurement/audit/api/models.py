@@ -208,20 +208,20 @@ class Monitoring(SchematicsDocument, Model):
 
     @serializable(serialized_name='decision', serialize_when_none=False, type=ModelType(Decision))
     def monitoring_decision(self):
-        role = self.__parent__.request.monitoring_role
-        if self.decision and self.decision.datePublished or role in ('sas', 'monitoring_owner'):
+        role = self.__parent__.request.authenticated_role
+        if self.decision and self.decision.datePublished or role == 'sas':
             return self.decision
 
     @serializable(serialized_name='conclusion', serialize_when_none=False, type=ModelType(Conclusion))
     def monitoring_conclusion(self):
-        role = self.__parent__.request.monitoring_role
-        if self.conclusion and self.conclusion.datePublished or role in ('sas', 'monitoring_owner'):
+        role = self.__parent__.request.authenticated_role
+        if self.conclusion and self.conclusion.datePublished or role == 'sas':
             return self.conclusion
 
-    @serializable(serialized_name='conclusion', serialize_when_none=False, type=ModelType(Cancellation))
+    @serializable(serialized_name='cancellation', serialize_when_none=False, type=ModelType(Cancellation))
     def monitoring_cancellation(self):
-        role = self.__parent__.request.monitoring_role
-        if self.cancellation and self.cancellation.datePublished or role in ('sas', 'monitoring_owner'):
+        role = self.__parent__.request.authenticated_role
+        if self.cancellation and self.cancellation.datePublished or role == 'sas':
             return self.cancellation
 
     def validate_eliminationResolution(self, data, value):
@@ -236,12 +236,6 @@ class Monitoring(SchematicsDocument, Model):
         role = super(Monitoring, self).get_role()
         status = self.__parent__.request.context.status
         return 'edit_{}'.format(status) if role == 'edit' else role
-
-    def __local_roles__(self):
-        return dict([
-            ('{}_{}'.format(self.tender_owner, self.tender_owner_token), 'tender_owner'),
-            ('g:sas', 'monitoring_owner'),
-        ])
 
     def __acl__(self):
         return [

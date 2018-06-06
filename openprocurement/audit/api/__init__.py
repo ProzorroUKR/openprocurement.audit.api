@@ -14,7 +14,6 @@ def includeme(config):
     LOGGER.info('init audit plugin')
     add_design()
     config.add_subscriber(set_logging_context, ContextFound)
-    config.add_request_method(authenticated_role, 'monitoring_role', reify=True)
     config.add_request_method(extract_monitoring, 'monitoring', reify=True)
     config.add_request_method(monitoring_from_data)
     settings = config.get_settings()

@@ -6,7 +6,7 @@ from openprocurement.api.utils import update_logging_context, raise_operation_er
 from openprocurement.api.validation import validate_data
 from openprocurement_client.client import TendersClient
 
-from openprocurement.audit.api.utils import get_access_token
+from openprocurement.audit.api.utils import get_access_token, get_monitoring_role
 from openprocurement.audit.api.models import Monitoring, Dialogue, EliminationReport, Party, Appeal
 
 
@@ -145,7 +145,7 @@ def validate_post_dialogue_allowed(request):
 def validate_patch_dialogue_allowed(request):
     dialogue = request.validated['dialogue']
     author = dialogue['author']
-    if request.monitoring_role == author:
+    if get_monitoring_role(request.authenticated_role) == author:
         raise forbidden(request)
     monitoring = request.validated['monitoring']
     status_current = monitoring.status

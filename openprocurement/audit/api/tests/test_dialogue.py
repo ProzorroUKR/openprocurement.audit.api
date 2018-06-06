@@ -67,6 +67,7 @@ class MonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.json['data']['title'], 'Lorem ipsum')
         self.assertEqual(response.json['data']['description'], 'Lorem ipsum dolor sit amet')
         self.assertEqual(response.json['data']['dateSubmitted'], get_now().isoformat())
+        self.assertEqual(response.json['data']['author'], 'monitoring_owner')
 
     @mock.patch('openprocurement.audit.api.validation.TendersClient')
     def test_dialogue_create_by_tender_owner(self, mock_api_client):
@@ -81,7 +82,6 @@ class MonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
 
         tender_owner_token = response.json['access']['token']
 
-        self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.post_json(
             '/monitorings/{}/dialogues?acc_token={}'.format(self.monitoring_id, tender_owner_token),
             {'data': {
@@ -99,6 +99,7 @@ class MonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.json['data']['title'], 'Lorem ipsum')
         self.assertEqual(response.json['data']['description'], 'Lorem ipsum dolor sit amet')
         self.assertEqual(response.json['data']['dateSubmitted'], get_now().isoformat())
+        self.assertEqual(response.json['data']['author'], 'tender_owner')
 
     def test_monitoring_owner_patch_dialogue_by_monitoring_owner(self):
         response = self.app.post_json(

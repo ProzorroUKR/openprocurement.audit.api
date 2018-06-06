@@ -8,6 +8,9 @@ Appeal
     | |no| Monitoring owner
     | |yes| Tender owner
 
+
+We have already seen how to get ``acc_token`` in :ref:`credentials` section
+
 As soon as the decision is published, tender's owner may point out that the decision has been appealed in court:
 
 .. include:: http/post-appeal.http

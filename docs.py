@@ -288,7 +288,22 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                     status=422
                 )
 
+        # CREDENTIALS
+
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+
+        with freeze_time("2018.01.04 00:00"):
+            with open('docs/source/tutorial/http/dialogue-get-credentials.http', 'w') as self.app.file_obj:
+                response = self.app.patch_json(
+                    '/monitorings/{}/credentials?acc_token={}'.format(monitoring_id, tender_token),
+                    status=200
+                )
+
+        tender_owner_token = response.json['access']['token']
+
         # DIALOGUE
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+
         with freeze_time("2018.01.03 00:00"):
             with open('docs/source/tutorial/http/dialogue-party.http', 'w') as self.app.file_obj:
                 response = self.app.post_json(
@@ -339,15 +354,6 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
             )
 
         self.app.authorization = ('Basic', (self.broker_token, ''))
-
-        with freeze_time("2018.01.04 00:00"):
-            with open('docs/source/tutorial/http/dialogue-get-credentials.http', 'w') as self.app.file_obj:
-                response = self.app.patch_json(
-                    '/monitorings/{}/credentials?acc_token={}'.format(monitoring_id, tender_token),
-                    status=200
-                )
-
-        tender_owner_token = response.json['access']['token']
 
         with freeze_time("2018.01.04 00:05"):
             with open('docs/source/tutorial/http/dialogue-answer.http', 'w') as self.app.file_obj:

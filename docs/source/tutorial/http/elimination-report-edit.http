@@ -1,4 +1,4 @@
-PATCH /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/eliminationReport?acc_token=080f0f4d99b137d9bc9073da60e2247c HTTP/1.0
+PATCH /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/eliminationReport?acc_token=08c7d830025f391ba6b57584516df9a3 HTTP/1.0
 Authorization: Basic YnJva2VyOg==
 Content-Length: 191
 Content-Type: application/json
@@ -21,10 +21,10 @@ Content-Type: application/json; charset=UTF-8
       {
         "hash": "md5:00000000000000000000000000000000", 
         "title": "requirements.doc", 
-        "url": "http://docs-sandbox.openprocurement.org/get/6bb62d4103c036d5b47eee6a0c2bf1a6?KeyID=a8968c46&Signature=xcE0Hbu2Uq2QfGfbvPykxNo%2BAtR7C12W%2FC19rd%2B%2FgSR%2BNTjzxkbRVlLT2%2Bb16tBbIT2fMNf3JJVJe0hl1g4AAg%3D%3D", 
+        "url": "http://docs-sandbox.openprocurement.org/get/ce77416b53cf37ce8c7bf30745f15281?KeyID=a8968c46&Signature=lWtSCByp%2FXxJwXWCCkmVw9V4FBoytJoCeyLyA7mqfgkPN39L%2FtULuGyv7z5lZ%2Fa8hBP10dankPmCzUZyePEUCg%3D%3D", 
         "format": "application/msword", 
         "datePublished": "2018-01-07T02:00:00+02:00", 
-        "id": "8050f9d1b1993521811d62c74493302f", 
+        "id": "e8a90844fb71399da2d16f58d6a0524e", 
         "dateModified": "2018-01-07T02:00:00+02:00"
       }
     ], 

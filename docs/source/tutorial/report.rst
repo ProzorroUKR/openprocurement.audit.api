@@ -13,7 +13,7 @@ As soon as the monitoring in ``addressed`` status, its tender owner can provide 
 .. include:: http/elimination-report-post.http
    :code:
 
-We have already seen how to get ``tender_token`` in :ref:`dialogue` section
+We have already seen how to get ``acc_token`` in :ref:`credentials` section
 
 Now let's update our report:
 

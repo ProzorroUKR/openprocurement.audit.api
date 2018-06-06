@@ -1,6 +1,6 @@
-POST /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/dialogues?acc_token=080f0f4d99b137d9bc9073da60e2247c HTTP/1.0
+POST /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/dialogues?acc_token=08c7d830025f391ba6b57584516df9a3 HTTP/1.0
 Authorization: Basic YnJva2VyOg==
-Content-Length: 405
+Content-Length: 419
 Content-Type: application/json
 Host: api-sandbox.openprocurement.org
 
@@ -8,7 +8,7 @@ Host: api-sandbox.openprocurement.org
   "data": {
     "documents": [
       {
-        "url": "http://docs-sandbox.openprocurement.org/get/6b67646055173e1db0bfc689c9da55b4?KeyID=a8968c46&Signature=FG10cgUEwhgiMhAFI4SlfoorRNFx%2FRZF3YxohVIfWQhjT1jSuQO%2BOQ5EVkje74IaHHbw6r4bRTBywHcgCCXKAA%3D%3D", 
+        "url": "http://docs-sandbox.openprocurement.org/get/c836ccbe7e7d3fc1b95d04789b9cde20?KeyID=a8968c46&Signature=9geTTiuf5qQ%2BCpqtiKAU%2FmPl3%2Fn6%2Fy8W7%2FVwbB56KmGp%2B5ffNAho%2Fs0jubG3il5dNcO%2BTXkNh0j%2FE9YlD96wCw%3D%3D", 
         "title": "dolor.doc", 
         "hash": "md5:00000000000000000000000000000000", 
         "format": "application/msword"
@@ -22,7 +22,7 @@ Host: api-sandbox.openprocurement.org
 
 201 Created
 Content-Type: application/json; charset=UTF-8
-Location: http://api-sandbox.openprocurement.org/api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/dialogues/86fe3e7cec053fac9f74c45b87820b3e
+Location: http://api-sandbox.openprocurement.org/api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/dialogues/bd061384123233bb9c5b40fb32dd13a7
 
 {
   "data": {
@@ -31,10 +31,10 @@ Location: http://api-sandbox.openprocurement.org/api/2.4/monitorings/3f193d61e4c
         "hash": "md5:00000000000000000000000000000000", 
         "author": "tender_owner", 
         "title": "dolor.doc", 
-        "url": "http://docs-sandbox.openprocurement.org/get/6b67646055173e1db0bfc689c9da55b4?KeyID=a8968c46&Signature=FG10cgUEwhgiMhAFI4SlfoorRNFx%2FRZF3YxohVIfWQhjT1jSuQO%2BOQ5EVkje74IaHHbw6r4bRTBywHcgCCXKAA%3D%3D", 
+        "url": "http://docs-sandbox.openprocurement.org/get/c836ccbe7e7d3fc1b95d04789b9cde20?KeyID=a8968c46&Signature=9geTTiuf5qQ%2BCpqtiKAU%2FmPl3%2Fn6%2Fy8W7%2FVwbB56KmGp%2B5ffNAho%2Fs0jubG3il5dNcO%2BTXkNh0j%2FE9YlD96wCw%3D%3D", 
         "format": "application/msword", 
         "datePublished": "2018-01-06T02:00:00+02:00", 
-        "id": "33448159b8bd346087185a5de88530b9", 
+        "id": "0a76aea25eff35bd85875b70af7d347c", 
         "dateModified": "2018-01-06T02:00:00+02:00"
       }
     ], 
@@ -42,7 +42,7 @@ Location: http://api-sandbox.openprocurement.org/api/2.4/monitorings/3f193d61e4c
     "title": "Sit amet", 
     "author": "tender_owner", 
     "dateSubmitted": "2018-01-06T02:00:00+02:00", 
-    "id": "86fe3e7cec053fac9f74c45b87820b3e", 
+    "id": "bd061384123233bb9c5b40fb32dd13a7", 
     "dialogueOf": "conclusion"
   }
 }

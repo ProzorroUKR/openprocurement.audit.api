@@ -1,12 +1,12 @@
-POST /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/appeal/documents?acc_token=080f0f4d99b137d9bc9073da60e2247c HTTP/1.0
+POST /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/appeal/documents?acc_token=08c7d830025f391ba6b57584516df9a3 HTTP/1.0
 Authorization: Basic YnJva2VyOg==
-Content-Length: 330
+Content-Length: 326
 Content-Type: application/json
 Host: api-sandbox.openprocurement.org
 
 {
   "data": {
-    "url": "http://docs-sandbox.openprocurement.org/get/fa41ed1a27f23f628cdc5aa1f9c17582?KeyID=a8968c46&Signature=crx4EVgIxihFa05lWxD1na5hnG27Atfx9lFvQRzpqx%2FuSnqz25Q1mPlPIJpgSlszWHShf3ynP0jm8kcjjd%2FnBA%3D%3D", 
+    "url": "http://docs-sandbox.openprocurement.org/get/27f7995a7bee3fd3bf86eaaacf25d983?KeyID=a8968c46&Signature=63aip54xOHUtYQoezgyDBDMMP1trN1rHJ1TZL7ApSoyGj0EAVnrv43329kOVQUsbo5zPHMyKDPHSxaSpQNUaBQ%3D%3D", 
     "title": "another-letter.doc", 
     "hash": "md5:00000000000000000000000000000000", 
     "format": "application/msword"
@@ -16,17 +16,17 @@ Host: api-sandbox.openprocurement.org
 
 201 Created
 Content-Type: application/json; charset=UTF-8
-Location: http://api-sandbox.openprocurement.org/api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/appeal/documents/7a85647c4d803eaeb52234ed707058d6
+Location: http://api-sandbox.openprocurement.org/api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/appeal/documents/453a7f88403c32738687625b2809752b
 
 {
   "data": {
     "hash": "md5:00000000000000000000000000000000", 
     "author": "tender_owner", 
     "title": "another-letter.doc", 
-    "url": "http://docs-sandbox.openprocurement.org/get/fa41ed1a27f23f628cdc5aa1f9c17582?KeyID=a8968c46&Signature=cO7aYeZIwjUkvhxyxMzS2tZ%252BACTATaV4xGjw5o0C1cmtmOO9xDYguR%252BlyC2%2FiaJ6Htncp4WGy0rw%2FabhzW1yCA%253D%253D", 
+    "url": "http://docs-sandbox.openprocurement.org/get/27f7995a7bee3fd3bf86eaaacf25d983?KeyID=a8968c46&Signature=daW8agGganvXSFsoyhesPgbqD2dRYGWSEHNl3jHgXNuKNicstnU4Ncz8mXYEpDuzR3fhHkLPldT0RbIBGrA%2FDA%253D%253D", 
     "format": "application/msword", 
     "datePublished": "2018-01-06T10:00:00+02:00", 
-    "id": "7a85647c4d803eaeb52234ed707058d6", 
+    "id": "453a7f88403c32738687625b2809752b", 
     "dateModified": "2018-01-06T10:00:00+02:00"
   }
 }

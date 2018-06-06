@@ -1,6 +1,6 @@
 PATCH /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073 HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
-Content-Length: 583
+Content-Length: 579
 Content-Type: application/json
 Host: api-sandbox.openprocurement.org
 
@@ -9,7 +9,7 @@ Host: api-sandbox.openprocurement.org
     "conclusion": {
       "documents": [
         {
-          "url": "http://docs-sandbox.openprocurement.org/get/0a31361cda3e302b87a17bc26239151a?KeyID=a8968c46&Signature=BPX6Jw8RTGp3ASHAfhrAaHRNjzkU%2BPF%2FfdQjqOSc6qDrEX2PZ8rCdr8H0m0IpKdhHQCpW2f7pOL3tDdqufY8Cw%3D%3D", 
+          "url": "http://docs-sandbox.openprocurement.org/get/d38163200329364ca55886e5d9534ee8?KeyID=a8968c46&Signature=t4TxN4Sqz9coN6tBhTOyElXeBahactu721kEMcDzCl9kA41jySGSlxD14SgH4EwkY4nwpd47vMECGlcJid4WBA%3D%3D", 
           "title": "New document(2).doc", 
           "hash": "md5:00000000000000000000000000000000", 
           "format": "application/msword"
@@ -80,6 +80,26 @@ Content-Type: application/json; charset=UTF-8
         "dateSubmitted": "2018-01-03T02:05:00+02:00", 
         "answer": "Sit amet", 
         "id": "f0ef0fc1e96638e8b2f09e00726d4a23", 
+        "dialogueOf": "decision"
+      }, 
+      {
+        "documents": [
+          {
+            "hash": "md5:00000000000000000000000000000000", 
+            "author": "tender_owner", 
+            "title": "ipsum.doc", 
+            "url": "http://docs-sandbox.openprocurement.org/get/7f87544ceaf934bca700c13082feafa4?KeyID=a8968c46&Signature=EbV0fyG1X14nxWqMkg%2FHtOsjSAq4RXdpFl%2FEWoDldk0wYmcHv6mmIo2MtsdMdRLK5huRhaFhRW7lZuHzJRQpBg%3D%3D", 
+            "format": "application/msword", 
+            "datePublished": "2018-01-03T02:05:00+02:00", 
+            "id": "2d3f26a21dbe3f4083c5457670f85175", 
+            "dateModified": "2018-01-03T02:05:00+02:00"
+          }
+        ], 
+        "description": "Lorem ipsum dolor sit amet.", 
+        "title": "Dolor sit amet", 
+        "author": "tender_owner", 
+        "dateSubmitted": "2018-01-03T02:05:00+02:00", 
+        "id": "5c15ae7167ba3407865740149592ec31", 
         "dialogueOf": "decision"
       }
     ], 
@@ -201,10 +221,10 @@ Content-Type: application/json; charset=UTF-8
         {
           "hash": "md5:00000000000000000000000000000000", 
           "title": "New document(2).doc", 
-          "url": "http://docs-sandbox.openprocurement.org/get/0a31361cda3e302b87a17bc26239151a?KeyID=a8968c46&Signature=BPX6Jw8RTGp3ASHAfhrAaHRNjzkU%2BPF%2FfdQjqOSc6qDrEX2PZ8rCdr8H0m0IpKdhHQCpW2f7pOL3tDdqufY8Cw%3D%3D", 
+          "url": "http://docs-sandbox.openprocurement.org/get/d38163200329364ca55886e5d9534ee8?KeyID=a8968c46&Signature=t4TxN4Sqz9coN6tBhTOyElXeBahactu721kEMcDzCl9kA41jySGSlxD14SgH4EwkY4nwpd47vMECGlcJid4WBA%3D%3D", 
           "format": "application/msword", 
           "datePublished": "2018-01-05T02:15:00+02:00", 
-          "id": "b486719eea1c3ccd8bf83356242f7095", 
+          "id": "1f29d067c2ba3f04a9d1773889ed2a24", 
           "dateModified": "2018-01-05T02:15:00+02:00"
         }
       ], 

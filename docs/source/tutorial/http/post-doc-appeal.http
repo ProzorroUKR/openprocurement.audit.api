@@ -1,12 +1,12 @@
 POST /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/appeal/documents?acc_token=080f0f4d99b137d9bc9073da60e2247c HTTP/1.0
 Authorization: Basic YnJva2VyOg==
-Content-Length: 326
+Content-Length: 330
 Content-Type: application/json
 Host: api-sandbox.openprocurement.org
 
 {
   "data": {
-    "url": "http://docs-sandbox.openprocurement.org/get/f660dd9bf4b23e229e18511469a4c22c?KeyID=a8968c46&Signature=mTVWoTCkseP50NmoI64MmKNqIDbFMkfff5V30pXE3zWajDIRzWdYmarKvQo33j5bdMYxIJjH4IRt1blKPSJjCA%3D%3D", 
+    "url": "http://docs-sandbox.openprocurement.org/get/fa41ed1a27f23f628cdc5aa1f9c17582?KeyID=a8968c46&Signature=crx4EVgIxihFa05lWxD1na5hnG27Atfx9lFvQRzpqx%2FuSnqz25Q1mPlPIJpgSlszWHShf3ynP0jm8kcjjd%2FnBA%3D%3D", 
     "title": "another-letter.doc", 
     "hash": "md5:00000000000000000000000000000000", 
     "format": "application/msword"
@@ -16,17 +16,17 @@ Host: api-sandbox.openprocurement.org
 
 201 Created
 Content-Type: application/json; charset=UTF-8
-Location: http://api-sandbox.openprocurement.org/api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/appeal/documents/0a76aea25eff35bd85875b70af7d347c
+Location: http://api-sandbox.openprocurement.org/api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/appeal/documents/7a85647c4d803eaeb52234ed707058d6
 
 {
   "data": {
     "hash": "md5:00000000000000000000000000000000", 
     "author": "tender_owner", 
     "title": "another-letter.doc", 
-    "url": "http://docs-sandbox.openprocurement.org/get/f660dd9bf4b23e229e18511469a4c22c?KeyID=a8968c46&Signature=cAvVIOChBTPQEfDxgqy5yiBwi7Vq5pub2SnKepKf%2FD3dBTVdPIDJIl%2FDmpuFRMVYSArIoy2ECJjdETwWeE8RAw%253D%253D", 
+    "url": "http://docs-sandbox.openprocurement.org/get/fa41ed1a27f23f628cdc5aa1f9c17582?KeyID=a8968c46&Signature=cO7aYeZIwjUkvhxyxMzS2tZ%252BACTATaV4xGjw5o0C1cmtmOO9xDYguR%252BlyC2%2FiaJ6Htncp4WGy0rw%2FabhzW1yCA%253D%253D", 
     "format": "application/msword", 
     "datePublished": "2018-01-06T10:00:00+02:00", 
-    "id": "0a76aea25eff35bd85875b70af7d347c", 
+    "id": "7a85647c4d803eaeb52234ed707058d6", 
     "dateModified": "2018-01-06T10:00:00+02:00"
   }
 }

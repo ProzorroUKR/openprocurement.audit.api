@@ -66,6 +66,26 @@ Content-Type: application/json; charset=UTF-8
         "answer": "Sit amet", 
         "id": "f0ef0fc1e96638e8b2f09e00726d4a23", 
         "dialogueOf": "decision"
+      }, 
+      {
+        "documents": [
+          {
+            "hash": "md5:00000000000000000000000000000000", 
+            "author": "tender_owner", 
+            "title": "ipsum.doc", 
+            "url": "http://docs-sandbox.openprocurement.org/get/7f87544ceaf934bca700c13082feafa4?KeyID=a8968c46&Signature=EbV0fyG1X14nxWqMkg%2FHtOsjSAq4RXdpFl%2FEWoDldk0wYmcHv6mmIo2MtsdMdRLK5huRhaFhRW7lZuHzJRQpBg%3D%3D", 
+            "format": "application/msword", 
+            "datePublished": "2018-01-03T02:05:00+02:00", 
+            "id": "2d3f26a21dbe3f4083c5457670f85175", 
+            "dateModified": "2018-01-03T02:05:00+02:00"
+          }
+        ], 
+        "description": "Lorem ipsum dolor sit amet.", 
+        "title": "Dolor sit amet", 
+        "author": "tender_owner", 
+        "dateSubmitted": "2018-01-03T02:05:00+02:00", 
+        "id": "5c15ae7167ba3407865740149592ec31", 
+        "dialogueOf": "decision"
       }
     ], 
     "reasons": [

@@ -378,9 +378,34 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                 status=200
             )
 
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+
+        with freeze_time("2018.01.03 00:05"):
+            with open('docs/source/tutorial/http/dialogue-broker-publish.http', 'w') as self.app.file_obj:
+                self.app.post_json(
+                    '/monitorings/{}/dialogues?acc_token={}'.format(monitoring_id, tender_owner_token),
+                    {"data": {
+                        "title": "Dolor sit amet",
+                        "description": "Lorem ipsum dolor sit amet.",
+                        "documents": [{
+                            'title': 'ipsum.doc',
+                            'url': self.generate_docservice_url(),
+                            'hash': 'md5:' + '0' * 32,
+                            'format': 'application/msword',
+                        }],
+                    }},
+                    status=201
+                )
+
+        with open('docs/source/tutorial/http/dialogues-get.http', 'w') as self.app.file_obj:
+            self.app.get(
+                '/monitorings/{}/dialogues'.format(monitoring_id),
+                status=200
+            )
 
         # CONCLUSION
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+
         with freeze_time("2018.01.05 00:00"):
             with open('docs/source/tutorial/http/conclusion-wo-violations.http', 'w') as self.app.file_obj:
                 response = self.app.patch_json(

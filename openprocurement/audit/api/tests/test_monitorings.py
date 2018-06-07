@@ -95,15 +95,6 @@ class BaseFeedResourceTest(BaseWebTest):
 
             self.assertIn("next_page", response.json)
             url = response.json["next_page"]["path"]
-        # go back, that doesn't work actually
-        # for _ in range(pages):
-        #     self.assertIn("prev_page", response.json)
-        #     response = self.app.get(response.json["prev_page"]["path"])
-        #     self.assertEqual(self.expected_fields, set(response.json['data'][0]))
-        #     offset -= self.limit
-        #     self.assertEqual([m["id"] for m in response.json['data']],
-        #                      self.expected_ids[offset:offset + self.limit])
-        # self.assertNotIn("prev_page", response.json)
 
 
 class DescendingFeedResourceTest(BaseFeedResourceTest):

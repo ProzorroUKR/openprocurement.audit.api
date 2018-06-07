@@ -1,4 +1,4 @@
-PUT /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/appeal?acc_token=080f0f4d99b137d9bc9073da60e2247c HTTP/1.0
+PUT /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/appeal?acc_token=08c7d830025f391ba6b57584516df9a3 HTTP/1.0
 Authorization: Basic YnJva2VyOg==
 Content-Length: 396
 Content-Type: application/json
@@ -8,7 +8,7 @@ Host: api-sandbox.openprocurement.org
   "data": {
     "documents": [
       {
-        "url": "http://docs-sandbox.openprocurement.org/get/f660dd9bf4b23e229e18511469a4c22c?KeyID=a8968c46&Signature=mTVWoTCkseP50NmoI64MmKNqIDbFMkfff5V30pXE3zWajDIRzWdYmarKvQo33j5bdMYxIJjH4IRt1blKPSJjCA%3D%3D", 
+        "url": "http://docs-sandbox.openprocurement.org/get/27f7995a7bee3fd3bf86eaaacf25d983?KeyID=a8968c46&Signature=63aip54xOHUtYQoezgyDBDMMP1trN1rHJ1TZL7ApSoyGj0EAVnrv43329kOVQUsbo5zPHMyKDPHSxaSpQNUaBQ%3D%3D", 
         "title": "another-letter.doc", 
         "hash": "md5:00000000000000000000000000000000", 
         "format": "application/msword"

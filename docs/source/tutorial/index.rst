@@ -9,6 +9,7 @@ Tutorial
 
    creation
    publishing
+   credentials
    dialogue
    conclusion
    appeal
@@ -18,4 +19,3 @@ Tutorial
    closing
    stopping
    cancellation
-

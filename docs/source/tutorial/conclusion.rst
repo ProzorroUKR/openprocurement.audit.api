@@ -1,5 +1,12 @@
+.. include:: defs.hrst
+
 Conclusion Publishing
 =====================
+
+.. tip::
+    | This section contains available actions for next roles:
+    | |yes| Monitoring owner
+    | |no| Tender owner
 
 
 Conclusion object contains results about any violations have been found during monitoring.

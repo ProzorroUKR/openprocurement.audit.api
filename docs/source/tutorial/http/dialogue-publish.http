@@ -7,10 +7,10 @@ Host: api-sandbox.openprocurement.org
 {
   "data": {
     "title": "Lorem ipsum", 
-    "relatedParty": "08c7d830025f391ba6b57584516df9a3", 
+    "relatedParty": "6e3da601782b3e5694c5a27eb1a8a3d5", 
     "documents": [
       {
-        "url": "http://docs-sandbox.openprocurement.org/get/46f99862f11f3255b9e5e51cfbdccdf9?KeyID=a8968c46&Signature=S%2F7YPXl9GB6WoXTa9zBDjlOMHgSlhYd26FNAxv4IUvouHLs4rCLHmnDNJCnn%2Fd7vi%2FWChIMV2k5eLM5qjR%2BpDw%3D%3D", 
+        "url": "http://docs-sandbox.openprocurement.org/get/bc176ec0e4563a8285c2ac0dcb294b17?KeyID=a8968c46&Signature=xihLbei7mFtNp3SBNQc66vBPivWb%2BLiELyzbrGFyLHmj%2BLQEOTfQMULTeA0o6Z01yRR%2FR0xn%2BezhbTMFdqrtBQ%3D%3D", 
         "title": "ipsum.doc", 
         "hash": "md5:00000000000000000000000000000000", 
         "format": "application/msword"
@@ -23,7 +23,7 @@ Host: api-sandbox.openprocurement.org
 
 201 Created
 Content-Type: application/json; charset=UTF-8
-Location: http://api-sandbox.openprocurement.org/api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/dialogues/f0ef0fc1e96638e8b2f09e00726d4a23
+Location: http://api-sandbox.openprocurement.org/api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/dialogues/34a0751d03a136bf884aa1ed12ca2a02
 
 {
   "data": {
@@ -32,19 +32,19 @@ Location: http://api-sandbox.openprocurement.org/api/2.4/monitorings/3f193d61e4c
         "hash": "md5:00000000000000000000000000000000", 
         "author": "monitoring_owner", 
         "title": "ipsum.doc", 
-        "url": "http://docs-sandbox.openprocurement.org/get/46f99862f11f3255b9e5e51cfbdccdf9?KeyID=a8968c46&Signature=S%2F7YPXl9GB6WoXTa9zBDjlOMHgSlhYd26FNAxv4IUvouHLs4rCLHmnDNJCnn%2Fd7vi%2FWChIMV2k5eLM5qjR%2BpDw%3D%3D", 
+        "url": "http://docs-sandbox.openprocurement.org/get/bc176ec0e4563a8285c2ac0dcb294b17?KeyID=a8968c46&Signature=xihLbei7mFtNp3SBNQc66vBPivWb%2BLiELyzbrGFyLHmj%2BLQEOTfQMULTeA0o6Z01yRR%2FR0xn%2BezhbTMFdqrtBQ%3D%3D", 
         "format": "application/msword", 
         "datePublished": "2018-01-03T02:05:00+02:00", 
-        "id": "ed6552fca74d3ab7a1acbdd6cd79b685", 
+        "id": "7db950a7c6753b8aba0e226ea8e55ce2", 
         "dateModified": "2018-01-03T02:05:00+02:00"
       }
     ], 
     "description": "Lorem ipsum dolor sit amet.", 
     "title": "Lorem ipsum", 
     "author": "monitoring_owner", 
-    "relatedParty": "08c7d830025f391ba6b57584516df9a3", 
+    "relatedParty": "6e3da601782b3e5694c5a27eb1a8a3d5", 
     "dateSubmitted": "2018-01-03T02:05:00+02:00", 
-    "id": "f0ef0fc1e96638e8b2f09e00726d4a23", 
+    "id": "34a0751d03a136bf884aa1ed12ca2a02", 
     "dialogueOf": "decision"
   }
 }

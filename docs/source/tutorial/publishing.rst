@@ -1,5 +1,12 @@
+.. include:: defs.hrst
+
 Decision Publishing
 ===================
+
+.. tip::
+    | This section contains available actions for next roles:
+    | |yes| Monitoring owner
+    | |no| Tender owner
 
 We are supposed to change the status of our monitoring to publish it:
 

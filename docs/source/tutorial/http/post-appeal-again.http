@@ -2,7 +2,7 @@ PUT /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/appeal?acc_token=08c7d
 Authorization: Basic YnJva2VyOg==
 Content-Length: 396
 Content-Type: application/json
-Host: api-sandbox.openprocurement.org
+Host: audit-api-sandbox.prozorro.gov.ua
 
 {
   "data": {

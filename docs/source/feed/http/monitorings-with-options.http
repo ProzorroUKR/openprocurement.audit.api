@@ -2,7 +2,7 @@ POST /api/2.4/monitorings HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
 Content-Length: 169
 Content-Type: application/json
-Host: api-sandbox.openprocurement.org
+Host: audit-api-sandbox.prozorro.gov.ua
 
 {
   "data": {
@@ -24,7 +24,7 @@ Host: api-sandbox.openprocurement.org
 
 201 Created
 Content-Type: application/json; charset=UTF-8
-Location: http://api-sandbox.openprocurement.org/api/2.4/monitorings/1561a438535b31dda5be2b429b942b8e
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/1561a438535b31dda5be2b429b942b8e
 
 {
   "data": {

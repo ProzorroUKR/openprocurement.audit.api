@@ -1,5 +1,5 @@
-GET /api/2.4/monitorings?feed=changes&skip=1&opt_fields=reasons&prev_offset=9b1feb8bb8f7080f79463cd1fb8c1b2b&offset=9b1feb8bb8f7080f79463cd1fb8c1b2b&limit=3 HTTP/1.0
-Host: api-sandbox.openprocurement.org
+GET /api/2.4/monitorings?feed=changes&offset=9b1feb8bb8f7080f79463cd1fb8c1b2b&limit=3&opt_fields=reasons HTTP/1.0
+Host: audit-api-sandbox.prozorro.gov.ua
 
 
 200 OK
@@ -7,14 +7,14 @@ Content-Type: application/json; charset=UTF-8
 
 {
   "next_page": {
-    "path": "/api/2.4/monitorings?feed=changes&skip=1&opt_fields=reasons&prev_offset=9b1feb8bb8f7080f79463cd1fb8c1b2b&offset=9b1feb8bb8f7080f79463cd1fb8c1b2b&limit=3", 
-    "uri": "http://api-sandbox.openprocurement.org/api/2.4/monitorings?feed=changes&skip=1&opt_fields=reasons&prev_offset=9b1feb8bb8f7080f79463cd1fb8c1b2b&offset=9b1feb8bb8f7080f79463cd1fb8c1b2b&limit=3", 
+    "path": "/api/2.4/monitorings?feed=changes&offset=9b1feb8bb8f7080f79463cd1fb8c1b2b&limit=3&opt_fields=reasons", 
+    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings?feed=changes&offset=9b1feb8bb8f7080f79463cd1fb8c1b2b&limit=3&opt_fields=reasons", 
     "offset": "9b1feb8bb8f7080f79463cd1fb8c1b2b"
   }, 
   "data": [], 
   "prev_page": {
-    "path": "/api/2.4/monitorings?feed=changes&limit=3&offset=9b1feb8bb8f7080f79463cd1fb8c1b2b&opt_fields=reasons", 
-    "uri": "http://api-sandbox.openprocurement.org/api/2.4/monitorings?feed=changes&limit=3&offset=9b1feb8bb8f7080f79463cd1fb8c1b2b&opt_fields=reasons", 
+    "path": "/api/2.4/monitorings?feed=changes&descending=1&offset=9b1feb8bb8f7080f79463cd1fb8c1b2b&limit=3&opt_fields=reasons", 
+    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings?feed=changes&descending=1&offset=9b1feb8bb8f7080f79463cd1fb8c1b2b&limit=3&opt_fields=reasons", 
     "offset": "9b1feb8bb8f7080f79463cd1fb8c1b2b"
   }
 }

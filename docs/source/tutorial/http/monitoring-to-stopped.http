@@ -2,7 +2,7 @@ PATCH /api/2.4/monitorings/bdf641e0dda6301fa4ea9b4f12acd399 HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
 Content-Length: 89
 Content-Type: application/json
-Host: api-sandbox.openprocurement.org
+Host: audit-api-sandbox.prozorro.gov.ua
 
 {
   "data": {

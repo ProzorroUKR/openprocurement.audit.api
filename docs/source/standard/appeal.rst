@@ -7,7 +7,7 @@ Schema
 ------
 
 :description:
-   string
+   string, required
 
 :documents:
    List of :ref:`document` objects

@@ -12,7 +12,7 @@ from openprocurement.audit.api.tests.base import BaseWebTest, DSWebTestMixin
 from openprocurement.audit.api.tests.utils import get_errors_field_names
 
 
-@freeze_time('2018-01-01T12:00:00.000000+03:00')
+@freeze_time('2018-01-01T12:00:00+02:00')
 class MonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
 
     def setUp(self):
@@ -48,8 +48,17 @@ class MonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
             {('body', 'title'), ('body', 'description')},
             get_errors_field_names(response, 'This field is required.'))
 
+    @freeze_time('2018-01-02T12:30:00+02:00')
     def test_dialogue_create_by_monitoring_owner(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
+
+        # check initial date modified
+        response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']['dateModified'], '2018-01-01T12:00:00+02:00')
+
+
         response = self.app.post_json(
             '/monitorings/{}/dialogues'.format(self.monitoring_id),
             {'data': {
@@ -68,6 +77,11 @@ class MonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.json['data']['description'], 'Lorem ipsum dolor sit amet')
         self.assertEqual(response.json['data']['dateSubmitted'], get_now().isoformat())
         self.assertEqual(response.json['data']['author'], 'monitoring_owner')
+
+        response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']['dateModified'], '2018-01-02T12:30:00+02:00')
 
     @mock.patch('openprocurement.audit.api.validation.TendersClient')
     def test_dialogue_create_by_tender_owner(self, mock_api_client):

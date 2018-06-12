@@ -8,7 +8,8 @@ from schematics.exceptions import ModelValidationError
 from openprocurement.api.models import Revision, Period
 from openprocurement.api.utils import (
     update_logging_context, context_unpack, get_revision_changes,
-    apply_data_patch, error_handler, generate_id)
+    apply_data_patch, error_handler, generate_id, get_now
+)
 from openprocurement.audit.api.models import Monitoring
 from pkg_resources import get_distribution
 from logging import getLogger
@@ -40,11 +41,14 @@ def monitoring_serialize(request, monitoring_data, fields):
     return {i: j for i, j in monitoring.serialize("view").items() if i in fields}
 
 
-def save_monitoring(request):
+def save_monitoring(request, date_modified=None):
     monitoring = request.validated['monitoring']
     patch = get_revision_changes(request.validated['monitoring_src'], monitoring.serialize("plain"))
     if patch:
         add_revision(request, monitoring, patch)
+
+        old_date_modified = monitoring.dateModified
+        monitoring.dateModified = date_modified or get_now()
         try:
             monitoring.store(request.registry.db)
         except ModelValidationError, e:  # pragma: no cover
@@ -55,19 +59,23 @@ def save_monitoring(request):
             request.errors.add('body', 'data', str(e))
         else:
             LOGGER.info(
-                'Saved monitoring {}'.format(monitoring.id),
+                'Saved monitoring {}: dateModified {} -> {}'.format(
+                    monitoring.id,
+                    old_date_modified and old_date_modified.isoformat(),
+                    monitoring.dateModified.isoformat()
+                ),
                 extra=context_unpack(request, {'MESSAGE_ID': 'save_monitoring'})
             )
             return True
 
 
-def apply_patch(request, data=None, save=True, src=None):
+def apply_patch(request, data=None, save=True, src=None, date_modified=None):
     data = request.validated['data'] if data is None else data
     patch = data and apply_data_patch(src or request.context.serialize(), data)
     if patch:
         request.context.import_data(patch)
         if save:
-            return save_monitoring(request)
+            return save_monitoring(request, date_modified=date_modified)
 
 
 def add_revision(request, item, changes):

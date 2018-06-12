@@ -30,7 +30,7 @@ class EliminationReportResource(APIResource):
     def put(self):
         elimination = self.request.validated['eliminationreport']
         elimination.dateModified = elimination.dateCreated
-        apply_patch(self.request, data=dict(eliminationReport=elimination))
+        apply_patch(self.request, data=dict(eliminationReport=elimination), date_modified=elimination.dateModified)
         self.LOGGER.info('Updated elimination {}'.format(self.request.context.id),
                          extra=context_unpack(self.request, {'MESSAGE_ID': 'elimination_put'}))
         return {'data': elimination.serialize('view')}
@@ -39,8 +39,9 @@ class EliminationReportResource(APIResource):
                validators=(validate_patch_elimination_report_data,),
                permission='edit_elimination_report')
     def patch(self):
-        self.request.validated['data']["dateModified"] = get_now()
-        apply_patch(self.request, src=self.request.context.serialize())
+        now = get_now()
+        self.request.validated['data']["dateModified"] = now
+        apply_patch(self.request, src=self.request.context.serialize(), date_modified=now)
         self.LOGGER.info('Updated elimination {}'.format(self.request.context.__parent__.id),
                          extra=context_unpack(self.request, {'MESSAGE_ID': 'elimination_patch'}))
         return {'data': self.request.context.serialize('view')}

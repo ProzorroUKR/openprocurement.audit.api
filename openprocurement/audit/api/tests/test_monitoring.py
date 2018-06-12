@@ -7,6 +7,7 @@ from datetime import datetime, timedelta
 from openprocurement.tender.core.utils import calculate_business_date
 
 
+@freeze_time('2018-01-01T09:00:00+02:00')
 class MonitoringResourceTest(BaseWebTest):
 
     def setUp(self):
@@ -34,7 +35,22 @@ class MonitoringResourceTest(BaseWebTest):
             status=422
         )
 
-    @freeze_time('2018-01-01T12:00:00.000000+03:00')
+    @freeze_time('2018-01-01T12:00:00.000000+02:00')
+    def test_patch_nothing(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        now_date = datetime.now(TZ)
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "procuringStages":  ["planning"]
+            }}
+        )
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertNotEqual(response.json['data']["dateModified"], now_date.isoformat())
+        self.assertEqual(response.json['data']["dateModified"], "2018-01-01T09:00:00+02:00")
+
+    @freeze_time('2018-01-01T12:00:00.000000+02:00')
     def test_patch_to_active(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         now_date = datetime.now(TZ)
@@ -54,6 +70,7 @@ class MonitoringResourceTest(BaseWebTest):
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["status"], "active")
         self.assertEqual(response.json['data']["monitoringPeriod"]["startDate"], now_date.isoformat())
+        self.assertEqual(response.json['data']["dateModified"], now_date.isoformat())
         self.assertEqual(response.json['data']["monitoringPeriod"]["endDate"], end_date.isoformat())
 
     def test_patch_to_active_already_in_active(self):

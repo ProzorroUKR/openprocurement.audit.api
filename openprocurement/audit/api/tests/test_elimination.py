@@ -282,6 +282,11 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         )
 
     def test_success_post_document(self):
+        # dateModified
+        response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.json["data"]["dateModified"], '2018-01-01T11:00:00+02:00')
+
         self.app.authorization = ('Basic', (self.broker_token, ''))
         document = {
             'title': 'lol.doc',
@@ -289,10 +294,12 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
             'hash': 'md5:' + '0' * 32,
             'format': 'application/helloword',
         }
-        response = self.app.post_json(
-            '/monitorings/{}/eliminationReport/documents?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
-            {"data": document},
-        )
+        post_time = '2018-01-13T13:35:00+02:00'
+        with freeze_time(post_time):
+            response = self.app.post_json(
+                '/monitorings/{}/eliminationReport/documents?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
+                {"data": document},
+            )
         self.assertEqual(response.status_code, 201)
 
         self.app.authorization = None
@@ -300,6 +307,11 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         data = response.json["data"]["eliminationReport"]
         self.assertEqual(len(data["documents"]), 2)
         self.assertEqual(data["documents"][1]["title"], document["title"])
+
+        # dateModified
+        response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.json["data"]["dateModified"], post_time)
 
     def test_success_patch_document(self):
         self.app.authorization = ('Basic', (self.broker_token, ''))

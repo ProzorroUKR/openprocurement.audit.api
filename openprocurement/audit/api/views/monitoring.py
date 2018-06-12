@@ -90,8 +90,7 @@ class MonitoringsResource(APIResourceListing):
         monitoring = self.request.validated['monitoring']
         monitoring.id = generate_id()
         monitoring.monitoring_id = generate_monitoring_id(get_now(), self.db, self.server_id)
-        monitoring.dateModified = monitoring.dateCreated
-        save_monitoring(self.request)
+        save_monitoring(self.request, date_modified=monitoring.dateCreated)
         LOGGER.info('Created monitoring {}'.format(monitoring.id),
                     extra=context_unpack(self.request,
                                          {'MESSAGE_ID': 'monitoring_create'},
@@ -118,24 +117,21 @@ class MonitoringResource(APIResource):
 
         apply_patch(self.request, save=False, src=self.request.validated['monitoring_src'])
 
-        monitoring.dateModified = get_now()
+        now = get_now()
         if monitoring_old_status == 'draft' and monitoring.status == 'active':
             set_author(monitoring.decision.documents, self.request, 'author')
-            monitoring.monitoringPeriod = generate_period(
-                monitoring.dateModified, MONITORING_TIME, self.context)
-            monitoring.decision.datePublished = monitoring.dateModified
+            monitoring.monitoringPeriod = generate_period(now, MONITORING_TIME, self.context)
+            monitoring.decision.datePublished = now
         elif monitoring_old_status == 'active' and monitoring.status == 'addressed':
             set_author(monitoring.conclusion.documents, self.request, 'author')
-            monitoring.conclusion.datePublished = monitoring.dateModified
-            monitoring.eliminationPeriod = generate_period(
-                monitoring.dateModified, ELIMINATION_PERIOD_TIME, self.context)
+            monitoring.conclusion.datePublished = now
+            monitoring.eliminationPeriod = generate_period(now, ELIMINATION_PERIOD_TIME, self.context)
         elif monitoring_old_status == 'active' and monitoring.status == 'declined':
-            monitoring.eliminationPeriod = generate_period(
-                monitoring.dateModified, ELIMINATION_PERIOD_NO_VIOLATIONS_TIME, self.context)
-            monitoring.conclusion.datePublished = monitoring.dateModified
+            monitoring.eliminationPeriod = generate_period(now, ELIMINATION_PERIOD_NO_VIOLATIONS_TIME, self.context)
+            monitoring.conclusion.datePublished = now
         elif monitoring_old_status == 'addressed' and monitoring.status == 'completed':
-            monitoring.eliminationReport.datePublished = monitoring.dateModified
-            monitoring.eliminationReport.eliminationResolution = monitoring.dateModified
+            monitoring.eliminationReport.datePublished = now
+            monitoring.eliminationReport.eliminationResolution = now
         elif any([
             monitoring_old_status == 'draft' and monitoring.status == 'cancelled',
             monitoring_old_status == 'active' and monitoring.status == 'stopped',
@@ -143,9 +139,9 @@ class MonitoringResource(APIResource):
             monitoring_old_status == 'addressed' and monitoring.status == 'stopped'
         ]):
             set_author(monitoring.cancellation.documents, self.request, 'author')
-            monitoring.cancellation.datePublished = monitoring.dateModified
+            monitoring.cancellation.datePublished = now
 
-        save_monitoring(self.request)
+        save_monitoring(self.request, date_modified=now)
         LOGGER.info('Updated monitoring {}'.format(monitoring.id),
                     extra=context_unpack(self.request, {'MESSAGE_ID': 'monitoring_patch'}))
         return {'data': monitoring.serialize('view')}

@@ -3,7 +3,8 @@ from openprocurement.audit.api.utils import (
     op_resource,
     APIResource,
     apply_patch,
-    set_ownership,
+    set_author,
+    upload_objects_documents,
 )
 from openprocurement.api.utils import (
     json_view,
@@ -27,7 +28,8 @@ class AppealResource(APIResource):
                permission='create_appeal')
     def put(self):
         appeal = self.request.validated['appeal']
-        set_ownership(appeal.documents, self.request, 'author')
+        set_author(appeal.documents, self.request, 'author')
+        upload_objects_documents(self.request, appeal)
         appeal.datePublished = appeal.dateCreated
 
         apply_patch(self.request, data=dict(appeal=appeal))

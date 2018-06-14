@@ -4,32 +4,41 @@ msgstr ""
 "Project-Id-Version: openprocurement.audit.api 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-13 11:14+0300\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"PO-Revision-Date: 2018-06-15 01:02+0300\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: uk\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
 #: ../../source/tutorial/stopping.rst:4
 msgid "Stop Monitoring"
-msgstr ""
+msgstr "Завершення моніторингу (Рішення зупинено)"
 
 #: ../../source/tutorial/stopping.rst:0
 msgid "This section contains available actions for next roles:"
-msgstr ""
+msgstr "Секція містить опис можливих дій для наступний учасників моніторингу:"
 
 #: ../../source/tutorial/stopping.rst:0
 msgid "|yes| Monitoring owner"
-msgstr ""
+msgstr "|yes| Власник моніторингу"
 
 #: ../../source/tutorial/stopping.rst:0
 msgid "|no| Tender owner"
-msgstr ""
+msgstr "|no| Власник тендеру"
 
 #: ../../source/tutorial/stopping.rst:12
 msgid ""
-"As soon as the monitoring in ``active``, ``addressed``, ``declined`` status,"
-" SAS-employee can terminate monitoring with ``stopped`` status with "
+"As soon as the monitoring in ``active``, ``addressed``, ``declined`` "
+"status, SAS-employee can terminate monitoring with ``stopped`` status with "
 "providing the ``description`` in ``cancellation`` report"
 msgstr ""
+"Маючи моніторинг у статусі ``active`` (Здійснення моніторингу), "
+"``addressed`` (Порушення виявлені), ``declined`` (Порушення не виявлені), "
+"власник тендеру має можливість зупинити моніторинг змінивши статус на "
+"``stopped`` (Рішення зупинено) надавши опис (``description``) у звіті про "
+"зупинення``cancellation``:"

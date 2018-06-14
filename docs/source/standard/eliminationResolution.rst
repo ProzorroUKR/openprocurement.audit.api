@@ -1,6 +1,6 @@
-.. _eliminationResolution:
+.. _EliminationResolution:
 
-eliminationResolution
+EliminationResolution
 =====================
 
 Schema

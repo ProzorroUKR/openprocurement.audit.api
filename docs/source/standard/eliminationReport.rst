@@ -1,6 +1,6 @@
-.. _eliminationReport:
+.. _EliminationReport:
 
-eliminationReport
+EliminationReport
 =================
 
 Schema

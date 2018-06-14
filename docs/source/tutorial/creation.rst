@@ -3,7 +3,7 @@
 Monitoring Creation
 ===================
 
-.. tip::
+.. note::
     | This section contains available actions for next roles:
     | |yes| Monitoring owner
     | |no| Tender owner

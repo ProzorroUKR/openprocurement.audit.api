@@ -3,6 +3,8 @@
 EliminationResolution
 =====================
 
+Violation elimination resolution
+
 Schema
 ------
 

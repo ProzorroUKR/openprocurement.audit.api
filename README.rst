@@ -58,7 +58,7 @@ For translation into *<lang>* (2 letter ISO language code), you have to follow t
 
  2. Update translation with new/changed strings::
 
-     bin/sphinx-intl update -c docs/source/conf.py -p docs/build/locale -l <lang>
+     bin/sphinx-intl update -c docs/source/conf.py -p docs/build/locale -l uk
 
  3. Update updated/missing strings in `docs/source/locale/<lang>/LC_MESSAGES/*.po` with your-favorite-editor/poedit/transifex/pootle/etc. to have all translations complete/updated.
 

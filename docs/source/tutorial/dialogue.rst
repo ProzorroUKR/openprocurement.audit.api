@@ -5,7 +5,7 @@
 Make a Dialogue
 ===============
 
-.. tip::
+.. note::
     | This section contains available actions for next roles:
     | |yes| Monitoring owner
     | |yes| Tender owner

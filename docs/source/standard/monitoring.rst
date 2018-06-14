@@ -44,6 +44,8 @@ Schema
 :reasons:
    list of strings
 
+   https://github.com/ProzorroUKR/standards/tree/master/monitoring/reasons
+
    :`indicator`:
       Automatic risks indicators
    :`authorities`:
@@ -57,6 +59,8 @@ Schema
 
 :procuringStages:
    list of strings
+
+   https://github.com/ProzorroUKR/standards/tree/master/monitoring/procuring_stages
 
    :`planning`:
       Planning of tender and publication of information on its conduct
@@ -88,11 +92,6 @@ Schema
 
 :cancellation:
    :ref:`cancellation`
-
-:revisions:
-   List of revision objects, auto-generated
-
-   Historical changes to Tender object properties.
 
 
 

@@ -38,6 +38,7 @@ class BaseWebTest(unittest.TestCase):
         self.app.RequestClass = PrefixedRequestClass
         self.couchdb_server = self.app.app.registry.couchdb_server
         self.db = self.app.app.registry.db
+        self.app.app.registry.docservice_url = 'http://localhost'
 
         config = ConfigParser.RawConfigParser()
         config.read(os.path.join(os.path.dirname(__file__), 'auth.ini'))

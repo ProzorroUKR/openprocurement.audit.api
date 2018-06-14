@@ -152,6 +152,8 @@ class MonitoringEliminationResourceTest(MonitoringEliminationBaseTest):
         self.assertEqual(data["dateModified"], "2018-01-01T11:00:00+02:00")
         self.assertNotIn("resolution", data)
         self.assertEqual(len(data["documents"]), 1)
+        document = data["documents"][0]
+        self.assertNotEqual(document["url"], request_data["documents"][0]["url"])
 
     def test_fail_update_resolution(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
@@ -304,14 +306,11 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
 
         self.app.authorization = None
         response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
-        data = response.json["data"]["eliminationReport"]
-        self.assertEqual(len(data["documents"]), 2)
-        self.assertEqual(data["documents"][1]["title"], document["title"])
-
-        # dateModified
-        response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
         self.assertEqual(response.status, '200 OK')
-        self.assertEqual(response.json["data"]["dateModified"], post_time)
+        data = response.json["data"]
+        self.assertEqual(len(data["eliminationReport"]["documents"]), 2)
+        self.assertEqual(data["eliminationReport"]["documents"][1]["title"], document["title"])
+        self.assertEqual(data["dateModified"], post_time)
 
     def test_success_patch_document(self):
         self.app.authorization = ('Basic', (self.broker_token, ''))

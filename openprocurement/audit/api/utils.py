@@ -8,7 +8,8 @@ from schematics.exceptions import ModelValidationError
 from openprocurement.api.models import Revision, Period
 from openprocurement.api.utils import (
     update_logging_context, context_unpack, get_revision_changes,
-    apply_data_patch, error_handler, generate_id, get_now
+    apply_data_patch, error_handler, generate_id, get_now,
+    check_document, update_document_url
 )
 from openprocurement.audit.api.models import Monitoring
 from pkg_resources import get_distribution
@@ -166,6 +167,7 @@ def set_author(data, request, fieldname='author'):
     for item in data if isinstance(data, list) else [data]:
         setattr(item, fieldname, get_monitoring_role(request.authenticated_role))
 
+
 def get_monitoring_role(role):
     return 'monitoring_owner' if role == 'sas' else 'tender_owner'
 
@@ -190,3 +192,10 @@ def get_access_token(request):
             json = None
         token = isinstance(json, dict) and json.get('access', {}).get('token')
     return token
+
+
+def upload_objects_documents(request, obj, key='body'):
+    for document in getattr(obj, "documents", []):
+        check_document(request, document, key)
+        document_route = request.matched_route.name
+        update_document_url(request, document, document_route, {})

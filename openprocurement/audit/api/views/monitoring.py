@@ -23,7 +23,9 @@ from openprocurement.audit.api.utils import (
     generate_monitoring_id,
     generate_period,
     set_ownership,
-    set_author)
+    set_author,
+    upload_objects_documents,
+)
 from openprocurement.audit.api.design import (
     monitorings_real_by_dateModified_view,
     monitorings_test_by_dateModified_view,
@@ -140,6 +142,12 @@ class MonitoringResource(APIResource):
         ]):
             set_author(monitoring.cancellation.documents, self.request, 'author')
             monitoring.cancellation.datePublished = now
+
+        # download (change urls of) documents for Decision, Conclusion, etc.
+        raw_data = self.request.json.get("data", {})
+        for key in raw_data.keys():
+            if hasattr(getattr(monitoring, key, None), "documents") and "documents" in raw_data[key]:
+                upload_objects_documents(self.request, getattr(monitoring, key), key=key)
 
         save_monitoring(self.request, date_modified=now)
         LOGGER.info('Updated monitoring {}'.format(monitoring.id),

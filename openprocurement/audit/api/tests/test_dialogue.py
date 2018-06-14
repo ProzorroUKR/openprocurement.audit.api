@@ -58,13 +58,19 @@ class MonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']['dateModified'], '2018-01-01T12:00:00+02:00')
 
-
+        request_data = {
+            'title': 'Lorem ipsum',
+            'description': 'Lorem ipsum dolor sit amet',
+            'documents': [{
+                'title': 'lorem.doc',
+                'url': self.generate_docservice_url(),
+                'hash': 'md5:' + '0' * 32,
+                'format': 'application/msword',
+            }]
+        }
         response = self.app.post_json(
             '/monitorings/{}/dialogues'.format(self.monitoring_id),
-            {'data': {
-                'title': 'Lorem ipsum',
-                'description': 'Lorem ipsum dolor sit amet'
-            }})
+            {'data': request_data})
         self.assertEqual(response.status, '201 Created')
         self.assertEqual(response.content_type, 'application/json')
 
@@ -73,10 +79,12 @@ class MonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
         response = self.app.get('/monitorings/{}/dialogues/{}'.format(self.monitoring_id, dialogue_id))
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
-        self.assertEqual(response.json['data']['title'], 'Lorem ipsum')
-        self.assertEqual(response.json['data']['description'], 'Lorem ipsum dolor sit amet')
+        self.assertEqual(response.json['data']['title'], request_data["title"])
+        self.assertEqual(response.json['data']['description'], request_data['description'])
         self.assertEqual(response.json['data']['dateSubmitted'], get_now().isoformat())
         self.assertEqual(response.json['data']['author'], 'monitoring_owner')
+        self.assertEqual(len(response.json['data']['documents']), 1)
+        self.assertNotEqual(response.json['data']['documents'][0]['url'], request_data["documents"][0]['url'])
 
         response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
         self.assertEqual(response.status, '200 OK')

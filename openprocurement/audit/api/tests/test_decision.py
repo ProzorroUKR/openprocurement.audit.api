@@ -105,9 +105,15 @@ class MonitoringDecisionResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertIn("decision", response.json["data"])
         self.assertEqual(response.json['data']["id"], self.monitoring_id)
         self.assertEqual(response.json['data']["status"], "draft")
-        self.assertEqual(response.json['data']["decision"]["description"], "text")
-        self.assertEqual(response.json['data']["decision"]["date"], decision_date.isoformat())
-        self.assertEqual(len(response.json['data']["decision"]["documents"]), 2)
+        response_decision = response.json['data']["decision"]
+        self.assertEqual(response_decision["description"], "text")
+        self.assertEqual(response_decision["date"], decision_date.isoformat())
+        self.assertEqual(len(response_decision["documents"]), 2)
+
+        self.assertEqual(decision['documents'][0]['title'], response_decision['documents'][0]['title'])
+        self.assertNotEqual(decision['documents'][0]['url'], response_decision['documents'][0]['url'])
+        self.assertEqual(decision['documents'][1]['title'], response_decision['documents'][1]['title'])
+        self.assertNotEqual(decision['documents'][1]['url'], response_decision['documents'][1]['url'])
 
     def test_visibility(self):
         self.app.patch_json(

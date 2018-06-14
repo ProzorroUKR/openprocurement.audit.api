@@ -12,8 +12,10 @@ areas that were not covered by it.
 
    monitoring
    document
-   conclusion
    decision
+   conclusion
+   eliminationReport
+   eliminationResolution
    cancellation
    appeal
    party

@@ -1,0 +1,47 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: openprocurement.audit.api 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-06-13 11:14+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../source/tutorial/appeal.rst:4
+msgid "Appeal"
+msgstr ""
+
+#: ../../source/tutorial/appeal.rst:0
+msgid "This section contains available actions for next roles:"
+msgstr ""
+
+#: ../../source/tutorial/appeal.rst:0
+msgid "|no| Monitoring owner"
+msgstr ""
+
+#: ../../source/tutorial/appeal.rst:0
+msgid "|yes| Tender owner"
+msgstr ""
+
+#: ../../source/tutorial/appeal.rst:12
+msgid ""
+"We have already seen how to get ``acc_token`` in :ref:`credentials` section"
+msgstr ""
+
+#: ../../source/tutorial/appeal.rst:14
+msgid ""
+"As soon as the conclusion is published, tender's owner may point out that "
+"the conclusion has been appealed in court:"
+msgstr ""
+
+#: ../../source/tutorial/appeal.rst:20
+msgid "This action can be performed only once:"
+msgstr ""
+
+#: ../../source/tutorial/appeal.rst:25
+msgid "Documents can be added/changed any time:"
+msgstr ""

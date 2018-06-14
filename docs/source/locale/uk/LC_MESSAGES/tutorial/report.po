@@ -1,0 +1,47 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: openprocurement.audit.api 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-06-13 11:14+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../source/tutorial/report.rst:4
+msgid "Violation Elimination Report"
+msgstr ""
+
+#: ../../source/tutorial/report.rst:0
+msgid "This section contains available actions for next roles:"
+msgstr ""
+
+#: ../../source/tutorial/report.rst:0
+msgid "|no| Monitoring owner"
+msgstr ""
+
+#: ../../source/tutorial/report.rst:0
+msgid "|yes| Tender owner"
+msgstr ""
+
+#: ../../source/tutorial/report.rst:11
+msgid ""
+"As soon as the monitoring in ``addressed`` status, its tender owner can "
+"provide a report about violation eliminations:"
+msgstr ""
+
+#: ../../source/tutorial/report.rst:16
+msgid ""
+"We have already seen how to get ``acc_token`` in :ref:`credentials` section"
+msgstr ""
+
+#: ../../source/tutorial/report.rst:18
+msgid "Now let's update our report:"
+msgstr ""
+
+#: ../../source/tutorial/report.rst:23
+msgid "That's it."
+msgstr ""

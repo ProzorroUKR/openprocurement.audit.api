@@ -1,0 +1,36 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: openprocurement.audit.api 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-06-13 11:14+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../source/standard/period.rst:6
+msgid "Period"
+msgstr ""
+
+#: ../../source/standard/period.rst:9
+msgid "Schema"
+msgstr ""
+
+#: ../../source/standard/period.rst:12 ../../source/standard/period.rst:18
+msgid "string, :ref:`date`"
+msgstr ""
+
+#: ../../source/standard/period.rst:14
+msgid "|ocdsDescription| The start date for the period."
+msgstr ""
+
+#: ../../source/standard/period.rst:20
+msgid "|ocdsDescription| The end date for the period."
+msgstr ""
+
+#: ../../source/standard/period.rst:23
+msgid "`startDate` should always precede `endDate`."
+msgstr ""

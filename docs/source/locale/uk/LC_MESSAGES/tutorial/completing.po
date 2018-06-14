@@ -1,0 +1,34 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: openprocurement.audit.api 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-06-13 11:14+0300\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: ../../source/tutorial/completing.rst:4
+msgid "Complete Monitoring"
+msgstr ""
+
+#: ../../source/tutorial/completing.rst:0
+msgid "This section contains available actions for next roles:"
+msgstr ""
+
+#: ../../source/tutorial/completing.rst:0
+msgid "|yes| Monitoring owner"
+msgstr ""
+
+#: ../../source/tutorial/completing.rst:0
+msgid "|no| Tender owner"
+msgstr ""
+
+#: ../../source/tutorial/completing.rst:12
+msgid ""
+"When the elimination report is posted, SAS-employee can move the monitoring "
+"to ``completed`` status"
+msgstr ""

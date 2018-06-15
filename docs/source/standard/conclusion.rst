@@ -46,6 +46,11 @@ Schema
 
     conclusion on the presence or absence of violations of the law
 
+:date:
+   string, :ref:`date`
+
+   Actual (offline) conclusion date.
+
 :documents:
     List of :ref:`document` objects
 

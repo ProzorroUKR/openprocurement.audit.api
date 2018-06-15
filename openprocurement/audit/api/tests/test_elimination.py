@@ -212,6 +212,28 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
             status=403
         )
 
+    def test_forbidden_put(self):
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+        response = self.app.put_json(
+            '/monitorings/{}/eliminationReport?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
+            {"data": {
+                "description": "Hi there",
+                "documents": [
+                    {
+                        'title': 'texts.doc',
+                        'url': self.generate_docservice_url(),
+                        'hash': 'md5:' + '0' * 32,
+                        'format': 'application/msword',
+                    }
+                ],
+            }},
+            status=403
+        )
+        self.assertEqual(
+            response.json["errors"],
+            [{u'description': u"Can't post another elimination report", u'location': u'body', u'name': u'data'}],
+        )
+
     def test_success_minimal_patch(self):
         self.app.authorization = ('Basic', (self.broker_token, ''))
         request_data = {

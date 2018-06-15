@@ -12,7 +12,7 @@ import os
 
 class DumpsTestAppwebtest(TestApp):
     def do_request(self, req, status=None, expect_errors=None):
-        req.headers.environ["HTTP_HOST"] = "api-sandbox.openprocurement.org"
+        req.headers.environ["HTTP_HOST"] = "audit-api-sandbox.prozorro.gov.ua"
         if hasattr(self, 'file_obj') and not self.file_obj.closed:
             self.file_obj.write(req.as_bytes(True))
             self.file_obj.write("\n")

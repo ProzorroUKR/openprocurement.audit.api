@@ -1,0 +1,70 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: openprocurement.audit.api 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-06-13 11:14+0300\n"
+"PO-Revision-Date: 2018-06-15 02:56+0300\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: uk\n"
+"X-Generator: Poedit 1.8.7.1\n"
+
+#: ../../source/tutorial/publishing.rst:4
+msgid "Decision Publishing"
+msgstr "Оприлюднення рішення про початок моніторингу"
+
+#: ../../source/tutorial/publishing.rst:0
+msgid "This section contains available actions for next roles:"
+msgstr "Секція містить опис можливих дій для наступний учасників моніторингу:"
+
+#: ../../source/tutorial/publishing.rst:0
+msgid "|yes| Monitoring owner"
+msgstr "|yes| Власник моніторингу"
+
+#: ../../source/tutorial/publishing.rst:0
+msgid "|no| Tender owner"
+msgstr "|no| Власник тендеру"
+
+#: ../../source/tutorial/publishing.rst:11
+msgid "We are supposed to change the status of our monitoring to publish it:"
+msgstr "Спробуємо змінити статус моніторингу для активації:"
+
+#: ../../source/tutorial/publishing.rst:16
+msgid "Let's provide our publish party:"
+msgstr "Додаємо учасника моніторингу відповідального за публікацію:"
+
+#: ../../source/tutorial/publishing.rst:21
+msgid "Let's provide our decision:"
+msgstr "Додаємо рішення про початок моніторингу:"
+
+#: ../../source/tutorial/publishing.rst:26
+msgid ""
+"Also we can add documents one by one. Documents uploading should follow the "
+"`upload <http://documentservice.api-docs.openprocurement.org>`_ rules."
+msgstr ""
+"Також ми можемо додати документ окремо. Завантаження повинно відбуватись "
+"згідно `правил <http://documentservice.api-docs.openprocurement.org>`_."
+
+#: ../../source/tutorial/publishing.rst:32
+msgid "And finally activate tender:"
+msgstr "Тепер активуємо моніторинг:"
+
+#: ../../source/tutorial/publishing.rst:37
+msgid "Success! Our monitoring object has been published."
+msgstr "Успіх, моніторинг було активовано."
+
+#: ../../source/tutorial/publishing.rst:39
+msgid "After monitoring is published we can't change decision any more."
+msgstr ""
+"Після публікації ми вже не можемо змінити рішення про початок моніторингу:"
+
+#: ../../source/tutorial/publishing.rst:44
+msgid "Also we can publish decision with single request:"
+msgstr ""
+"Також ми можемо опублікувати рішення про початок моніторингу одним запитом:"

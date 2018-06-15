@@ -1,0 +1,249 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: openprocurement.audit.api 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-06-13 11:14+0300\n"
+"PO-Revision-Date: 2018-06-15 02:22+0300\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: uk\n"
+"X-Generator: Poedit 1.8.7.1\n"
+
+#: ../../source/standard/party.rst:6
+msgid "Party"
+msgstr ""
+
+#: ../../source/standard/party.rst:9 ../../source/standard/party.rst:51
+#: ../../source/standard/party.rst:96 ../../source/standard/party.rst:137
+msgid "Schema"
+msgstr ""
+
+#: ../../source/standard/party.rst:12 ../../source/standard/party.rst:54
+#: ../../source/standard/party.rst:152 ../../source/standard/party.rst:158
+#: ../../source/standard/party.rst:170
+msgid "string"
+msgstr "рядок"
+
+#: ../../source/standard/party.rst:14
+msgid ""
+"|ocdsDescription| A common name for this organization or other participant "
+"in the contracting process. The identifier object provides an space for the "
+"formal legal name, and so this may either repeat that value, or could "
+"provide the common name by which this organization or entity is known. This "
+"field may also include details of the department or sub-unit involved in "
+"this contracting process."
+msgstr ""
+
+#: ../../source/standard/party.rst:18
+msgid ":ref:`Identifier`"
+msgstr "рядок, :ref:`Identifier`"
+
+#: ../../source/standard/party.rst:20
+msgid ""
+"|ocdsDescription| The primary identifier for this organization or "
+"participant. Identifiers that uniquely pick out a legal entity should be "
+"preferred. Consult the organization identifier guidance for the preferred "
+"scheme and identifier to use."
+msgstr ""
+
+#: ../../source/standard/party.rst:24
+msgid "List of :ref:`identifier` objects"
+msgstr "Список об’єктів :ref:`identifier`"
+
+#: ../../source/standard/party.rst:27
+msgid ":ref:`Address`, required"
+msgstr ":ref:`Address`, обов'язково"
+
+#: ../../source/standard/party.rst:30
+msgid ":ref:`ContactPoint`, required"
+msgstr ":ref:`ContactPoint`, обов'язково"
+
+#: ../../source/standard/party.rst:33
+msgid "List of strings"
+msgstr "Список рядків"
+
+#: ../../source/standard/party.rst:35
+msgid "|ocdsDescription| The party’s role(s) in the contracting process."
+msgstr ""
+
+#: ../../source/standard/party.rst:38 ../../source/standard/party.rst:172
+msgid "Possible values are:"
+msgstr "Можливі значення:"
+
+#: ../../source/standard/party.rst:40
+msgid "create"
+msgstr ""
+
+#: ../../source/standard/party.rst:41
+msgid "decision"
+msgstr ""
+
+#: ../../source/standard/party.rst:42
+msgid "conclusion"
+msgstr ""
+
+#: ../../source/standard/party.rst:43
+msgid "dialogue"
+msgstr ""
+
+#: ../../source/standard/party.rst:48
+msgid "Identifier"
+msgstr ""
+
+#: ../../source/standard/party.rst:56
+msgid ""
+"|ocdsDescription| Organization identifiers be drawn from an existing "
+"identification scheme. This field is used to indicate the scheme or "
+"codelist in which the identifier will be found.  This value should be drawn "
+"from the Organization Identifier Scheme."
+msgstr ""
+"|ocdsDescription| Ідентифікатори організації беруться з існуючої схеми "
+"ідентифікації. Це поле вказує схему або список кодів, де можна знайти "
+"ідентифікатор організації. Це значення повинно братись зі Схеми "
+"Ідентифікації Організацій."
+
+#: ../../source/standard/party.rst:63 ../../source/standard/party.rst:99
+#: ../../source/standard/party.rst:105 ../../source/standard/party.rst:111
+#: ../../source/standard/party.rst:117
+msgid "string, required"
+msgstr "рядок, обов'язково"
+
+#: ../../source/standard/party.rst:65
+msgid ""
+"|ocdsDescription| The identifier of the organization in the selected scheme."
+msgstr "|ocdsDescription| Ідентифікатор організації у вибраній схемі."
+
+#: ../../source/standard/party.rst:68
+msgid ""
+"The allowed codes are the ones found in `\"Organisation Registration Agency"
+"\" codelist of IATI Standard <http://iatistandard.org/codelists/"
+"OrganisationRegistrationAgency/>`_ with addition of `UA-EDR` code for "
+"organizations registered in Ukraine (EDRPOU and IPN)."
+msgstr ""
+"Дозволеними є коди зі `спику кодів \\\"Organisation Registration Agency\\\" "
+"Стандарту IATI <http://iatistandard.org/codelists/"
+"OrganisationRegistrationAgency/>`_ з додаванням коду `UA-EDR` для "
+"організацій, зареєстрованих в Україні (ЄДРПОУ та ІПН)."
+
+#: ../../source/standard/party.rst:75
+msgid "string, multilingual"
+msgstr "рядок, ,багатомовний"
+
+#: ../../source/standard/party.rst:77
+msgid "|ocdsDescription| The legally registered name of the organization."
+msgstr "|ocdsDescription| Легально зареєстрована назва організації."
+
+#: ../../source/standard/party.rst:81
+msgid "uri"
+msgstr ""
+
+#: ../../source/standard/party.rst:83
+msgid ""
+"|ocdsDescription| A URI to identify the organization, such as those "
+"provided by Open Corporates or some other relevant URI provider.  This is "
+"not for listing the website of the organization: that can be done through "
+"the url field of the Organization contact point."
+msgstr ""
+"|ocdsDescription| URI для ідентифікації організації, наприклад, ті, які "
+"надають Open Corporates або інші постачальники URI. Це не для вебсайту "
+"організації, його можна надати в полі url в ContactPoint організації."
+
+#: ../../source/standard/party.rst:93
+msgid "Address"
+msgstr ""
+
+#: ../../source/standard/party.rst:101
+msgid ""
+"|ocdsDescription| The street address. For example, 1600 Amphitheatre Pkwy."
+msgstr "|ocdsDescription| Вулиця. Наприклад, вул.Хрещатик, 22."
+
+#: ../../source/standard/party.rst:107
+msgid "|ocdsDescription| The locality. For example, Mountain View."
+msgstr "|ocdsDescription| Населений пункт. Наприклад, Київ."
+
+#: ../../source/standard/party.rst:113
+msgid "|ocdsDescription| The region. For example, CA."
+msgstr "|ocdsDescription| Область. Наприклад, Київська."
+
+#: ../../source/standard/party.rst:119
+msgid "|ocdsDescription| The postal code. For example, 94043."
+msgstr "Поштовий індекс, Наприклад, 78043."
+
+#: ../../source/standard/party.rst:123 ../../source/standard/party.rst:140
+msgid "string, multilingual, required"
+msgstr "рядок, ,багатомовний, обов'язково"
+
+#: ../../source/standard/party.rst:125
+msgid "|ocdsDescription| The country name. For example, United States."
+msgstr "Назва країни. Наприклад, Україна."
+
+#: ../../source/standard/party.rst:134
+msgid "ContactPoint"
+msgstr ""
+
+#: ../../source/standard/party.rst:142
+msgid ""
+"|ocdsDescription| The name of the contact person, department, or contact "
+"point, for correspondence relating to this contracting process."
+msgstr ""
+"|ocdsDescription| Ім’я контактної особи, назва відділу чи контактного "
+"пункту для листування, що стосується цього процесу укладання договору."
+
+#: ../../source/standard/party.rst:146
+msgid "email"
+msgstr ""
+
+#: ../../source/standard/party.rst:148
+msgid "|ocdsDescription| The e-mail address of the contact point/person."
+msgstr "|ocdsDescription| Адреса електронної пошти контактної особи/пункту."
+
+#: ../../source/standard/party.rst:154
+msgid ""
+"|ocdsDescription| The telephone number of the contact point/person. This "
+"should include the international dialling code."
+msgstr ""
+"|ocdsDescription| Номер телефону контактної особи/пункту. Повинен включати "
+"міжнародний телефонний код."
+
+#: ../../source/standard/party.rst:160
+msgid ""
+"|ocdsDescription| The fax number of the contact point/person. This should "
+"include the international dialling code."
+msgstr ""
+"|ocdsDescription| Номер факсу контактної особи/пункту. Повинен включати "
+"міжнародний телефонний код."
+
+#: ../../source/standard/party.rst:164
+msgid "url"
+msgstr ""
+
+#: ../../source/standard/party.rst:166
+msgid "|ocdsDescription| A web address for the contact point/person."
+msgstr "|ocdsDescription| Веб адреса контактної особи/пункту."
+
+#: ../../source/standard/party.rst:174
+msgid "`uk`"
+msgstr ""
+
+#: ../../source/standard/party.rst:175
+msgid "`en`"
+msgstr ""
+
+#: ../../source/standard/party.rst:176
+msgid "`ru`"
+msgstr ""
+
+#: ../../source/standard/party.rst:178
+msgid "Specifies the language of communication."
+msgstr "Визначає мови спілкування."
+
+#: ../../source/standard/party.rst:180
+msgid "Either `email` or `telephone` field has to be provided."
+msgstr ""
+"Повинне бути заповнене хоча б одне з полів: або `email`, або `telephone`."

@@ -22,7 +22,7 @@ class Report(Model):
 
 
 class Decision(Report):
-    date = IsoDateTimeType(required=True)
+    date = IsoDateTimeType(required=False)
 
 
 class Conclusion(Report):
@@ -39,6 +39,7 @@ class Conclusion(Report):
     auditFinding = StringType()
     stringsAttached = StringType()
     description = StringType(required=False)
+    date = IsoDateTimeType(required=False)
 
     def validate_violationType(self, data, value):
         if data["violationOccurred"] and not value:

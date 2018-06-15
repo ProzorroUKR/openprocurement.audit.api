@@ -3,7 +3,7 @@
 Violation Elimination Report
 ============================
 
-.. tip::
+.. note::
     | This section contains available actions for next roles:
     | |no| Monitoring owner
     | |yes| Tender owner

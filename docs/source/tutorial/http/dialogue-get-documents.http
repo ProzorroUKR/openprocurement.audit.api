@@ -1,6 +1,6 @@
 GET /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/dialogues/34a0751d03a136bf884aa1ed12ca2a02/documents HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
-Host: api-sandbox.openprocurement.org
+Host: audit-api-sandbox.prozorro.gov.ua
 
 
 200 OK

@@ -1,5 +1,5 @@
 GET /api/2.4/monitorings?feed=changes&limit=3&opt_fields=reasons HTTP/1.0
-Host: api-sandbox.openprocurement.org
+Host: audit-api-sandbox.prozorro.gov.ua
 
 
 200 OK
@@ -7,9 +7,9 @@ Content-Type: application/json; charset=UTF-8
 
 {
   "next_page": {
-    "path": "/api/2.4/monitorings?feed=changes&opt_fields=reasons&prev_offset=90d3226c2782f976bcf5178faedaf4d1&offset=b22f6be6441db6986b1d33b60e2a6d75&limit=3", 
-    "uri": "http://api-sandbox.openprocurement.org/api/2.4/monitorings?feed=changes&opt_fields=reasons&prev_offset=90d3226c2782f976bcf5178faedaf4d1&offset=b22f6be6441db6986b1d33b60e2a6d75&limit=3", 
-    "offset": "b22f6be6441db6986b1d33b60e2a6d75"
+    "path": "/api/2.4/monitorings?feed=changes&offset=b0de1d5f6f95b90a6c6f0b94d08fb958&limit=3&opt_fields=reasons", 
+    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings?feed=changes&offset=b0de1d5f6f95b90a6c6f0b94d08fb958&limit=3&opt_fields=reasons", 
+    "offset": "b0de1d5f6f95b90a6c6f0b94d08fb958"
   }, 
   "data": [
     {

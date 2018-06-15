@@ -140,6 +140,36 @@ class ActiveMonitoringResourceTest(BaseWebTest):
             }}
         )
 
+    def test_patch_add_conclusion_with_no_violations(self):
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "conclusion": {
+                    "violationOccurred": False,
+                }
+            }},
+        )
+
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["conclusion"]["violationOccurred"], False)
+
+    def test_patch_add_conclusion_with_violations(self):
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "conclusion": {
+                    "violationOccurred": True,
+                    "violationType": ["corruptionProcurementMethodType"],
+                },
+            }},
+        )
+
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["conclusion"]["violationOccurred"], True)
+        self.assertEqual(response.json['data']["conclusion"]["violationType"], ["corruptionProcurementMethodType"])
+
     def test_patch_to_declined(self):
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
@@ -247,6 +277,20 @@ class AddressedMonitoringResourceTest(BaseWebTest):
             }},
         )
 
+    def test_patch_add_cancellation(self):
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "cancellation": {
+                    "description": "Whisper words of wisdom - let it be."
+                }
+            }},
+        )
+
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["cancellation"]["description"], "Whisper words of wisdom - let it be.")
+
     def test_patch_to_stopped(self):
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
@@ -302,6 +346,20 @@ class DeclinedMonitoringResourceTest(BaseWebTest):
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["status"], "closed")
+
+    def test_patch_add_cancellation(self):
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "cancellation": {
+                    "description": "Whisper words of wisdom - let it be."
+                }
+            }},
+        )
+
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["cancellation"]["description"], "Whisper words of wisdom - let it be.")
 
     def test_patch_to_stopped(self):
         response = self.app.patch_json(

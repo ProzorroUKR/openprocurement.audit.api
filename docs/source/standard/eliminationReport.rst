@@ -3,6 +3,8 @@
 EliminationReport
 =================
 
+Violation elimination report
+
 Schema
 ------
 

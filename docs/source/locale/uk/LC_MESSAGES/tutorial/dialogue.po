@@ -1,0 +1,78 @@
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: openprocurement.audit.api 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2018-06-13 11:14+0300\n"
+"PO-Revision-Date: 2018-06-15 00:24+0300\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: uk\n"
+"X-Generator: Poedit 1.8.7.1\n"
+
+#: ../../source/tutorial/dialogue.rst:6
+msgid "Make a Dialogue"
+msgstr "Запит пояснень"
+
+#: ../../source/tutorial/dialogue.rst:0
+msgid "This section contains available actions for next roles:"
+msgstr "Секція містить опис можливих дій для наступний учасників моніторингу:"
+
+#: ../../source/tutorial/dialogue.rst:0
+msgid "|yes| Monitoring owner"
+msgstr "|yes| Власник моніторингу"
+
+#: ../../source/tutorial/dialogue.rst:0
+msgid "|yes| Tender owner"
+msgstr "|yes| Власник тендеру"
+
+#: ../../source/tutorial/dialogue.rst:14
+msgid ""
+"Let's provide party that will be used as related party for our dialogue:"
+msgstr "Додаємо учасника моніторингу на якого буде посилатися запит: "
+
+#: ../../source/tutorial/dialogue.rst:19
+msgid "For published monitoring we can start dialogue:"
+msgstr ""
+"Для моніторингу  з опублікованим рішенням про початок моніторингу є "
+"можливість створення запиту на пояснення:"
+
+#: ../../source/tutorial/dialogue.rst:24
+msgid "Lets add another document to dialogue:"
+msgstr "Додамо ще один документ для діалогу:"
+
+#: ../../source/tutorial/dialogue.rst:29
+msgid "We also can get a list of all dialogue documents:"
+msgstr ""
+"Також ми можемо отримати всіх доданих документів до запиту на пояснення:"
+
+#: ../../source/tutorial/dialogue.rst:34
+msgid ""
+"To answer the question as a broker we must get :ref:`credentials` first. "
+"Now lets update answer using generated token:"
+msgstr ""
+"Для надання відповіді на запит від імені майданчику ми маємо спочатку "
+"`отримати токен <credentials>`_. Тепер спробуємо додати відповідь "
+"використовуючи згенерований токен."
+
+#: ../../source/tutorial/dialogue.rst:39
+msgid "And also add documents:"
+msgstr "А також додамо документи:"
+
+#: ../../source/tutorial/dialogue.rst:44
+msgid "Lets see the result dialogue:"
+msgstr "Поглянемо на результат діалогу:"
+
+#: ../../source/tutorial/dialogue.rst:49
+msgid "Also we can create another question as a broker:"
+msgstr ""
+"Також ми можемо від імені майданчику надати пояснення з власної ініціативи:"
+
+#: ../../source/tutorial/dialogue.rst:54
+msgid "Lets see all dialogues we have:"
+msgstr "Поглянемо на список всіх діалогів у моніторингу:"

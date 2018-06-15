@@ -77,7 +77,7 @@ msgstr ""
 #: ../../source/tutorial/conclusion.rst:47
 msgid "Broker can initiate dialogue once after conclusion was provided:"
 msgstr ""
-"Майданчик звернутись (одноразово) за роз’ясненням щодо висновку, своривши "
+"Власник тендеру звернутись (одноразово) за роз’ясненням щодо висновку, своривши "
 "діалог:"
 
 #: ../../source/tutorial/conclusion.rst:52

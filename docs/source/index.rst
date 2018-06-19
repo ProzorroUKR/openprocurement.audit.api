@@ -1,8 +1,7 @@
 Welcome to openprocurement.audit.api documentation!
 ===================================================
 
-API includes also  openprocurement.audit.inspection_ module. Follow the link to see its documentation section.
-.. _openprocurement.audit.inspection: https://prozorro-monitoring-inspection.readthedocs.io/en/latest
+API includes also  `openprocurement.audit.inspection <https://prozorro-monitoring-inspection.readthedocs.io/en/latest>`_ module. Follow the link to see its documentation section.
 
 .. title:: Monitoring API
 

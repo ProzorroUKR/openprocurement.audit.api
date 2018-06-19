@@ -197,6 +197,8 @@ def _validate_elimination_report_status(request):
 
 
 def validate_elimination_report_data(request):
+    if request.validated["monitoring"].eliminationReport is not None:
+        raise_operation_error(request, "Can't post another elimination report")
     _validate_elimination_report_status(request)
     return validate_data(request, EliminationReport)
 

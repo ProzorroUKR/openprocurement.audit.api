@@ -54,6 +54,40 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest):
         )
         self.assertEqual(response.json["data"]["status"], "draft")
 
+    def test_post_monitoring_risk_bot(self):
+        self.app.authorization = ('Basic', (self.risk_indicator_token, ''))
+        response = self.app.post_json(
+            '/monitorings',
+            {"data": {
+                "tender_id": "f" * 32,
+                "reasons": ["public", "fiscal"],
+                "procuringStages": ["awarding", "contracting"]
+            }},
+            status=201
+        )
+
+        self.assertIn("data", response.json)
+        self.assertEqual(
+            set(response.json["data"]),
+            {"id", "status", "tender_id", "dateModified",
+             "dateCreated", "reasons", "monitoring_id", "procuringStages"}
+        )
+        self.assertEqual(response.json["data"]["status"], "draft")
+
+    def test_post_active_monitoring_risk_bot(self):
+        self.app.authorization = ('Basic', (self.risk_indicator_token, ''))
+        response = self.app.post_json(
+            '/monitorings',
+            {"data": {
+                "tender_id": "f" * 32,
+                "reasons": ["public", "fiscal"],
+                "procuringStages": ["awarding", "contracting"],
+                "status": "active",
+            }},
+            status=422
+        )
+        self.assertEqual(response.json["errors"][0]["description"], "Can't create a monitoring in 'active' status")
+
 
 class BaseFeedResourceTest(BaseWebTest):
     feed = ""

@@ -12,7 +12,16 @@ from openprocurement.audit.api.models import Monitoring, Dialogue, EliminationRe
 
 def validate_monitoring_data(request):
     update_logging_context(request, {'MONITOR_ID': '__new__'})
-    return validate_data(request, Monitoring)
+    data = validate_data(request, Monitoring)
+
+    monitoring = request.validated['monitoring']
+    if monitoring.status != "draft":
+        request.errors.add(
+            'body', 'status', "Can't create a monitoring in '{}' status".format(monitoring.status)
+        )
+        request.errors.status = 422
+        raise error_handler(request.errors)
+    return data
 
 
 def validate_patch_monitoring_data(request):

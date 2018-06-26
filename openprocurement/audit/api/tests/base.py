@@ -44,6 +44,7 @@ class BaseWebTest(unittest.TestCase):
         config.read(os.path.join(os.path.dirname(__file__), 'auth.ini'))
         self.broker_token = config.get("brokers", "broker")
         self.sas_token = config.get("sas", "test_sas")
+        self.risk_indicator_token = config.get("risk_indicators", "risk_indicator_bot")
 
     def tearDown(self):
         del self.couchdb_server[self.db.name]

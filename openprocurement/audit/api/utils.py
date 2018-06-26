@@ -39,12 +39,12 @@ class APIResource(object):
 def monitoring_serialize(request, monitoring_data, fields):
     monitoring = request.monitoring_from_data(monitoring_data, raise_error=False)
     monitoring.__parent__ = request.context
-    return {i: j for i, j in monitoring.serialize("view").items() if i in fields}
+    return {i: j for i, j in monitoring.serialize('view').items() if i in fields}
 
 
 def save_monitoring(request, date_modified=None):
     monitoring = request.validated['monitoring']
-    patch = get_revision_changes(request.validated['monitoring_src'], monitoring.serialize("plain"))
+    patch = get_revision_changes(request.validated['monitoring_src'], monitoring.serialize('plain'))
     if patch:
         add_revision(request, monitoring, patch)
 
@@ -195,7 +195,7 @@ def get_access_token(request):
 
 
 def upload_objects_documents(request, obj, key='body'):
-    for document in getattr(obj, "documents", []):
+    for document in getattr(obj, 'documents', []):
         check_document(request, document, key)
         document_route = request.matched_route.name
         update_document_url(request, document, document_route, {})

@@ -15,7 +15,7 @@ from logging import getLogger
 LOGGER = getLogger(__name__)
 
 
-@op_resource(name='Tender Monitorings', path='/tender/{tender_id}/monitorings')
+@op_resource(name='Tender Monitorings', path='/tenders/{tender_id}/monitorings')
 class TenderMonitoringResource(APIResource):
 
     def __init__(self, request, context):

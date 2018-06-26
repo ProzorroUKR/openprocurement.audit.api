@@ -1,12 +1,11 @@
 from openprocurement.audit.api.tests.base import BaseWebTest
-from openprocurement.audit.api.design import MONITORINGS_BY_TENDER_FIELDS
 import unittest
 
 
 class TenderMonitoringsResourceTest(BaseWebTest):
 
     def test_get_empty_list(self):
-        response = self.app.get('/tender/f9f9f9/monitorings')
+        response = self.app.get('/tenders/f9f9f9/monitorings')
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data'], [])
@@ -22,7 +21,7 @@ class TenderMonitoringsResourceTest(BaseWebTest):
         for i in range(5):  # these are not on the list
             self.create_monitoring(tender_id="a" * 32)
 
-        response = self.app.get('/tender/{}/monitorings'.format(tender_id))
+        response = self.app.get('/tenders/{}/monitorings'.format(tender_id))
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual([e["id"] for e in response.json['data']], ids)
@@ -38,7 +37,7 @@ class TenderMonitoringsResourceTest(BaseWebTest):
             ids.append(self.monitoring_id)
 
         response = self.app.get(
-            '/tender/{}/monitorings?opt_fields=dateModified%2Creasons'.format(
+            '/tenders/{}/monitorings?opt_fields=dateModified%2Creasons'.format(
                 tender_id
             )
         )
@@ -55,7 +54,7 @@ class TenderMonitoringsResourceTest(BaseWebTest):
             self.create_monitoring(tender_id=tender_id, mode="test")
 
         response = self.app.get(
-            '/tender/{}/monitorings'.format(tender_id)
+            '/tenders/{}/monitorings'.format(tender_id)
         )
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
@@ -70,7 +69,7 @@ class TenderMonitoringsResourceTest(BaseWebTest):
             ids.append(self.monitoring_id)
 
         response = self.app.get(
-            '/tender/{}/monitorings?mode=test'.format(tender_id)
+            '/tenders/{}/monitorings?mode=test'.format(tender_id)
         )
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')

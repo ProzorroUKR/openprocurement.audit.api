@@ -20,7 +20,7 @@ class MonitoringCredentialsResourceTest(BaseWebTest):
             status=403
         )
 
-        self.assertEqual(response.status, '403 Forbidden')
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual({('body', 'data')}, get_errors_field_names(response, 'No access token was provided'))
 
@@ -36,7 +36,7 @@ class MonitoringCredentialsResourceTest(BaseWebTest):
             '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token')
         )
 
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertIn('access', response.json)
 
@@ -53,7 +53,7 @@ class MonitoringCredentialsResourceTest(BaseWebTest):
             status=403
         )
 
-        self.assertEqual(response.status, '403 Forbidden')
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(response.content_type, 'application/json')
 
     @mock.patch('restkit.Client.request')
@@ -68,7 +68,7 @@ class MonitoringCredentialsResourceTest(BaseWebTest):
             status=403
         )
 
-        self.assertEqual(response.status, '403 Forbidden')
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual({('body', 'data')}, get_errors_field_names(response, 'Tender {} not found'.format("f" * 32)))
 
@@ -85,7 +85,7 @@ class MonitoringCredentialsResourceTest(BaseWebTest):
             headers={'X-access-token': 'tender_token'}
         )
 
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertIn('access', response.json)
 
@@ -103,7 +103,7 @@ class MonitoringCredentialsResourceTest(BaseWebTest):
             status=403
         )
 
-        self.assertEqual(response.status, '403 Forbidden')
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(response.content_type, 'application/json')
 
     @mock.patch('restkit.Resource.request')
@@ -119,7 +119,7 @@ class MonitoringCredentialsResourceTest(BaseWebTest):
             {'access': {'token': 'tender_token'}}
         )
 
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertIn('access', response.json)
 
@@ -137,7 +137,7 @@ class MonitoringCredentialsResourceTest(BaseWebTest):
             status=403
         )
 
-        self.assertEqual(response.status, '403 Forbidden')
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(response.content_type, 'application/json')
 
 def suite():

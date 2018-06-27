@@ -13,6 +13,7 @@ class Root(object):
         (Allow, Everyone, 'view_monitoring'),
         (Allow, Everyone, 'revision_monitoring'),
         (Allow, 'g:brokers', 'generate_credentials'),
+        (Allow, 'g:risk_indicators', 'create_monitoring'),
         (Allow, 'g:sas', 'create_monitoring'),
         (Allow, 'g:sas', 'edit_monitoring'),
         (Allow, 'g:sas', 'upload_monitoring_documents'),

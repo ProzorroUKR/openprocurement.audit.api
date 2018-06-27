@@ -154,6 +154,7 @@ class MonitoringEliminationResourceTest(MonitoringEliminationBaseTest):
         self.assertEqual(len(data["documents"]), 1)
         document = data["documents"][0]
         self.assertNotEqual(document["url"], request_data["documents"][0]["url"])
+        self.assertEqual(document["author"], "tender_owner")
 
     def test_fail_update_resolution(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))

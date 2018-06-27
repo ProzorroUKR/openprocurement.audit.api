@@ -4,6 +4,7 @@ from openprocurement.audit.api.utils import (
     APIResource,
     apply_patch,
     upload_objects_documents,
+    set_author,
 )
 from openprocurement.api.utils import (
     json_view,
@@ -31,6 +32,7 @@ class EliminationReportResource(APIResource):
     def put(self):
         elimination = self.request.validated['eliminationreport']
         elimination.dateModified = elimination.dateCreated
+        set_author(elimination.documents, self.request, 'author')
         upload_objects_documents(self.request, elimination)
         apply_patch(self.request, data=dict(eliminationReport=elimination), date_modified=elimination.dateModified)
         self.LOGGER.info('Updated elimination {}'.format(self.request.context.id),

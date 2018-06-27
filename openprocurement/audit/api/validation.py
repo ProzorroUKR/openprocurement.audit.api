@@ -6,16 +6,21 @@ from openprocurement.api.utils import update_logging_context, raise_operation_er
 from openprocurement.api.validation import validate_data
 from openprocurement_client.client import TendersClient
 
+from openprocurement.audit.api.constants import (
+    CONCLUSION_OBJECT_TYPE, DECISION_OBJECT_TYPE, DRAFT_STATUS, ACTIVE_STATUS, ADDRESSED_STATUS, DECLINED_STATUS)
 from openprocurement.audit.api.utils import get_access_token, get_monitoring_role
 from openprocurement.audit.api.models import Monitoring, Dialogue, EliminationReport, Party, Appeal
 
 
 def validate_monitoring_data(request):
+    """
+    Validate monitoring data POST
+    """
     update_logging_context(request, {'MONITOR_ID': '__new__'})
     data = validate_data(request, Monitoring)
 
     monitoring = request.validated['monitoring']
-    if monitoring.status != "draft":
+    if monitoring.status != DRAFT_STATUS:
         request.errors.add(
             'body', 'status', "Can't create a monitoring in '{}' status".format(monitoring.status)
         )
@@ -25,10 +30,118 @@ def validate_monitoring_data(request):
 
 
 def validate_patch_monitoring_data(request):
+    """
+    Validate monitoring data PATCH
+    """
     data = validate_data(request, Monitoring, partial=True)
+    _validate_patch_monitoring_fields(request)
+    _validate_patch_monitoring_status(request)
+    return data
 
-    # check sent data that is not allowed in current status
-    # acceptable fields are set in Monitor.Options.roles: edit_draft, edit_active, etc
+
+def validate_dialogue_data(request):
+    """
+    Validate dialogue data POST
+    """
+    update_logging_context(request, {'DIALOGUE_ID': '__new__'})
+    data = validate_data(request, Dialogue)
+    _validate_post_dialogue_status(request)
+    return data
+
+
+def validate_patch_dialogue_data(request):
+    """
+    Validate dialogue data PATCH
+    """
+    data = validate_data(request, Dialogue, partial=True)
+    _validate_patch_dialogue_status(request)
+    return data
+
+
+def validate_party_data(request):
+    """
+    Validate party data POST
+    """
+    update_logging_context(request, {'PARTY_ID': '__new__'})
+    return validate_data(request, Party)
+
+
+def validate_patch_party_data(request):
+    """
+    Validate party data PATCH
+    """
+    data = validate_data(request, Party, partial=True)
+    return data
+
+
+def validate_elimination_report_data(request):
+    """
+    Validate elimination report data POST
+    """
+    if request.validated["monitoring"].eliminationReport is not None:
+        raise_operation_error(request, "Can't post another elimination report")
+    _validate_elimination_report_status(request)
+    return validate_data(request, EliminationReport)
+
+
+def validate_patch_elimination_report_data(request):
+    """
+    Validate elimination report data PATCH
+    """
+    _validate_elimination_report_status(request)
+    return validate_data(request, EliminationReport, partial=True)
+
+
+def validate_appeal_data(request):
+    """
+    Validate appeal report data POST
+    """
+    monitoring = request.validated['monitoring']
+    if monitoring.appeal is not None:
+        raise_operation_error(request, "Can't post another appeal")
+
+    if monitoring.conclusion is None or monitoring.conclusion.datePublished is None:
+        request.errors.status = 422
+        request.errors.add('body', 'appeal', 'Can\'t post before conclusion is published')
+        raise error_handler(request.errors)
+
+    return validate_data(request, Appeal)
+
+def validate_document_decision_status(request):
+    _validate_document_status(request, DRAFT_STATUS)
+
+
+def validate_document_conclusion_status(request):
+    _validate_document_status(request, ACTIVE_STATUS)
+
+
+def validate_document_dialogue_status(request):
+    _validate_document_status(request, ACTIVE_STATUS)
+
+
+def validate_credentials_generate(request):
+    token = get_access_token(request)
+    if not token:
+        raise_operation_error(request, 'No access token was provided')
+
+    try:
+        response = TendersClient(
+            request.registry.api_token,
+            host_url=request.registry.api_server,
+            api_version=request.registry.api_version,
+        ).extract_credentials(request.validated['monitoring'].tender_id)
+    except ResourceNotFound:
+        raise_operation_error(request, 'Tender {} not found'.format(request.validated['monitoring'].tender_id))
+    else:
+        if sha512(token).hexdigest() != response['data']['tender_token']:
+            raise forbidden(request)
+
+
+def _validate_patch_monitoring_fields(request):
+    """
+    Check sent data that is not allowed in current status
+    acceptable fields are set in Monitor.Options.roles: edit_draft, edit_active, etc
+    """
     provided = set(request.validated['json_data'].keys())
     allowed = set(request.validated['data'].keys())
     difference = provided - allowed
@@ -39,10 +152,11 @@ def validate_patch_monitoring_data(request):
         request.errors.status = 422
         raise error_handler(request.errors)
 
-    return data
 
-
-def validate_patch_monitoring_status(request):
+def _validate_patch_monitoring_status(request):
+    """
+    Check that monitoring status change is allowed
+    """
     status = request.validated['json_data'].get('status')
     if status is not None and status != request.context.status:
         function_name = '_validate_patch_monitoring_status_{}_to_{}'.format(request.context.status, status)
@@ -69,13 +183,15 @@ def _validate_patch_monitoring_status_draft_to_active(request):
 def _validate_patch_monitoring_status_active_to_addressed(request):
     _validate_patch_monitoring_status_active_to_addressed_or_declined(request)
     if not request.validated.get('data', {}).get('conclusion').get('violationOccurred'):
-        raise_operation_error(request, 'Can\'t set addressed status to monitoring if no violation occurred')
+        raise_operation_error(request, 'Can\'t set {} status to monitoring if no violation occurred'.format(
+            ADDRESSED_STATUS))
 
 
 def _validate_patch_monitoring_status_active_to_declined(request):
     _validate_patch_monitoring_status_active_to_addressed_or_declined(request)
     if request.validated.get('data', {}).get('conclusion').get('violationOccurred'):
-        raise_operation_error(request, 'Can\'t set declined status to monitoring if violation occurred')
+        raise_operation_error(request, 'Can\'t set {} status to monitoring if violation occurred'.format(
+            DECLINED_STATUS))
 
 
 def _validate_patch_monitoring_status_active_to_addressed_or_declined(request):
@@ -121,110 +237,43 @@ def _validate_patch_monitoring_status_to_stopped_or_cancelled(request):
         raise error_handler(request.errors)
 
 
-def validate_dialogue_data(request):
-    update_logging_context(request, {'DIALOGUE_ID': '__new__'})
-    return validate_data(request, Dialogue)
-
-
-def validate_patch_dialogue_data(request):
-    return validate_data(request, Dialogue, partial=True)
-
-
-def validate_party_data(request):
-    update_logging_context(request, {'PARTY_ID': '__new__'})
-    return validate_data(request, Party)
-
-
-def validate_patch_party_data(request):
-    return validate_data(request, Party, partial=True)
-
-
-def validate_post_dialogue_allowed(request):
+def _validate_post_dialogue_status(request):
     monitoring = request.validated['monitoring']
     status_current = monitoring.status
-    if status_current in ('addressed', 'declined'):
+    if status_current in (ADDRESSED_STATUS, DECLINED_STATUS):
         if request.authenticated_userid != monitoring.tender_owner:
             raise forbidden(request)
-        if sum(dialogue.dialogueOf == 'conclusion' for dialogue in monitoring.dialogues):
-            raise_operation_error(request, 'Can\'t add more than one conclusion dialogue')
-    elif status_current not in ('active',):
+        if sum(dialogue.dialogueOf == CONCLUSION_OBJECT_TYPE for dialogue in monitoring.dialogues):
+            raise_operation_error(request, 'Can\'t add more than one {} dialogue'.format(CONCLUSION_OBJECT_TYPE))
+    elif status_current not in (ACTIVE_STATUS,):
         raise_operation_error(request, 'Can\'t add dialogue in current {} monitoring status'.format(status_current))
 
 
-def validate_patch_dialogue_allowed(request):
+def _validate_patch_dialogue_status(request):
     dialogue = request.validated['dialogue']
     author = dialogue['author']
     if get_monitoring_role(request.authenticated_role) == author:
         raise forbidden(request)
     monitoring = request.validated['monitoring']
     status_current = monitoring.status
-    if dialogue.dialogueOf == 'conclusion' and status_current not in ('addressed', 'declined'):
-        raise_operation_error(request, 'Can\'t edit conclusion dialogue in current {} monitoring status'.format(
-            status_current))
-    elif dialogue.dialogueOf == 'decision' and status_current not in ('active',):
-        raise_operation_error(request, 'Can\'t edit decision dialogue in current {} monitoring status'.format(
-            status_current))
-
-
-def validate_document_decision_upload_allowed(request):
-    status_current = request.validated['monitoring'].status
-    if status_current != 'draft':
-        raise_operation_error(request, 'Can\'t add document in current {} monitoring status'.format(status_current))
-
-
-def validate_document_conclusion_upload_allowed(request):
-    status_current = request.validated['monitoring'].status
-    if status_current != 'active':
-        raise_operation_error(request, 'Can\'t add document in current {} monitoring status'.format(status_current))
-
-
-def validate_credentials_generate(request):
-    token = get_access_token(request)
-    if not token:
-        raise_operation_error(request, 'No access token was provided')
-
-    try:
-        response = TendersClient(
-            request.registry.api_token,
-            host_url=request.registry.api_server,
-            api_version=request.registry.api_version,
-        ).extract_credentials(request.validated['monitoring'].tender_id)
-    except ResourceNotFound:
-        raise_operation_error(request, 'Tender {} not found'.format(request.validated['monitoring'].tender_id))
-    else:
-        if sha512(token).hexdigest() != response['data']['tender_token']:
-            raise forbidden(request)
+    if dialogue.dialogueOf == CONCLUSION_OBJECT_TYPE and status_current not in (ADDRESSED_STATUS, DECLINED_STATUS):
+        raise_operation_error(request, 'Can\'t edit {} dialogue in current {} monitoring status'.format(
+            CONCLUSION_OBJECT_TYPE, status_current))
+    elif dialogue.dialogueOf == DECISION_OBJECT_TYPE and status_current not in (ACTIVE_STATUS,):
+        raise_operation_error(request, 'Can\'t edit {} dialogue in current {} monitoring status'.format(
+            DECISION_OBJECT_TYPE, status_current))
 
 
 def _validate_elimination_report_status(request):
     monitoring = request.validated['monitoring']
-    if monitoring.status != 'addressed':
+    if monitoring.status != ADDRESSED_STATUS:
         request.errors.status = 422
         request.errors.add('body', 'eliminationResolution',
                            'Can\'t update in current {} monitoring status'.format(monitoring.status))
         raise error_handler(request.errors)
 
 
-def validate_elimination_report_data(request):
-    if request.validated["monitoring"].eliminationReport is not None:
-        raise_operation_error(request, "Can't post another elimination report")
-    _validate_elimination_report_status(request)
-    return validate_data(request, EliminationReport)
-
-
-def validate_patch_elimination_report_data(request):
-    _validate_elimination_report_status(request)
-    return validate_data(request, EliminationReport, partial=True)
-
-
-def validate_appeal_data(request):
-    monitoring = request.validated['monitoring']
-    if monitoring.appeal is not None:
-        raise_operation_error(request, "Can't post another appeal")
-
-    if monitoring.conclusion is None or monitoring.conclusion.datePublished is None:
-        request.errors.status = 422
-        request.errors.add('body', 'appeal', 'Can\'t post before conclusion is published')
-        raise error_handler(request.errors)
-
-    return validate_data(request, Appeal)
+def _validate_document_status(request, status):
+    status_current = request.validated['monitoring'].status
+    if status_current != status:
+        raise_operation_error(request, 'Can\'t add document in current {} monitoring status'.format(status_current))

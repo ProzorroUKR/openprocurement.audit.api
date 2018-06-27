@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from pyramid.security import (
-    ALL_PERMISSIONS,
     Allow,
     Everyone,
 )
@@ -21,6 +20,9 @@ class Root(object):
         (Allow, 'g:sas', 'create_dialogue'),
         (Allow, 'g:sas', 'edit_dialogue'),
         (Allow, 'g:sas', 'upload_dialogue_documents'),
+        (Allow, 'g:sas', 'create_post'),
+        (Allow, 'g:sas', 'edit_post'),
+        (Allow, 'g:sas', 'upload_post_documents'),
         (Allow, 'g:sas', 'create_party'),
         (Allow, 'g:sas', 'edit_party'),
     ]
@@ -69,6 +71,8 @@ def factory(request):
         return appeal_factory(request)
     elif request.matchdict.get('dialogue_id'):
         return dialogue_factory(request)
+    elif request.matchdict.get('post_id'):
+        return post_factory(request)
     elif request.matchdict.get('party_id'):
         return get_item(request.monitoring, 'party', request)
     elif request.matchdict.get('document_id'):
@@ -98,6 +102,13 @@ def dialogue_factory(request):
     if request.matchdict.get('document_id'):
         return get_item(dialogue, 'document', request)
     return dialogue
+
+
+def post_factory(request):
+    post = get_item(request.monitoring, 'post', request)
+    if request.matchdict.get('document_id'):
+        return get_item(post, 'document', request)
+    return post
 
 
 def decision_factory(request):

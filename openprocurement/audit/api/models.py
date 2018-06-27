@@ -13,10 +13,24 @@ from schematics.exceptions import ValidationError
 from couchdb_schematics.document import SchematicsDocument
 from pyramid.security import Allow
 
+from openprocurement.audit.api.choices import (
+    DIALOGUE_TYPE_CHOICES,
+    PARTY_ROLES_CHOICES,
+    MONITORING_STATUS_CHOICES,
+    MONITORING_VIOLATION_TYPE_CHOICES,
+    MONITORING_REASON_CHOICES,
+    MONITORING_PROCURING_STAGES,
+    RESOLUTION_RESULT_CHOICES, RESOLUTION_BY_TYPE_CHOICES)
+from openprocurement.audit.api.constants import (
+    DECISION_OBJECT_TYPE,
+    DRAFT_STATUS,
+    OTHER_VIOLATION,
+)
+
 
 class Report(Model):
     description = StringType(required=True)
-    documents = ListType(ModelType(Document), default=list())
+    documents = ListType(ModelType(Document), default=[])
     dateCreated = IsoDateTimeType(default=get_now)
     datePublished = IsoDateTimeType()
 
@@ -27,14 +41,7 @@ class Decision(Report):
 
 class Conclusion(Report):
     violationOccurred = BooleanType(required=True)
-    violationType = ListType(
-        StringType(choices=(
-            'corruptionDescription', 'corruptionProcurementMethodType', 'corruptionPublicDisclosure',
-            'corruptionBiddingDocuments', 'documentsForm', 'corruptionAwarded', 'corruptionCancelled',
-            'corruptionContracting', 'corruptionChanges', 'other',
-        )),
-        default=[]
-    )
+    violationType = ListType(StringType(choices=MONITORING_VIOLATION_TYPE_CHOICES), default=[])
     otherViolationType = StringType()
     auditFinding = StringType()
     stringsAttached = StringType()
@@ -45,11 +52,11 @@ class Conclusion(Report):
         if data["violationOccurred"] and not value:
             raise ValidationError(u"This field is required.")
 
-        if value and "other" not in value:  # drop other type description
+        if value and OTHER_VIOLATION not in value:  # drop other type description
             data["otherViolationType"] = None
 
     def validate_otherViolationType(self, data, value):
-        if "other" in data["violationType"] and not value:
+        if OTHER_VIOLATION in data["violationType"] and not value:
             raise ValidationError(u"This field is required.")
 
 
@@ -58,8 +65,8 @@ class Cancellation(Report):
 
 
 class EliminationResolution(Report):
-    result = StringType(choices=['completely', 'partly', 'none'])
-    resultByType = DictType(StringType(choices=['eliminated', 'not_eliminated', 'no_mechanism']))
+    result = StringType(choices=RESOLUTION_RESULT_CHOICES)
+    resultByType = DictType(StringType(choices=RESOLUTION_BY_TYPE_CHOICES))
     description = StringType(required=False)
 
     def validate_resultByType(self, data, value):
@@ -115,11 +122,11 @@ class Dialogue(Model):
     title = StringType(required=True)
     description = StringType(required=True)
     answer = StringType()
-    documents = ListType(ModelType(Document), default=list())
+    documents = ListType(ModelType(Document), default=[])
     dateSubmitted = IsoDateTimeType(default=get_now())
     dateAnswered = IsoDateTimeType()
     author = StringType()
-    dialogueOf = StringType(choices=('decision', 'conclusion'), default='decision')
+    dialogueOf = StringType(choices=DIALOGUE_TYPE_CHOICES, default=DECISION_OBJECT_TYPE)
     relatedParty = StringType()
 
     def validate_relatedParty(self, data, value):
@@ -142,13 +149,13 @@ class Party(Model):
     additionalIdentifiers = ListType(ModelType(Identifier))
     address = ModelType(Address, required=True)
     contactPoint = ModelType(ContactPoint, required=True)
-    roles = ListType(StringType(choices=('create', 'decision', 'conclusion', 'dialogue')), default=list())
+    roles = ListType(StringType(choices=PARTY_ROLES_CHOICES), default=[])
 
 
 class Monitoring(SchematicsDocument, Model):
 
     class Options:
-        _perm_edit_whitelist = whitelist("status", "reasons", "procuringStages", "parties")
+        _perm_edit_whitelist = whitelist('status', 'reasons', 'procuringStages', 'parties')
         roles = {
             'plain': blacklist('_attachments', 'revisions') + schematics_embedded_role,
             'revision': whitelist('revisions'),
@@ -158,10 +165,10 @@ class Monitoring(SchematicsDocument, Model):
                 'tender_owner_token', 'tender_owner',
                 'monitoringPeriod', 'eliminationPeriod'
             ) + schematics_embedded_role,
-            'edit_draft': whitelist("decision", "cancellation") + _perm_edit_whitelist,
-            'edit_active': whitelist("conclusion", "cancellation") + _perm_edit_whitelist,
-            'edit_addressed': whitelist("eliminationResolution", "cancellation") + _perm_edit_whitelist,
-            'edit_declined': whitelist("cancellation") + _perm_edit_whitelist,
+            'edit_draft': whitelist('decision', 'cancellation') + _perm_edit_whitelist,
+            'edit_active': whitelist('conclusion', 'cancellation') + _perm_edit_whitelist,
+            'edit_addressed': whitelist('eliminationResolution', 'cancellation') + _perm_edit_whitelist,
+            'edit_declined': whitelist('cancellation') + _perm_edit_whitelist,
             'edit_completed': whitelist(),
             'edit_closed': whitelist(),
             'edit_stopped': whitelist(),
@@ -176,13 +183,10 @@ class Monitoring(SchematicsDocument, Model):
 
     tender_id = MD5Type(required=True)
     monitoring_id = StringType()
-    status = StringType(choices=[
-        'draft', 'active', 'addressed', 'declined',
-        'completed', 'closed', 'stopped', 'cancelled'
-    ], default='draft')
+    status = StringType(choices=MONITORING_STATUS_CHOICES, default=DRAFT_STATUS)
 
-    reasons = ListType(StringType(choices=['indicator', 'authorities', 'media', 'fiscal', 'public']), required=True)
-    procuringStages = ListType(StringType(choices=['planning', 'awarding', 'contracting']), required=True)
+    reasons = ListType(StringType(choices=MONITORING_REASON_CHOICES), required=True)
+    procuringStages = ListType(StringType(choices=MONITORING_PROCURING_STAGES), required=True)
     monitoringPeriod = ModelType(Period)
 
     decision = ModelType(Decision)
@@ -190,17 +194,17 @@ class Monitoring(SchematicsDocument, Model):
     eliminationReport = ModelType(EliminationReport)
     eliminationResolution = ModelType(EliminationResolution)
     eliminationPeriod = ModelType(Period)
-    dialogues = ListType(ModelType(Dialogue), default=list())
+    dialogues = ListType(ModelType(Dialogue), default=[])
     cancellation = ModelType(Cancellation)
     appeal = ModelType(Appeal)
 
-    parties = ListType(ModelType(Party), default=list())
+    parties = ListType(ModelType(Party), default=[])
 
     dateModified = IsoDateTimeType()
     dateCreated = IsoDateTimeType(default=get_now)
     tender_owner = StringType()
     tender_owner_token = StringType()
-    revisions = ListType(ModelType(Revision), default=list())
+    revisions = ListType(ModelType(Revision), default=[])
     _attachments = DictType(DictType(BaseType), default=dict())
 
     mode = StringType(choices=['test'])
@@ -226,7 +230,7 @@ class Monitoring(SchematicsDocument, Model):
             return self.cancellation
 
     def validate_eliminationResolution(self, data, value):
-        if value is not None and data["eliminationReport"] is None:
+        if value is not None and data['eliminationReport'] is None:
             raise ValidationError(u"Elimination report hasn't been provided.")
 
     def validate_monitoringDetails(self, *args, **kw):

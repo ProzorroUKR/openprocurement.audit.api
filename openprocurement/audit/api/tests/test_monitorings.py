@@ -9,7 +9,7 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest):
 
     def test_get(self):
         response = self.app.get('/monitorings')
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data'], [])
 
@@ -114,7 +114,7 @@ class BaseFeedResourceTest(BaseWebTest):
         pages = int(ceil(len(self.expected_ids) / float(self.limit)))
         for i in range(pages + 2):
             response = self.app.get(url)
-            self.assertEqual(response.status, '200 OK')
+            self.assertEqual(response.status_code, 200)
             self.assertEqual(response.content_type, 'application/json')
             self.assertIn("data", response.json)
 

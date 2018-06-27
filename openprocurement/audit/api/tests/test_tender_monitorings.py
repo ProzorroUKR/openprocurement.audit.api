@@ -6,7 +6,7 @@ class TenderMonitoringsResourceTest(BaseWebTest):
 
     def test_get_empty_list(self):
         response = self.app.get('/tenders/f9f9f9/monitorings')
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data'], [])
 
@@ -22,7 +22,7 @@ class TenderMonitoringsResourceTest(BaseWebTest):
             self.create_monitoring(tender_id="a" * 32)
 
         response = self.app.get('/tenders/{}/monitorings'.format(tender_id))
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual([e["id"] for e in response.json['data']], ids)
         self.assertEqual(set(response.json['data'][0].keys()),
@@ -41,7 +41,7 @@ class TenderMonitoringsResourceTest(BaseWebTest):
                 tender_id
             )
         )
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
 
         self.assertEqual([e["id"] for e in response.json['data']], ids)
@@ -56,7 +56,7 @@ class TenderMonitoringsResourceTest(BaseWebTest):
         response = self.app.get(
             '/tenders/{}/monitorings'.format(tender_id)
         )
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data'], [])
 
@@ -71,7 +71,7 @@ class TenderMonitoringsResourceTest(BaseWebTest):
         response = self.app.get(
             '/tenders/{}/monitorings?mode=test'.format(tender_id)
         )
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual([e["id"] for e in response.json['data']], ids)
 

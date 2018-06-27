@@ -41,7 +41,7 @@ class MonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
         response = self.app.post_json(
             '/monitorings/{}/dialogues'.format(self.monitoring_id),
             {'data': {}}, status=422)
-        self.assertEqual(response.status, '422 Unprocessable Entity')
+        self.assertEqual(response.status_code, 422)
         self.assertEqual(response.content_type, 'application/json')
 
         self.assertEqual(
@@ -54,7 +54,7 @@ class MonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
 
         # check initial date modified
         response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']['dateModified'], '2018-01-01T12:00:00+02:00')
 
@@ -71,13 +71,13 @@ class MonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
         response = self.app.post_json(
             '/monitorings/{}/dialogues'.format(self.monitoring_id),
             {'data': request_data})
-        self.assertEqual(response.status, '201 Created')
+        self.assertEqual(response.status_code, 201)
         self.assertEqual(response.content_type, 'application/json')
 
         dialogue_id = response.json['data']['id']
 
         response = self.app.get('/monitorings/{}/dialogues/{}'.format(self.monitoring_id, dialogue_id))
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']['title'], request_data["title"])
         self.assertEqual(response.json['data']['description'], request_data['description'])
@@ -87,7 +87,7 @@ class MonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertNotEqual(response.json['data']['documents'][0]['url'], request_data["documents"][0]['url'])
 
         response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']['dateModified'], '2018-01-02T12:30:00+02:00')
 
@@ -110,13 +110,13 @@ class MonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
                 'title': 'Lorem ipsum',
                 'description': 'Lorem ipsum dolor sit amet'
             }})
-        self.assertEqual(response.status, '201 Created')
+        self.assertEqual(response.status_code, 201)
         self.assertEqual(response.content_type, 'application/json')
 
         dialogue_id = response.json['data']['id']
 
         response = self.app.get('/monitorings/{}/dialogues/{}'.format(self.monitoring_id, dialogue_id))
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']['title'], 'Lorem ipsum')
         self.assertEqual(response.json['data']['description'], 'Lorem ipsum dolor sit amet')
@@ -142,7 +142,7 @@ class MonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.content_type, 'application/json')
 
         response = self.app.get('/monitorings/{}/dialogues/{}'.format(self.monitoring_id, dialogue_id))
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']['title'], 'Lorem ipsum')
         self.assertEqual(response.json['data']['description'], 'Lorem ipsum dolor sit amet')
@@ -239,7 +239,7 @@ class MonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.content_type, 'application/json')
 
         response = self.app.get('/monitorings/{}/dialogues/{}'.format(self.monitoring_id, dialogue_id))
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']['title'], 'Lorem ipsum')
         self.assertEqual(response.json['data']['description'], 'Lorem ipsum dolor sit amet')
@@ -318,7 +318,7 @@ class AddressedMonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
                 'title': 'Lorem ipsum',
                 'description': 'Lorem ipsum dolor sit amet'
             }})
-        self.assertEqual(response.status, '201 Created')
+        self.assertEqual(response.status_code, 201)
         self.assertEqual(response.content_type, 'application/json')
 
     @mock.patch('openprocurement.audit.api.validation.TendersClient')
@@ -339,7 +339,7 @@ class AddressedMonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
                 'title': 'Lorem ipsum',
                 'description': 'Lorem ipsum dolor sit amet'
             }})
-        self.assertEqual(response.status, '201 Created')
+        self.assertEqual(response.status_code, 201)
         self.assertEqual(response.content_type, 'application/json')
 
         self.app.post_json(
@@ -357,7 +357,7 @@ class AddressedMonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
                 'title': 'Lorem ipsum',
                 'description': 'Lorem ipsum dolor sit amet'
             }}, status=403)
-        self.assertEqual(response.status, '403 Forbidden')
+        self.assertEqual(response.status_code, 403)
 
 
 def suite():

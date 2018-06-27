@@ -1,17 +1,24 @@
 # -*- coding: utf-8 -*-
+from openprocurement.audit.api.constants import (
+    DECISION_OBJECT_TYPE,
+    CONCLUSION_OBJECT_TYPE,
+    APPEAL_OBJECT_TYPE,
+    ELIMINATION_REPORT_OBJECT_TYPE,
+    DIALOGUE_OBJECT_TYPE,
+)
 from openprocurement.audit.api.utils import (
     save_monitoring,
     op_resource,
     apply_patch,
     APIResource,
-    set_ownership,
-    set_author)
+    set_author,
+)
 from openprocurement.api.utils import (
     get_file,
     update_file_content_type,
     upload_file,
     context_unpack,
-    json_view
+    json_view,
 )
 from openprocurement.api.validation import (
     validate_file_update,
@@ -19,13 +26,14 @@ from openprocurement.api.validation import (
     validate_patch_document_data,
 )
 from openprocurement.audit.api.validation import (
-    validate_document_decision_upload_allowed,
-    validate_document_conclusion_upload_allowed
+    validate_document_decision_status,
+    validate_document_conclusion_status,
+    validate_document_dialogue_status,
 )
 
 
 class MonitoringsDocumentBaseResource(APIResource):
-    document_of = None
+    document_type = None
 
     @json_view(permission='view_monitoring')
     def collection_get(self):
@@ -49,7 +57,7 @@ class MonitoringsDocumentBaseResource(APIResource):
         documents = self.context.documents
         documents.append(document)
         if save_monitoring(self.request):
-            self.LOGGER.info('Created {} monitoring document {}'.format(self.document_of, document.id),
+            self.LOGGER.info('Created {} monitoring document {}'.format(self.document_type, document.id),
                              extra=context_unpack(self.request,
                                                   {'MESSAGE_ID': 'monitoring_document_create'},
                                                   {'DOCUMENT_ID': document.id}))
@@ -84,7 +92,7 @@ class MonitoringsDocumentBaseResource(APIResource):
         set_author(document, self.request, 'author')
         parent.documents.append(document)
         if save_monitoring(self.request):
-            self.LOGGER.info('Updated {} monitoring document {}'.format(self.document_of, document.id),
+            self.LOGGER.info('Updated {} monitoring document {}'.format(self.document_type, document.id),
                              extra=context_unpack(self.request,
                                                   {'MESSAGE_ID': 'monitoring_document_put'},
                                                   {'DOCUMENT_ID': document.id}))
@@ -100,7 +108,7 @@ class MonitoringsDocumentBaseResource(APIResource):
         document = self.request.context
         if apply_patch(self.request):
             update_file_content_type(self.request)
-            self.LOGGER.info('Updated {} monitoring document {}'.format(self.document_of, document.id),
+            self.LOGGER.info('Updated {} monitoring document {}'.format(self.document_type, document.id),
                              extra=context_unpack(self.request,
                                                   {'MESSAGE_ID': 'monitoring_document_patch'},
                                                   {'DOCUMENT_ID': document.id}))
@@ -112,15 +120,15 @@ class MonitoringsDocumentBaseResource(APIResource):
              path='/monitorings/{monitoring_id}/decision/documents/{document_id}',
              description="Monitoring Decision related binary files (PDFs, etc.)")
 class MonitoringsDocumentDecisionResource(MonitoringsDocumentBaseResource):
-    document_of = 'decision'
+    document_type = DECISION_OBJECT_TYPE
 
     @json_view(permission='upload_monitoring_documents',
-               validators=(validate_file_upload, validate_document_decision_upload_allowed))
+               validators=(validate_document_decision_status, validate_file_upload,))
     def collection_post(self):
         return super(MonitoringsDocumentDecisionResource, self).collection_post()
 
     @json_view(permission='upload_monitoring_documents',
-               validators=(validate_file_update, validate_document_decision_upload_allowed))
+               validators=(validate_document_decision_status, validate_file_update,))
     def put(self):
         return super(MonitoringsDocumentDecisionResource, self).put()
 
@@ -130,15 +138,15 @@ class MonitoringsDocumentDecisionResource(MonitoringsDocumentBaseResource):
              path='/monitorings/{monitoring_id}/conclusion/documents/{document_id}',
              description="Monitoring Conclusion related binary files (PDFs, etc.)")
 class MonitoringsDocumentConclusionResource(MonitoringsDocumentBaseResource):
-    document_of = 'conclusion'
+    document_type = CONCLUSION_OBJECT_TYPE
 
     @json_view(permission='upload_monitoring_documents',
-               validators=(validate_file_upload, validate_document_conclusion_upload_allowed))
+               validators=(validate_document_conclusion_status, validate_file_upload,))
     def collection_post(self):
         return super(MonitoringsDocumentConclusionResource, self).collection_post()
 
     @json_view(permission='upload_monitoring_documents',
-               validators=(validate_file_update, validate_document_conclusion_upload_allowed))
+               validators=(validate_document_conclusion_status, validate_file_update,))
     def put(self):
         return super(MonitoringsDocumentConclusionResource, self).put()
 
@@ -148,15 +156,15 @@ class MonitoringsDocumentConclusionResource(MonitoringsDocumentBaseResource):
              path='/monitorings/{monitoring_id}/dialogues/{dialogue_id}/documents/{document_id}',
              description="Monitoring Conclusion related binary files (PDFs, etc.)")
 class MonitoringsDocumentDialogueResource(MonitoringsDocumentBaseResource):
-    document_of = 'dialogue'
+    document_type = DIALOGUE_OBJECT_TYPE
 
     @json_view(permission='upload_dialogue_documents',
-               validators=(validate_file_upload, validate_document_conclusion_upload_allowed,))
+               validators=(validate_document_dialogue_status, validate_file_upload,))
     def collection_post(self):
         return super(MonitoringsDocumentDialogueResource, self).collection_post()
 
     @json_view(permission='upload_monitoring_documents',
-               validators=(validate_file_update, validate_document_conclusion_upload_allowed))
+               validators=(validate_document_dialogue_status, validate_file_update,))
     def put(self):
         return super(MonitoringsDocumentDialogueResource, self).put()
 
@@ -166,7 +174,7 @@ class MonitoringsDocumentDialogueResource(MonitoringsDocumentBaseResource):
              path='/monitorings/{monitoring_id}/eliminationReport/documents/{document_id}',
              description="Monitoring Elimination Report related binary files (PDFs, etc.)")
 class MonitoringsDocumentEliminationResource(MonitoringsDocumentBaseResource):
-    document_of = 'eliminationReport'
+    document_type = ELIMINATION_REPORT_OBJECT_TYPE
 
     @json_view(permission='edit_elimination_report',
                validators=(validate_file_upload,))
@@ -189,7 +197,7 @@ class MonitoringsDocumentEliminationResource(MonitoringsDocumentBaseResource):
              path='/monitorings/{monitoring_id}/appeal/documents/{document_id}',
              description="Monitoring Appeal related binary files (PDFs, etc.)")
 class AppealDocumentResource(MonitoringsDocumentBaseResource):
-    document_of = 'appeal'
+    document_type = APPEAL_OBJECT_TYPE
 
     @json_view(permission='create_appeal',
                validators=(validate_file_upload,))

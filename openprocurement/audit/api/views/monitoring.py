@@ -9,11 +9,11 @@ from openprocurement.api.utils import (
     APIResourceListing,
 )
 
-from openprocurement.audit.api.constraints import (
+from openprocurement.audit.api.constants import (
     MONITORING_TIME,
     ELIMINATION_PERIOD_TIME,
-    ELIMINATION_PERIOD_NO_VIOLATIONS_TIME
-)
+    ELIMINATION_PERIOD_NO_VIOLATIONS_TIME,
+    DRAFT_STATUS, ACTIVE_STATUS, ADDRESSED_STATUS, DECLINED_STATUS, COMPLETED_STATUS, STOPPED_STATUS, CANCELLED_STATUS)
 from openprocurement.audit.api.utils import (
     save_monitoring,
     monitoring_serialize,
@@ -40,7 +40,7 @@ from openprocurement.audit.api.design import (
 from openprocurement.audit.api.validation import (
     validate_monitoring_data,
     validate_patch_monitoring_data,
-    validate_patch_monitoring_status,
+    _validate_patch_monitoring_status,
     validate_credentials_generate
 )
 from openprocurement.audit.api.design import FIELDS
@@ -111,7 +111,7 @@ class MonitoringResource(APIResource):
         return {'data': monitoring.serialize('view')}
 
     @json_view(content_type='application/json',
-               validators=(validate_patch_monitoring_data, validate_patch_monitoring_status),
+               validators=(validate_patch_monitoring_data,),
                permission='edit_monitoring')
     def patch(self):
         monitoring = self.request.validated['monitoring']
@@ -120,25 +120,25 @@ class MonitoringResource(APIResource):
         apply_patch(self.request, save=False, src=self.request.validated['monitoring_src'])
 
         now = get_now()
-        if monitoring_old_status == 'draft' and monitoring.status == 'active':
+        if monitoring_old_status == DRAFT_STATUS and monitoring.status == ACTIVE_STATUS:
             set_author(monitoring.decision.documents, self.request, 'author')
             monitoring.monitoringPeriod = generate_period(now, MONITORING_TIME, self.context)
             monitoring.decision.datePublished = now
-        elif monitoring_old_status == 'active' and monitoring.status == 'addressed':
+        elif monitoring_old_status == ACTIVE_STATUS and monitoring.status == ADDRESSED_STATUS:
             set_author(monitoring.conclusion.documents, self.request, 'author')
             monitoring.conclusion.datePublished = now
             monitoring.eliminationPeriod = generate_period(now, ELIMINATION_PERIOD_TIME, self.context)
-        elif monitoring_old_status == 'active' and monitoring.status == 'declined':
+        elif monitoring_old_status == ACTIVE_STATUS and monitoring.status == DECLINED_STATUS:
             monitoring.eliminationPeriod = generate_period(now, ELIMINATION_PERIOD_NO_VIOLATIONS_TIME, self.context)
             monitoring.conclusion.datePublished = now
-        elif monitoring_old_status == 'addressed' and monitoring.status == 'completed':
+        elif monitoring_old_status == ADDRESSED_STATUS and monitoring.status == COMPLETED_STATUS:
             monitoring.eliminationReport.datePublished = now
             monitoring.eliminationReport.eliminationResolution = now
         elif any([
-            monitoring_old_status == 'draft' and monitoring.status == 'cancelled',
-            monitoring_old_status == 'active' and monitoring.status == 'stopped',
-            monitoring_old_status == 'declined' and monitoring.status == 'stopped',
-            monitoring_old_status == 'addressed' and monitoring.status == 'stopped'
+            monitoring_old_status == DRAFT_STATUS and monitoring.status == CANCELLED_STATUS,
+            monitoring_old_status == ACTIVE_STATUS and monitoring.status == STOPPED_STATUS,
+            monitoring_old_status == DECLINED_STATUS and monitoring.status == STOPPED_STATUS,
+            monitoring_old_status == ADDRESSED_STATUS and monitoring.status == STOPPED_STATUS
         ]):
             set_author(monitoring.cancellation.documents, self.request, 'author')
             monitoring.cancellation.datePublished = now

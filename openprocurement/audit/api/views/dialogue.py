@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from openprocurement.audit.api.constants import CONCLUSION_OBJECT_TYPE
 from openprocurement.audit.api.utils import (
     op_resource,
     APIResource,
@@ -10,13 +11,11 @@ from openprocurement.audit.api.utils import (
 from openprocurement.api.utils import (
     json_view,
     get_now,
-    context_unpack
+    context_unpack,
 )
 from openprocurement.audit.api.validation import (
     validate_dialogue_data,
     validate_patch_dialogue_data,
-    validate_patch_dialogue_allowed,
-    validate_post_dialogue_allowed
 )
 
 
@@ -27,7 +26,7 @@ from openprocurement.audit.api.validation import (
 class DialogueResource(APIResource):
 
     @json_view(content_type='application/json',
-               validators=(validate_dialogue_data, validate_post_dialogue_allowed),
+               validators=(validate_dialogue_data,),
                permission='create_dialogue')
     def collection_post(self):
         """
@@ -40,13 +39,13 @@ class DialogueResource(APIResource):
         set_author(dialogue.documents, self.request, 'author')
         upload_objects_documents(self.request, dialogue)
         if monitoring.status in ('addressed', 'declined'):
-            dialogue.dialogueOf = 'conclusion'
+            dialogue.dialogueOf = CONCLUSION_OBJECT_TYPE
         monitoring.dialogues.append(dialogue)
         if save_monitoring(self.request):
             self.LOGGER.info('Created monitoring dialogue {}'.format(dialogue.id),
                              extra=context_unpack(self.request,
                                                   {'MESSAGE_ID': 'monitoring_dialogue_create'},
-                                                  {'dialogue_id': dialogue.id}))
+                                                  {'DIALOGUE_ID': dialogue.id}))
             self.request.response.status = 201
             self.request.response.headers['Location'] = self.request.route_url(
                 'Monitoring Dialogue', monitoring_id=monitoring.id, dialogue_id=dialogue.id)
@@ -67,7 +66,7 @@ class DialogueResource(APIResource):
         return {'data': self.context.serialize('view')}
 
     @json_view(content_type='application/json',
-               validators=(validate_patch_dialogue_data, validate_patch_dialogue_allowed),
+               validators=(validate_patch_dialogue_data,),
                permission='edit_dialogue')
     def patch(self):
         """

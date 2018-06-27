@@ -85,7 +85,7 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
         response = self.app.post_json(
             '/monitorings/{}/parties'.format(self.monitoring_id),
             {'data': {}}, status=422)
-        self.assertEqual(response.status, '422 Unprocessable Entity')
+        self.assertEqual(response.status_code, 422)
         self.assertEqual(response.content_type, 'application/json')
 
         self.assertEqual(
@@ -103,13 +103,13 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
             '/monitorings/{}/parties'.format(self.monitoring_id),
             {'data': self.party_creator})
 
-        self.assertEqual(response.status, '201 Created')
+        self.assertEqual(response.status_code, 201)
         self.assertEqual(response.content_type, 'application/json')
 
         party_id = response.json['data']['id']
 
         response = self.app.get('/monitorings/{}/parties/{}'.format(self.monitoring_id, party_id))
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']['name'], "The State Audit Service of Ukraine",)
         self.assertEqual(response.json['data']['roles'], ['create'])
@@ -120,13 +120,13 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
             '/monitorings/{}/parties'.format(self.monitoring_id),
             {'data': self.party_dialogue})
 
-        self.assertEqual(response.status, '201 Created')
+        self.assertEqual(response.status_code, 201)
         self.assertEqual(response.content_type, 'application/json')
 
         party_id = response.json['data']['id']
 
         response = self.app.get('/monitorings/{}/parties/{}'.format(self.monitoring_id, party_id))
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']['name'], "The State Audit Service of Ukraine",)
         self.assertEqual(response.json['data']['roles'], ['dialogue'])
@@ -148,7 +148,7 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
         dialogue_id = response.json['data']['id']
 
         response = self.app.get('/monitorings/{}/dialogues/{}'.format(self.monitoring_id, dialogue_id))
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']['relatedParty'], party_id)
 
@@ -158,13 +158,13 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
             '/monitorings/{}/parties'.format(self.monitoring_id),
             {'data': self.party_dialogue})
 
-        self.assertEqual(response.status, '201 Created')
+        self.assertEqual(response.status_code, 201)
         self.assertEqual(response.content_type, 'application/json')
 
         party_id = response.json['data']['id']
 
         response = self.app.get('/monitorings/{}/parties/{}'.format(self.monitoring_id, party_id))
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']['name'], "The State Audit Service of Ukraine",)
         self.assertEqual(response.json['data']['roles'], ['dialogue'])
@@ -183,7 +183,7 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
                 "relatedParty": "Party with the devil"
             }}, status=422)
 
-        self.assertEqual(response.status, '422 Unprocessable Entity')
+        self.assertEqual(response.status_code, 422)
         self.assertEqual(response.content_type, 'application/json')
 
         self.assertEqual(

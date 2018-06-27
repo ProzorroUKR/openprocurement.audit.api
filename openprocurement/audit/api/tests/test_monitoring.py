@@ -1,6 +1,6 @@
 from freezegun import freeze_time
 from openprocurement.api.constants import TZ
-from openprocurement.audit.api.constraints import MONITORING_TIME
+from openprocurement.audit.api.constants import MONITORING_TIME
 from openprocurement.audit.api.tests.base import BaseWebTest
 import unittest
 from datetime import datetime, timedelta
@@ -16,7 +16,7 @@ class MonitoringResourceTest(BaseWebTest):
 
     def test_get(self):
         response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["id"], self.monitoring_id)
 
@@ -45,7 +45,7 @@ class MonitoringResourceTest(BaseWebTest):
                 "procuringStages":  ["planning"]
             }}
         )
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertNotEqual(response.json['data']["dateModified"], now_date.isoformat())
         self.assertEqual(response.json['data']["dateModified"], "2018-01-01T09:00:00+02:00")
@@ -66,7 +66,7 @@ class MonitoringResourceTest(BaseWebTest):
             }}
         )
 
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["status"], "active")
         self.assertEqual(response.json['data']["monitoringPeriod"]["startDate"], now_date.isoformat())
@@ -85,7 +85,7 @@ class MonitoringResourceTest(BaseWebTest):
                 }
             }}
         )
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["status"], "active")
 
@@ -119,7 +119,7 @@ class MonitoringResourceTest(BaseWebTest):
             }}
         )
 
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["status"], "cancelled")
 
@@ -150,7 +150,7 @@ class ActiveMonitoringResourceTest(BaseWebTest):
             }},
         )
 
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["conclusion"]["violationOccurred"], False)
 
@@ -165,7 +165,7 @@ class ActiveMonitoringResourceTest(BaseWebTest):
             }},
         )
 
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["conclusion"]["violationOccurred"], True)
         self.assertEqual(response.json['data']["conclusion"]["violationType"], ["corruptionProcurementMethodType"])
@@ -181,7 +181,7 @@ class ActiveMonitoringResourceTest(BaseWebTest):
             }},
         )
 
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["status"], "declined")
 
@@ -198,7 +198,7 @@ class ActiveMonitoringResourceTest(BaseWebTest):
             status=403
         )
 
-        self.assertEqual(response.status, '403 Forbidden')
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(response.content_type, 'application/json')
 
     def test_patch_to_addressed(self):
@@ -213,7 +213,7 @@ class ActiveMonitoringResourceTest(BaseWebTest):
             }},
         )
 
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["status"], "addressed")
 
@@ -229,7 +229,7 @@ class ActiveMonitoringResourceTest(BaseWebTest):
             status=403
         )
 
-        self.assertEqual(response.status, '403 Forbidden')
+        self.assertEqual(response.status_code, 403)
         self.assertEqual(response.content_type, 'application/json')
 
     def test_patch_to_stopped(self):
@@ -243,7 +243,7 @@ class ActiveMonitoringResourceTest(BaseWebTest):
             }},
         )
 
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["status"], "stopped")
         self.assertIn('cancellation', response.json['data'])
@@ -287,7 +287,7 @@ class AddressedMonitoringResourceTest(BaseWebTest):
             }},
         )
 
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["cancellation"]["description"], "Whisper words of wisdom - let it be.")
 
@@ -302,7 +302,7 @@ class AddressedMonitoringResourceTest(BaseWebTest):
             }},
         )
 
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["status"], "stopped")
         self.assertIn('cancellation', response.json['data'])
@@ -343,7 +343,7 @@ class DeclinedMonitoringResourceTest(BaseWebTest):
             }},
         )
 
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["status"], "closed")
 
@@ -357,7 +357,7 @@ class DeclinedMonitoringResourceTest(BaseWebTest):
             }},
         )
 
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["cancellation"]["description"], "Whisper words of wisdom - let it be.")
 
@@ -372,7 +372,7 @@ class DeclinedMonitoringResourceTest(BaseWebTest):
             }},
         )
 
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["status"], "stopped")
         self.assertIn('cancellation', response.json['data'])

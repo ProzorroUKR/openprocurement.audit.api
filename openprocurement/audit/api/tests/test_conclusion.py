@@ -274,13 +274,13 @@ class ActiveMonitoringConclusionResourceTest(BaseWebTest, DSWebTestMixin):
 
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["conclusion"]["description"], "text")
 
         self.app.authorization = ('Basic', (self.broker_token, ''))
         response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertNotIn('conclusion', response.json['data'])
 
@@ -294,13 +294,13 @@ class ActiveMonitoringConclusionResourceTest(BaseWebTest, DSWebTestMixin):
 
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["conclusion"]["description"], "text")
 
         self.app.authorization = ('Basic', (self.broker_token, ''))
         response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["conclusion"]["description"], "text")
 

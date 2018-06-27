@@ -308,7 +308,7 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
     def test_success_post_document(self):
         # dateModified
         response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json["data"]["dateModified"], '2018-01-01T11:00:00+02:00')
 
         self.app.authorization = ('Basic', (self.broker_token, ''))
@@ -328,7 +328,7 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
 
         self.app.authorization = None
         response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
-        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.status_code, 200)
         data = response.json["data"]
         self.assertEqual(len(data["eliminationReport"]["documents"]), 2)
         self.assertEqual(data["eliminationReport"]["documents"][1]["title"], document["title"])

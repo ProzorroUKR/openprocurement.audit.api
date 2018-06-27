@@ -132,3 +132,32 @@ monitorings_test_by_local_seq_view = ViewDefinition('monitorings', 'test_by_loca
         emit(doc._local_seq, data);
     }
 }''' % CHANGES_FIELDS)
+
+
+MONITORINGS_BY_TENDER_FIELDS = [
+    'status',
+]
+
+monitorings_by_tender_id_view = ViewDefinition('monitorings', 'by_tender_id', '''function(doc) {
+    if(doc.doc_type == 'Monitoring' && !doc.mode) {
+        var fields=%s, data={};
+        for (var i in fields) {
+            if (doc[fields[i]]) {
+                data[fields[i]] = doc[fields[i]]
+            }
+        }
+        emit([doc.tender_id, doc.dateCreated], data);
+    }
+}''' % MONITORINGS_BY_TENDER_FIELDS)
+
+test_monitorings_by_tender_id_view = ViewDefinition('monitorings', 'test_by_tender_id', '''function(doc) {
+    if(doc.doc_type == 'Monitoring' && doc.mode == 'test') {
+        var fields=%s, data={};
+        for (var i in fields) {
+            if (doc[fields[i]]) {
+                data[fields[i]] = doc[fields[i]]
+            }
+        }
+        emit([doc.tender_id, doc.dateCreated], data);
+    }
+}''' % MONITORINGS_BY_TENDER_FIELDS)

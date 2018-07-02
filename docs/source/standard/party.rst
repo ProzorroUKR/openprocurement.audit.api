@@ -38,6 +38,7 @@ Schema
     Possible values are:
 
         * sas
+        * risk_indicator
 
 .. _Identifier:
 

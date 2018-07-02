@@ -1,6 +1,6 @@
 POST /api/2.4/monitorings HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
-Content-Length: 529
+Content-Length: 526
 Content-Type: application/json
 Host: audit-api-sandbox.prozorro.gov.ua
 
@@ -28,7 +28,7 @@ Host: audit-api-sandbox.prozorro.gov.ua
         }, 
         "name": "The State Audit Service of Ukraine", 
         "roles": [
-          "create"
+          "sas"
         ], 
         "address": {
           "countryName": "Ukraine", 
@@ -64,7 +64,7 @@ Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/3f193d61e
       {
         "name": "The State Audit Service of Ukraine", 
         "roles": [
-          "create"
+          "sas"
         ], 
         "address": {
           "postalCode": "04070", 

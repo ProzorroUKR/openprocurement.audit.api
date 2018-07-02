@@ -44,9 +44,9 @@ To finalize conclusion process status must be changed to ``addressed`` in case o
 .. include:: http/conclusion-addressed.http
    :code:
 
-Broker can initiate dialogue once after conclusion was provided:
+Broker can initiate dialogue once after conclusion was provided by publishing a post:
 
-.. include:: http/conclusion-dialogue.http
+.. include:: http/conclusion-post.http
    :code:
 
 In case of no violations occurred SAS-employer can close monitoring by changing status to ``closed``:

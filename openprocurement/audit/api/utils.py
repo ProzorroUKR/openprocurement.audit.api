@@ -172,8 +172,7 @@ def get_monitoring_role(role):
     return 'monitoring_owner' if role == 'sas' else 'tender_owner'
 
 
-def calculate_business_date(date_obj, timedelta_obj, context=None,
-                            working_days=False):
+def calculate_business_date(date_obj, timedelta_obj, context=None, working_days=False):
     if context and 'monitoringDetails' in context and context['monitoringDetails']:
         re_obj = ACCELERATOR_RE.search(context['monitoringDetails'])
         if re_obj and 'accelerator' in re_obj.groupdict():

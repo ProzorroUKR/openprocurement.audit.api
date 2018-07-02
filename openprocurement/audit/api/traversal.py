@@ -16,15 +16,9 @@ class Root(object):
         (Allow, 'g:risk_indicators', 'create_monitoring'),
         (Allow, 'g:sas', 'create_monitoring'),
         (Allow, 'g:sas', 'edit_monitoring'),
-        (Allow, 'g:sas', 'upload_monitoring_documents'),
-        (Allow, 'g:sas', 'create_dialogue'),
-        (Allow, 'g:sas', 'edit_dialogue'),
-        (Allow, 'g:sas', 'upload_dialogue_documents'),
-        (Allow, 'g:sas', 'create_post'),
-        (Allow, 'g:sas', 'edit_post'),
-        (Allow, 'g:sas', 'upload_post_documents'),
         (Allow, 'g:sas', 'create_party'),
         (Allow, 'g:sas', 'edit_party'),
+        (Allow, 'g:sas', 'create_post'),
     ]
 
     def __init__(self, request):
@@ -69,8 +63,6 @@ def factory(request):
         return elimination_factory(request)
     elif 'appeal' in request.path.split('/'):
         return appeal_factory(request)
-    elif request.matchdict.get('dialogue_id'):
-        return dialogue_factory(request)
     elif request.matchdict.get('post_id'):
         return post_factory(request)
     elif request.matchdict.get('party_id'):
@@ -95,13 +87,6 @@ def elimination_factory(request):
         return request.monitoring
     else:
         return request.monitoring.eliminationReport
-
-
-def dialogue_factory(request):
-    dialogue = get_item(request.monitoring, 'dialogue', request)
-    if request.matchdict.get('document_id'):
-        return get_item(dialogue, 'document', request)
-    return dialogue
 
 
 def post_factory(request):

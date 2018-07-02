@@ -1,12 +1,12 @@
 POST /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/decision/documents HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
-Content-Length: 317
+Content-Length: 323
 Content-Type: application/json
 Host: audit-api-sandbox.prozorro.gov.ua
 
 {
   "data": {
-    "url": "http://docs-sandbox.openprocurement.org/get/f6087e8388073674bafae65691436fe1?KeyID=a8968c46&Signature=yvqNZMUf4k90yOGMYTHIFmGNkAIwMIy7wCb21nZUlPYUGfpVuNnMs0a1vZaTfzFkLlg2NDiUoG5SKmDXk8FZAA%3D%3D", 
+    "url": "http://docs-sandbox.openprocurement.org/get/22192bb730e13d01af815eb70f9204bb?KeyID=a8968c46&Signature=a3WNRlnPpPh5wYdlUH4Uv1%2Bvqm5Y18Zg%2BxXJqMlmIpLNbbPElpXQ8S90285nWXsmIZOTR%2BjrC0JsCl577YI2AA%3D%3D", 
     "title": "dolor.doc", 
     "hash": "md5:00000000000000000000000000000000", 
     "format": "application/msword"
@@ -16,17 +16,17 @@ Host: audit-api-sandbox.prozorro.gov.ua
 
 201 Created
 Content-Type: application/json; charset=UTF-8
-Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/decision/documents/d40b9012471f3278954388ddedb2a03a
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/decision/documents/82b6518426e13394b4d31196fa90eefe
 
 {
   "data": {
     "hash": "md5:00000000000000000000000000000000", 
     "author": "monitoring_owner", 
     "title": "dolor.doc", 
-    "url": "http://docs-sandbox.openprocurement.org/get/f6087e8388073674bafae65691436fe1?KeyID=a8968c46&Signature=C1r65aZTmxeAFWbCrtnt%252BRd69Wq3yMP%2F5UxHJczrQNsssDggULiXiXMKLTPwqEW94YDQygzc8f%252B5NFFp%252BVneCQ%253D%253D", 
+    "url": "http://docs-sandbox.openprocurement.org/get/22192bb730e13d01af815eb70f9204bb?KeyID=a8968c46&Signature=8L9lnrZ%2Fjy1tA5sJ1DEv1GZtqQdIWRQTU2oBQWX84hUVtrzlp79TEuA9qAvYSLvU6CyHzFXTZ7c2p38iM2KSBQ%253D%253D", 
     "format": "application/msword", 
     "datePublished": "2018-01-02T03:10:00+02:00", 
-    "id": "d40b9012471f3278954388ddedb2a03a", 
+    "id": "82b6518426e13394b4d31196fa90eefe", 
     "dateModified": "2018-01-02T03:10:00+02:00"
   }
 }

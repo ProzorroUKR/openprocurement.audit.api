@@ -13,10 +13,10 @@ from openprocurement.audit.api.tests.utils import get_errors_field_names
 
 
 @freeze_time('2018-01-01T12:00:00+02:00')
-class MonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
+class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
 
     def setUp(self):
-        super(MonitoringDialogueResourceTest, self).setUp()
+        super(MonitoringPostResourceTest, self).setUp()
         self.app.app.registry.docservice_url = 'http://localhost'
         self.create_monitoring()
         self.app.authorization = ('Basic', (self.sas_token, ''))
@@ -36,10 +36,10 @@ class MonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
                 }
             }})
 
-    def test_dialogue_create_required_fields(self):
+    def test_post_create_required_fields(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.post_json(
-            '/monitorings/{}/dialogues'.format(self.monitoring_id),
+            '/monitorings/{}/posts'.format(self.monitoring_id),
             {'data': {}}, status=422)
         self.assertEqual(response.status_code, 422)
         self.assertEqual(response.content_type, 'application/json')
@@ -49,7 +49,7 @@ class MonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
             get_errors_field_names(response, 'This field is required.'))
 
     @freeze_time('2018-01-02T12:30:00+02:00')
-    def test_dialogue_create_by_monitoring_owner(self):
+    def test_post_create_by_monitoring_owner(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
 
         # check initial date modified
@@ -69,19 +69,18 @@ class MonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
             }]
         }
         response = self.app.post_json(
-            '/monitorings/{}/dialogues'.format(self.monitoring_id),
+            '/monitorings/{}/posts'.format(self.monitoring_id),
             {'data': request_data})
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.content_type, 'application/json')
 
-        dialogue_id = response.json['data']['id']
+        post_id = response.json['data']['id']
 
-        response = self.app.get('/monitorings/{}/dialogues/{}'.format(self.monitoring_id, dialogue_id))
+        response = self.app.get('/monitorings/{}/posts/{}'.format(self.monitoring_id, post_id))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']['title'], request_data["title"])
         self.assertEqual(response.json['data']['description'], request_data['description'])
-        self.assertEqual(response.json['data']['dateSubmitted'], get_now().isoformat())
         self.assertEqual(response.json['data']['author'], 'monitoring_owner')
         self.assertEqual(len(response.json['data']['documents']), 1)
         self.assertNotEqual(response.json['data']['documents'][0]['url'], request_data["documents"][0]['url'])
@@ -92,7 +91,7 @@ class MonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.json['data']['dateModified'], '2018-01-02T12:30:00+02:00')
 
     @mock.patch('openprocurement.audit.api.validation.TendersClient')
-    def test_dialogue_create_by_tender_owner(self, mock_api_client):
+    def test_post_create_by_tender_owner(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
             'data': {'tender_token': sha512('tender_token').hexdigest()}
         }
@@ -105,7 +104,7 @@ class MonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
         tender_owner_token = response.json['access']['token']
 
         response = self.app.post_json(
-            '/monitorings/{}/dialogues?acc_token={}'.format(self.monitoring_id, tender_owner_token),
+            '/monitorings/{}/posts?acc_token={}'.format(self.monitoring_id, tender_owner_token),
             {'data': {
                 'title': 'Lorem ipsum',
                 'description': 'Lorem ipsum dolor sit amet'
@@ -113,40 +112,33 @@ class MonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.content_type, 'application/json')
 
-        dialogue_id = response.json['data']['id']
+        post_id = response.json['data']['id']
 
-        response = self.app.get('/monitorings/{}/dialogues/{}'.format(self.monitoring_id, dialogue_id))
+        response = self.app.get('/monitorings/{}/posts/{}'.format(self.monitoring_id, post_id))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']['title'], 'Lorem ipsum')
         self.assertEqual(response.json['data']['description'], 'Lorem ipsum dolor sit amet')
-        self.assertEqual(response.json['data']['dateSubmitted'], get_now().isoformat())
         self.assertEqual(response.json['data']['author'], 'tender_owner')
 
-    def test_monitoring_owner_patch_dialogue_by_monitoring_owner(self):
+    def test_monitoring_owner_answer_post_by_monitoring_owner(self):
         response = self.app.post_json(
-            '/monitorings/{}/dialogues'.format(self.monitoring_id),
+            '/monitorings/{}/posts'.format(self.monitoring_id),
             {'data': {
                 'title': 'Lorem ipsum',
                 'description': 'Lorem ipsum dolor sit amet'
             }})
-        dialogue_id = response.json['data']['id']
+        post_id = response.json['data']['id']
 
         self.app.authorization = ('Basic', (self.sas_token, ''))
-        response = self.app.patch_json(
-            '/monitorings/{}/dialogues/{}'.format(self.monitoring_id, dialogue_id),
+        response = self.app.post_json(
+            '/monitorings/{}/posts'.format(self.monitoring_id),
             {'data': {
                 'title': 'It’s a trap!',
-                'description': 'Enemy Ships in Sector 47!'
-            }}, status=403)
+                'description': 'Enemy Ships in Sector 47!',
+                'relatedPost': post_id
+            }}, status=422)
         self.assertEqual(response.content_type, 'application/json')
-
-        response = self.app.get('/monitorings/{}/dialogues/{}'.format(self.monitoring_id, dialogue_id))
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content_type, 'application/json')
-        self.assertEqual(response.json['data']['title'], 'Lorem ipsum')
-        self.assertEqual(response.json['data']['description'], 'Lorem ipsum dolor sit amet')
-        self.assertEqual(response.json['data']['dateSubmitted'], datetime.now(TZ).isoformat())
 
     @mock.patch('restkit.Resource.request')
     def test_monitoring_credentials_tender_owner(self, mock_request):
@@ -175,13 +167,13 @@ class MonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
         )
 
     @mock.patch('openprocurement.audit.api.validation.TendersClient')
-    def test_monitoring_owner_patch_dialogue_by_tender_owner(self, mock_api_client):
+    def test_monitoring_owner_answer_post_by_tender_owner(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
             'data': {'tender_token': sha512('tender_token').hexdigest()}
         }
 
         response = self.app.post_json(
-            '/monitorings/{}/dialogues'.format(self.monitoring_id),
+            '/monitorings/{}/posts'.format(self.monitoring_id),
             {'data': {
                 'title': 'Lorem ipsum',
                 'description': 'Lorem ipsum dolor sit amet',
@@ -192,7 +184,7 @@ class MonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
                     'format': 'application/msword',
                 }]
             }})
-        dialogue_id = response.json['data']['id']
+        post_id = response.json['data']['id']
 
         self.app.authorization = ('Basic', (self.broker_token, ''))
         response = self.app.patch_json(
@@ -200,16 +192,18 @@ class MonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
         )
 
         tender_owner_token = response.json['access']['token']
-        response = self.app.patch_json(
-            '/monitorings/{}/dialogues/{}?acc_token={}'.format(self.monitoring_id, dialogue_id, tender_owner_token),
+        response = self.app.post_json(
+            '/monitorings/{}/posts?acc_token={}'.format(self.monitoring_id, tender_owner_token),
             {'data': {
-                'answer': 'Gotcha'
+                'title': 'Lorem ipsum',
+                'description': 'Gotcha',
+                'relatedPost': post_id
             }})
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 201)
         self.assertEqual(response.content_type, 'application/json')
 
     @mock.patch('openprocurement.audit.api.validation.TendersClient')
-    def test_tender_owner_patch_dialogue_by_monitoring_owner(self, mock_api_client):
+    def test_tender_owner_answer_post_by_monitoring_owner(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
             'data': {'tender_token': sha512('tender_token').hexdigest()}
         }
@@ -221,33 +215,32 @@ class MonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
 
         tender_owner_token = response.json['access']['token']
         response = self.app.post_json(
-            '/monitorings/{}/dialogues?acc_token={}'.format(self.monitoring_id, tender_owner_token),
+            '/monitorings/{}/posts?acc_token={}'.format(self.monitoring_id, tender_owner_token),
             {'data': {
-                'title': 'Lorem ipsum',
-                'description': 'Lorem ipsum dolor sit amet'
+                'title': 'It\'s a trap!',
+                'description': 'Enemy Ships in Sector 47!',
             }})
-        dialogue_id = response.json['data']['id']
+        post_id = response.json['data']['id']
 
         self.app.authorization = ('Basic', (self.sas_token, ''))
-        response = self.app.patch_json(
-            '/monitorings/{}/dialogues/{}'.format(self.monitoring_id, dialogue_id),
+        response = self.app.post_json(
+            '/monitorings/{}/posts'.format(self.monitoring_id, post_id),
             {'data': {
-                'title': 'It’s a trap!',
-                'description': 'Enemy Ships in Sector 47!',
-                'answer': 'The Force will be with you. Always.'
-            }}, status=200)
+                'title': 'It\'s a trap!',
+                'description': 'The Force will be with you. Always.',
+            }}, status=201)
         self.assertEqual(response.content_type, 'application/json')
 
-        response = self.app.get('/monitorings/{}/dialogues/{}'.format(self.monitoring_id, dialogue_id))
+        post_id = response.json['data']['id']
+
+        response = self.app.get('/monitorings/{}/posts/{}'.format(self.monitoring_id, post_id))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
-        self.assertEqual(response.json['data']['title'], 'Lorem ipsum')
-        self.assertEqual(response.json['data']['description'], 'Lorem ipsum dolor sit amet')
-        self.assertEqual(response.json['data']['answer'], 'The Force will be with you. Always.')
-        self.assertEqual(response.json['data']['dateSubmitted'], datetime.now(TZ).isoformat())
+        self.assertEqual(response.json['data']['title'], 'It\'s a trap!')
+        self.assertEqual(response.json['data']['description'], 'The Force will be with you. Always.')
 
     @mock.patch('openprocurement.audit.api.validation.TendersClient')
-    def test_tender_owner_patch_dialogue_by_tender_owner(self, mock_api_client):
+    def test_tender_owner_answer_post_by_tender_owner(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
             'data': {'tender_token': sha512('tender_token').hexdigest()}
         }
@@ -259,27 +252,27 @@ class MonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
 
         tender_owner_token = response.json['access']['token']
         response = self.app.post_json(
-            '/monitorings/{}/dialogues?acc_token={}'.format(self.monitoring_id, tender_owner_token),
+            '/monitorings/{}/posts?acc_token={}'.format(self.monitoring_id, tender_owner_token),
             {'data': {
                 'title': 'Lorem ipsum',
                 'description': 'Lorem ipsum dolor sit amet'
             }})
-        dialogue_id = response.json['data']['id']
+        post_id = response.json['data']['id']
 
-        response = self.app.patch_json(
-            '/monitorings/{}/dialogues/{}'.format(self.monitoring_id, dialogue_id),
+        response = self.app.post_json(
+            '/monitorings/{}/posts?acc_token={}'.format(self.monitoring_id, tender_owner_token),
             {'data': {
                 'title': 'It’s a trap!',
-                'description': 'Enemy Ships in Sector 47!',
-                'answer': 'The Force will be with you. Always.'
-            }}, status=403)
+                'description': 'The Force will be with you. Always.',
+                'relatedPost': post_id
+            }}, status=422)
         self.assertEqual(response.content_type, 'application/json')
 
 @freeze_time('2018-01-01T12:00:00.000000+03:00')
-class AddressedMonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
+class AddressedMonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
 
     def setUp(self):
-        super(AddressedMonitoringDialogueResourceTest, self).setUp()
+        super(AddressedMonitoringPostResourceTest, self).setUp()
         self.create_monitoring()
         self.app.authorization = ('Basic', (self.sas_token, ''))
         self.app.patch_json(
@@ -301,7 +294,7 @@ class AddressedMonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
             }})
 
     @mock.patch('openprocurement.audit.api.validation.TendersClient')
-    def test_dialogue_create_by_tender_owner(self, mock_api_client):
+    def test_post_create_by_tender_owner(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
             'data': {'tender_token': sha512('tender_token').hexdigest()}
         }
@@ -313,7 +306,7 @@ class AddressedMonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
 
         tender_owner_token = response.json['access']['token']
         response = self.app.post_json(
-            '/monitorings/{}/dialogues?acc_token={}'.format(self.monitoring_id, tender_owner_token),
+            '/monitorings/{}/posts?acc_token={}'.format(self.monitoring_id, tender_owner_token),
             {'data': {
                 'title': 'Lorem ipsum',
                 'description': 'Lorem ipsum dolor sit amet'
@@ -322,7 +315,7 @@ class AddressedMonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.content_type, 'application/json')
 
     @mock.patch('openprocurement.audit.api.validation.TendersClient')
-    def test_dialogue_create_by_tender_owner_multiple(self, mock_api_client):
+    def test_post_answer_by_monitoring_owner(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
             'data': {'tender_token': sha512('tender_token').hexdigest()}
         }
@@ -334,7 +327,42 @@ class AddressedMonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
 
         tender_owner_token = response.json['access']['token']
         response = self.app.post_json(
-            '/monitorings/{}/dialogues?acc_token={}'.format(self.monitoring_id, tender_owner_token),
+            '/monitorings/{}/posts?acc_token={}'.format(self.monitoring_id, tender_owner_token),
+            {'data': {
+                'title': 'Lorem ipsum',
+                'description': 'Lorem ipsum dolor sit amet'
+            }})
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.content_type, 'application/json')
+
+        post_id = response.json['data']['id']
+
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+
+        response = self.app.post_json(
+            '/monitorings/{}/posts'.format(self.monitoring_id, tender_owner_token),
+            {'data': {
+                'title': 'Lorem ipsum',
+                'description': 'Lorem ipsum dolor sit amet',
+                'relatedPost': post_id
+            }})
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.content_type, 'application/json')
+
+    @mock.patch('openprocurement.audit.api.validation.TendersClient')
+    def test_post_create_by_tender_owner_multiple(self, mock_api_client):
+        mock_api_client.return_value.extract_credentials.return_value = {
+            'data': {'tender_token': sha512('tender_token').hexdigest()}
+        }
+
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+        response = self.app.patch_json(
+            '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token')
+        )
+
+        tender_owner_token = response.json['access']['token']
+        response = self.app.post_json(
+            '/monitorings/{}/posts?acc_token={}'.format(self.monitoring_id, tender_owner_token),
             {'data': {
                 'title': 'Lorem ipsum',
                 'description': 'Lorem ipsum dolor sit amet'
@@ -343,16 +371,16 @@ class AddressedMonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.content_type, 'application/json')
 
         self.app.post_json(
-            '/monitorings/{}/dialogues?acc_token={}'.format(self.monitoring_id, tender_owner_token),
+            '/monitorings/{}/posts?acc_token={}'.format(self.monitoring_id, tender_owner_token),
             {'data': {
                 'title': 'Lorem ipsum',
                 'description': 'Lorem ipsum dolor sit amet'
             }}, status=403)
 
-    def test_dialogue_create_by_monitoring_owner(self):
+    def test_post_create_by_monitoring_owner(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.post_json(
-            '/monitorings/{}/dialogues'.format(self.monitoring_id),
+            '/monitorings/{}/posts'.format(self.monitoring_id),
             {'data': {
                 'title': 'Lorem ipsum',
                 'description': 'Lorem ipsum dolor sit amet'
@@ -362,7 +390,8 @@ class AddressedMonitoringDialogueResourceTest(BaseWebTest, DSWebTestMixin):
 
 def suite():
     suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(MonitoringDialogueResourceTest))
+    suite.addTest(unittest.makeSuite(MonitoringPostResourceTest))
+    suite.addTest(unittest.makeSuite(AddressedMonitoringPostResourceTest))
     return suite
 
 

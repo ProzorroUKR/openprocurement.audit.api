@@ -8,7 +8,6 @@ from openprocurement.audit.api.utils import (
 )
 from openprocurement.api.utils import (
     json_view,
-    get_now,
     context_unpack
 )
 from openprocurement.audit.api.validation import validate_appeal_data
@@ -16,7 +15,7 @@ from openprocurement.audit.api.validation import validate_appeal_data
 
 @op_resource(name='Monitoring Appeal',
              path='/monitorings/{monitoring_id}/appeal',
-             description='appeal to the conclusion')
+             description='Appeal to the conclusion')
 class AppealResource(APIResource):
 
     @json_view(permission='view_monitoring')

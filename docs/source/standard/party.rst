@@ -37,10 +37,7 @@ Schema
 
     Possible values are:
 
-        * create
-        * decision
-        * conclusion
-        * dialogue
+        * sas
 
 .. _Identifier:
 

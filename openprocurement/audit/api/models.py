@@ -3,7 +3,7 @@ from uuid import uuid4
 from openprocurement.api.constants import SANDBOX_MODE
 from openprocurement.api.utils import get_now
 from openprocurement.api.models import Model, Revision, Period, Identifier, Address, ContactPoint
-from openprocurement.api.models import Document
+from openprocurement.api.models import Document as BaseDocument
 from openprocurement.api.models import schematics_embedded_role, schematics_default_role, IsoDateTimeType, ListType
 from schematics.types import StringType, MD5Type, BaseType, BooleanType
 from schematics.types.serializable import serializable
@@ -20,12 +20,18 @@ from openprocurement.audit.api.choices import (
     MONITORING_VIOLATION_TYPE_CHOICES,
     MONITORING_REASON_CHOICES,
     MONITORING_PROCURING_STAGES,
-    RESOLUTION_RESULT_CHOICES, RESOLUTION_BY_TYPE_CHOICES)
+    RESOLUTION_RESULT_CHOICES,
+    RESOLUTION_BY_TYPE_CHOICES,
+)
 from openprocurement.audit.api.constants import (
     DECISION_OBJECT_TYPE,
     DRAFT_STATUS,
     OTHER_VIOLATION,
 )
+
+
+class Document(BaseDocument):
+    documentType = None
 
 
 class Report(Model):
@@ -35,8 +41,46 @@ class Report(Model):
     datePublished = IsoDateTimeType()
 
 
+class Post(Model):
+    class Options:
+        roles = {
+            'create': whitelist('title', 'description', 'documents', 'relatedParty', 'relatedPost'),
+            'edit': whitelist(),
+            'view': schematics_default_role,
+            'default': schematics_default_role,
+            'embedded': schematics_embedded_role,
+        }
+    id = MD5Type(required=True, default=lambda: uuid4().hex)
+
+    title = StringType(required=True)
+    description = StringType(required=True)
+    documents = ListType(ModelType(Document), default=list())
+    author = StringType()
+    postOf = StringType(choices=DIALOGUE_TYPE_CHOICES, default=DECISION_OBJECT_TYPE)
+    datePublished = IsoDateTimeType(default=get_now())
+    dateOverdue = IsoDateTimeType()
+    relatedPost = StringType()
+    relatedParty = StringType()
+
+    def validate_relatedParty(self, data, value):
+        if value and isinstance(data['__parent__'], Model) and value not in [i.id for i in data['__parent__'].parties]:
+            raise ValidationError(u"relatedParty should be one of parties.")
+
+    def validate_relatedPost(self, data, value):
+        if value and isinstance(data['__parent__'], Model):
+            posts = data['__parent__'].posts
+            if value not in [i.id for i in posts]:
+                raise ValidationError(u"relatedPost should be one of posts of current monitoring.")
+            if len([i for i in posts if i.relatedPost == value]) > 1:
+                raise ValidationError(u"relatedPost must be unique.")
+            related_authors = [i.author for i in posts if i.id == value]
+            if len(related_authors) > 0 and data["author"] == related_authors[0]:
+                raise ValidationError(u"relatedPost can't have the same author.")
+
+
 class Decision(Report):
     date = IsoDateTimeType(required=False)
+    relatedParty = StringType()
 
 
 class Conclusion(Report):
@@ -47,6 +91,7 @@ class Conclusion(Report):
     stringsAttached = StringType()
     description = StringType(required=False)
     date = IsoDateTimeType(required=False)
+    relatedParty = StringType()
 
     def validate_violationType(self, data, value):
         if data["violationOccurred"] and not value:
@@ -61,13 +106,14 @@ class Conclusion(Report):
 
 
 class Cancellation(Report):
-    pass
+    relatedParty = StringType()
 
 
 class EliminationResolution(Report):
     result = StringType(choices=RESOLUTION_RESULT_CHOICES)
     resultByType = DictType(StringType(choices=RESOLUTION_BY_TYPE_CHOICES))
     description = StringType(required=False)
+    relatedParty = StringType()
 
     def validate_resultByType(self, data, value):
         violations = data["__parent__"].conclusion.violationType
@@ -106,32 +152,6 @@ class Appeal(Report):
             'create': whitelist('description', 'documents'),
             'view': schematics_default_role,
         }
-
-
-class Dialogue(Model):
-    class Options:
-        roles = {
-            'create': whitelist('title', 'description', 'documents', 'relatedParty'),
-            'edit': whitelist('answer'),
-            'view': schematics_default_role,
-            'default': schematics_default_role,
-            'embedded': schematics_embedded_role,
-        }
-    id = MD5Type(required=True, default=lambda: uuid4().hex)
-
-    title = StringType(required=True)
-    description = StringType(required=True)
-    answer = StringType()
-    documents = ListType(ModelType(Document), default=[])
-    dateSubmitted = IsoDateTimeType(default=get_now())
-    dateAnswered = IsoDateTimeType()
-    author = StringType()
-    dialogueOf = StringType(choices=DIALOGUE_TYPE_CHOICES, default=DECISION_OBJECT_TYPE)
-    relatedParty = StringType()
-
-    def validate_relatedParty(self, data, value):
-        if value and isinstance(data['__parent__'], Model) and value not in [i.id for i in data['__parent__'].parties]:
-            raise ValidationError(u"relatedParty should be one of parties.")
 
 
 class Party(Model):
@@ -194,7 +214,7 @@ class Monitoring(SchematicsDocument, Model):
     eliminationReport = ModelType(EliminationReport)
     eliminationResolution = ModelType(EliminationResolution)
     eliminationPeriod = ModelType(Period)
-    dialogues = ListType(ModelType(Dialogue), default=[])
+    posts = ListType(ModelType(Post), default=[])
     cancellation = ModelType(Cancellation)
     appeal = ModelType(Appeal)
 
@@ -244,11 +264,9 @@ class Monitoring(SchematicsDocument, Model):
 
     def __acl__(self):
         return [
-            (Allow, '{}_{}'.format(self.tender_owner, self.tender_owner_token), 'create_dialogue'),
+            (Allow, '{}_{}'.format(self.tender_owner, self.tender_owner_token), 'create_post'),
             (Allow, '{}_{}'.format(self.tender_owner, self.tender_owner_token), 'create_elimination_report'),
             (Allow, '{}_{}'.format(self.tender_owner, self.tender_owner_token), 'create_appeal'),
-            (Allow, '{}_{}'.format(self.tender_owner, self.tender_owner_token), 'edit_dialogue'),
-            (Allow, '{}_{}'.format(self.tender_owner, self.tender_owner_token), 'upload_dialogue_documents'),
         ]
 
     def __repr__(self):

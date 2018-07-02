@@ -112,7 +112,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
         super(MonitoringsResourceTest, self).setUp()
         self.app.app.registry.docservice_url = 'http://docs-sandbox.openprocurement.org'
 
-        self.party_creator = {
+        self.party = {
             "name": "The State Audit Service of Ukraine",
             "contactPoint": {
                 "name": "Oleksii Kovalenko",
@@ -131,53 +131,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                 "locality": "Kyiv"
             },
             "roles": [
-                "create"
-            ]
-        }
-
-        self.party_decision = {
-            "name": "The State Audit Service of Ukraine",
-            "contactPoint": {
-                "name": "John Doe",
-                "telephone": "0440000000"
-            },
-            "identifier": {
-                "scheme": "UA-EDR",
-                "id": "40165856",
-                "uri": "http://www.dkrs.gov.ua"
-            },
-            "address": {
-                "countryName": "Ukraine",
-                "postalCode": "04070",
-                "region": "Kyiv",
-                "streetAddress": "Petra Sahaidachnoho St, 4",
-                "locality": "Kyiv"
-            },
-            "roles": [
-                "decision"
-            ]
-        }
-
-        self.party_dialogue = {
-            "name": "The State Audit Service of Ukraine",
-            "contactPoint": {
-                "name": "Jane Doe",
-                "telephone": "0440000000"
-            },
-            "identifier": {
-                "scheme": "UA-EDR",
-                "id": "40165856",
-                "uri": "http://www.dkrs.gov.ua"
-            },
-            "address": {
-                "countryName": "Ukraine",
-                "postalCode": "04070",
-                "region": "Kyiv",
-                "streetAddress": "Petra Sahaidachnoho St, 4",
-                "locality": "Kyiv"
-            },
-            "roles": [
-                "dialogue"
+                "sas"
             ]
         }
 
@@ -205,12 +159,13 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                     "tender_id": self._generate_test_uuid().hex,
                     "reasons": ["public", "fiscal"],
                     "procuringStages": ["awarding", "contracting"],
-                    "parties": [self.party_creator]
+                    "parties": [self.party]
                 }},
                 status=201
             )
 
             monitoring_id = response.json["data"]["id"]
+            party_id = response.json["data"]["parties"][0]["id"]
 
         with open('docs/source/tutorial/http/monitorings-with-object.http', 'w') as self.app.file_obj:
             response = self.app.get('/monitorings')
@@ -226,13 +181,6 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                 )
 
         # PUBLISH
-        with freeze_time("2018.01.02 01:00"):
-            with open('docs/source/tutorial/http/monitoring-publish-party.http', 'w') as self.app.file_obj:
-                self.app.post_json(
-                    '/monitorings/{}/parties'.format(monitoring_id),
-                    {"data": self.party_decision},
-                    status=201
-                )
 
         with freeze_time("2018.01.02 01:05"):
             with open('docs/source/tutorial/http/monitoring-publish-first-step.http', 'w') as self.app.file_obj:
@@ -247,7 +195,8 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                                 'url': self.generate_docservice_url(),
                                 'hash': 'md5:' + '0' * 32,
                                 'format': 'application/msword',
-                            }]
+                            }],
+                            "relatedParty": party_id
                         }
                     }},
                     status=200
@@ -304,20 +253,10 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
         # DIALOGUE
         self.app.authorization = ('Basic', (self.sas_token, ''))
 
-        with freeze_time("2018.01.03 00:00"):
-            with open('docs/source/tutorial/http/dialogue-party.http', 'w') as self.app.file_obj:
-                response = self.app.post_json(
-                    '/monitorings/{}/parties'.format(monitoring_id),
-                    {"data": self.party_dialogue},
-                    status=201
-                )
-
-        party_id = response.json['data']['id']
-
         with freeze_time("2018.01.03 00:05"):
-            with open('docs/source/tutorial/http/dialogue-publish.http', 'w') as self.app.file_obj:
+            with open('docs/source/tutorial/http/post-publish.http', 'w') as self.app.file_obj:
                 response = self.app.post_json(
-                    '/monitorings/{}/dialogues'.format(monitoring_id),
+                    '/monitorings/{}/posts'.format(monitoring_id),
                     {"data": {
                         "title": "Lorem ipsum",
                         "description": "Lorem ipsum dolor sit amet.",
@@ -332,12 +271,12 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                     status=201
                 )
 
-        dialogue_id = response.json['data']['id']
+        post_id = response.json['data']['id']
 
         with freeze_time("2018.01.03 00:10"):
-            with open('docs/source/tutorial/http/dialogue-publish-add-document.http', 'w') as self.app.file_obj:
+            with open('docs/source/tutorial/http/post-publish-add-document.http', 'w') as self.app.file_obj:
                 self.app.post_json(
-                    '/monitorings/{}/dialogues/{}/documents'.format(monitoring_id, dialogue_id),
+                    '/monitorings/{}/posts/{}/documents'.format(monitoring_id, post_id),
                     {"data": {
                         'title': 'dolor.doc',
                         'url': self.generate_docservice_url(),
@@ -347,28 +286,35 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                     status=201
                 )
 
-        with open('docs/source/tutorial/http/dialogue-get-documents.http', 'w') as self.app.file_obj:
+        with open('docs/source/tutorial/http/post-get-documents.http', 'w') as self.app.file_obj:
             self.app.get(
-                '/monitorings/{}/dialogues/{}/documents'.format(monitoring_id, dialogue_id),
+                '/monitorings/{}/posts/{}/documents'.format(monitoring_id, post_id),
                 status=200
             )
 
         self.app.authorization = ('Basic', (self.broker_token, ''))
 
         with freeze_time("2018.01.04 00:05"):
-            with open('docs/source/tutorial/http/dialogue-answer.http', 'w') as self.app.file_obj:
-                self.app.patch_json(
-                    '/monitorings/{}/dialogues/{}?acc_token={}'.format(monitoring_id, dialogue_id, tender_owner_token),
+            with open('docs/source/tutorial/http/post-answer.http', 'w') as self.app.file_obj:
+                response = self.app.post_json(
+                    '/monitorings/{}/posts?acc_token={}'.format(monitoring_id, tender_owner_token),
                     {"data": {
-                        'answer': 'Sit amet'
+                        'title': 'Sit amet',
+                        'description': 'Dolor sit amet',
+                        'relatedPost': post_id,
+                        "relatedParty": party_id
                     }},
-                    status=200
+                    status=201
                 )
 
+        answer_id = response.json['data']['id']
+
         with freeze_time("2018.01.04 00:10"):
-            with open('docs/source/tutorial/http/dialogue-answer-docs.http', 'w') as self.app.file_obj:
+            with open('docs/source/tutorial/http/post-answer-docs.http', 'w') as self.app.file_obj:
                 self.app.post_json(
-                    '/monitorings/{}/dialogues/{}/documents?acc_token={}'.format(monitoring_id, dialogue_id, tender_owner_token),
+                    '/monitorings/{}/posts/{}/documents?acc_token={}'.format(
+                        monitoring_id, answer_id, tender_owner_token
+                    ),
                     {"data": {
                         'title': 'dolor.doc',
                         'url': self.generate_docservice_url(),
@@ -378,18 +324,12 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                     status=201
                 )
 
-        with open('docs/source/tutorial/http/dialogue-get.http', 'w') as self.app.file_obj:
-            self.app.get(
-                '/monitorings/{}/dialogues/{}'.format(monitoring_id, dialogue_id),
-                status=200
-            )
-
         self.app.authorization = ('Basic', (self.broker_token, ''))
 
         with freeze_time("2018.01.03 00:05"):
-            with open('docs/source/tutorial/http/dialogue-broker-publish.http', 'w') as self.app.file_obj:
-                self.app.post_json(
-                    '/monitorings/{}/dialogues?acc_token={}'.format(monitoring_id, tender_owner_token),
+            with open('docs/source/tutorial/http/post-broker-publish.http', 'w') as self.app.file_obj:
+                response = self.app.post_json(
+                    '/monitorings/{}/posts?acc_token={}'.format(monitoring_id, tender_owner_token),
                     {"data": {
                         "title": "Dolor sit amet",
                         "description": "Lorem ipsum dolor sit amet.",
@@ -399,13 +339,37 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                             'hash': 'md5:' + '0' * 32,
                             'format': 'application/msword',
                         }],
+                        "relatedParty": party_id
                     }},
                     status=201
                 )
 
-        with open('docs/source/tutorial/http/dialogues-get.http', 'w') as self.app.file_obj:
+        post_broker_id = response.json['data']['id']
+
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+
+        with freeze_time("2018.01.03 00:05"):
+            with open('docs/source/tutorial/http/post-broker-sas-answer.http', 'w') as self.app.file_obj:
+                self.app.post_json(
+                    '/monitorings/{}/posts'.format(monitoring_id),
+                    {"data": {
+                        "title": "Lorem ipsum",
+                        "description": "Lorem ipsum dolor sit amet.",
+                        "relatedPost": post_broker_id,
+                        "documents": [{
+                            'title': 'ipsum.doc',
+                            'url': self.generate_docservice_url(),
+                            'hash': 'md5:' + '0' * 32,
+                            'format': 'application/msword',
+                        }],
+                        "relatedParty": party_id
+                    }},
+                    status=201
+                )
+
+        with open('docs/source/tutorial/http/posts-get.http', 'w') as self.app.file_obj:
             self.app.get(
-                '/monitorings/{}/dialogues'.format(monitoring_id),
+                '/monitorings/{}/posts'.format(monitoring_id),
                 status=200
             )
 
@@ -419,6 +383,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                     {"data": {
                         "conclusion": {
                             "violationOccurred": False,
+                            "relatedParty": party_id
                         }
                     }},
                 )
@@ -483,7 +448,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
         with freeze_time("2018.01.05 00:20"):
             with open('docs/source/tutorial/http/conclusion-add-document.http', 'w') as self.app.file_obj:
                 self.app.post_json(
-                    '/monitorings/{}/conclusion/documents'.format(monitoring_id, dialogue_id),
+                    '/monitorings/{}/conclusion/documents'.format(monitoring_id),
                     {"data": {
                         'title': 'sign.p7s',
                         'url': self.generate_docservice_url(),
@@ -508,9 +473,9 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
         self.app.authorization = ('Basic', (self.broker_token, ''))
 
         with freeze_time("2018.01.06 00:00"):
-            with open('docs/source/tutorial/http/conclusion-dialogue.http', 'w') as self.app.file_obj:
+            with open('docs/source/tutorial/http/conclusion-post.http', 'w') as self.app.file_obj:
                 self.app.post_json(
-                    '/monitorings/{}/dialogues?acc_token={}'.format(monitoring_id, tender_owner_token),
+                    '/monitorings/{}/posts?acc_token={}'.format(monitoring_id, tender_owner_token),
                     {"data": {
                         "title": "Sit amet",
                         "description": "Sit amet lorem ipsum dolor.",
@@ -519,7 +484,8 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                             'url': self.generate_docservice_url(),
                             'hash': 'md5:' + '0' * 32,
                             'format': 'application/msword',
-                        }]
+                        }],
+                        "relatedParty": party_id
                     }},
                     status=201
                 )
@@ -528,7 +494,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
         self.app.authorization = ('Basic', (self.broker_token, ''))
 
         with freeze_time("2018.01.06 07:00"):
-            with open('docs/source/tutorial/http/post-appeal.http', 'w') as self.app.file_obj:
+            with open('docs/source/tutorial/http/appeal-post.http', 'w') as self.app.file_obj:
                 response = self.app.put_json(
                     '/monitorings/{}/appeal?acc_token={}'.format(monitoring_id, tender_owner_token),
                     {"data": {
@@ -551,7 +517,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
         }
 
         with freeze_time("2018.01.06 07:30"):
-            with open('docs/source/tutorial/http/post-appeal-again.http', 'w') as self.app.file_obj:
+            with open('docs/source/tutorial/http/appeal-post-again.http', 'w') as self.app.file_obj:
                 self.app.put_json(
                     '/monitorings/{}/appeal?acc_token={}'.format(monitoring_id, tender_owner_token),
                     {"data": {
@@ -562,14 +528,14 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                 )
 
         with freeze_time("2018.01.06 08:00"):
-            with open('docs/source/tutorial/http/post-doc-appeal.http', 'w') as self.app.file_obj:
+            with open('docs/source/tutorial/http/appeal-post-doc.http', 'w') as self.app.file_obj:
                 self.app.post_json(
                     '/monitorings/{}/appeal/documents?acc_token={}'.format(monitoring_id, tender_owner_token),
                     {"data": another_document},
                 )
 
         with freeze_time("2018.01.06 08:15"):
-            with open('docs/source/tutorial/http/patch-doc-appeal.http', 'w') as self.app.file_obj:
+            with open('docs/source/tutorial/http/appeal-patch-doc.http', 'w') as self.app.file_obj:
                 self.app.patch_json(
                     '/monitorings/{}/appeal/documents/{}?acc_token={}'.format(
                         monitoring_id,
@@ -641,7 +607,8 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                                     'hash': 'md5:' + '0' * 32,
                                     'format': 'application/pkcs7-signature',
                                 }
-                            ]
+                            ],
+                            "relatedParty": party_id
                         },
                     }},
                 )
@@ -666,12 +633,13 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                     "tender_id": self._generate_test_uuid().hex,
                     "reasons": ["public", "fiscal"],
                     "procuringStages": ["awarding", "contracting"],
-                    "parties": [self.party_creator]
+                    "parties": [self.party]
                 }},
                 status=201
             )
 
         monitoring_id = response.json["data"]["id"]
+        party_id = response.json["data"]["parties"][0]["id"]
 
         with freeze_time("2018.01.02 00:00"):
             with open('docs/source/tutorial/http/monitoring-publish.http', 'w') as self.app.file_obj:
@@ -687,24 +655,16 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                                 'url': self.generate_docservice_url(),
                                 'hash': 'md5:' + '0' * 32,
                                 'format': 'application/msword',
-                            }]
+                            }],
+                            "relatedParty": party_id
                         }
                     }},
                     status=200
                 )
 
-        with freeze_time("2018.01.03 00:00"):
-            response = self.app.post_json(
-                '/monitorings/{}/parties'.format(monitoring_id),
-                {"data": self.party_dialogue},
-                status=201
-            )
-
-        party_id = response.json['data']['id']
-
         with freeze_time("2018.01.03 00:10"):
             self.app.post_json(
-                '/monitorings/{}/dialogues'.format(monitoring_id),
+                '/monitorings/{}/posts'.format(monitoring_id),
                 {"data": {
                     "title": "Lorem ipsum",
                     "description": "Lorem ipsum dolor sit amet.",
@@ -725,6 +685,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                 {"data": {
                     "conclusion": {
                         "violationOccurred": False,
+                        "relatedParty": party_id
                     },
                     "status": "declined"
                 }},
@@ -749,12 +710,13 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                     "tender_id": self._generate_test_uuid().hex,
                     "reasons": ["public", "fiscal"],
                     "procuringStages": ["awarding", "contracting"],
-                    "parties": [self.party_creator]
+                    "parties": [self.party]
                 }},
                 status=201
             )
 
         monitoring_id = response.json["data"]["id"]
+        party_id = response.json["data"]["parties"][0]["id"]
 
         with freeze_time("2018.01.02 00:00"):
             self.app.patch_json(
@@ -769,7 +731,8 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                             'url': self.generate_docservice_url(),
                             'hash': 'md5:' + '0' * 32,
                             'format': 'application/msword',
-                        }]
+                        }],
+                        "relatedParty": party_id
                     }
                 }},
                 status=200
@@ -781,7 +744,8 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                     '/monitorings/{}'.format(monitoring_id),
                     {"data": {
                         "cancellation": {
-                            "description": "Complaint was created"
+                            "description": "Complaint was created",
+                            "relatedParty": party_id
                         },
                         "status": "stopped",
                     }}
@@ -797,12 +761,13 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                     "tender_id": self._generate_test_uuid().hex,
                     "reasons": ["public", "fiscal"],
                     "procuringStages": ["awarding", "contracting"],
-                    "parties": [self.party_creator]
+                    "parties": [self.party]
                 }},
                 status=201
             )
 
         monitoring_id = response.json["data"]["id"]
+        party_id = response.json["data"]["parties"][0]["id"]
 
         with freeze_time("2018.01.03 00:00"):
             with open('docs/source/tutorial/http/monitoring-to-cancelled.http', 'w') as self.app.file_obj:
@@ -810,7 +775,8 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                     '/monitorings/{}'.format(monitoring_id),
                     {"data": {
                         "cancellation": {
-                            "description": "Some reason"
+                            "description": "Some reason",
+                            "relatedParty": party_id
                         },
                         "status": "cancelled",
                     }}

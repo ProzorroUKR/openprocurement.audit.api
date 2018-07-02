@@ -8,11 +8,11 @@ from openprocurement.audit.api.utils import (
 from openprocurement.api.utils import (
     json_view,
     get_now,
-    context_unpack
+    context_unpack,
 )
 from openprocurement.audit.api.validation import (
     validate_patch_elimination_report_data,
-    validate_elimination_report_data
+    validate_elimination_report_data,
 )
 
 

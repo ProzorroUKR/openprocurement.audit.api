@@ -53,7 +53,7 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
                 "locality": "Kyiv"
             },
             "roles": [
-                "create"
+                "sas"
             ]
         }
 
@@ -76,7 +76,7 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
                 "locality": "Kyiv"
             },
             "roles": [
-                "dialogue"
+                "sas"
             ]
         }
 
@@ -112,7 +112,7 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']['name'], "The State Audit Service of Ukraine",)
-        self.assertEqual(response.json['data']['roles'], ['create'])
+        self.assertEqual(response.json['data']['roles'], ['sas'])
 
     def test_dialogue_party_create(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
@@ -129,10 +129,10 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']['name'], "The State Audit Service of Ukraine",)
-        self.assertEqual(response.json['data']['roles'], ['dialogue'])
+        self.assertEqual(response.json['data']['roles'], ['sas'])
 
         response = self.app.post_json(
-            '/monitorings/{}/dialogues'.format(self.monitoring_id),
+            '/monitorings/{}/posts'.format(self.monitoring_id),
             {"data": {
                 "title": "Lorem ipsum",
                 "description": "Lorem ipsum dolor sit amet.",
@@ -145,9 +145,9 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
                 "relatedParty": party_id
             }}, status=201)
 
-        dialogue_id = response.json['data']['id']
+        post_id = response.json['data']['id']
 
-        response = self.app.get('/monitorings/{}/dialogues/{}'.format(self.monitoring_id, dialogue_id))
+        response = self.app.get('/monitorings/{}/posts/{}'.format(self.monitoring_id, post_id))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']['relatedParty'], party_id)
@@ -167,10 +167,10 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']['name'], "The State Audit Service of Ukraine",)
-        self.assertEqual(response.json['data']['roles'], ['dialogue'])
+        self.assertEqual(response.json['data']['roles'], ['sas'])
 
         response = self.app.post_json(
-            '/monitorings/{}/dialogues'.format(self.monitoring_id),
+            '/monitorings/{}/posts'.format(self.monitoring_id),
             {"data": {
                 "title": "Lorem ipsum",
                 "description": "Lorem ipsum dolor sit amet.",

@@ -103,7 +103,6 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest):
             }},
         )
         self.assertNotIn("eliminationReport", response.json["data"])
-        print(response.json["data"])
 
 
 class BaseFeedResourceTest(BaseWebTest):

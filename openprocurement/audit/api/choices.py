@@ -13,6 +13,7 @@ DIALOGUE_TYPE_CHOICES = (
 
 PARTY_ROLES_CHOICES = (
     'sas',
+    'risk_indicator'
 )
 
 MONITORING_STATUS_CHOICES = (

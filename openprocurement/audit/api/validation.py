@@ -256,10 +256,7 @@ def _validate_post_post_status(request):
     status_current = monitoring.status
     if status_current in (ADDRESSED_STATUS, DECLINED_STATUS):
         if request.authenticated_userid == monitoring.tender_owner:
-            if sum(all([
-                post.postOf == CONCLUSION_OBJECT_TYPE,
-                post.relatedPost is None
-            ]) for post in monitoring.posts):
+            if any(post.postOf == CONCLUSION_OBJECT_TYPE and post.relatedPost is None for post in monitoring.posts):
                 raise_operation_error(request, 'Can\'t add more than one {} post in current {} monitoring status'.format(
                     CONCLUSION_OBJECT_TYPE, status_current))
         elif post.relatedPost is None:

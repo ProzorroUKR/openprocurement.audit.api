@@ -53,8 +53,3 @@ And add another document to a post:
 
 .. include:: http/post-conclusion-add-document.http
    :code:
-
-In case of no violations occurred SAS-employer can close monitoring by changing status to ``closed``:
-
-.. include:: http/monitoring-to-closed.http
-   :code:

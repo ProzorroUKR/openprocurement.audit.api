@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: openprocurement.audit.api 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-13 11:14+0300\n"
-"PO-Revision-Date: 2018-07-02 16:21+0300\n"
+"PO-Revision-Date: 2018-07-03 11:53+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -50,15 +50,6 @@ msgstr "Додамо ще один документ до запиту:"
 msgid "We also can get a list of all post documents:"
 msgstr "Також ми можемо отримати всіх доданих документів до запиту на пояснення:"
 
-#: ../../source/tutorial/dialogue.rst:29
-msgid ""
-"To answer the question as a broker we must get :ref:`credentials` first. Now "
-"lets add an answer using generated token:"
-msgstr ""
-"Для надання відповіді на запит власником тендеру ми маємо спочатку `отримати "
-"токен <credentials>`_. Тепер спробуємо додати відповідь використовуючи "
-"згенерований токен."
-
 #: ../../source/tutorial/dialogue.rst:39
 msgid ""
 "Also we can create another question as a broker by publishing an another post:"
@@ -71,6 +62,25 @@ msgstr "Співробітник ДАСУ може надати відповід
 #: ../../source/tutorial/dialogue.rst:49
 msgid "Lets see all posts we have:"
 msgstr "Подивимось усі запити:"
+
+#: ../../source/tutorial/dialogue.rst:29
+msgid ""
+"To answer the question as a broker we must get :ref:`credentials` first. Now "
+"lets add an answer using generated token. To link the answer to a question we "
+"should pass `id` of the question  post as `relatedPost`:"
+msgstr ""
+"Для надання відповіді на запит власником тендеру ми маємо спочатку `отримати "
+"токен <credentials>`_. Тепер спробуємо додати відповідь використовуючи "
+"згенерований токен. Щоб прив'язати відповідь до запиту ми маємо передати "
+"`relatedPost`:"
+
+#~ msgid ""
+#~ "To answer the question as a broker we must get :ref:`credentials` first. "
+#~ "Now lets add an answer using generated token:"
+#~ msgstr ""
+#~ "Для надання відповіді на запит власником тендеру ми маємо спочатку "
+#~ "`отримати токен <credentials>`_. Тепер спробуємо додати відповідь "
+#~ "використовуючи згенерований токен."
 
 #~ msgid ""
 #~ "Let's provide party that will be used as related party for our dialogue:"

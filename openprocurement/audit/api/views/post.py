@@ -1,16 +1,17 @@
 # -*- coding: utf-8 -*-
-from openprocurement.audit.api.constants import CONCLUSION_OBJECT_TYPE, ADDRESSED_STATUS, DECLINED_STATUS
+from openprocurement.audit.api.constants import CONCLUSION_OBJECT_TYPE, ADDRESSED_STATUS, DECLINED_STATUS, \
+    POST_OVERDUE_TIME
 from openprocurement.audit.api.utils import (
     op_resource,
     APIResource,
     save_monitoring,
     set_author,
     upload_objects_documents,
-)
+    get_monitoring_role, calculate_business_date)
 from openprocurement.api.utils import (
     json_view,
     context_unpack,
-)
+    get_now)
 from openprocurement.audit.api.validation import (
     validate_post_data,
 )
@@ -34,6 +35,8 @@ class PostResource(APIResource):
         set_author(post, self.request, 'author')
         set_author(post.documents, self.request, 'author')
         upload_objects_documents(self.request, post)
+        if post.author == get_monitoring_role('sas') and post.relatedPost is None:
+            post.dateOverdue = calculate_business_date(get_now(), POST_OVERDUE_TIME, self.context, True)
         if monitoring.status in (ADDRESSED_STATUS, DECLINED_STATUS):
             post.postOf = CONCLUSION_OBJECT_TYPE
         monitoring.posts.append(post)

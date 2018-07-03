@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: openprocurement.audit.api 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-13 11:14+0300\n"
-"PO-Revision-Date: 2018-07-02 16:13+0300\n"
+"PO-Revision-Date: 2018-07-03 11:33+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -74,7 +74,7 @@ msgstr ""
 "виявлені) у випадку якщо було виявлено порушення або ``declined`` "
 "(Порушення не виявлені) якщо порушень виявлено не було:"
 
-#: ../../source/tutorial/conclusion.rst:52
+#: ../../source/tutorial/conclusion.rst:57
 msgid ""
 "In case of no violations occurred SAS-employer can close monitoring by "
 "changing status to ``closed``:"
@@ -88,6 +88,10 @@ msgid ""
 "publishing a post:"
 msgstr ""
 "Власник тендеру може звернутись (одноразово) за роз’ясненням щодо висновку:"
+
+#: ../../source/tutorial/conclusion.rst:52
+msgid "And add another document to a post:"
+msgstr "Додамо ще один документ до запиту:"
 
 #~ msgid "Broker can initiate dialogue once after conclusion was provided:"
 #~ msgstr ""

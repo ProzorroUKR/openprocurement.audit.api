@@ -6,7 +6,7 @@ Host: audit-api-sandbox.prozorro.gov.ua
 
 {
   "data": {
-    "url": "http://docs-sandbox.openprocurement.org/get/f4c4bf6612c43112810b3c694910118f?KeyID=a8968c46&Signature=toiBDWjwYL7Czr9kMj%2BesUAmRsZwzhpdYTdZ%2B4r6OYvnyOw2cmwPlgosyPLVVo1KoPrTQDNF0Hj7jpF0ljcWCg%3D%3D", 
+    "url": "http://docs-sandbox.openprocurement.org/get/ad2a036df827309c91b93723b5fb43a3?KeyID=a8968c46&Signature=LQOk82hVtIwWVqWb84j%2B3RFuly90n75wnhCVt2eoxiizspNeLzyRrhlb4tOOyLX7ny1mqUYEpdnJvpYCqdo%2BDQ%3D%3D", 
     "title": "another-letter.doc", 
     "hash": "md5:00000000000000000000000000000000", 
     "format": "application/msword"
@@ -16,17 +16,17 @@ Host: audit-api-sandbox.prozorro.gov.ua
 
 201 Created
 Content-Type: application/json; charset=UTF-8
-Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/appeal/documents/89d79fd650533aa3bfe6ddf12961436f
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/appeal/documents/ce77416b53cf37ce8c7bf30745f15281
 
 {
   "data": {
     "hash": "md5:00000000000000000000000000000000", 
     "author": "tender_owner", 
     "title": "another-letter.doc", 
-    "url": "http://docs-sandbox.openprocurement.org/get/f4c4bf6612c43112810b3c694910118f?KeyID=a8968c46&Signature=2UlEpzVNDr%2FJitJV0adGt1sWOW13aae1lkXMJtWDVFXPRah3L87LIOczb8U0j5Ycapy4q7T6j16O4G%2FFbY8wDA%253D%253D", 
+    "url": "http://docs-sandbox.openprocurement.org/get/ad2a036df827309c91b93723b5fb43a3?KeyID=a8968c46&Signature=lJMFcE2Nh7J0eYGzMpfRYGdNtiNSifjEPVTSChqCb48MxRUs1XkAgCDXIsbCnZJu15DPm3kt4zTSgK%252B6t0gXDg%253D%253D", 
     "format": "application/msword", 
     "datePublished": "2018-01-06T10:00:00+02:00", 
-    "id": "89d79fd650533aa3bfe6ddf12961436f", 
+    "id": "ce77416b53cf37ce8c7bf30745f15281", 
     "dateModified": "2018-01-06T10:00:00+02:00"
   }
 }

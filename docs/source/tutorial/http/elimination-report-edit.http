@@ -21,10 +21,10 @@ Content-Type: application/json; charset=UTF-8
       {
         "hash": "md5:00000000000000000000000000000000", 
         "title": "requirements.doc", 
-        "url": "http://docs-sandbox.openprocurement.org/get/2d641d79fe173936b673e7b35aea6f65?KeyID=a8968c46&Signature=Aj%2FpQCwFFdhuWy2XmraVSRwEULjYaRum7BrBmdb2KpF8wnSTwPdK1PZ2%252Bi3sZ%2FxyJV5lpDH58EtII2390TyrAA%253D%253D", 
+        "url": "http://docs-sandbox.openprocurement.org/get/e5aefc03d5ca3cdcb01edf73e6698665?KeyID=a8968c46&Signature=sDDV88b5vAtN2iKjiSULAtXpldjp7bkDOCy0w%252BY5ZTYpI4j1Y0RRHKkTzhPtOd3HIt%2Fj90FV7L%2F7Q%252Bbf%252BoIeAA%253D%253D", 
         "format": "application/msword", 
         "datePublished": "2018-01-07T02:00:00+02:00", 
-        "id": "e8a90844fb71399da2d16f58d6a0524e", 
+        "id": "0c663f09d6db3317932150b2a5575f54", 
         "dateModified": "2018-01-07T02:00:00+02:00"
       }
     ], 

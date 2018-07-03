@@ -8,7 +8,7 @@ Host: audit-api-sandbox.prozorro.gov.ua
   "data": {
     "documents": [
       {
-        "url": "http://docs-sandbox.openprocurement.org/get/f4c4bf6612c43112810b3c694910118f?KeyID=a8968c46&Signature=toiBDWjwYL7Czr9kMj%2BesUAmRsZwzhpdYTdZ%2B4r6OYvnyOw2cmwPlgosyPLVVo1KoPrTQDNF0Hj7jpF0ljcWCg%3D%3D", 
+        "url": "http://docs-sandbox.openprocurement.org/get/ad2a036df827309c91b93723b5fb43a3?KeyID=a8968c46&Signature=LQOk82hVtIwWVqWb84j%2B3RFuly90n75wnhCVt2eoxiizspNeLzyRrhlb4tOOyLX7ny1mqUYEpdnJvpYCqdo%2BDQ%3D%3D", 
         "title": "another-letter.doc", 
         "hash": "md5:00000000000000000000000000000000", 
         "format": "application/msword"

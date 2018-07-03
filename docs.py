@@ -474,7 +474,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
 
         with freeze_time("2018.01.06 00:00"):
             with open('docs/source/tutorial/http/conclusion-post.http', 'w') as self.app.file_obj:
-                self.app.post_json(
+                response = self.app.post_json(
                     '/monitorings/{}/posts?acc_token={}'.format(monitoring_id, tender_owner_token),
                     {"data": {
                         "title": "Sit amet",
@@ -486,6 +486,22 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                             'format': 'application/msword',
                         }],
                         "relatedParty": party_id
+                    }},
+                    status=201
+                )
+
+        post_conclusion_id = response.json['data']['id']
+
+        with freeze_time("2018.01.03 00:10"):
+            with open('docs/source/tutorial/http/post-conclusion-add-document.http', 'w') as self.app.file_obj:
+                self.app.post_json(
+                    '/monitorings/{}/posts/{}/documents?acc_token={}'.format(
+                        monitoring_id, post_conclusion_id, tender_owner_token),
+                    {"data": {
+                        'title': 'dolor.doc',
+                        'url': self.generate_docservice_url(),
+                        'hash': 'md5:' + '0' * 32,
+                        'format': 'application/msword',
                     }},
                     status=201
                 )

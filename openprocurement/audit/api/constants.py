@@ -5,13 +5,14 @@ from datetime import datetime, timedelta
 MONITORING_TIME = timedelta(days=17)
 ELIMINATION_PERIOD_TIME = timedelta(days=10)
 ELIMINATION_PERIOD_NO_VIOLATIONS_TIME = timedelta(days=3)
+POST_OVERDUE_TIME = timedelta(days=3)
 
 # Object type strings
 DECISION_OBJECT_TYPE = 'decision'
 CONCLUSION_OBJECT_TYPE = 'conclusion'
 APPEAL_OBJECT_TYPE = 'appeal'
 ELIMINATION_REPORT_OBJECT_TYPE = 'eliminationReport'
-DIALOGUE_OBJECT_TYPE = 'dialogue'
+POST_OBJECT_TYPE = 'post'
 
 # Custom party roles
 CREATE_PARTY_ROLE = 'create'

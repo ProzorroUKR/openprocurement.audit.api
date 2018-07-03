@@ -1,6 +1,6 @@
-PUT /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/appeal?acc_token=08c7d830025f391ba6b57584516df9a3 HTTP/1.0
+PUT /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/appeal?acc_token=9176b26052b23e5e92d60c0515e76a56 HTTP/1.0
 Authorization: Basic YnJva2VyOg==
-Content-Length: 396
+Content-Length: 400
 Content-Type: application/json
 Host: audit-api-sandbox.prozorro.gov.ua
 
@@ -8,7 +8,7 @@ Host: audit-api-sandbox.prozorro.gov.ua
   "data": {
     "documents": [
       {
-        "url": "http://docs-sandbox.openprocurement.org/get/27f7995a7bee3fd3bf86eaaacf25d983?KeyID=a8968c46&Signature=63aip54xOHUtYQoezgyDBDMMP1trN1rHJ1TZL7ApSoyGj0EAVnrv43329kOVQUsbo5zPHMyKDPHSxaSpQNUaBQ%3D%3D", 
+        "url": "http://docs-sandbox.openprocurement.org/get/ad2a036df827309c91b93723b5fb43a3?KeyID=a8968c46&Signature=LQOk82hVtIwWVqWb84j%2B3RFuly90n75wnhCVt2eoxiizspNeLzyRrhlb4tOOyLX7ny1mqUYEpdnJvpYCqdo%2BDQ%3D%3D", 
         "title": "another-letter.doc", 
         "hash": "md5:00000000000000000000000000000000", 
         "format": "application/msword"

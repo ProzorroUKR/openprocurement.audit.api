@@ -13,7 +13,7 @@ areas that were not covered by it.
    monitoring
    document
    decision
-   dialogue
+   post
    conclusion
    eliminationReport
    eliminationResolution

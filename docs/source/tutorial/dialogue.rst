@@ -11,47 +11,49 @@ Make a Dialogue
     | |yes| Tender owner
 
 
-Let's provide party that will be used as related party for our dialogue:
+For published monitoring we can start dialogue by publishing a post as a SAS-employee:
 
-.. include:: http/dialogue-party.http
+.. include:: http/post-publish.http
     :code:
 
-For published monitoring we can start dialogue:
+We can see that ``postOf`` field was generated. Possible  values of this field are:
 
-.. include:: http/dialogue-publish.http
+    * ``decision`` - means that post is related to a decision and was added in ``active`` monitoring status
+    * ``conclusion`` - means that post is related to a conclusion and was added in ``addressed`` or ``declined`` monitoring status
+
+Also ``dateOverdue`` was generated for SAS question, that is end date for reply. This is info field and there are no validations that use this date.
+
+Lets add another document to a post:
+
+.. include:: http/post-publish-add-document.http
     :code:
 
-Lets add another document to dialogue:
+We also can get a list of all post documents:
 
-.. include:: http/dialogue-publish-add-document.http
+.. include:: http/post-get-documents.http
     :code:
 
-We also can get a list of all dialogue documents:
+To answer the question as a broker we must get :ref:`credentials` first. Now lets add an answer using generated token. To link the answer to a question we should pass `id` of the question  post as `relatedPost`:
 
-.. include:: http/dialogue-get-documents.http
-    :code:
-
-To answer the question as a broker we must get :ref:`credentials` first. Now lets update answer using generated token:
-
-.. include:: http/dialogue-answer.http
+.. include:: http/post-answer.http
     :code:
 
 And also add documents:
 
-.. include:: http/dialogue-answer-docs.http
+.. include:: http/post-answer-docs.http
     :code:
 
-Lets see the result dialogue:
+Also we can create another question as a broker by publishing an another post:
 
-.. include:: http/dialogue-get.http
+.. include:: http/post-broker-publish.http
     :code:
 
-Also we can create another question as a broker:
+And also SAS-employee can publish an answer post:
 
-.. include:: http/dialogue-broker-publish.http
+.. include:: http/post-broker-sas-answer.http
     :code:
 
-Lets see all dialogues we have:
+Lets see all posts we have:
 
-.. include:: http/dialogue-get.http
+.. include:: http/posts-get.http
     :code:

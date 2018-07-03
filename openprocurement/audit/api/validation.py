@@ -2,14 +2,26 @@
 from hashlib import sha512
 from restkit import ResourceNotFound
 
-from openprocurement.api.utils import update_logging_context, raise_operation_error, error_handler, forbidden, get_now
+from openprocurement.api.utils import (
+    update_logging_context,
+    raise_operation_error,
+    error_handler,
+    forbidden,
+    get_now,
+)
 from openprocurement.api.validation import validate_data
 from openprocurement_client.client import TendersClient
 
 from openprocurement.audit.api.constants import (
-    CONCLUSION_OBJECT_TYPE, DECISION_OBJECT_TYPE, DRAFT_STATUS, ACTIVE_STATUS, ADDRESSED_STATUS, DECLINED_STATUS)
+    CONCLUSION_OBJECT_TYPE,
+    DECISION_OBJECT_TYPE,
+    DRAFT_STATUS,
+    ACTIVE_STATUS,
+    ADDRESSED_STATUS,
+    DECLINED_STATUS,
+)
 from openprocurement.audit.api.utils import get_access_token, get_monitoring_role
-from openprocurement.audit.api.models import Monitoring, Dialogue, EliminationReport, Party, Appeal
+from openprocurement.audit.api.models import Monitoring, EliminationReport, Party, Appeal, Post
 
 
 def validate_monitoring_data(request):
@@ -39,22 +51,13 @@ def validate_patch_monitoring_data(request):
     return data
 
 
-def validate_dialogue_data(request):
+def validate_post_data(request):
     """
-    Validate dialogue data POST
+    Validate post data POST
     """
-    update_logging_context(request, {'DIALOGUE_ID': '__new__'})
-    data = validate_data(request, Dialogue)
-    _validate_post_dialogue_status(request)
-    return data
-
-
-def validate_patch_dialogue_data(request):
-    """
-    Validate dialogue data PATCH
-    """
-    data = validate_data(request, Dialogue, partial=True)
-    _validate_patch_dialogue_status(request)
+    update_logging_context(request, {'POST_ID': '__new__'})
+    data = validate_data(request, Post)
+    _validate_post_post_status(request)
     return data
 
 
@@ -115,8 +118,18 @@ def validate_document_conclusion_status(request):
     _validate_document_status(request, ACTIVE_STATUS)
 
 
-def validate_document_dialogue_status(request):
-    _validate_document_status(request, ACTIVE_STATUS)
+def validate_document_post_status(request):
+    post = request.validated['post']
+
+    if post.author != get_monitoring_role(request.authenticated_role):
+        raise forbidden(request)
+
+    if post.postOf == DECISION_OBJECT_TYPE:
+        _validate_document_status(request, ACTIVE_STATUS)
+    elif post.postOf == CONCLUSION_OBJECT_TYPE:
+        _validate_document_status(request, ADDRESSED_STATUS)
+    else:
+        raise forbidden(request)
 
 
 def validate_credentials_generate(request):
@@ -237,31 +250,21 @@ def _validate_patch_monitoring_status_to_stopped_or_cancelled(request):
         raise error_handler(request.errors)
 
 
-def _validate_post_dialogue_status(request):
+def _validate_post_post_status(request):
+    post = request.validated['post']
     monitoring = request.validated['monitoring']
     status_current = monitoring.status
     if status_current in (ADDRESSED_STATUS, DECLINED_STATUS):
-        if request.authenticated_userid != monitoring.tender_owner:
-            raise forbidden(request)
-        if sum(dialogue.dialogueOf == CONCLUSION_OBJECT_TYPE for dialogue in monitoring.dialogues):
-            raise_operation_error(request, 'Can\'t add more than one {} dialogue'.format(CONCLUSION_OBJECT_TYPE))
+        if request.authenticated_userid == monitoring.tender_owner:
+            if any(post.postOf == CONCLUSION_OBJECT_TYPE and post.relatedPost is None for post in monitoring.posts):
+                raise_operation_error(request, 'Can\'t add more than one {} post in current {} monitoring status'.format(
+                    CONCLUSION_OBJECT_TYPE, status_current))
+        elif post.relatedPost is None:
+            raise_operation_error(request, 'Can\'t add post in current {} monitoring status'.format(
+                status_current))
     elif status_current not in (ACTIVE_STATUS,):
-        raise_operation_error(request, 'Can\'t add dialogue in current {} monitoring status'.format(status_current))
-
-
-def _validate_patch_dialogue_status(request):
-    dialogue = request.validated['dialogue']
-    author = dialogue['author']
-    if get_monitoring_role(request.authenticated_role) == author:
-        raise forbidden(request)
-    monitoring = request.validated['monitoring']
-    status_current = monitoring.status
-    if dialogue.dialogueOf == CONCLUSION_OBJECT_TYPE and status_current not in (ADDRESSED_STATUS, DECLINED_STATUS):
-        raise_operation_error(request, 'Can\'t edit {} dialogue in current {} monitoring status'.format(
-            CONCLUSION_OBJECT_TYPE, status_current))
-    elif dialogue.dialogueOf == DECISION_OBJECT_TYPE and status_current not in (ACTIVE_STATUS,):
-        raise_operation_error(request, 'Can\'t edit {} dialogue in current {} monitoring status'.format(
-            DECISION_OBJECT_TYPE, status_current))
+        raise_operation_error(request, 'Can\'t add post in current {} monitoring status'.format(
+            status_current))
 
 
 def _validate_elimination_report_status(request):

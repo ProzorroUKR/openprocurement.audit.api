@@ -1,11 +1,8 @@
 from openprocurement.api.utils import (
     context_unpack,
-    decrypt,
-    encrypt,
     get_now,
     generate_id,
     json_view,
-    error_handler,
     APIResourceListing,
 )
 
@@ -13,7 +10,14 @@ from openprocurement.audit.api.constants import (
     MONITORING_TIME,
     ELIMINATION_PERIOD_TIME,
     ELIMINATION_PERIOD_NO_VIOLATIONS_TIME,
-    DRAFT_STATUS, ACTIVE_STATUS, ADDRESSED_STATUS, DECLINED_STATUS, COMPLETED_STATUS, STOPPED_STATUS, CANCELLED_STATUS)
+    DRAFT_STATUS,
+    ACTIVE_STATUS,
+    ADDRESSED_STATUS,
+    DECLINED_STATUS,
+    COMPLETED_STATUS,
+    STOPPED_STATUS,
+    CANCELLED_STATUS,
+)
 from openprocurement.audit.api.utils import (
     save_monitoring,
     monitoring_serialize,
@@ -40,7 +44,6 @@ from openprocurement.audit.api.design import (
 from openprocurement.audit.api.validation import (
     validate_monitoring_data,
     validate_patch_monitoring_data,
-    _validate_patch_monitoring_status,
     validate_credentials_generate
 )
 from openprocurement.audit.api.design import FIELDS

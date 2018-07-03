@@ -9,7 +9,7 @@ Host: audit-api-sandbox.prozorro.gov.ua
     "conclusion": {
       "documents": [
         {
-          "url": "http://docs-sandbox.openprocurement.org/get/45265b4cc3dc3c038e36be752d6c47a6?KeyID=a8968c46&Signature=zqU29oG2aVSmDZd8UCaAijjd0aksimOwiAudUQovodxCZJX34F2r8qO0zpQyzh14KwqUKdB1oZJXAa%2FHK6QLBw%3D%3D", 
+          "url": "http://docs-sandbox.openprocurement.org/get/60293decddef3675aa367827db00d3cb?KeyID=a8968c46&Signature=9Qzn3ORXJ%2FNo90tBsWdWZ8xpGB7bFYXIZZG46QtbuNUC3v0bMs59cZEeFTOAJJBt6S6LAVjWzYIQxusQsQn2CQ%3D%3D", 
           "title": "New document(2).doc", 
           "hash": "md5:00000000000000000000000000000000", 
           "format": "application/msword"
@@ -38,71 +38,7 @@ Content-Type: application/json; charset=UTF-8
       "awarding", 
       "contracting"
     ], 
-    "dialogues": [
-      {
-        "documents": [
-          {
-            "hash": "md5:00000000000000000000000000000000", 
-            "author": "monitoring_owner", 
-            "title": "ipsum.doc", 
-            "url": "http://docs-sandbox.openprocurement.org/get/bc176ec0e4563a8285c2ac0dcb294b17?KeyID=a8968c46&Signature=xihLbei7mFtNp3SBNQc66vBPivWb%2BLiELyzbrGFyLHmj%2BLQEOTfQMULTeA0o6Z01yRR%2FR0xn%2BezhbTMFdqrtBQ%3D%3D", 
-            "format": "application/msword", 
-            "datePublished": "2018-01-03T02:05:00+02:00", 
-            "id": "7db950a7c6753b8aba0e226ea8e55ce2", 
-            "dateModified": "2018-01-03T02:05:00+02:00"
-          }, 
-          {
-            "hash": "md5:00000000000000000000000000000000", 
-            "author": "monitoring_owner", 
-            "title": "dolor.doc", 
-            "url": "http://docs-sandbox.openprocurement.org/get/54f3206ee6e838388a7ade83aa3e320b?KeyID=a8968c46&Signature=l1q3e3YfOlgBmlaLbYcLrPahcV4O6zjCRBUFwIaARE43%252BOmJkwhwtoM78Wn8naeKbavSnoF20vu1BANXkMtMBg%253D%253D", 
-            "format": "application/msword", 
-            "datePublished": "2018-01-03T02:10:00+02:00", 
-            "id": "aef26e1612da390ebce4733b3f5b66cd", 
-            "dateModified": "2018-01-03T02:10:00+02:00"
-          }, 
-          {
-            "hash": "md5:00000000000000000000000000000000", 
-            "author": "tender_owner", 
-            "title": "dolor.doc", 
-            "url": "http://docs-sandbox.openprocurement.org/get/c3a72ce1588c36ba831aac61fe4a9252?KeyID=a8968c46&Signature=wecizLd9T%2FkMw9LZ9xIX2vGzVAQKeaJT8DMzDdk8c6%2FoFU%252Bl71G%252BK9XZw4xEzD88yBKIwnT%2F6aV9fMAC2XTlCg%253D%253D", 
-            "format": "application/msword", 
-            "datePublished": "2018-01-04T02:10:00+02:00", 
-            "id": "2a73ab9646ee3b899ecbb07361966d89", 
-            "dateModified": "2018-01-04T02:10:00+02:00"
-          }
-        ], 
-        "description": "Lorem ipsum dolor sit amet.", 
-        "author": "monitoring_owner", 
-        "title": "Lorem ipsum", 
-        "dateAnswered": "2018-01-04T02:05:00+02:00", 
-        "relatedParty": "6e3da601782b3e5694c5a27eb1a8a3d5", 
-        "dateSubmitted": "2018-01-03T02:05:00+02:00", 
-        "answer": "Sit amet", 
-        "id": "34a0751d03a136bf884aa1ed12ca2a02", 
-        "dialogueOf": "decision"
-      }, 
-      {
-        "documents": [
-          {
-            "hash": "md5:00000000000000000000000000000000", 
-            "author": "tender_owner", 
-            "title": "ipsum.doc", 
-            "url": "http://docs-sandbox.openprocurement.org/get/3df142fc4c8c3dca893126bea1b14c35?KeyID=a8968c46&Signature=HjB5rpyQR4Sxu8m0OQsj6kz7dFroDPs8Qv6vqKb1fSuTBG99FEMhlapadQ0g2%2FqASPGa9VuNp89Ha7FGHxBIAw%3D%3D", 
-            "format": "application/msword", 
-            "datePublished": "2018-01-03T02:05:00+02:00", 
-            "id": "38e51dc2b86f3d64a70b4424954b0957", 
-            "dateModified": "2018-01-03T02:05:00+02:00"
-          }
-        ], 
-        "description": "Lorem ipsum dolor sit amet.", 
-        "title": "Dolor sit amet", 
-        "author": "tender_owner", 
-        "dateSubmitted": "2018-01-03T02:05:00+02:00", 
-        "id": "b60255a2528235869678f690bf1f0fcb", 
-        "dialogueOf": "decision"
-      }
-    ], 
+    "tender_id": "0830383a594534f98cbb0a12bbd401ac", 
     "reasons": [
       "public", 
       "fiscal"
@@ -112,42 +48,141 @@ Content-Type: application/json; charset=UTF-8
       "endDate": "2018-01-26T03:15:00+02:00"
     }, 
     "decision": {
-      "date": "2018-01-02T01:05:00+02:00", 
-      "dateCreated": "2018-01-02T03:05:00+02:00", 
       "documents": [
         {
           "hash": "md5:00000000000000000000000000000000", 
           "author": "monitoring_owner", 
           "title": "lorem.doc", 
-          "url": "http://docs-sandbox.openprocurement.org/get/ccc82cd7c15037ec8540f7a32569c869?KeyID=a8968c46&Signature=jnixFE8PN8sVNw%2FDpTkiRodfUL74elJ38fQBflS2e53CvQDsev52o18XxsiqZLAw9%2BcGKl7NixbccfgiUDiYDQ%3D%3D", 
+          "url": "http://docs-sandbox.openprocurement.org/get/b2c4161bdb693cf4856a63430b0a60c1?KeyID=a8968c46&Signature=yNRg%252BxNtldS%2F5uGjXKv7oSlBOrw2lMEiK08HAtfpqOMeqzHvmxxpHjgFy8lII0P1e4fb4dvlNkaIwmugpSkIBw%253D%253D", 
           "format": "application/msword", 
           "datePublished": "2018-01-02T03:05:00+02:00", 
-          "id": "22192bb730e13d01af815eb70f9204bb", 
+          "id": "54b5bb33c9db3e1fb565d74f3b695d0a", 
           "dateModified": "2018-01-02T03:05:00+02:00"
         }, 
         {
           "hash": "md5:00000000000000000000000000000000", 
           "author": "monitoring_owner", 
           "title": "dolor.doc", 
-          "url": "http://docs-sandbox.openprocurement.org/get/f6087e8388073674bafae65691436fe1?KeyID=a8968c46&Signature=C1r65aZTmxeAFWbCrtnt%252BRd69Wq3yMP%2F5UxHJczrQNsssDggULiXiXMKLTPwqEW94YDQygzc8f%252B5NFFp%252BVneCQ%253D%253D", 
+          "url": "http://docs-sandbox.openprocurement.org/get/22192bb730e13d01af815eb70f9204bb?KeyID=a8968c46&Signature=8L9lnrZ%2Fjy1tA5sJ1DEv1GZtqQdIWRQTU2oBQWX84hUVtrzlp79TEuA9qAvYSLvU6CyHzFXTZ7c2p38iM2KSBQ%253D%253D", 
           "format": "application/msword", 
           "datePublished": "2018-01-02T03:10:00+02:00", 
-          "id": "d40b9012471f3278954388ddedb2a03a", 
+          "id": "82b6518426e13394b4d31196fa90eefe", 
           "dateModified": "2018-01-02T03:10:00+02:00"
         }
       ], 
       "description": "text", 
+      "dateCreated": "2018-01-02T03:05:00+02:00", 
+      "relatedParty": "f0e119b94ed33bd9b72caf2573503984", 
+      "date": "2018-01-02T01:05:00+02:00", 
       "datePublished": "2018-01-02T03:15:00+02:00"
     }, 
     "monitoring_id": "UA-M-2018-01-01-000001", 
-    "tender_id": "0830383a594534f98cbb0a12bbd401ac", 
+    "posts": [
+      {
+        "documents": [
+          {
+            "hash": "md5:00000000000000000000000000000000", 
+            "author": "monitoring_owner", 
+            "title": "ipsum.doc", 
+            "url": "http://docs-sandbox.openprocurement.org/get/4b160836ce343adda2f7de38a083e35f?KeyID=a8968c46&Signature=g07Q%2F1dhFZsjsJHzxAmKxk03vLL35s0EBWhuV5WzdAlz67xubAO1oy5ktxow4yFG769w%252BAI7%2FhWDplYLVzT5AA%253D%253D", 
+            "format": "application/msword", 
+            "datePublished": "2018-01-03T02:05:00+02:00", 
+            "id": "529e322b8f5a3b8abb4cf13d169b1bc2", 
+            "dateModified": "2018-01-03T02:05:00+02:00"
+          }, 
+          {
+            "hash": "md5:00000000000000000000000000000000", 
+            "author": "monitoring_owner", 
+            "title": "dolor.doc", 
+            "url": "http://docs-sandbox.openprocurement.org/get/58751d5a4aa73106a5f9452aa8922b0c?KeyID=a8968c46&Signature=3WKrZCpMWPu6h2feJi0mhZ06%2Fuug96gcFPjLB%252BHDW2LnkV9fJI9ZKgPJc%2F1HfiS2z1nRTNd6vbMpYXiIdCCiDQ%253D%253D", 
+            "format": "application/msword", 
+            "datePublished": "2018-01-03T02:10:00+02:00", 
+            "id": "a8522817b4003f4aa62deb36821d476c", 
+            "dateModified": "2018-01-03T02:10:00+02:00"
+          }
+        ], 
+        "description": "Lorem ipsum dolor sit amet.", 
+        "title": "Lorem ipsum", 
+        "author": "monitoring_owner", 
+        "datePublished": "2018-07-03T12:30:06.284989+03:00", 
+        "relatedParty": "f0e119b94ed33bd9b72caf2573503984", 
+        "dateOverdue": "2018-01-09T02:05:00+02:00", 
+        "id": "cd657dbd03603f8ba1c586cc10ca41e8", 
+        "postOf": "decision"
+      }, 
+      {
+        "documents": [
+          {
+            "hash": "md5:00000000000000000000000000000000", 
+            "author": "tender_owner", 
+            "title": "dolor.doc", 
+            "url": "http://docs-sandbox.openprocurement.org/get/54f3206ee6e838388a7ade83aa3e320b?KeyID=a8968c46&Signature=l1q3e3YfOlgBmlaLbYcLrPahcV4O6zjCRBUFwIaARE43%252BOmJkwhwtoM78Wn8naeKbavSnoF20vu1BANXkMtMBg%253D%253D", 
+            "format": "application/msword", 
+            "datePublished": "2018-01-04T02:10:00+02:00", 
+            "id": "aef26e1612da390ebce4733b3f5b66cd", 
+            "dateModified": "2018-01-04T02:10:00+02:00"
+          }
+        ], 
+        "description": "Dolor sit amet", 
+        "title": "Sit amet", 
+        "author": "tender_owner", 
+        "datePublished": "2018-07-03T12:30:06.284989+03:00", 
+        "relatedParty": "f0e119b94ed33bd9b72caf2573503984", 
+        "relatedPost": "cd657dbd03603f8ba1c586cc10ca41e8", 
+        "id": "7db950a7c6753b8aba0e226ea8e55ce2", 
+        "postOf": "decision"
+      }, 
+      {
+        "documents": [
+          {
+            "hash": "md5:00000000000000000000000000000000", 
+            "author": "tender_owner", 
+            "title": "ipsum.doc", 
+            "url": "http://docs-sandbox.openprocurement.org/get/7b15a101ae8634919a833ee6c019e37e?KeyID=a8968c46&Signature=oE76x1r292%252BatrcbqwexRqwdPCjg410wxVw1WjTUxPeGLFGgwtQ535r5xBYUoTpkDJvgmMVJX4kkq8FY7olcCA%253D%253D", 
+            "format": "application/msword", 
+            "datePublished": "2018-01-03T02:05:00+02:00", 
+            "id": "1e53f131580932a3a962f3fe8dec3ea6", 
+            "dateModified": "2018-01-03T02:05:00+02:00"
+          }
+        ], 
+        "description": "Lorem ipsum dolor sit amet.", 
+        "title": "Dolor sit amet", 
+        "author": "tender_owner", 
+        "datePublished": "2018-07-03T12:30:06.284989+03:00", 
+        "relatedParty": "f0e119b94ed33bd9b72caf2573503984", 
+        "id": "e5a57a9388ea394eaf17b9467449fa65", 
+        "postOf": "decision"
+      }, 
+      {
+        "documents": [
+          {
+            "hash": "md5:00000000000000000000000000000000", 
+            "author": "monitoring_owner", 
+            "title": "ipsum.doc", 
+            "url": "http://docs-sandbox.openprocurement.org/get/6d008b3ff791358ba06c59a92a5c52dc?KeyID=a8968c46&Signature=4HvzNwDbek1YNhvcs4MFZb%2FCoVBQ52%252B1xJ02ets9UrOHDW4Ghzi0cQJ1LKg9zBMOAcaKKQe4C8uYhxlCnpHRDg%253D%253D", 
+            "format": "application/msword", 
+            "datePublished": "2018-01-03T02:05:00+02:00", 
+            "id": "7db24f8da75b3eb7a2763d19103d50cb", 
+            "dateModified": "2018-01-03T02:05:00+02:00"
+          }
+        ], 
+        "description": "Lorem ipsum dolor sit amet.", 
+        "title": "Lorem ipsum", 
+        "author": "monitoring_owner", 
+        "datePublished": "2018-07-03T12:30:06.284989+03:00", 
+        "relatedParty": "f0e119b94ed33bd9b72caf2573503984", 
+        "relatedPost": "e5a57a9388ea394eaf17b9467449fa65", 
+        "id": "22e56a0025f1347c96d4bc3b098d7bb8", 
+        "postOf": "decision"
+      }
+    ], 
     "id": "3f193d61e4ca3863a60e29557b338073", 
     "tender_owner": "broker", 
     "parties": [
       {
         "name": "The State Audit Service of Ukraine", 
         "roles": [
-          "create"
+          "sas"
         ], 
         "address": {
           "postalCode": "04070", 
@@ -166,52 +201,6 @@ Content-Type: application/json; charset=UTF-8
           "uri": "http://www.dkrs.gov.ua"
         }, 
         "id": "f0e119b94ed33bd9b72caf2573503984"
-      }, 
-      {
-        "name": "The State Audit Service of Ukraine", 
-        "roles": [
-          "decision"
-        ], 
-        "address": {
-          "postalCode": "04070", 
-          "countryName": "Ukraine", 
-          "streetAddress": "Petra Sahaidachnoho St, 4", 
-          "region": "Kyiv", 
-          "locality": "Kyiv"
-        }, 
-        "contactPoint": {
-          "name": "John Doe", 
-          "telephone": "0440000000"
-        }, 
-        "identifier": {
-          "scheme": "UA-EDR", 
-          "id": "40165856", 
-          "uri": "http://www.dkrs.gov.ua"
-        }, 
-        "id": "a725ead4784e37ba8456eab409701230"
-      }, 
-      {
-        "name": "The State Audit Service of Ukraine", 
-        "roles": [
-          "dialogue"
-        ], 
-        "address": {
-          "postalCode": "04070", 
-          "countryName": "Ukraine", 
-          "streetAddress": "Petra Sahaidachnoho St, 4", 
-          "region": "Kyiv", 
-          "locality": "Kyiv"
-        }, 
-        "contactPoint": {
-          "name": "Jane Doe", 
-          "telephone": "0440000000"
-        }, 
-        "identifier": {
-          "scheme": "UA-EDR", 
-          "id": "40165856", 
-          "uri": "http://www.dkrs.gov.ua"
-        }, 
-        "id": "6e3da601782b3e5694c5a27eb1a8a3d5"
       }
     ], 
     "dateCreated": "2018-01-01T02:00:00+02:00", 
@@ -221,10 +210,10 @@ Content-Type: application/json; charset=UTF-8
         {
           "hash": "md5:00000000000000000000000000000000", 
           "title": "New document(2).doc", 
-          "url": "http://docs-sandbox.openprocurement.org/get/45265b4cc3dc3c038e36be752d6c47a6?KeyID=a8968c46&Signature=zqU29oG2aVSmDZd8UCaAijjd0aksimOwiAudUQovodxCZJX34F2r8qO0zpQyzh14KwqUKdB1oZJXAa%2FHK6QLBw%3D%3D", 
+          "url": "http://docs-sandbox.openprocurement.org/get/60293decddef3675aa367827db00d3cb?KeyID=a8968c46&Signature=%2FXhcAwozYodO1Oc7Q%2FTvKIGzl4sneoRmREHa3gq9TMjD07OtNt1LPVqmPB9vU%2FW1qz2YctD%252B6%2FGJSw01L4RvDQ%253D%253D", 
           "format": "application/msword", 
           "datePublished": "2018-01-05T02:15:00+02:00", 
-          "id": "f26a8f53ad653705ba55f6c2b4728dc0", 
+          "id": "1777ff22087e3c55815dc7fa44aa2146", 
           "dateModified": "2018-01-05T02:15:00+02:00"
         }
       ], 
@@ -236,6 +225,7 @@ Content-Type: application/json; charset=UTF-8
       "stringsAttached": "Pocket full of posies", 
       "dateCreated": "2018-01-05T02:00:00+02:00", 
       "auditFinding": "Ring around the rosies", 
+      "relatedParty": "f0e119b94ed33bd9b72caf2573503984", 
       "violationOccurred": true
     }
   }

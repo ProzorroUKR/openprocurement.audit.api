@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: openprocurement.audit.api 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-13 11:14+0300\n"
-"PO-Revision-Date: 2018-06-15 03:19+0300\n"
+"PO-Revision-Date: 2018-07-02 16:22+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -22,7 +22,7 @@ msgstr ""
 msgid "Schema"
 msgstr ""
 
-#: ../../source/standard/decision.rst:12
+#: ../../source/standard/decision.rst:12 ../../source/standard/decision.rst:32
 msgid "string"
 msgstr "рядок"
 
@@ -45,3 +45,7 @@ msgstr "рядок, :ref:`date`, генерується автоматично"
 #: ../../source/standard/decision.rst:23
 msgid "Actual (offline) decision date."
 msgstr "Фактична дата прийняття рішення про проведення моніторингу."
+
+#: ../../source/standard/decision.rst:34
+msgid "Id of related :ref:`party`."
+msgstr "Id відповідного :ref:`party`."

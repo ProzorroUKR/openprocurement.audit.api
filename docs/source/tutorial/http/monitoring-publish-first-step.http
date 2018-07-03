@@ -1,6 +1,6 @@
 PATCH /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073 HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
-Content-Length: 406
+Content-Length: 456
 Content-Type: application/json
 Host: audit-api-sandbox.prozorro.gov.ua
 
@@ -8,9 +8,10 @@ Host: audit-api-sandbox.prozorro.gov.ua
   "data": {
     "decision": {
       "date": "2018-01-02T01:05:00", 
+      "relatedParty": "f0e119b94ed33bd9b72caf2573503984", 
       "documents": [
         {
-          "url": "http://docs-sandbox.openprocurement.org/get/ccc82cd7c15037ec8540f7a32569c869?KeyID=a8968c46&Signature=jnixFE8PN8sVNw%2FDpTkiRodfUL74elJ38fQBflS2e53CvQDsev52o18XxsiqZLAw9%2BcGKl7NixbccfgiUDiYDQ%3D%3D", 
+          "url": "http://docs-sandbox.openprocurement.org/get/b2c4161bdb693cf4856a63430b0a60c1?KeyID=a8968c46&Signature=Dsfgpl1gMRAa%2BRkwYms2qfOIzzdB9khj2osxSBOw0BtTvqGmIkeAAP2ksX3WT5b5wfQ003IKk8Jagw9q88UWAQ%3D%3D", 
           "title": "lorem.doc", 
           "hash": "md5:00000000000000000000000000000000", 
           "format": "application/msword"
@@ -38,19 +39,20 @@ Content-Type: application/json; charset=UTF-8
     ], 
     "decision": {
       "date": "2018-01-02T01:05:00+02:00", 
+      "dateCreated": "2018-01-02T03:05:00+02:00", 
+      "relatedParty": "f0e119b94ed33bd9b72caf2573503984", 
       "documents": [
         {
           "hash": "md5:00000000000000000000000000000000", 
           "title": "lorem.doc", 
-          "url": "http://docs-sandbox.openprocurement.org/get/ccc82cd7c15037ec8540f7a32569c869?KeyID=a8968c46&Signature=jnixFE8PN8sVNw%2FDpTkiRodfUL74elJ38fQBflS2e53CvQDsev52o18XxsiqZLAw9%2BcGKl7NixbccfgiUDiYDQ%3D%3D", 
+          "url": "http://docs-sandbox.openprocurement.org/get/b2c4161bdb693cf4856a63430b0a60c1?KeyID=a8968c46&Signature=yNRg%252BxNtldS%2F5uGjXKv7oSlBOrw2lMEiK08HAtfpqOMeqzHvmxxpHjgFy8lII0P1e4fb4dvlNkaIwmugpSkIBw%253D%253D", 
           "format": "application/msword", 
           "datePublished": "2018-01-02T03:05:00+02:00", 
-          "id": "22192bb730e13d01af815eb70f9204bb", 
+          "id": "54b5bb33c9db3e1fb565d74f3b695d0a", 
           "dateModified": "2018-01-02T03:05:00+02:00"
         }
       ], 
-      "description": "text", 
-      "dateCreated": "2018-01-02T03:05:00+02:00"
+      "description": "text"
     }, 
     "monitoring_id": "UA-M-2018-01-01-000001", 
     "id": "3f193d61e4ca3863a60e29557b338073", 
@@ -58,7 +60,7 @@ Content-Type: application/json; charset=UTF-8
       {
         "name": "The State Audit Service of Ukraine", 
         "roles": [
-          "create"
+          "sas"
         ], 
         "address": {
           "postalCode": "04070", 
@@ -77,29 +79,6 @@ Content-Type: application/json; charset=UTF-8
           "uri": "http://www.dkrs.gov.ua"
         }, 
         "id": "f0e119b94ed33bd9b72caf2573503984"
-      }, 
-      {
-        "name": "The State Audit Service of Ukraine", 
-        "roles": [
-          "decision"
-        ], 
-        "address": {
-          "postalCode": "04070", 
-          "countryName": "Ukraine", 
-          "streetAddress": "Petra Sahaidachnoho St, 4", 
-          "region": "Kyiv", 
-          "locality": "Kyiv"
-        }, 
-        "contactPoint": {
-          "name": "John Doe", 
-          "telephone": "0440000000"
-        }, 
-        "identifier": {
-          "scheme": "UA-EDR", 
-          "id": "40165856", 
-          "uri": "http://www.dkrs.gov.ua"
-        }, 
-        "id": "a725ead4784e37ba8456eab409701230"
       }
     ], 
     "dateCreated": "2018-01-01T02:00:00+02:00", 

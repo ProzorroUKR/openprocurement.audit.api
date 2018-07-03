@@ -301,8 +301,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                     {"data": {
                         'title': 'Sit amet',
                         'description': 'Dolor sit amet',
-                        'relatedPost': post_id,
-                        "relatedParty": party_id
+                        'relatedPost': post_id
                     }},
                     status=201
                 )
@@ -338,8 +337,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                             'url': self.generate_docservice_url(),
                             'hash': 'md5:' + '0' * 32,
                             'format': 'application/msword',
-                        }],
-                        "relatedParty": party_id
+                        }]
                     }},
                     status=201
                 )
@@ -484,8 +482,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                             'url': self.generate_docservice_url(),
                             'hash': 'md5:' + '0' * 32,
                             'format': 'application/msword',
-                        }],
-                        "relatedParty": party_id
+                        }]
                     }},
                     status=201
                 )

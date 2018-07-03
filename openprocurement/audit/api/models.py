@@ -57,7 +57,7 @@ class Post(Model):
     documents = ListType(ModelType(Document), default=list())
     author = StringType()
     postOf = StringType(choices=DIALOGUE_TYPE_CHOICES, default=DECISION_OBJECT_TYPE)
-    datePublished = IsoDateTimeType(default=get_now())
+    datePublished = IsoDateTimeType(default=get_now)
     dateOverdue = IsoDateTimeType()
     relatedPost = StringType()
     relatedParty = StringType()

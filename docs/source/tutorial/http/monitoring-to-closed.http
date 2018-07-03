@@ -67,7 +67,7 @@ Content-Type: application/json; charset=UTF-8
         "description": "Lorem ipsum dolor sit amet.", 
         "title": "Lorem ipsum", 
         "author": "monitoring_owner", 
-        "datePublished": "2018-07-03T12:30:06.284989+03:00", 
+        "datePublished": "2018-01-03T02:10:00+02:00", 
         "relatedParty": "1098403b9f313a4bba6ae80d3a14baca", 
         "dateOverdue": "2018-01-09T02:10:00+02:00", 
         "id": "45b8d74842e13037b2cd6677c276a691", 

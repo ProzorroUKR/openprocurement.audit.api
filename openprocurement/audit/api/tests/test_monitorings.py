@@ -88,6 +88,22 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest):
         )
         self.assertEqual(response.json["errors"][0]["description"], "Can't create a monitoring in 'active' status")
 
+    def test_post_not_allowed_fields(self):
+        self.app.authorization = ('Basic', (self.risk_indicator_token, ''))
+        response = self.app.post_json(
+            '/monitorings',
+            {"data": {
+                "tender_id": "f" * 32,
+                "reasons": ["public", "fiscal"],
+                "procuringStages": ["awarding", "contracting"],
+                "status": "draft",
+                "eliminationReport": {
+                    "description": "Report from the tender owner"
+                }
+            }},
+        )
+        self.assertNotIn("eliminationReport", response.json["data"])
+
 
 class BaseFeedResourceTest(BaseWebTest):
     feed = ""

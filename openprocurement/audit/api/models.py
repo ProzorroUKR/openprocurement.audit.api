@@ -179,12 +179,7 @@ class Monitoring(SchematicsDocument, Model):
         roles = {
             'plain': blacklist('_attachments', 'revisions') + schematics_embedded_role,
             'revision': whitelist('revisions'),
-            'create': blacklist(
-                'revisions', 'dateModified', 'dateCreated',
-                'doc_id', '_attachments', 'monitoring_id',
-                'tender_owner_token', 'tender_owner',
-                'monitoringPeriod', 'eliminationPeriod'
-            ) + schematics_embedded_role,
+            'create': whitelist("tender_id", "reasons", "procuringStages", "status", "mode", "monitoringDetails"),
             'edit_draft': whitelist('decision', 'cancellation') + _perm_edit_whitelist,
             'edit_active': whitelist('conclusion', 'cancellation') + _perm_edit_whitelist,
             'edit_addressed': whitelist('eliminationResolution', 'cancellation') + _perm_edit_whitelist,

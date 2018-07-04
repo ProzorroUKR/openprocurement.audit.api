@@ -114,6 +114,34 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.json['data']['name'], "The State Audit Service of Ukraine",)
         self.assertEqual(response.json['data']['roles'], ['sas'])
 
+    def test_party_patch(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        response = self.app.post_json(
+            '/monitorings/{}/parties'.format(self.monitoring_id),
+            {'data': self.party_creator})
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.content_type, 'application/json')
+
+        party_id = response.json['data']['id']
+        response = self.app.patch_json(
+            '/monitorings/{}/parties/{}'.format(self.monitoring_id, party_id),
+            {'data': {
+                "name": "The NEW State Audit Service of Ukraine",
+                "contactPoint": {
+                    "telephone": "0449999999"
+                },
+                "address": {
+                    "region": "Kharkov",
+                    "locality": "Kharkov"
+                },
+            }})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual('0449999999', response.json['data']['contactPoint']['telephone'])
+        self.assertEqual('Kharkov', response.json['data']['address']['region'])
+        self.assertEqual('Kharkov', response.json['data']['address']['locality'])
+
     def test_dialogue_party_create(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.post_json(

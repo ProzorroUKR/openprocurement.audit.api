@@ -1,0 +1,27 @@
+main:
+  indicators_host: "${options['risk_indicators_host']}"
+  monitors_host: "${options['monitors_host']}"
+  monitors_token: "${options['monitors_token']}"
+
+version: 1
+
+formatters:
+  simple:
+    format: "%(asctime)s - %(filename)s:%(lineno)d - %(levelname)s - %(message)s"
+
+handlers:
+  console:
+    class: logging.StreamHandler
+    level: INFO
+    formatter: simple
+    stream: ext://sys.stdout
+
+loggers:
+  RiskIndicatorBridge:
+    handlers: [console]
+    propagate: no
+    level: INFO
+
+  "":
+    handlers: [console]
+    level: INFO

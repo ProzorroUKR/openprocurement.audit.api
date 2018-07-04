@@ -127,6 +127,8 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
         response = self.app.patch_json(
             '/monitorings/{}/parties/{}'.format(self.monitoring_id, party_id),
             {'data': {
+                # trying to update party id. Right now it will be silently ommited
+                "id": "43c4c5ec776549c6becdd874887edead",
                 "name": "The NEW State Audit Service of Ukraine",
                 "contactPoint": {
                     "telephone": "0449999999"
@@ -141,6 +143,8 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual('0449999999', response.json['data']['contactPoint']['telephone'])
         self.assertEqual('Kharkov', response.json['data']['address']['region'])
         self.assertEqual('Kharkov', response.json['data']['address']['locality'])
+        # ensure that id is not updated
+        self.assertEqual(party_id, response.json['data']['id'])
 
     def test_dialogue_party_create(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))

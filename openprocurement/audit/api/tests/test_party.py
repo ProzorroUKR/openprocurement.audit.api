@@ -146,6 +146,14 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
         # ensure that id is not updated
         self.assertEqual(party_id, response.json['data']['id'])
 
+    def test_party_get_missing(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        from openprocurement.api.utils import error_handler
+        with self.assertRaisesRegexp(Exception, 'Bad response: 404 Not Found'):
+            response = self.app.get('/monitorings/{}/parties/{}'.format(self.monitoring_id, 'not_existent_id'))
+            self.assertEqual(response.status_code, 404)
+
+
     def test_dialogue_party_create(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.post_json(

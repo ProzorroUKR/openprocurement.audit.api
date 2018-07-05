@@ -157,8 +157,8 @@ class Appeal(Report):
 class Party(Model):
     class Options:
         roles = {
-            'create': schematics_embedded_role,
-            'edit': schematics_embedded_role,
+            'create': blacklist('id') + schematics_embedded_role,
+            'edit': blacklist('id') + schematics_embedded_role,
             'embedded': schematics_embedded_role,
             'view': schematics_default_role,
         }

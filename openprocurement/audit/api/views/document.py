@@ -114,6 +114,13 @@ class MonitoringsDocumentBaseResource(APIResource):
                                                   {'DOCUMENT_ID': document.id}))
             return {'data': self.request.context.serialize('view')}
 
+@op_resource(name='Monitoring Documents',
+             collection_path='/monitorings/{monitoring_id}/documents',
+             path='/monitorings/{monitoring_id}/documents/{document_id}',
+             description='Monitoring related binary files (PDFs, etc.)')
+class MonitoringsDocumentResource(MonitoringsDocumentBaseResource):
+    document_type = DECISION_OBJECT_TYPE
+
 
 @op_resource(name='Monitoring Decision Documents',
              collection_path='/monitorings/{monitoring_id}/decision/documents',

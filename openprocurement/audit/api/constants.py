@@ -9,6 +9,7 @@ ELIMINATION_PERIOD_NO_VIOLATIONS_TIME = timedelta(days=3)
 POST_OVERDUE_TIME = timedelta(days=3)
 
 # Object type strings
+MONITORING_OBJECT_TYPE = 'monitoring'
 DECISION_OBJECT_TYPE = 'decision'
 CONCLUSION_OBJECT_TYPE = 'conclusion'
 APPEAL_OBJECT_TYPE = 'appeal'

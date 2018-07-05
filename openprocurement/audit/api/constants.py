@@ -3,6 +3,7 @@ from datetime import datetime, timedelta
 
 # Time restrictions
 MONITORING_TIME = timedelta(days=17)
+MONITORING_END_PERIOD = timedelta(days=15)
 ELIMINATION_PERIOD_TIME = timedelta(days=10)
 ELIMINATION_PERIOD_NO_VIOLATIONS_TIME = timedelta(days=3)
 POST_OVERDUE_TIME = timedelta(days=3)

@@ -8,6 +8,7 @@ from openprocurement.api.utils import (
 
 from openprocurement.audit.api.constants import (
     MONITORING_TIME,
+    MONITORING_END_PERIOD,
     ELIMINATION_PERIOD_TIME,
     ELIMINATION_PERIOD_NO_VIOLATIONS_TIME,
     DRAFT_STATUS,
@@ -29,6 +30,7 @@ from openprocurement.audit.api.utils import (
     set_ownership,
     set_author,
     upload_objects_documents,
+    calculate_business_date,
 )
 from openprocurement.audit.api.design import (
     monitorings_real_by_dateModified_view,
@@ -127,6 +129,7 @@ class MonitoringResource(APIResource):
             set_author(monitoring.decision.documents, self.request, 'author')
             monitoring.monitoringPeriod = generate_period(now, MONITORING_TIME, self.context)
             monitoring.decision.datePublished = now
+            monitoring.endDate = calculate_business_date(now, MONITORING_END_PERIOD, working_days=True)
         elif monitoring_old_status == ACTIVE_STATUS and monitoring.status == ADDRESSED_STATUS:
             set_author(monitoring.conclusion.documents, self.request, 'author')
             monitoring.conclusion.datePublished = now

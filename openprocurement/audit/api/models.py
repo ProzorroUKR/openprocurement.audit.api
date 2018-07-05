@@ -216,6 +216,7 @@ class Monitoring(SchematicsDocument, Model):
     parties = ListType(ModelType(Party), default=[])
 
     dateModified = IsoDateTimeType()
+    endDate = IsoDateTimeType()
     dateCreated = IsoDateTimeType(default=get_now)
     tender_owner = StringType()
     tender_owner_token = StringType()

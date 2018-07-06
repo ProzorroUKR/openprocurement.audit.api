@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 from openprocurement.audit.api.constants import (
+    MONITORING_OBJECT_TYPE,
+    CANCELLATION_OBJECT_TYPE,
     DECISION_OBJECT_TYPE,
     CONCLUSION_OBJECT_TYPE,
     APPEAL_OBJECT_TYPE,
@@ -119,8 +121,14 @@ class MonitoringsDocumentBaseResource(APIResource):
              path='/monitorings/{monitoring_id}/documents/{document_id}',
              description='Monitoring related binary files (PDFs, etc.)')
 class MonitoringsDocumentResource(MonitoringsDocumentBaseResource):
-    document_type = DECISION_OBJECT_TYPE
+    document_type = MONITORING_OBJECT_TYPE
 
+@op_resource(name='Monitoring Cancellation Documents',
+             collection_path='/monitorings/{monitoring_id}/cancellation/documents',
+             path='/monitorings/{monitoring_id}/cancellation/documents/{document_id}',
+             description='Monitoring Cancellation related binary files (PDFs, etc.)')
+class MonitoringsCancellationDocumentResource(MonitoringsDocumentBaseResource):
+    document_type = CANCELLATION_OBJECT_TYPE
 
 @op_resource(name='Monitoring Decision Documents',
              collection_path='/monitorings/{monitoring_id}/decision/documents',

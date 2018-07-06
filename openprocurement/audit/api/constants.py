@@ -10,6 +10,7 @@ POST_OVERDUE_TIME = timedelta(days=3)
 
 # Object type strings
 MONITORING_OBJECT_TYPE = 'monitoring'
+CANCELLATION_OBJECT_TYPE = 'cancellation'
 DECISION_OBJECT_TYPE = 'decision'
 CONCLUSION_OBJECT_TYPE = 'conclusion'
 APPEAL_OBJECT_TYPE = 'appeal'

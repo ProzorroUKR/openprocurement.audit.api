@@ -184,10 +184,10 @@ class Monitoring(SchematicsDocument, Model):
             'edit_active': whitelist('conclusion', 'cancellation') + _perm_edit_whitelist,
             'edit_addressed': whitelist('eliminationResolution', 'cancellation') + _perm_edit_whitelist,
             'edit_declined': whitelist('cancellation') + _perm_edit_whitelist,
-            'edit_completed': whitelist(),
-            'edit_closed': whitelist(),
-            'edit_stopped': whitelist(),
-            'edit_cancelled': whitelist(),
+            'edit_completed': whitelist('documents'),
+            'edit_closed': whitelist('documents'),
+            'edit_stopped': whitelist('documents'),
+            'edit_cancelled': whitelist('documents'),
             'view': blacklist(
                 'tender_owner_token', '_attachments', 'revisions',
                 'decision', 'conclusion', 'cancellation'
@@ -203,6 +203,8 @@ class Monitoring(SchematicsDocument, Model):
     reasons = ListType(StringType(choices=MONITORING_REASON_CHOICES), required=True)
     procuringStages = ListType(StringType(choices=MONITORING_PROCURING_STAGES), required=True)
     monitoringPeriod = ModelType(Period)
+
+    documents = ListType(ModelType(Document), default=[])
 
     decision = ModelType(Decision)
     conclusion = ModelType(Conclusion)

@@ -19,3 +19,4 @@ Tutorial
    closing
    stopping
    cancellation
+   documents

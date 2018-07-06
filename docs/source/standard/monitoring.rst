@@ -41,6 +41,12 @@ Schema
 
    Status of the Monitoring.
 
+:documents:
+   List of :ref:`document` objects
+
+   |ocdsDescription|
+   All documents and attachments related to the monitoring.
+
 :reasons:
    list of strings
 

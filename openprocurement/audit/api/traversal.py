@@ -57,6 +57,8 @@ def factory(request):
         request.validated['monitoring_src'] = request.monitoring.serialize('plain')
     if 'decision' in request.path.split('/'):
         return decision_factory(request)
+    if 'cancellation' in request.path.split('/'):
+        return cancellation_factory(request)
     elif 'conclusion' in request.path.split('/'):
         return conclusion_factory(request)
     elif 'eliminationReport' in request.path.split('/'):
@@ -100,6 +102,11 @@ def decision_factory(request):
     if request.matchdict.get('document_id'):
         return get_item(request.monitoring.decision, 'document', request)
     return request.monitoring.decision
+
+def cancellation_factory(request):
+    if request.matchdict.get('document_id'):
+        return get_item(request.monitoring.cancellation, 'document', request)
+    return request.monitoring.cancellation
 
 
 def conclusion_factory(request):

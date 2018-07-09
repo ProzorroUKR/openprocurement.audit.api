@@ -107,6 +107,10 @@ class Conclusion(Report):
 
 class Cancellation(Report):
     relatedParty = StringType()
+    class Options:
+        roles = {
+            'view': schematics_default_role,
+        }
 
 
 class EliminationResolution(Report):

@@ -17,6 +17,7 @@ from openprocurement.audit.api.utils import (
 )
 from openprocurement.api.utils import (
     get_file,
+    forbidden,
     update_file_content_type,
     upload_file,
     context_unpack,
@@ -196,15 +197,11 @@ class MonitoringsDocumentEliminationResource(MonitoringsDocumentBaseResource):
     def collection_post(self):
         return super(MonitoringsDocumentEliminationResource, self).collection_post()
 
-    @json_view(permission='edit_elimination_report',
-               validators=(validate_file_update,))
     def patch(self):
-        return super(MonitoringsDocumentEliminationResource, self).patch()
+        raise forbidden(self.request)
 
-    @json_view(permission='edit_elimination_report',
-               validators=(validate_file_update,))
     def put(self):
-        return super(MonitoringsDocumentEliminationResource, self).put()
+        raise forbidden(self.request)
 
 
 @op_resource(name='Monitoring Appeal Documents',

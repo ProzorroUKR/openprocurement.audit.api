@@ -111,7 +111,7 @@ class MonitoringEliminationResourceTest(MonitoringEliminationBaseTest):
         self.app.patch_json(
             '/monitorings/{}/eliminationReport?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
             {"data": {"description": "One pint, two pint, three pint, four,"}},
-            status=403
+            status=405
         )
 
     def test_patch_sas_elimination(self):
@@ -119,7 +119,7 @@ class MonitoringEliminationResourceTest(MonitoringEliminationBaseTest):
         self.app.patch_json(
             '/monitorings/{}/eliminationReport'.format(self.monitoring_id),
             {"data": {"description": "One pint, two pint, three pint, four,"}},
-            status=403
+            status=405
         )
 
     def test_success_put(self):
@@ -155,6 +155,28 @@ class MonitoringEliminationResourceTest(MonitoringEliminationBaseTest):
         document = data["documents"][0]
         self.assertNotEqual(document["url"], request_data["documents"][0]["url"])
         self.assertEqual(document["author"], "tender_owner")
+
+    def test_fail_post_elimination_report_when_not_in_adressed_state(self):
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.create_monitoring()
+        request_data = {
+            "description": "Five pint, six pint, seven pint, flour.",
+            "dateCreated": "1988-07-11T15:53:06.068598+03:00",
+            "dateModified": "1988-07-11T15:53:06.068598+03:00",
+            "documents": [
+                {
+                    'title': 'lorem.doc',
+                    'url': self.generate_docservice_url(),
+                    'hash': 'md5:' + '0' * 32,
+                    'format': 'application/msword',
+                }
+            ],
+        }
+        response = self.app.put_json(
+            '/monitorings/{}/eliminationReport?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
+            {"data": request_data},
+            status=403
+        )
 
     def test_fail_update_resolution(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
@@ -198,10 +220,10 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         self.app.patch_json(
             '/monitorings/{}/eliminationReport?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
             {"data": request_data},
-            status=403
+            status=405
         )
 
-    def test_forbidden_without_token_patch(self):
+    def test_forbidden_patch(self):
         self.app.authorization = ('Basic', (self.broker_token, ''))
         request_data = {
             "description": "I'm gonna change this",
@@ -210,7 +232,7 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         self.app.patch_json(
             '/monitorings/{}/eliminationReport'.format(self.monitoring_id),
             {"data": request_data},
-            status=403
+            status=405
         )
 
     def test_forbidden_put(self):
@@ -234,49 +256,6 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
             response.json["errors"],
             [{u'description': u"Can't post another elimination report", u'location': u'body', u'name': u'data'}],
         )
-
-    def test_success_minimal_patch(self):
-        self.app.authorization = ('Basic', (self.broker_token, ''))
-        request_data = {
-            "description": "I'm gonna change this",
-        }
-        response = self.app.patch_json(
-            '/monitorings/{}/eliminationReport?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
-            {"data": request_data},
-        )
-        self.assertEqual(response.json["data"]["description"], request_data["description"])
-
-    @freeze_time('2018-01-02T11:30:00+02:00')
-    def test_success_patch(self):
-        self.app.authorization = ('Basic', (self.broker_token, ''))
-        request_data = {
-            "description": "I'm gonna change this",
-            "documents": [
-                {
-                    'title': 'and this.doc',
-                    'url': self.generate_docservice_url() + "#1",
-                    'hash': 'md5:' + '1' * 32,
-                    'format': 'application/json',
-                }
-            ],
-        }
-        response = self.app.patch_json(
-            '/monitorings/{}/eliminationReport?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
-            {"data": request_data},
-        )
-        self.assertEqual(response.status_code, 200)
-
-        self.app.authorization = None
-        response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
-        data = response.json["data"]["eliminationReport"]
-        self.assertEqual(data["description"], request_data["description"])
-        self.assertEqual(data["dateCreated"], "2018-01-01T11:00:00+02:00")
-        self.assertEqual(data["dateModified"], "2018-01-02T11:30:00+02:00")
-        self.assertEqual(data["documents"][0]["title"], request_data["documents"][0]["title"])
-        self.assertEqual(data["documents"][0]["url"], request_data["documents"][0]["url"])
-        self.assertEqual(data["documents"][0]["hash"], request_data["documents"][0]["hash"])
-        self.assertEqual(data["documents"][0]["format"], request_data["documents"][0]["format"])
-        self.assertNotIn("resolution", data)
 
     def test_forbidden_sas_post_document(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
@@ -335,7 +314,7 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         self.assertEqual(data["eliminationReport"]["documents"][1]["title"], document["title"])
         self.assertEqual(data["dateModified"], post_time)
 
-    def test_success_patch_document(self):
+    def test_patch_document_forbidden(self):
         self.app.authorization = ('Basic', (self.broker_token, ''))
         document = {
             'title': 'another.txt',
@@ -345,22 +324,15 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         }
         doc_to_update = self.elimination["documents"][0]
 
-        response = self.app.patch_json(
+        self.app.patch_json(
             '/monitorings/{}/eliminationReport/documents/{}?acc_token={}'.format(
                 self.monitoring_id, doc_to_update["id"], self.tender_owner_token
             ),
             {"data": document},
+            status=403
         )
-        self.assertEqual(response.status_code, 200)
 
-        self.app.authorization = None
-        response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
-        data = response.json["data"]["eliminationReport"]
-        self.assertEqual(len(data["documents"]), 1)
-        self.assertEqual(data["documents"][0]["id"], doc_to_update["id"])
-        self.assertEqual(data["documents"][0]["title"], document["title"])
-
-    def test_success_put_document(self):
+    def test_put_document_forbidden(self):
         self.app.authorization = ('Basic', (self.broker_token, ''))
         document = {
             'title': 'my_new_file.txt',
@@ -370,30 +342,13 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         }
         doc_to_update = self.elimination["documents"][0]
 
-        response = self.app.put_json(
+        self.app.put_json(
             '/monitorings/{}/eliminationReport/documents/{}?acc_token={}'.format(
                 self.monitoring_id, doc_to_update["id"], self.tender_owner_token
             ),
             {"data": document},
+            status=403
         )
-        self.assertEqual(response.status_code, 200)
-
-        self.app.authorization = None
-        response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
-        data = response.json["data"]["eliminationReport"]
-        self.assertEqual(len(data["documents"]), 2)
-
-        response = self.app.get(
-            '/monitorings/{}/eliminationReport/documents/{}'.format(
-                self.monitoring_id, doc_to_update["id"]
-            ),
-            {"data": document},
-        )
-        self.assertEqual(response.status_code, 200)
-        resp_data = response.json["data"]
-        self.assertEqual(resp_data["title"], document["title"])
-        # self.assertEqual(resp_data["url"], document["url"])
-        self.assertEqual(resp_data["format"], document["format"])
 
     def test_fail_update_resolution_wo_result_by_type(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
@@ -504,13 +459,13 @@ class ResolutionMonitoringResourceTest(MonitoringEliminationBaseTest):
         super(ResolutionMonitoringResourceTest, self).setUp()
         self.create_monitoring_with_resolution()
 
-    def test_success_change_report(self):
+    def test_change_report_not_allowed(self):
         self.app.authorization = ('Basic', (self.broker_token, ''))
-        response = self.app.patch_json(
+        self.app.patch_json(
             '/monitorings/{}/eliminationReport?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
             {"data": {"description": "I want to change this description"}},
+            status=405
         )
-        self.assertEqual(response.status_code, 200)
 
     @freeze_time('2018-01-20T12:00:00.000000+03:00')
     def test_success_change_status(self):
@@ -539,7 +494,7 @@ class ResolutionMonitoringResourceTest(MonitoringEliminationBaseTest):
         self.app.patch_json(
             '/monitorings/{}/eliminationReport?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
             {"data": {"description": "I want to change this description"}},
-            status=422
+            status=405
         )
 
 

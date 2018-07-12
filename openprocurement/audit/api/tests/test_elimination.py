@@ -1,3 +1,4 @@
+from openprocurement.audit.api.constants import COMPLETED_STATUS
 from openprocurement.audit.api.tests.base import BaseWebTest, DSWebTestMixin
 from freezegun import freeze_time
 from datetime import datetime
@@ -394,7 +395,6 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         self.assertEqual(response.status_code, 200)
         resp_data = response.json["data"]
         self.assertEqual(resp_data["title"], document["title"])
-        # self.assertEqual(resp_data["url"], document["url"])
         self.assertEqual(resp_data["format"], document["format"])
 
     def test_fail_update_resolution_wo_result_by_type(self):
@@ -541,7 +541,7 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
-                "status": "completed",
+                "status": COMPLETED_STATUS,
             }},
             status=403
         )
@@ -576,7 +576,7 @@ class ResolutionMonitoringResourceTest(MonitoringEliminationBaseTest):
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
-                "status": "completed",
+                "status": COMPLETED_STATUS,
             }},
         )
         self.assertEqual(response.json["data"]["status"], "completed")

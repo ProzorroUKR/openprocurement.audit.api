@@ -492,7 +492,7 @@ class MonitoringPostAddressedDocumentResourceTest(BaseWebTest, DSWebTestMixin):
 
         self.app.authorization = ('Basic', (self.sas_token, ''))
 
-        response = self.app.post_json('/monitorings/{}/posts/{}/documents'.format(
+        self.app.post_json('/monitorings/{}/posts/{}/documents'.format(
             self.monitoring_id, post_id),
             {'data': self.test_docservice_document_data}, status=403)
 

@@ -11,6 +11,9 @@ services:
 env:
   global:
     - TZ=Europe/Kiev
+  matrix:
+    - SANDBOX_MODE=
+    - SANDBOX_MODE=True
 cache:
   directories:
     - eggs
@@ -19,6 +22,7 @@ before_install:
 install:
   - bin/buildout -N
 script:
+  - bin/nosetests docs.py
   - bin/nosetests
 after_success:
   - bin/coveralls

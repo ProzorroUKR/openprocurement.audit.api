@@ -37,7 +37,7 @@ class APIResource(object):
 
 
 def monitoring_serialize(request, monitoring_data, fields):
-    monitoring = request.monitoring_from_data(monitoring_data, raise_error=False)
+    monitoring = request.monitoring_from_data(monitoring_data)
     monitoring.__parent__ = request.context
     return {i: j for i, j in monitoring.serialize('view').items() if i in fields}
 
@@ -97,20 +97,14 @@ def set_logging_context(event):
     update_logging_context(request, params)
 
 
-def monitoring_from_data(request, data, raise_error=True, create=True):
-    if create:
-        return Monitoring(data)
-    return Monitoring
+def monitoring_from_data(request, data):
+    return Monitoring(data)
 
 
 def extract_monitoring_adapter(request, monitoring_id):
     db = request.registry.db
     doc = db.get(monitoring_id)
-    if doc is not None and doc.get('doc_type') == 'monitoring':
-        request.errors.add('url', 'monitoring_id', 'Archived')
-        request.errors.status = 410
-        raise error_handler(request.errors)
-    elif doc is None or doc.get('doc_type') != 'Monitoring':
+    if doc is None or doc.get('doc_type') != 'Monitoring':
         request.errors.add('url', 'monitoring_id', 'Not Found')
         request.errors.status = 404
         raise error_handler(request.errors)

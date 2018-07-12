@@ -10,7 +10,7 @@ from schematics.types.serializable import serializable
 from schematics.types.compound import ModelType, DictType
 from schematics.transforms import whitelist, blacklist
 from schematics.exceptions import ValidationError
-from couchdb_schematics.document import SchematicsDocument
+from couchdb_schematics.document import Document as SchematicsDocument
 from pyramid.security import Allow
 
 from openprocurement.audit.api.choices import (
@@ -63,24 +63,48 @@ class Post(Model):
     relatedParty = StringType()
 
     def validate_relatedParty(self, data, value):
-        if value and isinstance(data['__parent__'], Model) and value not in [i.id for i in data['__parent__'].parties]:
+        parent = data['__parent__']
+        if value and isinstance(parent, Model) and value not in [i.id for i in parent.parties]:
             raise ValidationError(u"relatedParty should be one of parties.")
 
     def validate_relatedPost(self, data, value):
-        if value and isinstance(data['__parent__'], Model):
-            posts = data['__parent__'].posts
-            if value not in [i.id for i in posts]:
+        parent = data['__parent__']
+        if value and isinstance(parent, Model):
+
+            # check that another post with 'id'
+            # that equals 'relatedPost' of current post exists
+            if value not in [i.id for i in parent.posts]:
                 raise ValidationError(u"relatedPost should be one of posts of current monitoring.")
-            if len([i for i in posts if i.relatedPost == value]) > 1:
+
+            # check that another posts with `relatedPost`
+            # that equals `relatedPost` of current post does not exist
+            if len([i for i in parent.posts if i.relatedPost == value]) > 1:
                 raise ValidationError(u"relatedPost must be unique.")
-            related_authors = [i.author for i in posts if i.id == value]
-            if len(related_authors) > 0 and data["author"] == related_authors[0]:
+
+            related_posts = [i for i in parent.posts if i.id == value]
+
+            # check that there are no multiple related posts,
+            # that should never happen coz `id` is unique
+            if len(related_posts) > 1:
+                raise ValidationError(u"relatedPost can't be a link to more than one post.")
+
+            # check that related post have another author
+            if len(related_posts) == 1 and data['author'] == related_posts[0]['author']:
                 raise ValidationError(u"relatedPost can't have the same author.")
+
+            # check that related post is not an answer to another post
+            if len(related_posts) == 1 and related_posts[0]['relatedPost']:
+                raise ValidationError(u"relatedPost can't be have relatedPost defined.")
 
 
 class Decision(Report):
     date = IsoDateTimeType(required=False)
     relatedParty = StringType()
+
+    def validate_relatedParty(self, data, value):
+        parent = data['__parent__']
+        if value and isinstance(parent, Model) and value not in [i.id for i in parent.parties]:
+            raise ValidationError(u"relatedParty should be one of parties.")
 
 
 class Conclusion(Report):
@@ -92,6 +116,11 @@ class Conclusion(Report):
     description = StringType(required=False)
     date = IsoDateTimeType(required=False)
     relatedParty = StringType()
+
+    def validate_relatedParty(self, data, value):
+        parent = data['__parent__']
+        if value and isinstance(parent, Model) and value not in [i.id for i in parent.parties]:
+            raise ValidationError(u"relatedParty should be one of parties.")
 
     def validate_violationType(self, data, value):
         if data["violationOccurred"] and not value:
@@ -107,10 +136,16 @@ class Conclusion(Report):
 
 class Cancellation(Report):
     relatedParty = StringType()
+
     class Options:
         roles = {
             'view': schematics_default_role,
         }
+
+    def validate_relatedParty(self, data, value):
+        parent = data['__parent__']
+        if value and isinstance(parent, Model) and value not in [i.id for i in parent.parties]:
+            raise ValidationError(u"relatedParty should be one of parties.")
 
 
 class EliminationResolution(Report):
@@ -118,6 +153,11 @@ class EliminationResolution(Report):
     resultByType = DictType(StringType(choices=RESOLUTION_BY_TYPE_CHOICES))
     description = StringType(required=False)
     relatedParty = StringType()
+
+    def validate_relatedParty(self, data, value):
+        parent = data['__parent__']
+        if value and isinstance(parent, Model) and value not in [i.id for i in parent.parties]:
+            raise ValidationError(u"relatedParty should be one of parties.")
 
     def validate_resultByType(self, data, value):
         violations = data["__parent__"].conclusion.violationType
@@ -174,6 +214,7 @@ class Party(Model):
     address = ModelType(Address, required=True)
     contactPoint = ModelType(ContactPoint, required=True)
     roles = ListType(StringType(choices=PARTY_ROLES_CHOICES), default=[])
+    datePublished = IsoDateTimeType(default=get_now)
 
 
 class Monitoring(SchematicsDocument, Model):
@@ -183,7 +224,10 @@ class Monitoring(SchematicsDocument, Model):
         roles = {
             'plain': blacklist('_attachments', 'revisions') + schematics_embedded_role,
             'revision': whitelist('revisions'),
-            'create': whitelist("tender_id", "reasons", "procuringStages", "status", "mode", "monitoringDetails"),
+            'create': whitelist(
+                "tender_id", "reasons", "procuringStages", "status",
+                "mode", "monitoringDetails", "parties"
+            ),
             'edit_draft': whitelist('decision', 'cancellation') + _perm_edit_whitelist,
             'edit_active': whitelist('conclusion', 'cancellation') + _perm_edit_whitelist,
             'edit_addressed': whitelist('eliminationResolution', 'cancellation') + _perm_edit_whitelist,
@@ -254,10 +298,6 @@ class Monitoring(SchematicsDocument, Model):
     def validate_eliminationResolution(self, data, value):
         if value is not None and data['eliminationReport'] is None:
             raise ValidationError(u"Elimination report hasn't been provided.")
-
-    def validate_monitoringDetails(self, *args, **kw):
-        if self.mode and self.mode == 'test' and self.monitoringDetails and self.monitoringDetails != '':
-            raise ValidationError(u"monitoringDetails should be used with mode test.")
 
     def get_role(self):
         role = super(Monitoring, self).get_role()

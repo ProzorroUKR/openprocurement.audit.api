@@ -1,12 +1,12 @@
-POST /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/conclusion/documents HTTP/1.0
+POST /api/2.4/monitorings/740f121e638537efb727c70bc0451507/conclusion/documents HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
-Content-Length: 339
+Content-Length: 331
 Content-Type: application/json
 Host: audit-api-sandbox.prozorro.gov.ua
 
 {
   "data": {
-    "url": "http://docs-sandbox.openprocurement.org/get/807cbf7ab7fe3c369fb5c18ffd8f39b8?KeyID=a8968c46&Signature=NUyQPKG8CtM11jGOCN2vLw1js%2FvgtXCxl%2FnXHwwFqhS3%2FUhD%2Fcl8mnSQD%2B%2Bd6Hklhun2sBb%2FMfrrbD9ee9WcCw%3D%3D", 
+    "url": "http://docs-sandbox.openprocurement.org/get/8de7aefc64ff3fc8a67d721942410c29?KeyID=a8968c46&Signature=8YnGbaiYHuLXdaScwXRw4GKWbSB%2BJhuKqkgf5m7b8mB%2BA3u4t1jZSrMdu4eHhMP9rAULnAdsFV3%2F1DsqxinrCw%3D%3D", 
     "title": "sign.p7s", 
     "hash": "md5:00000000000000000000000000000000", 
     "format": "application/pkcs7-signature"
@@ -16,17 +16,17 @@ Host: audit-api-sandbox.prozorro.gov.ua
 
 201 Created
 Content-Type: application/json; charset=UTF-8
-Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/conclusion/documents/ee14cf6e472f3c5d813dc90de99522f9
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/740f121e638537efb727c70bc0451507/conclusion/documents/9dcf4407a2cb34a3a5dcdf84df721119
 
 {
   "data": {
     "hash": "md5:00000000000000000000000000000000", 
     "author": "monitoring_owner", 
     "title": "sign.p7s", 
-    "url": "http://docs-sandbox.openprocurement.org/get/807cbf7ab7fe3c369fb5c18ffd8f39b8?KeyID=a8968c46&Signature=%2FFoodmTOUmcXMgdi7T6aZuxk8ab2LuDU%252BSw1Ff%2F78MmLKCkGttHwsPHEfE80tx%252BEy%2FqHPj887OTC5LlZGVIJBQ%253D%253D", 
+    "url": "http://docs-sandbox.openprocurement.org/get/8de7aefc64ff3fc8a67d721942410c29?KeyID=a8968c46&Signature=q8JzxGrmUnyI6kS35kRUgvvNH%252BopNSwDGZaVyU8D1m3NxcRCQQ3zdp4I832THO50DDxGvzJ5d%252B%2FYPDdjJlAfBA%253D%253D", 
     "format": "application/pkcs7-signature", 
     "datePublished": "2018-01-05T02:20:00+02:00", 
-    "id": "ee14cf6e472f3c5d813dc90de99522f9", 
+    "id": "9dcf4407a2cb34a3a5dcdf84df721119", 
     "dateModified": "2018-01-05T02:20:00+02:00"
   }
 }

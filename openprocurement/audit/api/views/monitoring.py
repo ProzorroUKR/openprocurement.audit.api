@@ -129,7 +129,7 @@ class MonitoringResource(APIResource):
             set_author(monitoring.decision.documents, self.request, 'author')
             monitoring.monitoringPeriod = generate_period(now, MONITORING_TIME, self.context)
             monitoring.decision.datePublished = now
-            monitoring.endDate = calculate_business_date(now, MONITORING_END_PERIOD, working_days=True)
+            monitoring.endDate = calculate_business_date(now, MONITORING_END_PERIOD, self.context, True)
         elif monitoring_old_status == ACTIVE_STATUS and monitoring.status == ADDRESSED_STATUS:
             set_author(monitoring.conclusion.documents, self.request, 'author')
             monitoring.conclusion.datePublished = now

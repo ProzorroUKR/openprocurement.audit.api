@@ -4,7 +4,7 @@ import unittest
 import webtest
 import os
 from copy import deepcopy
-from openprocurement.api.constants import VERSION
+from openprocurement.api.constants import VERSION, SANDBOX_MODE
 from uuid import uuid4
 from urllib import urlencode
 from base64 import b64encode
@@ -33,6 +33,33 @@ class BaseWebTest(unittest.TestCase):
         "procuringStages": ["planning"]
     }
 
+    initial_party = {
+        "name": "The State Audit Service of Ukraine",
+        "contactPoint": {
+            "name": "Jane Doe",
+            "telephone": "0440000000"
+        },
+        "identifier": {
+            "scheme": "UA-EDR",
+            "id": "40165856",
+            "uri": "http://www.dkrs.gov.ua"
+        },
+        "address": {
+            "countryName": "Ukraine",
+            "postalCode": "04070",
+            "region": "Kyiv",
+            "streetAddress": "Petra Sahaidachnoho St, 4",
+            "locality": "Kyiv"
+        },
+        "roles": [
+            "sas"
+        ]
+    }
+
+    acceleration = {
+        'monitoringDetails': 'accelerator=1440'
+    }
+
     def setUp(self):
         self.app = webtest.TestApp("config:tests.ini", relative_to=os.path.dirname(__file__))
         self.app.RequestClass = PrefixedRequestClass
@@ -52,7 +79,12 @@ class BaseWebTest(unittest.TestCase):
     def create_monitoring(self, **kwargs):
 
         data = deepcopy(self.initial_data)
+
+        if SANDBOX_MODE:
+            data.update(self.acceleration)
+
         data.update(kwargs)
+
         self.app.authorization = ('Basic', (self.sas_token, ''))
 
         response = self.app.post_json('/monitorings', {'data': data})

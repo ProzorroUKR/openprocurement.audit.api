@@ -5,7 +5,14 @@ from hashlib import sha512
 import mock
 
 from openprocurement.audit.api.tests.base import BaseWebTest, DSWebTestMixin
+from openprocurement.audit.api.tests.test_elimination import MonitoringEliminationBaseTest
 from openprocurement.audit.api.tests.utils import get_errors_field_names
+from openprocurement.audit.api.constants import (
+    CANCELLED_STATUS,
+    ADDRESSED_STATUS,
+    ACTIVE_STATUS
+)
+
 
 
 class MonitoringDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
@@ -701,6 +708,137 @@ class MonitoringCancellationDocumentResourceTest(BaseWebTest, DSWebTestMixin):
             {'data': self.test_docservice_document_data})
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.content_type, 'application/json')
+
+
+class MonitoringEliminationResolutionDocumentResourceTest(MonitoringEliminationBaseTest):
+
+    def setUp(self):
+        super(MonitoringEliminationResolutionDocumentResourceTest, self).setUp()
+        self.app.app.registry.docservice_url = 'http://localhost'
+        self.create_monitoring()
+        self.test_docservice_document_data = {
+            'title': 'lorem.doc',
+            'url': self.generate_docservice_url(),
+            'hash': 'md5:' + '0' * 32,
+            'format': 'application/msword',
+        }
+
+
+        self.create_monitoring_with_resolution()
+
+    def test_document_get_single(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        response = self.app.post_json(
+            '/monitorings/{}/eliminationResolution/documents'.format(self.monitoring_id),
+            {'data': self.test_docservice_document_data})
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.content_type, 'application/json')
+
+        document_id = response.json['data']['id']
+
+        response = self.app.get('/monitorings/{}/eliminationResolution/documents/{}'.format(self.monitoring_id, document_id))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+
+        document_data = response.json['data']
+
+        self.assertEqual(document_data['title'], 'lorem.doc')
+        self.assertIn('Signature=', document_data["url"])
+        self.assertIn('KeyID=', document_data["url"])
+        self.assertNotIn('Expires=', document_data["url"])
+
+    def test_document_get_list(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        response = self.app.post_json(
+            '/monitorings/{}/eliminationResolution/documents'.format(self.monitoring_id),
+            {'data': self.test_docservice_document_data})
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.content_type, 'application/json')
+
+        response = self.app.get('/monitorings/{}/eliminationResolution/documents'.format(self.monitoring_id))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+
+        self.assertEqual(2, len(response.json['data']))
+
+        self.assertIn('lorem.doc', [doc['title'] for doc in response.json['data']])
+
+    def test_document_download(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        response = self.app.post_json(
+                '/monitorings/{}/eliminationResolution/documents'.format(self.monitoring_id),
+                {'data': self.test_docservice_document_data})
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.content_type, 'application/json')
+
+        document_data = response.json['data']
+        key = document_data["url"].split('/')[-1].split('?')[0]
+        document_id = document_data['id']
+
+        response = self.app.get('/monitorings/{}/eliminationResolution/documents/{}?download=some_id'.format(
+            self.monitoring_id, document_id), status=404)
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['status'], 'error')
+        self.assertEqual(response.json['errors'], [
+            {'description': 'Not Found', 'location': 'url', 'name': 'download'}
+        ])
+
+        response = self.app.get('/monitorings/{}/eliminationResolution/documents/{}?download={}'.format(
+            self.monitoring_id, document_id, key))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn('http://localhost/get/', response.location)
+        self.assertIn('Signature=', response.location)
+        self.assertIn('KeyID=', response.location)
+        self.assertNotIn('Expires=', response.location)
+
+    def test_document_upload(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        response = self.app.post_json('/monitorings/{}/eliminationResolution/documents'.format(
+            self.monitoring_id),
+            {'data': self.test_docservice_document_data})
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.content_type, 'application/json')
+
+    def test_patch_document_forbidden(self):
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+        document = {
+            'title': 'another.txt',
+            'url': self.generate_docservice_url(),
+            'hash': 'md5:' + '0' * 32,
+            'format': 'application/msword',
+        }
+        response = self.app.get('/monitorings/{}/eliminationResolution/documents'.format(self.monitoring_id))
+        doc_to_update = response.json['data'][0]
+
+        self.app.patch_json(
+            '/monitorings/{}/eliminationResolution/documents/{}?acc_token={}'.format(
+                self.monitoring_id, doc_to_update["id"], self.tender_owner_token
+            ),
+            {"data": document},
+            status=403
+        )
+
+    def test_put_document_forbidden(self):
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+        document = {
+            'title': 'my_new_file.txt',
+            'url': self.generate_docservice_url(),
+            'hash': 'md5:' + '0' * 32,
+            'format': 'text/css',
+        }
+        response = self.app.get('/monitorings/{}/eliminationResolution/documents'.format(self.monitoring_id))
+        doc_to_update = response.json['data'][0]
+        print(doc_to_update)
+
+        self.app.put_json(
+            '/monitorings/{}/eliminationResolution/documents/{}?acc_token={}'.format(
+                self.monitoring_id, doc_to_update["id"], self.tender_owner_token
+            ),
+            {"data": document},
+            status=403
+        )
 
 
 class MonitoringConclusionDocumentResourceTest(BaseWebTest, DSWebTestMixin):

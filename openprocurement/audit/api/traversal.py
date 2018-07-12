@@ -63,6 +63,8 @@ def factory(request):
         return conclusion_factory(request)
     elif 'eliminationReport' in request.path.split('/'):
         return elimination_factory(request)
+    elif 'eliminationResolution' in request.path.split('/'):
+        return elimination_resolution_factory(request)
     elif 'appeal' in request.path.split('/'):
         return appeal_factory(request)
     elif request.matchdict.get('post_id'):
@@ -90,6 +92,10 @@ def elimination_factory(request):
     else:
         return request.monitoring.eliminationReport
 
+def elimination_resolution_factory(request):
+    if request.matchdict.get('document_id'):
+        return get_item(request.monitoring.eliminationResolution, 'document', request)
+    return request.monitoring.eliminationResolution
 
 def post_factory(request):
     post = get_item(request.monitoring, 'post', request)

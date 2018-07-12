@@ -85,7 +85,7 @@ class Post(Model):
 
             # check that there are no multiple related posts,
             # that should never happen coz `id` is unique
-            if len(related_posts) > 1 and data['author'] == related_posts[0]['author']:
+            if len(related_posts) > 1:
                 raise ValidationError(u"relatedPost can't be a link to more than one post.")
 
             # check that related post have another author

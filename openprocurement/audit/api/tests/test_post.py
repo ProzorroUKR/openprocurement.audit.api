@@ -309,10 +309,11 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
                 'title': 'Lorem ipsum',
                 'description': 'Gotcha',
                 'relatedPost': post_id
-            }})
+            }}, status=422)
 
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(
+            ('body', 'relatedPost'),
+            next(get_errors_field_names(response, 'relatedPost can\'t be a link to more than one post.')))
 
     @mock.patch('openprocurement.audit.api.validation.TendersClient')
     def test_tender_owner_answer_post_by_monitoring_owner(self, mock_api_client):

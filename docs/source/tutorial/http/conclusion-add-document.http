@@ -13,3 +13,21 @@ Host: audit-api-sandbox.prozorro.gov.ua
   }
 }
 
+
+201 Created
+Content-Type: application/json; charset=UTF-8
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/740f121e638537efb727c70bc0451507/conclusion/documents/9dcf4407a2cb34a3a5dcdf84df721119
+
+{
+  "data": {
+    "hash": "md5:00000000000000000000000000000000", 
+    "author": "monitoring_owner", 
+    "title": "sign.p7s", 
+    "url": "http://docs-sandbox.openprocurement.org/get/8de7aefc64ff3fc8a67d721942410c29?KeyID=a8968c46&Signature=q8JzxGrmUnyI6kS35kRUgvvNH%252BopNSwDGZaVyU8D1m3NxcRCQQ3zdp4I832THO50DDxGvzJ5d%252B%2FYPDdjJlAfBA%253D%253D", 
+    "format": "application/pkcs7-signature", 
+    "datePublished": "2018-01-05T02:20:00+02:00", 
+    "id": "9dcf4407a2cb34a3a5dcdf84df721119", 
+    "dateModified": "2018-01-05T02:20:00+02:00"
+  }
+}
+

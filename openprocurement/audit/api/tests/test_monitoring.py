@@ -1,10 +1,11 @@
 from freezegun import freeze_time
-from openprocurement.api.constants import TZ
+from openprocurement.api.constants import TZ, SANDBOX_MODE
 from openprocurement.audit.api.constants import MONITORING_TIME, MONITORING_END_PERIOD
 from openprocurement.audit.api.tests.base import BaseWebTest
 import unittest
 from datetime import datetime, timedelta
-from openprocurement.tender.core.utils import calculate_business_date
+
+from openprocurement.audit.api.utils import calculate_business_date
 
 
 @freeze_time('2018-01-01T09:00:00+02:00')
@@ -53,9 +54,12 @@ class MonitoringResourceTest(BaseWebTest):
     @freeze_time('2018-01-01T12:00:00.000000+02:00')
     def test_patch_to_active(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
+
+        context = self.acceleration if SANDBOX_MODE else {}
+
         now_date = datetime.now(TZ)
-        end_date = calculate_business_date(now_date, MONITORING_TIME, working_days=True)
-        monitoring_end_date = calculate_business_date(now_date, MONITORING_END_PERIOD, working_days=True)
+        end_date = calculate_business_date(now_date, MONITORING_TIME, working_days=True, context=context)
+        m_end_date = calculate_business_date(now_date, MONITORING_END_PERIOD, working_days=True, context=context)
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
@@ -73,7 +77,7 @@ class MonitoringResourceTest(BaseWebTest):
         self.assertEqual(response.json['data']["monitoringPeriod"]["startDate"], now_date.isoformat())
         self.assertEqual(response.json['data']["dateModified"], now_date.isoformat())
         self.assertEqual(response.json['data']["monitoringPeriod"]["endDate"], end_date.isoformat())
-        self.assertEqual(response.json['data']["endDate"], monitoring_end_date.isoformat())
+        self.assertEqual(response.json['data']["endDate"], m_end_date.isoformat())
 
     def test_patch_to_active_already_in_active(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))

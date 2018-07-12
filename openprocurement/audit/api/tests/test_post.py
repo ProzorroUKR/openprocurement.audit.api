@@ -268,6 +268,56 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
             next(get_errors_field_names(response, 'relatedPost must be unique.')))
 
     @mock.patch('openprocurement.audit.api.validation.TendersClient')
+    def test_monitoring_owner_answer_post_for_not_unique_id(self, mock_api_client):
+        mock_api_client.return_value.extract_credentials.return_value = {
+            'data': {'tender_token': sha512('tender_token').hexdigest()}
+        }
+        with mock.patch('openprocurement.audit.api.models.uuid4', mock.Mock(return_value=mock.Mock(hex='f'*32))):
+            self.app.post_json(
+                '/monitorings/{}/posts'.format(self.monitoring_id),
+                {'data': {
+                    'title': 'Lorem ipsum',
+                    'description': 'Lorem ipsum dolor sit amet',
+                    'documents': [{
+                        'title': 'lorem.doc',
+                        'url': self.generate_docservice_url(),
+                        'hash': 'md5:' + '0' * 32,
+                        'format': 'application/msword',
+                    }]
+                }})
+            response = self.app.post_json(
+                '/monitorings/{}/posts'.format(self.monitoring_id),
+                {'data': {
+                    'title': 'Lorem ipsum',
+                    'description': 'Lorem ipsum dolor sit amet',
+                    'documents': [{
+                        'title': 'lorem.doc',
+                        'url': self.generate_docservice_url(),
+                        'hash': 'md5:' + '0' * 32,
+                        'format': 'application/msword',
+                    }]
+                }})
+
+        post_id = response.json['data']['id']
+
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+        response = self.app.patch_json(
+            '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token')
+        )
+
+        tender_owner_token = response.json['access']['token']
+        response = self.app.post_json(
+            '/monitorings/{}/posts?acc_token={}'.format(self.monitoring_id, tender_owner_token),
+            {'data': {
+                'title': 'Lorem ipsum',
+                'description': 'Gotcha',
+                'relatedPost': post_id
+            }})
+
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.content_type, 'application/json')
+
+    @mock.patch('openprocurement.audit.api.validation.TendersClient')
     def test_tender_owner_answer_post_by_monitoring_owner(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
             'data': {'tender_token': sha512('tender_token').hexdigest()}

@@ -4,7 +4,7 @@ import unittest
 import webtest
 import os
 from copy import deepcopy
-from openprocurement.api.constants import VERSION
+from openprocurement.api.constants import VERSION, SANDBOX_MODE
 from uuid import uuid4
 from urllib import urlencode
 from base64 import b64encode
@@ -56,6 +56,11 @@ class BaseWebTest(unittest.TestCase):
         ]
     }
 
+    acceleration = {
+        'monitoringDetails': 'accelerator=1440',
+        'mode': 'test'
+    }
+
     def setUp(self):
         self.app = webtest.TestApp("config:tests.ini", relative_to=os.path.dirname(__file__))
         self.app.RequestClass = PrefixedRequestClass
@@ -75,7 +80,12 @@ class BaseWebTest(unittest.TestCase):
     def create_monitoring(self, **kwargs):
 
         data = deepcopy(self.initial_data)
+
+        if SANDBOX_MODE:
+            data.update(self.acceleration)
+
         data.update(kwargs)
+
         self.app.authorization = ('Basic', (self.sas_token, ''))
 
         response = self.app.post_json('/monitorings', {'data': data})

@@ -10,7 +10,7 @@ from schematics.types.serializable import serializable
 from schematics.types.compound import ModelType, DictType
 from schematics.transforms import whitelist, blacklist
 from schematics.exceptions import ValidationError
-from couchdb_schematics.document import SchematicsDocument
+from couchdb_schematics.document import Document as SchematicsDocument
 from pyramid.security import Allow
 
 from openprocurement.audit.api.choices import (

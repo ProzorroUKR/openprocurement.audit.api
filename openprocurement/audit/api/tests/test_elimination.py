@@ -5,6 +5,8 @@ from hashlib import sha512
 import unittest
 import mock
 
+from openprocurement.audit.api.tests.utils import get_errors_field_names
+
 
 @freeze_time('2018-01-01T11:00:00+02:00')
 class MonitoringEliminationBaseTest(BaseWebTest, DSWebTestMixin):
@@ -13,8 +15,8 @@ class MonitoringEliminationBaseTest(BaseWebTest, DSWebTestMixin):
         super(MonitoringEliminationBaseTest, self).setUp()
         self.app.app.registry.docservice_url = 'http://localhost'
 
-    def create_satisfied_monitoring(self):
-        self.create_monitoring()
+    def create_satisfied_monitoring(self, **kwargs):
+        self.create_monitoring(**kwargs)
         self.app.authorization = ('Basic', (self.sas_token, ''))
 
         self.app.patch_json(
@@ -50,8 +52,8 @@ class MonitoringEliminationBaseTest(BaseWebTest, DSWebTestMixin):
             )
         self.tender_owner_token = response.json['access']['token']
 
-    def create_monitoring_with_elimination(self):
-        self.create_satisfied_monitoring()
+    def create_monitoring_with_elimination(self, **kwargs):
+        self.create_satisfied_monitoring(**kwargs)
         response = self.app.put_json(
             '/monitorings/{}/eliminationReport?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
             {"data": {
@@ -68,8 +70,8 @@ class MonitoringEliminationBaseTest(BaseWebTest, DSWebTestMixin):
         )
         self.elimination = response.json["data"]
 
-    def create_monitoring_with_resolution(self):
-        self.create_monitoring_with_elimination()
+    def create_monitoring_with_resolution(self, **kwargs):
+        self.create_monitoring_with_elimination(**kwargs)
         self.app.authorization = ('Basic', (self.sas_token, ''))
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
@@ -187,7 +189,7 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
 
     def setUp(self):
         super(UpdateEliminationResourceTest, self).setUp()
-        self.create_monitoring_with_elimination()
+        self.create_monitoring_with_elimination(parties=[self.initial_party])
 
     def test_forbidden_sas_patch(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
@@ -477,6 +479,62 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         self.assertEqual(resolution["description"], request_data["description"])
         self.assertEqual(resolution["dateCreated"], "2018-01-01T11:00:00+02:00")
         self.assertEqual(len(resolution["documents"]), len(request_data["documents"]))
+
+    def test_success_update_party_resolution(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+
+        response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        party_id = response.json['data']['parties'][0]['id']
+
+        request_data = {
+            "result": "partly",
+            "resultByType": {
+                "corruptionProcurementMethodType": "eliminated",
+                "corruptionAwarded": "not_eliminated",
+            },
+            "description": "Do you have spare crutches?",
+            "relatedParty": party_id
+        }
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "eliminationResolution": request_data,
+            }},
+        )
+        self.assertEqual(response.status_code, 200)
+
+        response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']['eliminationResolution']['relatedParty'], party_id)
+
+    def test_success_update_party_resolution_party_id_not_exists(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+
+        request_data = {
+            "result": "partly",
+            "resultByType": {
+                "corruptionProcurementMethodType": "eliminated",
+                "corruptionAwarded": "not_eliminated",
+            },
+            "description": "Do you have spare crutches?",
+            "relatedParty": "Party with the devil"
+        }
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "eliminationResolution": request_data,
+            }}, status=422
+        )
+
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.content_type, 'application/json')
+
+        self.assertEqual(
+            ('body', 'eliminationResolution', 'relatedParty'),
+            next(get_errors_field_names(response, 'relatedParty should be one of parties.')))
 
     def test_fail_change_status(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))

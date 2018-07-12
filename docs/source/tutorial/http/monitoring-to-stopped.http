@@ -1,4 +1,4 @@
-PATCH /api/2.4/monitorings/bdf641e0dda6301fa4ea9b4f12acd399 HTTP/1.0
+PATCH /api/2.4/monitorings/ab7f702a2dec39f2b59e7334bcf7034c HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
 Content-Length: 141
 Content-Type: application/json
@@ -8,7 +8,7 @@ Host: audit-api-sandbox.prozorro.gov.ua
   "data": {
     "status": "stopped", 
     "cancellation": {
-      "relatedParty": "be546d6519ee37a597df5c1ca71ddd18", 
+      "relatedParty": "bdf641e0dda6301fa4ea9b4f12acd399", 
       "description": "Complaint was created"
     }
   }
@@ -25,6 +25,7 @@ Content-Type: application/json; charset=UTF-8
       "awarding", 
       "contracting"
     ], 
+    "endDate": "2018-01-24T02:00:00+02:00", 
     "reasons": [
       "public", 
       "fiscal"
@@ -39,23 +40,23 @@ Content-Type: application/json; charset=UTF-8
           "hash": "md5:00000000000000000000000000000000", 
           "author": "monitoring_owner", 
           "title": "lorem.doc", 
-          "url": "http://docs-sandbox.openprocurement.org/get/ab7f702a2dec39f2b59e7334bcf7034c?KeyID=a8968c46&Signature=MeIyCfAIDDYoXb%2F0OBGI%252BYreBfiILy%2F0Kd3kW%252BxDekpKtHuD7agnTryRm6%2FEfAZbGLa1tebK60yJPMqHTJIACw%253D%253D", 
+          "url": "http://docs-sandbox.openprocurement.org/get/f730ad5b0fe338f0bc549bf6cdd27c66?KeyID=a8968c46&Signature=Jy44eia5H0nwnKm45Au2kwPwRUdfnRAtYEhq1R4PJTkNdbYF2YUGSatQ%2FJUE8Y5%2FcANSi8zTpoJwH3dFH43hCQ%253D%253D", 
           "format": "application/msword", 
           "datePublished": "2018-01-02T02:00:00+02:00", 
-          "id": "60121e3d07213c19bf6e1c197d011414", 
+          "id": "58aa272351c030cc96184c72942db302", 
           "dateModified": "2018-01-02T02:00:00+02:00"
         }
       ], 
       "description": "text", 
       "dateCreated": "2018-01-02T02:00:00+02:00", 
-      "relatedParty": "be546d6519ee37a597df5c1ca71ddd18", 
+      "relatedParty": "bdf641e0dda6301fa4ea9b4f12acd399", 
       "date": "2018-01-02T00:00:00+02:00", 
       "datePublished": "2018-01-02T02:00:00+02:00"
     }, 
     "monitoring_id": "UA-M-2018-01-01-000001", 
     "cancellation": {
       "dateCreated": "2018-01-03T02:00:00+02:00", 
-      "relatedParty": "be546d6519ee37a597df5c1ca71ddd18", 
+      "relatedParty": "bdf641e0dda6301fa4ea9b4f12acd399", 
       "description": "Complaint was created", 
       "datePublished": "2018-01-03T02:00:00+02:00"
     }, 
@@ -81,10 +82,10 @@ Content-Type: application/json; charset=UTF-8
           "id": "40165856", 
           "uri": "http://www.dkrs.gov.ua"
         }, 
-        "id": "be546d6519ee37a597df5c1ca71ddd18"
+        "id": "bdf641e0dda6301fa4ea9b4f12acd399"
       }
     ], 
-    "id": "bdf641e0dda6301fa4ea9b4f12acd399", 
+    "id": "ab7f702a2dec39f2b59e7334bcf7034c", 
     "dateCreated": "2018-01-01T02:00:00+02:00", 
     "dateModified": "2018-01-03T02:00:00+02:00", 
     "tender_id": "23a0e490908e3a04b7e75381738bb49d"

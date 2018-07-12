@@ -33,6 +33,29 @@ class BaseWebTest(unittest.TestCase):
         "procuringStages": ["planning"]
     }
 
+    initial_party = {
+        "name": "The State Audit Service of Ukraine",
+        "contactPoint": {
+            "name": "Jane Doe",
+            "telephone": "0440000000"
+        },
+        "identifier": {
+            "scheme": "UA-EDR",
+            "id": "40165856",
+            "uri": "http://www.dkrs.gov.ua"
+        },
+        "address": {
+            "countryName": "Ukraine",
+            "postalCode": "04070",
+            "region": "Kyiv",
+            "streetAddress": "Petra Sahaidachnoho St, 4",
+            "locality": "Kyiv"
+        },
+        "roles": [
+            "sas"
+        ]
+    }
+
     def setUp(self):
         self.app = webtest.TestApp("config:tests.ini", relative_to=os.path.dirname(__file__))
         self.app.RequestClass = PrefixedRequestClass

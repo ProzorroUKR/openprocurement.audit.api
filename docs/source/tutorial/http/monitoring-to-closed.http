@@ -1,4 +1,4 @@
-PATCH /api/2.4/monitorings/c8e8f103105a3865bcffbc6b0f461a24 HTTP/1.0
+PATCH /api/2.4/monitorings/043595b64f033d37bc0bbdfbfd0285fa HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
 Content-Length: 30
 Content-Type: application/json
@@ -21,7 +21,7 @@ Content-Type: application/json; charset=UTF-8
       "startDate": "2018-01-04T02:00:00+02:00", 
       "endDate": "2018-01-10T02:00:00+02:00"
     }, 
-    "tender_id": "5cdfed0712523a779273071435e1680f", 
+    "endDate": "2018-01-24T02:00:00+02:00", 
     "reasons": [
       "public", 
       "fiscal"
@@ -36,16 +36,16 @@ Content-Type: application/json; charset=UTF-8
           "hash": "md5:00000000000000000000000000000000", 
           "author": "monitoring_owner", 
           "title": "lorem.doc", 
-          "url": "http://docs-sandbox.openprocurement.org/get/043595b64f033d37bc0bbdfbfd0285fa?KeyID=a8968c46&Signature=fQZHZwTjjgk0RBB%252BQ4UDjb5cezinL9Un1HZmSdanv%2F4XcFI31n8b5MRj%252BRGUUM20%252BY8%2FcEP7BZHheYRnzhiKDg%253D%253D", 
+          "url": "http://docs-sandbox.openprocurement.org/get/cb54008a74c336a1a5253318bfd41035?KeyID=a8968c46&Signature=glTQwXRxBPk%2FPnEwi4kYN%2FtSI%252BCvIChtGB8IOzuZaHX8Qpwo0pQ9VwdQpbLSWAuYu%252BxblqEN4ZG6N63Xb3VaDQ%253D%253D", 
           "format": "application/msword", 
           "datePublished": "2018-01-02T02:00:00+02:00", 
-          "id": "e5995c42378d31b6a38dc9282bf5b5c1", 
+          "id": "aff7325883143e478bb453c3d9f9e5df", 
           "dateModified": "2018-01-02T02:00:00+02:00"
         }
       ], 
       "description": "text", 
       "dateCreated": "2018-01-02T02:00:00+02:00", 
-      "relatedParty": "1098403b9f313a4bba6ae80d3a14baca", 
+      "relatedParty": "c8e8f103105a3865bcffbc6b0f461a24", 
       "date": "2018-01-02T00:00:00+02:00", 
       "datePublished": "2018-01-02T02:00:00+02:00"
     }, 
@@ -57,10 +57,10 @@ Content-Type: application/json; charset=UTF-8
             "hash": "md5:00000000000000000000000000000000", 
             "author": "monitoring_owner", 
             "title": "ipsum.doc", 
-            "url": "http://docs-sandbox.openprocurement.org/get/0f6aa9f61ba03ce8b9750347b6aeb53d?KeyID=a8968c46&Signature=%2FO0L1JgVss9LFKlGuVjnocCieMpvi%2FiWsZtxyAWRkDlhZ1SK%252BTXTFVRA2gZcPu46y5bVhggh0bIXChdNVvG4CA%253D%253D", 
+            "url": "http://docs-sandbox.openprocurement.org/get/3498cc19988e30159e8d61f6a06d6379?KeyID=a8968c46&Signature=hNgPUbpJCAYIvaAxN1E5MYw8NHNW7MSLqxy5YWwrvuLQ1WEHA7Q8ccYCBPC%252BlSLCV7pMzQdeuMwqmSDrGVaCBw%253D%253D", 
             "format": "application/msword", 
             "datePublished": "2018-01-03T02:10:00+02:00", 
-            "id": "b1a7318ac4df34c0a357e82d028b67d9", 
+            "id": "d7ff2db11c5734fd96665133ddf46c3c", 
             "dateModified": "2018-01-03T02:10:00+02:00"
           }
         ], 
@@ -68,13 +68,14 @@ Content-Type: application/json; charset=UTF-8
         "title": "Lorem ipsum", 
         "author": "monitoring_owner", 
         "datePublished": "2018-01-03T02:10:00+02:00", 
-        "relatedParty": "1098403b9f313a4bba6ae80d3a14baca", 
+        "relatedParty": "c8e8f103105a3865bcffbc6b0f461a24", 
         "dateOverdue": "2018-01-09T02:10:00+02:00", 
-        "id": "45b8d74842e13037b2cd6677c276a691", 
+        "id": "c70ed2546691382685f7383ab687bd6d", 
         "postOf": "decision"
       }
     ], 
-    "id": "c8e8f103105a3865bcffbc6b0f461a24", 
+    "tender_id": "5cdfed0712523a779273071435e1680f", 
+    "id": "043595b64f033d37bc0bbdfbfd0285fa", 
     "parties": [
       {
         "name": "The State Audit Service of Ukraine", 
@@ -97,7 +98,7 @@ Content-Type: application/json; charset=UTF-8
           "id": "40165856", 
           "uri": "http://www.dkrs.gov.ua"
         }, 
-        "id": "1098403b9f313a4bba6ae80d3a14baca"
+        "id": "c8e8f103105a3865bcffbc6b0f461a24"
       }
     ], 
     "dateCreated": "2018-01-01T02:00:00+02:00", 
@@ -108,7 +109,7 @@ Content-Type: application/json; charset=UTF-8
     "dateModified": "2018-01-11T02:00:00+02:00", 
     "conclusion": {
       "dateCreated": "2018-01-04T02:00:00+02:00", 
-      "relatedParty": "1098403b9f313a4bba6ae80d3a14baca", 
+      "relatedParty": "c8e8f103105a3865bcffbc6b0f461a24", 
       "violationOccurred": false, 
       "datePublished": "2018-01-04T02:00:00+02:00"
     }

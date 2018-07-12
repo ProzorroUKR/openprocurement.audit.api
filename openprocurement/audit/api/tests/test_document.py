@@ -123,8 +123,8 @@ class MonitoringDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.content_type, 'application/json')
 
         self.assertEqual(
-            {('body', 'data')},
-            get_errors_field_names(response, 'Can\'t add document in current active monitoring status'))
+            ('body', 'data'),
+            next(get_errors_field_names(response, 'Can\'t add document in current active monitoring status')))
 
 class MonitoringDocumentResourceTest(BaseWebTest, DSWebTestMixin):
 
@@ -432,8 +432,8 @@ class MonitoringConclusionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.content_type, 'application/json')
 
         self.assertEqual(
-            {('body', 'data')},
-            get_errors_field_names(response, 'Can\'t add document in current addressed monitoring status'))
+            ('body', 'data'),
+            next(get_errors_field_names(response, 'Can\'t add document in current addressed monitoring status')))
 
 
 def suite():

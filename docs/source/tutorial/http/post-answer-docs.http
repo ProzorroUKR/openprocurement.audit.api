@@ -1,12 +1,12 @@
-POST /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/posts/7db950a7c6753b8aba0e226ea8e55ce2/documents?acc_token=9176b26052b23e5e92d60c0515e76a56 HTTP/1.0
+POST /api/2.4/monitorings/740f121e638537efb727c70bc0451507/posts/54f3206ee6e838388a7ade83aa3e320b/documents?acc_token=4b160836ce343adda2f7de38a083e35f HTTP/1.0
 Authorization: Basic YnJva2VyOg==
-Content-Length: 321
+Content-Length: 325
 Content-Type: application/json
 Host: audit-api-sandbox.prozorro.gov.ua
 
 {
   "data": {
-    "url": "http://docs-sandbox.openprocurement.org/get/54f3206ee6e838388a7ade83aa3e320b?KeyID=a8968c46&Signature=qLYHIttbtY9YmwzLhSRt550RD6ccMkEYLzB%2BF84hnGxmJDTRhnhe3PyOY4RtyWkYPUQbfcSBkAYUZ%2BFMT9IICw%3D%3D", 
+    "url": "http://docs-sandbox.openprocurement.org/get/ec7a3ca94c133971ab03125588f91934?KeyID=a8968c46&Signature=8TEXY2tf697PcpOcuq%2F4fmZZF6YQBO5CNP0VUbI%2Fvpgb9hrCHFRsmjcgq9G1j%2Fcxl1jRNtzBRed2LYt7W%2BUMAQ%3D%3D", 
     "title": "dolor.doc", 
     "hash": "md5:00000000000000000000000000000000", 
     "format": "application/msword"
@@ -16,17 +16,17 @@ Host: audit-api-sandbox.prozorro.gov.ua
 
 201 Created
 Content-Type: application/json; charset=UTF-8
-Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/posts/7db950a7c6753b8aba0e226ea8e55ce2/documents/aef26e1612da390ebce4733b3f5b66cd
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/740f121e638537efb727c70bc0451507/posts/54f3206ee6e838388a7ade83aa3e320b/documents/7b15a101ae8634919a833ee6c019e37e
 
 {
   "data": {
     "hash": "md5:00000000000000000000000000000000", 
     "author": "tender_owner", 
     "title": "dolor.doc", 
-    "url": "http://docs-sandbox.openprocurement.org/get/54f3206ee6e838388a7ade83aa3e320b?KeyID=a8968c46&Signature=l1q3e3YfOlgBmlaLbYcLrPahcV4O6zjCRBUFwIaARE43%252BOmJkwhwtoM78Wn8naeKbavSnoF20vu1BANXkMtMBg%253D%253D", 
+    "url": "http://docs-sandbox.openprocurement.org/get/ec7a3ca94c133971ab03125588f91934?KeyID=a8968c46&Signature=6TbgQMs2RHr5oPjbnmOH1bd0SXfkNBHzwxhqE1wFtrQYH9ZZNXFeO6kPNY9HdRPefRhZ9bSbUXdqXuIZNh84Bw%253D%253D", 
     "format": "application/msword", 
     "datePublished": "2018-01-04T02:10:00+02:00", 
-    "id": "aef26e1612da390ebce4733b3f5b66cd", 
+    "id": "7b15a101ae8634919a833ee6c019e37e", 
     "dateModified": "2018-01-04T02:10:00+02:00"
   }
 }

@@ -34,52 +34,6 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
                 }
             }})
 
-        self.party_creator = {
-            "name": "The State Audit Service of Ukraine",
-            "contactPoint": {
-                "name": "Oleksii Kovalenko",
-                "telephone": "0440000000"
-            },
-            "identifier": {
-                "scheme": "UA-EDR",
-                "id": "40165856",
-                "uri": "http://www.dkrs.gov.ua"
-            },
-            "address": {
-                "countryName": "Ukraine",
-                "postalCode": "04070",
-                "region": "Kyiv",
-                "streetAddress": "Petra Sahaidachnoho St, 4",
-                "locality": "Kyiv"
-            },
-            "roles": [
-                "sas"
-            ]
-        }
-
-        self.party_dialogue = {
-            "name": "The State Audit Service of Ukraine",
-            "contactPoint": {
-                "name": "Jane Doe",
-                "telephone": "0440000000"
-            },
-            "identifier": {
-                "scheme": "UA-EDR",
-                "id": "40165856",
-                "uri": "http://www.dkrs.gov.ua"
-            },
-            "address": {
-                "countryName": "Ukraine",
-                "postalCode": "04070",
-                "region": "Kyiv",
-                "streetAddress": "Petra Sahaidachnoho St, 4",
-                "locality": "Kyiv"
-            },
-            "roles": [
-                "sas"
-            ]
-        }
-
     def test_party_create_required_fields(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.post_json(
@@ -95,13 +49,13 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
                 ('body', 'name'),
                 ('body', 'address'),
             },
-            get_errors_field_names(response, 'This field is required.'))
+            set(get_errors_field_names(response, 'This field is required.')))
 
     def test_party_create(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.post_json(
             '/monitorings/{}/parties'.format(self.monitoring_id),
-            {'data': self.party_creator})
+            {'data': self.initial_party})
 
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.content_type, 'application/json')
@@ -118,7 +72,7 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.post_json(
             '/monitorings/{}/parties'.format(self.monitoring_id),
-            {'data': self.party_creator})
+            {'data': self.initial_party})
 
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.content_type, 'application/json')
@@ -148,87 +102,9 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
 
     def test_party_get_missing(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
-        from openprocurement.api.utils import error_handler
         with self.assertRaisesRegexp(Exception, 'Bad response: 404 Not Found'):
             response = self.app.get('/monitorings/{}/parties/{}'.format(self.monitoring_id, 'not_existent_id'))
             self.assertEqual(response.status_code, 404)
-
-
-    def test_dialogue_party_create(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
-        response = self.app.post_json(
-            '/monitorings/{}/parties'.format(self.monitoring_id),
-            {'data': self.party_dialogue})
-
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.content_type, 'application/json')
-
-        party_id = response.json['data']['id']
-
-        response = self.app.get('/monitorings/{}/parties/{}'.format(self.monitoring_id, party_id))
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content_type, 'application/json')
-        self.assertEqual(response.json['data']['name'], "The State Audit Service of Ukraine",)
-        self.assertEqual(response.json['data']['roles'], ['sas'])
-
-        response = self.app.post_json(
-            '/monitorings/{}/posts'.format(self.monitoring_id),
-            {"data": {
-                "title": "Lorem ipsum",
-                "description": "Lorem ipsum dolor sit amet.",
-                "documents": [{
-                    'title': 'ipsum.doc',
-                    'url': self.generate_docservice_url(),
-                    'hash': 'md5:' + '0' * 32,
-                    'format': 'application/msword',
-                }],
-                "relatedParty": party_id
-            }}, status=201)
-
-        post_id = response.json['data']['id']
-
-        response = self.app.get('/monitorings/{}/posts/{}'.format(self.monitoring_id, post_id))
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content_type, 'application/json')
-        self.assertEqual(response.json['data']['relatedParty'], party_id)
-
-    def test_dialogue_party_create_party_id_not_exists(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
-        response = self.app.post_json(
-            '/monitorings/{}/parties'.format(self.monitoring_id),
-            {'data': self.party_dialogue})
-
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(response.content_type, 'application/json')
-
-        party_id = response.json['data']['id']
-
-        response = self.app.get('/monitorings/{}/parties/{}'.format(self.monitoring_id, party_id))
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content_type, 'application/json')
-        self.assertEqual(response.json['data']['name'], "The State Audit Service of Ukraine",)
-        self.assertEqual(response.json['data']['roles'], ['sas'])
-
-        response = self.app.post_json(
-            '/monitorings/{}/posts'.format(self.monitoring_id),
-            {"data": {
-                "title": "Lorem ipsum",
-                "description": "Lorem ipsum dolor sit amet.",
-                "documents": [{
-                    'title': 'ipsum.doc',
-                    'url': self.generate_docservice_url(),
-                    'hash': 'md5:' + '0' * 32,
-                    'format': 'application/msword',
-                }],
-                "relatedParty": "Party with the devil"
-            }}, status=422)
-
-        self.assertEqual(response.status_code, 422)
-        self.assertEqual(response.content_type, 'application/json')
-
-        self.assertEqual(
-            {('body', 'relatedParty')},
-            get_errors_field_names(response, 'relatedParty should be one of parties.'))
 
 
 def suite():

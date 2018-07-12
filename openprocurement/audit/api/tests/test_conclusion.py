@@ -2,6 +2,8 @@ from openprocurement.audit.api.tests.base import BaseWebTest, DSWebTestMixin
 import unittest
 from datetime import datetime
 
+from openprocurement.audit.api.tests.utils import get_errors_field_names
+
 
 class MonitoringConclusionResourceTest(BaseWebTest):
 
@@ -48,7 +50,7 @@ class ActiveMonitoringConclusionResourceTest(BaseWebTest, DSWebTestMixin):
 
         self.app.app.registry.docservice_url = 'http://localhost'
 
-        self.create_monitoring()
+        self.create_monitoring(parties=[self.initial_party])
         self.app.authorization = ('Basic', (self.sas_token, ''))
 
         self.app.patch_json(
@@ -303,6 +305,49 @@ class ActiveMonitoringConclusionResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["conclusion"]["description"], "text")
+
+    def test_conclusion_party_create(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+
+        response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        party_id = response.json['data']['parties'][0]['id']
+
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "conclusion": {
+                    "violationOccurred": False,
+                    "relatedParty": party_id
+                }
+            }}
+        )
+        self.assertEqual(response.status_code, 200)
+
+        response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']['conclusion']['relatedParty'], party_id)
+
+    def test_conclusion_party_create_party_id_not_exists(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "conclusion": {
+                    "violationOccurred": False,
+                    "relatedParty": "Party with the devil"
+                }
+            }}, status=422
+        )
+
+        self.assertEqual(response.status_code, 422)
+        self.assertEqual(response.content_type, 'application/json')
+
+        self.assertEqual(
+            ('body', 'conclusion', 'relatedParty'),
+            next(get_errors_field_names(response, 'relatedParty should be one of parties.')))
 
 
 def suite():

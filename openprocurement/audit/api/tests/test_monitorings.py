@@ -24,15 +24,19 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.post_json('/monitorings', {}, status=422)
         self.assertEqual(
-            {('body', 'data')},
-            get_errors_field_names(response, "Data not available"))
+            ('body', 'data'),
+            next(get_errors_field_names(response, "Data not available")))
 
     def test_post_monitoring_sas_empty_data(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.post_json('/monitorings', {"data": {}}, status=422)
         self.assertEqual(
-            {('body', "reasons"), ('body', "tender_id"), ('body', "procuringStages")},
-            get_errors_field_names(response, 'This field is required.'))
+            {
+                ('body', "reasons"),
+                ('body', "tender_id"),
+                ('body', "procuringStages")
+            },
+            set(get_errors_field_names(response, 'This field is required.')))
 
     def test_post_monitoring_sas(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))

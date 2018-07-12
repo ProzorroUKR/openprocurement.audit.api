@@ -1,4 +1,4 @@
-POST /api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/posts?acc_token=9176b26052b23e5e92d60c0515e76a56 HTTP/1.0
+POST /api/2.4/monitorings/740f121e638537efb727c70bc0451507/posts?acc_token=4b160836ce343adda2f7de38a083e35f HTTP/1.0
 Authorization: Basic YnJva2VyOg==
 Content-Length: 115
 Content-Type: application/json
@@ -6,7 +6,7 @@ Host: audit-api-sandbox.prozorro.gov.ua
 
 {
   "data": {
-    "relatedPost": "cd657dbd03603f8ba1c586cc10ca41e8", 
+    "relatedPost": "719e95571c8e3e3581b8edd830cb160a", 
     "description": "Dolor sit amet", 
     "title": "Sit amet"
   }
@@ -15,7 +15,7 @@ Host: audit-api-sandbox.prozorro.gov.ua
 
 201 Created
 Content-Type: application/json; charset=UTF-8
-Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/3f193d61e4ca3863a60e29557b338073/posts/7db950a7c6753b8aba0e226ea8e55ce2
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/740f121e638537efb727c70bc0451507/posts/54f3206ee6e838388a7ade83aa3e320b
 
 {
   "data": {
@@ -23,8 +23,8 @@ Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/3f193d61e
     "title": "Sit amet", 
     "author": "tender_owner", 
     "datePublished": "2018-01-04T02:05:00+02:00", 
-    "relatedPost": "cd657dbd03603f8ba1c586cc10ca41e8", 
-    "id": "7db950a7c6753b8aba0e226ea8e55ce2", 
+    "relatedPost": "719e95571c8e3e3581b8edd830cb160a", 
+    "id": "54f3206ee6e838388a7ade83aa3e320b", 
     "postOf": "decision"
   }
 }

@@ -299,10 +299,6 @@ class Monitoring(SchematicsDocument, Model):
         if value is not None and data['eliminationReport'] is None:
             raise ValidationError(u"Elimination report hasn't been provided.")
 
-    def validate_monitoringDetails(self, *args, **kw):
-        if self.mode and self.mode == 'test' and self.monitoringDetails and self.monitoringDetails != '':
-            raise ValidationError(u"monitoringDetails should be used with mode test.")
-
     def get_role(self):
         role = super(Monitoring, self).get_role()
         status = self.__parent__.request.context.status

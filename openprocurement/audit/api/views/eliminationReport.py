@@ -12,7 +12,6 @@ from openprocurement.api.utils import (
     context_unpack,
 )
 from openprocurement.audit.api.validation import (
-    validate_patch_elimination_report_data,
     validate_elimination_report_data,
 )
 
@@ -38,14 +37,3 @@ class EliminationReportResource(APIResource):
         self.LOGGER.info('Updated elimination {}'.format(self.request.context.id),
                          extra=context_unpack(self.request, {'MESSAGE_ID': 'elimination_put'}))
         return {'data': elimination.serialize('view')}
-
-    @json_view(content_type='application/json',
-               validators=(validate_patch_elimination_report_data,),
-               permission='edit_elimination_report')
-    def patch(self):
-        now = get_now()
-        self.request.validated['data']["dateModified"] = now
-        apply_patch(self.request, src=self.request.context.serialize(), date_modified=now)
-        self.LOGGER.info('Updated elimination {}'.format(self.request.context.__parent__.id),
-                         extra=context_unpack(self.request, {'MESSAGE_ID': 'elimination_patch'}))
-        return {'data': self.request.context.serialize('view')}

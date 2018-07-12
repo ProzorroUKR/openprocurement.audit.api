@@ -585,19 +585,6 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
 
         self.assertEqual(response.status_code, 200)
 
-        with freeze_time("2018.01.08 00:00"):
-            with open('docs/source/tutorial/http/elimination-report-edit.http', 'w') as self.app.file_obj:
-                response = self.app.patch_json(
-                    '/monitorings/{}/eliminationReport?acc_token={}'.format(monitoring_id, tender_owner_token),
-                    {"data": {
-                        "description": "The procurement requirements have been fixed and the changes are attached. "
-                                       "But unfortunately the award cannot be changed as "
-                                       "the procurement is in its final state.",
-                    }},
-                )
-
-        self.assertEqual(response.status_code, 200)
-
         # ELIMINATION RESOLUTION
         self.app.authorization = ('Basic', (self.sas_token, ''))
 

@@ -87,14 +87,6 @@ def validate_elimination_report_data(request):
     return validate_data(request, EliminationReport)
 
 
-def validate_patch_elimination_report_data(request):
-    """
-    Validate elimination report data PATCH
-    """
-    _validate_elimination_report_status(request)
-    return validate_data(request, EliminationReport, partial=True)
-
-
 def validate_appeal_data(request):
     """
     Validate appeal report data POST

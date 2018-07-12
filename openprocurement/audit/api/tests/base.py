@@ -57,8 +57,7 @@ class BaseWebTest(unittest.TestCase):
     }
 
     acceleration = {
-        'monitoringDetails': 'accelerator=1440',
-        'mode': 'test'
+        'monitoringDetails': 'accelerator=1440'
     }
 
     def setUp(self):

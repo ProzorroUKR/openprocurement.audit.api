@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: openprocurement.audit.api 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-06-13 11:14+0300\n"
-"PO-Revision-Date: 2018-07-03 11:53+0300\n"
+"PO-Revision-Date: 2018-07-12 09:25+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "Language: uk\n"
@@ -31,7 +31,7 @@ msgstr "|yes| Власник моніторингу"
 msgid "|yes| Tender owner"
 msgstr "|yes| Власник тендеру"
 
-#: ../../source/tutorial/dialogue.rst:34
+#: ../../source/tutorial/dialogue.rst:41
 msgid "And also add documents:"
 msgstr "А також додамо документи:"
 
@@ -42,28 +42,28 @@ msgid ""
 msgstr ""
 "Для опублікованого моніторингу у власнику моніторингу можна запитати пояснення:"
 
-#: ../../source/tutorial/dialogue.rst:19
+#: ../../source/tutorial/dialogue.rst:26
 msgid "Lets add another document to a post:"
 msgstr "Додамо ще один документ до запиту:"
 
-#: ../../source/tutorial/dialogue.rst:24
+#: ../../source/tutorial/dialogue.rst:31
 msgid "We also can get a list of all post documents:"
 msgstr "Також ми можемо отримати всіх доданих документів до запиту на пояснення:"
 
-#: ../../source/tutorial/dialogue.rst:39
+#: ../../source/tutorial/dialogue.rst:46
 msgid ""
 "Also we can create another question as a broker by publishing an another post:"
 msgstr "Також власник тендеру може надання пояснення з власної ініціативи:"
 
-#: ../../source/tutorial/dialogue.rst:44
+#: ../../source/tutorial/dialogue.rst:51
 msgid "And also SAS-employee can publish an answer post:"
 msgstr "Співробітник ДАСУ може надати відповідь:"
 
-#: ../../source/tutorial/dialogue.rst:49
+#: ../../source/tutorial/dialogue.rst:56
 msgid "Lets see all posts we have:"
 msgstr "Подивимось усі запити:"
 
-#: ../../source/tutorial/dialogue.rst:29
+#: ../../source/tutorial/dialogue.rst:36
 msgid ""
 "To answer the question as a broker we must get :ref:`credentials` first. Now "
 "lets add an answer using generated token. To link the answer to a question we "
@@ -73,6 +73,37 @@ msgstr ""
 "токен <credentials>`_. Тепер спробуємо додати відповідь використовуючи "
 "згенерований токен. Щоб прив'язати відповідь до запиту ми маємо передати "
 "`relatedPost`:"
+
+#: ../../source/tutorial/dialogue.rst:19
+msgid ""
+"We can see that ``postOf`` field was generated. Possible  values of this field "
+"are:"
+msgstr "Бачимо що було згенеровано поле ``postOf`. Можливі наступні значення:"
+
+#: ../../source/tutorial/dialogue.rst:21
+msgid ""
+"``decision`` - means that post is related to a decision and was added in "
+"``active`` monitoring status"
+msgstr ""
+"``decision`` - означає що запит/відповідь відносяться до рішення про початок "
+"моніторингу та було додано у ``active`` статусі"
+
+#: ../../source/tutorial/dialogue.rst:22
+msgid ""
+"``conclusion`` - means that post is related to a conclusion and was added in "
+"``addressed`` or ``declined`` monitoring status"
+msgstr ""
+"``decision`` - означає що запит/відповідь відносяться до висновку та було "
+"додано у ``active`` статусах  ``addressed`` чи ``declined``"
+
+#: ../../source/tutorial/dialogue.rst:24
+msgid ""
+"Also ``dateOverdue`` was generated for SAS question, that is end date for "
+"reply. This is info field and there are no validations that use this date."
+msgstr ""
+"Також було  згенеровано ``dateOverdue`` для запиту від співробітника ДАСУ та "
+"означає кінцеву дату до якої має бути надана відповідь. Поле носить "
+"інформативний характер та не приймає участі у жодній валідації."
 
 #~ msgid ""
 #~ "To answer the question as a broker we must get :ref:`credentials` first. "

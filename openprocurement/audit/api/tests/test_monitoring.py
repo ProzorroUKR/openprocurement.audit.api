@@ -21,6 +21,10 @@ class MonitoringResourceTest(BaseWebTest):
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["id"], self.monitoring_id)
 
+    def test_get_not_found(self):
+        response = self.app.get('/monitorings/{}'.format('some_id'), status=404)
+        self.assertEqual(response.status_code, 404)
+
     def test_patch_forbidden_url(self):
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),

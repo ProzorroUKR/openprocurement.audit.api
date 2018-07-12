@@ -214,6 +214,7 @@ class Party(Model):
     address = ModelType(Address, required=True)
     contactPoint = ModelType(ContactPoint, required=True)
     roles = ListType(StringType(choices=PARTY_ROLES_CHOICES), default=[])
+    datePublished = IsoDateTimeType(default=get_now)
 
 
 class Monitoring(SchematicsDocument, Model):

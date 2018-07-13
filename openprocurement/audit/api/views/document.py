@@ -6,6 +6,7 @@ from openprocurement.audit.api.constants import (
     CONCLUSION_OBJECT_TYPE,
     APPEAL_OBJECT_TYPE,
     ELIMINATION_REPORT_OBJECT_TYPE,
+    ELIMINATION_RESOLUTION_OBJECT_TYPE,
     POST_OBJECT_TYPE,
 )
 from openprocurement.audit.api.utils import (
@@ -202,6 +203,20 @@ class MonitoringsDocumentEliminationResource(MonitoringsDocumentBaseResource):
 
     def put(self):
         raise forbidden(self.request)
+
+@op_resource(name='Monitoring Elimination Resolution Documents',
+             collection_path='/monitorings/{monitoring_id}/eliminationResolution/documents',
+             path='/monitorings/{monitoring_id}/eliminationResolution/documents/{document_id}',
+             description='Monitoring Elimination Resolution related binary files (PDFs, etc.)')
+class MonitoringsDocumentEliminationResolutionResource(MonitoringsDocumentBaseResource):
+    document_type = ELIMINATION_RESOLUTION_OBJECT_TYPE
+
+    def patch(self):
+        raise forbidden(self.request)
+
+    def put(self):
+        raise forbidden(self.request)
+
 
 
 @op_resource(name='Monitoring Appeal Documents',

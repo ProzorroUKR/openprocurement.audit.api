@@ -156,6 +156,24 @@ class MonitoringResourceTest(BaseWebTest):
         )
         self.assertEqual(('body', 'cancellation'), next(get_errors_field_names(response, 'This field is required.')))
 
+    def test_fail_change_status_not_exists(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "status": "closed",
+            }},
+            status=422
+        )
+        self.assertEqual(
+            response.json["errors"],
+            [{
+                'description': 'Status update from "draft" to "closed" is not allowed.',
+                'location': 'body',
+                'name': 'status'
+            }]
+        )
+
 
 class ActiveMonitoringResourceTest(BaseWebTest):
     def setUp(self):

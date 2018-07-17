@@ -120,8 +120,6 @@ def validate_document_post_status(request):
         _validate_document_status(request, ACTIVE_STATUS)
     elif post.postOf == CONCLUSION_OBJECT_TYPE:
         _validate_document_status(request, ADDRESSED_STATUS)
-    else:
-        raise forbidden(request)
 
 
 def validate_credentials_generate(request):
@@ -263,7 +261,7 @@ def _validate_elimination_report_status(request):
     monitoring = request.validated['monitoring']
     if monitoring.status != ADDRESSED_STATUS:
         request.errors.status = 422
-        request.errors.add('body', 'eliminationResolution',
+        request.errors.add('body', 'eliminationReport',
                            'Can\'t update in current {} monitoring status.'.format(monitoring.status))
         raise error_handler(request.errors)
 

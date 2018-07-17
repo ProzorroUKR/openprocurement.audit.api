@@ -15,7 +15,7 @@ class MonitoringEliminationBaseTest(BaseWebTest, DSWebTestMixin):
         super(MonitoringEliminationBaseTest, self).setUp()
         self.app.app.registry.docservice_url = 'http://localhost'
 
-    def create_satisfied_monitoring(self, **kwargs):
+    def create_active_monitoring(self, **kwargs):
         self.create_monitoring(**kwargs)
         self.app.authorization = ('Basic', (self.sas_token, ''))
 
@@ -27,17 +27,6 @@ class MonitoringEliminationBaseTest(BaseWebTest, DSWebTestMixin):
                     "date": datetime.now().isoformat()
                 },
                 "status": "active",
-            }}
-        )
-        self.app.patch_json(
-            '/monitorings/{}'.format(self.monitoring_id),
-            {"data": {
-                "conclusion": {
-                    "description": "Some text",
-                    "violationOccurred": True,
-                    "violationType": ["corruptionProcurementMethodType", "corruptionAwarded"],
-                },
-                "status": "addressed",
             }}
         )
 
@@ -52,8 +41,24 @@ class MonitoringEliminationBaseTest(BaseWebTest, DSWebTestMixin):
             )
         self.tender_owner_token = response.json['access']['token']
 
+    def create_addressed_monitoring(self, **kwargs):
+        self.create_active_monitoring(**kwargs)
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "conclusion": {
+                    "description": "Some text",
+                    "violationOccurred": True,
+                    "violationType": ["corruptionProcurementMethodType", "corruptionAwarded"],
+                },
+                "status": "addressed",
+            }}
+        )
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+
     def create_monitoring_with_elimination(self, **kwargs):
-        self.create_satisfied_monitoring(**kwargs)
+        self.create_addressed_monitoring(**kwargs)
         response = self.app.put_json(
             '/monitorings/{}/eliminationReport?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
             {"data": {
@@ -97,11 +102,34 @@ class MonitoringEliminationBaseTest(BaseWebTest, DSWebTestMixin):
 
 
 @freeze_time('2018-01-01T11:00:00+02:00')
+class MonitoringActiveEliminationResourceTest(MonitoringEliminationBaseTest):
+
+    def setUp(self):
+        super(MonitoringActiveEliminationResourceTest, self).setUp()
+        self.create_active_monitoring()
+
+    def test_fail_post_elimination_report_when_not_in_addressed_state(self):
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+        request_data = {
+            "description": "Five pint, six pint, seven pint, flour."
+        }
+        response = self.app.put_json(
+            '/monitorings/{}/eliminationReport?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
+            {"data": request_data},
+            status=422
+        )
+
+        self.assertEqual(
+            ('body', 'eliminationReport'),
+            next(get_errors_field_names(response, 'Can\'t update in current active monitoring status.')))
+
+
+@freeze_time('2018-01-01T11:00:00+02:00')
 class MonitoringEliminationResourceTest(MonitoringEliminationBaseTest):
 
     def setUp(self):
         super(MonitoringEliminationResourceTest, self).setUp()
-        self.create_satisfied_monitoring()
+        self.create_addressed_monitoring()
 
     def test_get_elimination(self):
         self.app.get(
@@ -157,28 +185,6 @@ class MonitoringEliminationResourceTest(MonitoringEliminationBaseTest):
         document = data["documents"][0]
         self.assertNotEqual(document["url"], request_data["documents"][0]["url"])
         self.assertEqual(document["author"], "tender_owner")
-
-    def test_fail_post_elimination_report_when_not_in_addressed_state(self):
-        self.app.authorization = ('Basic', (self.broker_token, ''))
-        self.create_monitoring()
-        request_data = {
-            "description": "Five pint, six pint, seven pint, flour.",
-            "dateCreated": "1988-07-11T15:53:06.068598+03:00",
-            "dateModified": "1988-07-11T15:53:06.068598+03:00",
-            "documents": [
-                {
-                    'title': 'lorem.doc',
-                    'url': self.generate_docservice_url(),
-                    'hash': 'md5:' + '0' * 32,
-                    'format': 'application/msword',
-                }
-            ],
-        }
-        self.app.put_json(
-            '/monitorings/{}/eliminationReport?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
-            {"data": request_data},
-            status=403
-        )
 
     def test_fail_update_resolution(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))

@@ -37,7 +37,9 @@ class DumpsTestAppwebtest(TestApp):
 
             if resp.testbody:
                 try:
-                    self.file_obj.write('\n' + json.dumps(json.loads(resp.testbody), indent=2, ensure_ascii=False).encode('utf8'))
+                    self.file_obj.write(
+                        '\n' + json.dumps(json.loads(resp.testbody), indent=2, ensure_ascii=False).encode('utf8')
+                    )
                 except:
                     pass
             self.file_obj.write("\n\n")

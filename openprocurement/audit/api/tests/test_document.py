@@ -7,12 +7,6 @@ import mock
 from openprocurement.audit.api.tests.base import BaseWebTest, DSWebTestMixin
 from openprocurement.audit.api.tests.test_elimination import MonitoringEliminationBaseTest
 from openprocurement.audit.api.tests.utils import get_errors_field_names
-from openprocurement.audit.api.constants import (
-    CANCELLED_STATUS,
-    ADDRESSED_STATUS,
-    ACTIVE_STATUS
-)
-
 
 
 class MonitoringDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
@@ -133,7 +127,7 @@ class MonitoringDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
 
         self.assertEqual(
             ('body', 'data'),
-            next(get_errors_field_names(response, 'Can\'t add document in current active monitoring status')))
+            next(get_errors_field_names(response, 'Can\'t add document in current active monitoring status.')))
 
 class MonitoringPostActiveDocumentResourceTest(BaseWebTest, DSWebTestMixin):
 
@@ -723,7 +717,6 @@ class MonitoringEliminationResolutionDocumentResourceTest(MonitoringEliminationB
             'format': 'application/msword',
         }
 
-
         self.create_monitoring_with_resolution()
 
     def test_document_get_single(self):
@@ -736,7 +729,8 @@ class MonitoringEliminationResolutionDocumentResourceTest(MonitoringEliminationB
 
         document_id = response.json['data']['id']
 
-        response = self.app.get('/monitorings/{}/eliminationResolution/documents/{}'.format(self.monitoring_id, document_id))
+        response = self.app.get(
+            '/monitorings/{}/eliminationResolution/documents/{}'.format(self.monitoring_id, document_id))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
 
@@ -942,7 +936,7 @@ class MonitoringConclusionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
 
         self.assertEqual(
             ('body', 'data'),
-            next(get_errors_field_names(response, 'Can\'t add document in current addressed monitoring status')))
+            next(get_errors_field_names(response, 'Can\'t add document in current addressed monitoring status.')))
 
 
 def suite():

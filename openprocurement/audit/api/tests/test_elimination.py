@@ -158,7 +158,7 @@ class MonitoringEliminationResourceTest(MonitoringEliminationBaseTest):
         self.assertNotEqual(document["url"], request_data["documents"][0]["url"])
         self.assertEqual(document["author"], "tender_owner")
 
-    def test_fail_post_elimination_report_when_not_in_adressed_state(self):
+    def test_fail_post_elimination_report_when_not_in_addressed_state(self):
         self.app.authorization = ('Basic', (self.broker_token, ''))
         self.create_monitoring()
         request_data = {
@@ -174,7 +174,7 @@ class MonitoringEliminationResourceTest(MonitoringEliminationBaseTest):
                 }
             ],
         }
-        response = self.app.put_json(
+        self.app.put_json(
             '/monitorings/{}/eliminationReport?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
             {"data": request_data},
             status=403
@@ -269,7 +269,7 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         )
         self.assertEqual(
             response.json["errors"],
-            [{u'description': u"Can't post another elimination report", u'location': u'body', u'name': u'data'}],
+            [{u'description': u"Can't post another elimination report.", u'location': u'body', u'name': u'data'}],
         )
 
     def test_forbidden_sas_post_document(self):
@@ -281,7 +281,8 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
             'format': 'application/helloword',
         }
         self.app.post_json(
-            '/monitorings/{}/eliminationReport/documents?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
+            '/monitorings/{}/eliminationReport/documents?acc_token={}'.format(
+                self.monitoring_id, self.tender_owner_token),
             {"data": document},
             status=403
         )
@@ -316,7 +317,8 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         post_time = '2018-01-13T13:35:00+02:00'
         with freeze_time(post_time):
             response = self.app.post_json(
-                '/monitorings/{}/eliminationReport/documents?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
+                '/monitorings/{}/eliminationReport/documents?acc_token={}'.format(
+                    self.monitoring_id, self.tender_owner_token),
                 {"data": document},
             )
         self.assertEqual(response.status_code, 201)
@@ -520,6 +522,16 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
                 'location': 'body',
                 'name': 'data'
             }]
+        )
+
+    @freeze_time('2018-01-20T12:00:00.000000+03:00')
+    def test_change_status_without_report(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "status": "completed",
+            }}, status=422
         )
 
 

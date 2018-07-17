@@ -56,7 +56,7 @@ class MonitoringAppealResourceTest(BaseAppealTest):
         )
         self.assertEqual(
             response.json["errors"],
-            [{'description': "Can't post before conclusion is published", 'location': 'body', 'name': 'appeal'}]
+            [{'description': "Can't post before conclusion is published.", 'location': 'body', 'name': 'appeal'}]
         )
 
     def test_fail_appeal_before_conclusion_posted(self):
@@ -72,7 +72,7 @@ class MonitoringAppealResourceTest(BaseAppealTest):
         )
         self.assertEqual(
             response.json["errors"],
-            [{'description': "Can't post before conclusion is published", 'location': 'body', 'name': 'appeal'}]
+            [{'description': "Can't post before conclusion is published.", 'location': 'body', 'name': 'appeal'}]
         )
 
     def test_fail_appeal_none(self):
@@ -181,7 +181,7 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
                 {
                     "location": "body",
                     "name": "data",
-                    "description": "Can't post another appeal"
+                    "description": "Can't post another appeal."
                 }
             ]
         )

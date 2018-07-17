@@ -153,6 +153,11 @@ class EliminationResolution(Report):
     resultByType = DictType(StringType(choices=RESOLUTION_BY_TYPE_CHOICES))
     description = StringType(required=False)
     relatedParty = StringType()
+    
+    class Options:
+        roles = {
+            'view': schematics_default_role,
+        }
 
     def validate_relatedParty(self, data, value):
         parent = data['__parent__']
@@ -226,7 +231,7 @@ class Monitoring(SchematicsDocument, Model):
             'revision': whitelist('revisions'),
             'create': whitelist(
                 "tender_id", "reasons", "procuringStages", "status",
-                "mode", "monitoringDetails", "parties"
+                "mode", "monitoringDetails", "parties", "riskIndicators"
             ),
             'edit_draft': whitelist('decision', 'cancellation') + _perm_edit_whitelist,
             'edit_active': whitelist('conclusion', 'cancellation') + _perm_edit_whitelist,
@@ -253,6 +258,7 @@ class Monitoring(SchematicsDocument, Model):
     monitoringPeriod = ModelType(Period)
 
     documents = ListType(ModelType(Document), default=[])
+    riskIndicators = ListType(StringType(), default=[])
 
     decision = ModelType(Decision)
     conclusion = ModelType(Conclusion)

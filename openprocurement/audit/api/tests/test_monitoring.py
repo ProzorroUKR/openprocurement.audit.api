@@ -83,6 +83,17 @@ class MonitoringResourceTest(BaseWebTest):
         self.assertEqual(response.json['data']["monitoringPeriod"]["endDate"], end_date.isoformat())
         self.assertEqual(response.json['data']["endDate"], m_end_date.isoformat())
 
+    def test_patch_risk_indicators_forbidden(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "riskIndicators": ["some_new_ids", 'fooBar']
+            }},
+            status=422
+        )
+
     def test_patch_to_active_already_in_active(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.patch_json(

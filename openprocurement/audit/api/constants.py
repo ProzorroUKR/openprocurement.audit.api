@@ -15,6 +15,7 @@ DECISION_OBJECT_TYPE = 'decision'
 CONCLUSION_OBJECT_TYPE = 'conclusion'
 APPEAL_OBJECT_TYPE = 'appeal'
 ELIMINATION_REPORT_OBJECT_TYPE = 'eliminationReport'
+ELIMINATION_RESOLUTION_OBJECT_TYPE = 'eliminationResolution'
 POST_OBJECT_TYPE = 'post'
 
 # Custom party roles

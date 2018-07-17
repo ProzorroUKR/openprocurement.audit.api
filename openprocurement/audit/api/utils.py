@@ -171,20 +171,27 @@ def calculate_business_date(date_obj, timedelta_obj, context=None, working_days=
         re_obj = ACCELERATOR_RE.search(context['monitoringDetails'])
         if re_obj and 'accelerator' in re_obj.groupdict():
             return date_obj + (timedelta_obj / int(re_obj.groupdict()['accelerator']))
-    if working_days:
-        return calculate_business_date_base(date_obj, timedelta_obj, context, working_days)
-    return date_obj + timedelta_obj
+    return calculate_business_date_base(date_obj, timedelta_obj, context=context, working_days=working_days)
 
 
 def get_access_token(request):
+    """
+    Find access token in request in next order:
+     - acc_token query param
+     - X-Access-Token header
+     - access.token body value (for POST, PUT, PATCH and application/json content type)
+     
+    Raise ValueError if no token provided
+    """
     token = request.params.get('acc_token') or request.headers.get('X-Access-Token')
-    if not token and request.method in ['POST', 'PUT', 'PATCH'] and request.content_type == 'application/json':
+    if token:
+        return token
+    elif request.method in ['POST', 'PUT', 'PATCH'] and request.content_type == 'application/json':
         try:
-            json = request.json_body
-        except ValueError:
-            json = None
-        token = isinstance(json, dict) and json.get('access', {}).get('token')
-    return token
+            return isinstance(request.json_body, dict) and request.json_body.get('access', {})['token']
+        except (ValueError, KeyError):
+            pass
+    raise ValueError('No access token was provided in request.')
 
 
 def upload_objects_documents(request, obj, key='body'):

@@ -123,8 +123,9 @@ def validate_document_post_status(request):
 
 
 def validate_credentials_generate(request):
-    token = get_access_token(request)
-    if not token:
+    try:
+        token = get_access_token(request)
+    except ValueError:
         raise_operation_error(request, 'No access token was provided.')
 
     try:

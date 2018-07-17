@@ -100,6 +100,24 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
         # ensure that id is not updated
         self.assertEqual(party_id, response.json['data']['id'])
 
+    def test_party_get_empty_list(self):
+        response = self.app.get('/monitorings/{}/parties'.format(self.monitoring_id))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(len(response.json['data']), 0)
+
+    def test_party_get_list(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.post_json(
+            '/monitorings/{}/parties'.format(self.monitoring_id),
+            {'data': self.initial_party})
+
+        response = self.app.get('/monitorings/{}/parties'.format(self.monitoring_id))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(len(response.json['data']), 1)
+        self.assertEqual(response.json['data'][0]['name'], "The State Audit Service of Ukraine")
+
     def test_party_get_missing(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         with self.assertRaisesRegexp(Exception, 'Bad response: 404 Not Found'):

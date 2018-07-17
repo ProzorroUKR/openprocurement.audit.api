@@ -33,6 +33,13 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
                 }
             }})
 
+    def test_post_get_empty_list(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        response = self.app.get('/monitorings/{}/posts'.format(self.monitoring_id))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(len(response.json['data']), 0)
+
     def test_post_create_required_fields(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.post_json(

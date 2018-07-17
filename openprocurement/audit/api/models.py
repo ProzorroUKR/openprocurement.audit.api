@@ -225,7 +225,7 @@ class Party(Model):
 class Monitoring(SchematicsDocument, Model):
 
     class Options:
-        _perm_edit_whitelist = whitelist('status', 'reasons', 'procuringStages', 'parties')
+        _perm_edit_whitelist = whitelist('status', 'reasons', 'procuringStages')
         roles = {
             'plain': blacklist('_attachments', 'revisions') + schematics_embedded_role,
             'revision': whitelist('revisions'),

@@ -231,7 +231,7 @@ class Monitoring(SchematicsDocument, Model):
             'revision': whitelist('revisions'),
             'create': whitelist(
                 "tender_id", "reasons", "procuringStages", "status",
-                "mode", "monitoringDetails", "parties"
+                "mode", "monitoringDetails", "parties", "riskIndicators"
             ),
             'edit_draft': whitelist('decision', 'cancellation') + _perm_edit_whitelist,
             'edit_active': whitelist('conclusion', 'cancellation') + _perm_edit_whitelist,
@@ -258,6 +258,7 @@ class Monitoring(SchematicsDocument, Model):
     monitoringPeriod = ModelType(Period)
 
     documents = ListType(ModelType(Document), default=[])
+    riskIndicators = ListType(StringType(), default=[])
 
     decision = ModelType(Decision)
     conclusion = ModelType(Conclusion)

@@ -226,6 +226,12 @@ class MonitoringEliminationResolutionResourceTest(MonitoringEliminationBaseTest)
         self.assertEquals('partly', response.json['data']['result'])
         self.assertEquals('Do you have spare crutches?', response.json['data']['description'])
 
+    def test_elimination_report_get(self):
+        response = self.app.get('/monitorings/{}/eliminationReport'.format(self.monitoring_id))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEquals('It\'s a minimal required elimination report', response.json['data']['description'])
+
 class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
 
     def setUp(self):
@@ -589,7 +595,11 @@ class ResolutionMonitoringResourceTest(MonitoringEliminationBaseTest):
 
 def suite():
     s = unittest.TestSuite()
+    s.addTest(unittest.makeSuite(MonitoringActiveEliminationResourceTest))
     s.addTest(unittest.makeSuite(MonitoringEliminationResourceTest))
+    s.addTest(unittest.makeSuite(MonitoringEliminationResolutionResourceTest))
+    s.addTest(unittest.makeSuite(UpdateEliminationResourceTest))
+    s.addTest(unittest.makeSuite(ResolutionMonitoringResourceTest))
     return s
 
 

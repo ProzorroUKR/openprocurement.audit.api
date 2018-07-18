@@ -30,10 +30,10 @@ class EliminationReportResource(APIResource):
                permission='create_elimination_report')
     def put(self):
         elimination = self.request.validated['eliminationreport']
-        elimination.dateModified = elimination.dateCreated
+        elimination.datePublished = elimination.dateCreated
         set_author(elimination.documents, self.request, 'author')
         upload_objects_documents(self.request, elimination)
-        apply_patch(self.request, data=dict(eliminationReport=elimination), date_modified=elimination.dateModified)
+        apply_patch(self.request, data=dict(eliminationReport=elimination), date_modified=elimination.dateCreated)
         self.LOGGER.info('Updated elimination {}'.format(self.request.context.id),
                          extra=context_unpack(self.request, {'MESSAGE_ID': 'elimination_put'}))
         return {'data': elimination.serialize('view')}

@@ -137,9 +137,6 @@ class MonitoringResource(APIResource):
         elif monitoring_old_status == ACTIVE_STATUS and monitoring.status == DECLINED_STATUS:
             monitoring.eliminationPeriod = generate_period(now, ELIMINATION_PERIOD_NO_VIOLATIONS_TIME, self.context)
             monitoring.conclusion.datePublished = now
-        elif monitoring_old_status == ADDRESSED_STATUS and monitoring.status == COMPLETED_STATUS:
-            monitoring.eliminationReport.datePublished = now
-            monitoring.eliminationReport.eliminationResolution = now
         elif any([
             monitoring_old_status == DRAFT_STATUS and monitoring.status == CANCELLED_STATUS,
             monitoring_old_status == ACTIVE_STATUS and monitoring.status == STOPPED_STATUS,
@@ -148,6 +145,9 @@ class MonitoringResource(APIResource):
         ]):
             set_author(monitoring.cancellation.documents, self.request, 'author')
             monitoring.cancellation.datePublished = now
+
+        if monitoring.eliminationResolution:
+            monitoring.eliminationResolution.datePublished = monitoring.eliminationResolution.dateCreated
 
         # download (change urls of) documents for Decision, Conclusion, etc.
         raw_data = self.request.json.get("data", {})

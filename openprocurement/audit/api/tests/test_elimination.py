@@ -157,7 +157,6 @@ class MonitoringEliminationResourceTest(MonitoringEliminationBaseTest):
         request_data = {
             "description": "Five pint, six pint, seven pint, flour.",
             "dateCreated": "1988-07-11T15:53:06.068598+03:00",
-            "dateModified": "1988-07-11T15:53:06.068598+03:00",
             "documents": [
                 {
                     'title': 'lorem.doc',
@@ -179,7 +178,6 @@ class MonitoringEliminationResourceTest(MonitoringEliminationBaseTest):
         data = response.json["data"]["eliminationReport"]
         self.assertEqual(data["description"], request_data["description"])
         self.assertEqual(data["dateCreated"], "2018-01-01T11:00:00+02:00")
-        self.assertEqual(data["dateModified"], "2018-01-01T11:00:00+02:00")
         self.assertNotIn("resolution", data)
         self.assertEqual(len(data["documents"]), 1)
         document = data["documents"][0]

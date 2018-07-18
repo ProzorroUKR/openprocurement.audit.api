@@ -176,8 +176,6 @@ class EliminationResolution(Report):
 
 
 class EliminationReport(Report):
-    dateModified = IsoDateTimeType()
-
     class Options:
         roles = {
             'create': whitelist('description', 'documents'),

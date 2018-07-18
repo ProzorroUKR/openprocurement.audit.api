@@ -1,16 +1,16 @@
-POST /api/2.4/monitorings/740f121e638537efb727c70bc0451507/posts HTTP/1.0
+POST /api/2.4/monitorings/f6b4660221b037c38c99ad2288e65a4e/posts HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
-Content-Length: 462
+Content-Length: 458
 Content-Type: application/json
 Host: audit-api-sandbox.prozorro.gov.ua
 
 {
   "data": {
     "title": "Lorem ipsum", 
-    "relatedParty": "3f193d61e4ca3863a60e29557b338073", 
+    "relatedParty": "f6b4660221b037c38c99ad2288e65a4e", 
     "documents": [
       {
-        "url": "http://docs-sandbox.openprocurement.org/get/6be6aac4169c365cadfa4bfed5982724?KeyID=a8968c46&Signature=%2BhSwMwfFRoLRzF8JvWDu1SEM6gqa4AjoKw%2FClvhr5jrKCNMKdiLfPUswfPQsJ9dgcewzZg9bjNeZH5d8SXT%2FCg%3D%3D", 
+        "url": "http://docs-sandbox.openprocurement.org/get/c64d148770453363b9c5bb96d05a4222?KeyID=a8968c46&Signature=eSxDN0WERPC3xsvrCp%2FD9uU0qfnJRDaEZ60ValSTBtf2X4BbJXy0S2ipG9EnohvMs9BobwbYNwOWil7jW8xtBw%3D%3D", 
         "title": "ipsum.doc", 
         "hash": "md5:00000000000000000000000000000000", 
         "format": "application/msword"
@@ -23,7 +23,7 @@ Host: audit-api-sandbox.prozorro.gov.ua
 
 201 Created
 Content-Type: application/json; charset=UTF-8
-Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/740f121e638537efb727c70bc0451507/posts/719e95571c8e3e3581b8edd830cb160a
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/f6b4660221b037c38c99ad2288e65a4e/posts/c64d148770453363b9c5bb96d05a4222
 
 {
   "data": {
@@ -32,10 +32,10 @@ Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/740f121e6
         "hash": "md5:00000000000000000000000000000000", 
         "author": "monitoring_owner", 
         "title": "ipsum.doc", 
-        "url": "http://docs-sandbox.openprocurement.org/get/6be6aac4169c365cadfa4bfed5982724?KeyID=a8968c46&Signature=7O8ytBTiZNbsB2CD7nytjLkg4nsiu0uU0q8tqkbpS5418v%252BW1eb%2Fbu576%252BpyDtmBTIqeXdv7sWt7U7vvrCZMAA%253D%253D", 
+        "url": "http://docs-sandbox.openprocurement.org/get/c64d148770453363b9c5bb96d05a4222?KeyID=a8968c46&Signature=ogAx5k%252B6W7pS6fCBx3Vtx2G%252BhmmbT1ldJjrmkPrKMfmUlmAeBX6%252BXfof2PseQyjD2tJTia9JXRU069eo9soVCw%253D%253D", 
         "format": "application/msword", 
         "datePublished": "2018-01-03T02:05:00+02:00", 
-        "id": "58751d5a4aa73106a5f9452aa8922b0c", 
+        "id": "c64d148770453363b9c5bb96d05a4222", 
         "dateModified": "2018-01-03T02:05:00+02:00"
       }
     ], 
@@ -43,9 +43,9 @@ Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/740f121e6
     "title": "Lorem ipsum", 
     "author": "monitoring_owner", 
     "datePublished": "2018-01-03T02:05:00+02:00", 
-    "relatedParty": "3f193d61e4ca3863a60e29557b338073", 
+    "relatedParty": "f6b4660221b037c38c99ad2288e65a4e", 
     "dateOverdue": "2018-01-09T02:05:00+02:00", 
-    "id": "719e95571c8e3e3581b8edd830cb160a", 
+    "id": "c64d148770453363b9c5bb96d05a4222", 
     "postOf": "decision"
   }
 }

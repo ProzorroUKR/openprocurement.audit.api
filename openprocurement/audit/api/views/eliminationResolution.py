@@ -16,4 +16,3 @@ class EliminationResolutionResource(APIResource):
     @json_view(permission='view_monitoring')
     def get(self):
         return {'data': self.context.serialize('view')}
-

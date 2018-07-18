@@ -165,7 +165,7 @@ class EliminationResolution(Report):
             raise ValidationError(u"relatedParty should be one of parties.")
 
     def validate_resultByType(self, data, value):
-        violations = data["__parent__"].conclusion.violationType
+        violations = data["__parent__"].conclusion.violationType if data["__parent__"].conclusion else None
         if violations:
             if value is None:
                 raise ValidationError(u"This field is required.")
@@ -176,11 +176,6 @@ class EliminationResolution(Report):
 
 
 class EliminationReport(Report):
-    dateModified = IsoDateTimeType()
-
-    def get_role(self):  # this fixes document validation, because document urls cannot be added when role "edit"
-        return 'create'
-
     class Options:
         roles = {
             'create': whitelist('description', 'documents'),

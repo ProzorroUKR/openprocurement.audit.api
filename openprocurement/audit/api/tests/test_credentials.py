@@ -22,7 +22,7 @@ class MonitoringCredentialsResourceTest(BaseWebTest):
 
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response.content_type, 'application/json')
-        self.assertEqual(('body', 'data'), next(get_errors_field_names(response, 'No access token was provided')))
+        self.assertEqual(('body', 'data'), next(get_errors_field_names(response, 'No access token was provided.')))
 
     @mock.patch('restkit.Resource.request')
     def test_credentials_query_param_access_token(self, mock_request):

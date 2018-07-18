@@ -1,4 +1,4 @@
-GET /api/2.4/monitorings/740f121e638537efb727c70bc0451507/posts/719e95571c8e3e3581b8edd830cb160a/documents HTTP/1.0
+GET /api/2.4/monitorings/f6b4660221b037c38c99ad2288e65a4e/posts/c64d148770453363b9c5bb96d05a4222/documents HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
 Host: audit-api-sandbox.prozorro.gov.ua
 
@@ -12,20 +12,20 @@ Content-Type: application/json; charset=UTF-8
       "hash": "md5:00000000000000000000000000000000", 
       "author": "monitoring_owner", 
       "title": "ipsum.doc", 
-      "url": "http://docs-sandbox.openprocurement.org/get/6be6aac4169c365cadfa4bfed5982724?KeyID=a8968c46&Signature=7O8ytBTiZNbsB2CD7nytjLkg4nsiu0uU0q8tqkbpS5418v%252BW1eb%2Fbu576%252BpyDtmBTIqeXdv7sWt7U7vvrCZMAA%253D%253D", 
+      "url": "http://docs-sandbox.openprocurement.org/get/c64d148770453363b9c5bb96d05a4222?KeyID=a8968c46&Signature=ogAx5k%252B6W7pS6fCBx3Vtx2G%252BhmmbT1ldJjrmkPrKMfmUlmAeBX6%252BXfof2PseQyjD2tJTia9JXRU069eo9soVCw%253D%253D", 
       "format": "application/msword", 
       "datePublished": "2018-01-03T02:05:00+02:00", 
-      "id": "58751d5a4aa73106a5f9452aa8922b0c", 
+      "id": "c64d148770453363b9c5bb96d05a4222", 
       "dateModified": "2018-01-03T02:05:00+02:00"
     }, 
     {
       "hash": "md5:00000000000000000000000000000000", 
       "author": "monitoring_owner", 
       "title": "dolor.doc", 
-      "url": "http://docs-sandbox.openprocurement.org/get/02c1f067b40638eab32e4e13f4cb37d6?KeyID=a8968c46&Signature=TnlFjThQl4Cs7dmnka62gdJljxEH6kG9X7hearebBO7QbeaEXJWO6PnBXErfbzty0QevwHQzOL6sdLmTpM%252BsBg%253D%253D", 
+      "url": "http://docs-sandbox.openprocurement.org/get/7c15c91cda27332f959d002adf747412?KeyID=a8968c46&Signature=wHmcsSyT70A9OnRdEHDapUj01vtD8FVPrmiAMdoXCQ3c3ab2OYBhpwtyZPMhtUGf7O%252BQAuvvVeS7SFPGT%2FsWBg%253D%253D", 
       "format": "application/msword", 
       "datePublished": "2018-01-03T02:10:00+02:00", 
-      "id": "8d841a585bc83b32a59c84259f2da7db", 
+      "id": "7c15c91cda27332f959d002adf747412", 
       "dateModified": "2018-01-03T02:10:00+02:00"
     }
   ]

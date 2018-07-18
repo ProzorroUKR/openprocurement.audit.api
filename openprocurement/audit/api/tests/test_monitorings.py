@@ -91,7 +91,7 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest):
             }},
             status=422
         )
-        self.assertEqual(response.json["errors"][0]["description"], "Can't create a monitoring in 'active' status")
+        self.assertEqual(response.json["errors"][0]["description"], "Can't create a monitoring in 'active' status.")
 
     def test_post_not_allowed_fields(self):
         self.app.authorization = ('Basic', (self.risk_indicator_token, ''))

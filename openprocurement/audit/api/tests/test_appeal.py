@@ -56,7 +56,7 @@ class MonitoringAppealResourceTest(BaseAppealTest):
         )
         self.assertEqual(
             response.json["errors"],
-            [{'description': "Can't post before conclusion is published", 'location': 'body', 'name': 'appeal'}]
+            [{'description': "Can't post before conclusion is published.", 'location': 'body', 'name': 'appeal'}]
         )
 
     def test_fail_appeal_before_conclusion_posted(self):
@@ -72,7 +72,7 @@ class MonitoringAppealResourceTest(BaseAppealTest):
         )
         self.assertEqual(
             response.json["errors"],
-            [{'description': "Can't post before conclusion is published", 'location': 'body', 'name': 'appeal'}]
+            [{'description': "Can't post before conclusion is published.", 'location': 'body', 'name': 'appeal'}]
         )
 
     def test_fail_appeal_none(self):
@@ -166,6 +166,15 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
         )
         self.document_id = response.json["data"]["documents"][0]["id"]
 
+    def test_get_appeal(self):
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+        response = self.app.get(
+            '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token)
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json["data"]["description"], 'Lorem ipsum dolor sit amet')
+
     def test_fail_update_appeal(self):
         self.app.authorization = ('Basic', (self.broker_token, ''))
         response = self.app.put_json(
@@ -181,7 +190,7 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
                 {
                     "location": "body",
                     "name": "data",
-                    "description": "Can't post another appeal"
+                    "description": "Can't post another appeal."
                 }
             ]
         )

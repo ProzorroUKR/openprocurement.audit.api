@@ -33,6 +33,13 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
                 }
             }})
 
+    def test_post_get_empty_list(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        response = self.app.get('/monitorings/{}/posts'.format(self.monitoring_id))
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(len(response.json['data']), 0)
+
     def test_post_create_required_fields(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.post_json(
@@ -521,10 +528,10 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
             next(get_errors_field_names(response, 'relatedParty should be one of parties.')))
 
 @freeze_time('2018-01-01T12:00:00.000000+03:00')
-class AddressedMonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
+class DeclinedMonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
 
     def setUp(self):
-        super(AddressedMonitoringPostResourceTest, self).setUp()
+        super(DeclinedMonitoringPostResourceTest, self).setUp()
         self.create_monitoring()
         self.app.authorization = ('Basic', (self.sas_token, ''))
         self.app.patch_json(
@@ -639,11 +646,34 @@ class AddressedMonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
             }}, status=403)
         self.assertEqual(response.status_code, 403)
 
+    @freeze_time('2018-01-20T12:00:00.000000+03:00')
+    def test_post_create_in_non_allowed_status(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {'data': {
+                'status': 'closed',
+            }})
+        self.assertEqual(response.status_code, 200)
+
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        response = self.app.post_json(
+            '/monitorings/{}/posts'.format(self.monitoring_id),
+            {'data': {
+                'title': 'Lorem ipsum',
+                'description': 'Lorem ipsum dolor sit amet'
+            }}, status=403)
+        self.assertEqual(response.status_code, 403)
+        self.assertEqual(
+            ('body', 'data'),
+            next(get_errors_field_names(response, 'Can\'t add post in current closed monitoring status.'))
+        )
+
 
 def suite():
     suite = unittest.TestSuite()
     suite.addTest(unittest.makeSuite(MonitoringPostResourceTest))
-    suite.addTest(unittest.makeSuite(AddressedMonitoringPostResourceTest))
+    suite.addTest(unittest.makeSuite(DeclinedMonitoringPostResourceTest))
     return suite
 
 

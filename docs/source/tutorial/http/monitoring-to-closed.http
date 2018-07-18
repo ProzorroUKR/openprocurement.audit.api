@@ -1,4 +1,4 @@
-PATCH /api/2.4/monitorings/043595b64f033d37bc0bbdfbfd0285fa HTTP/1.0
+PATCH /api/2.4/monitorings/3b9246f54db034b4823638a7b901c90c HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
 Content-Length: 30
 Content-Type: application/json
@@ -36,16 +36,16 @@ Content-Type: application/json; charset=UTF-8
           "hash": "md5:00000000000000000000000000000000", 
           "author": "monitoring_owner", 
           "title": "lorem.doc", 
-          "url": "http://docs-sandbox.openprocurement.org/get/cb54008a74c336a1a5253318bfd41035?KeyID=a8968c46&Signature=glTQwXRxBPk%2FPnEwi4kYN%2FtSI%252BCvIChtGB8IOzuZaHX8Qpwo0pQ9VwdQpbLSWAuYu%252BxblqEN4ZG6N63Xb3VaDQ%253D%253D", 
+          "url": "http://docs-sandbox.openprocurement.org/get/12bc633ca5ee3ef3a6bc6cae4841a66e?KeyID=a8968c46&Signature=gJEO275brc1rFQyGFI3hARaaTHNuAyo5uttzC6SJF%252Bry3hJEVSMRVY5nn9eyGbWe15OBNZqpjmmYvr5QVwp%2FBQ%253D%253D", 
           "format": "application/msword", 
           "datePublished": "2018-01-02T02:00:00+02:00", 
-          "id": "aff7325883143e478bb453c3d9f9e5df", 
+          "id": "12bc633ca5ee3ef3a6bc6cae4841a66e", 
           "dateModified": "2018-01-02T02:00:00+02:00"
         }
       ], 
       "description": "text", 
       "dateCreated": "2018-01-02T02:00:00+02:00", 
-      "relatedParty": "c8e8f103105a3865bcffbc6b0f461a24", 
+      "relatedParty": "3b9246f54db034b4823638a7b901c90c", 
       "date": "2018-01-02T00:00:00+02:00", 
       "datePublished": "2018-01-02T02:00:00+02:00"
     }, 
@@ -57,10 +57,10 @@ Content-Type: application/json; charset=UTF-8
             "hash": "md5:00000000000000000000000000000000", 
             "author": "monitoring_owner", 
             "title": "ipsum.doc", 
-            "url": "http://docs-sandbox.openprocurement.org/get/3498cc19988e30159e8d61f6a06d6379?KeyID=a8968c46&Signature=hNgPUbpJCAYIvaAxN1E5MYw8NHNW7MSLqxy5YWwrvuLQ1WEHA7Q8ccYCBPC%252BlSLCV7pMzQdeuMwqmSDrGVaCBw%253D%253D", 
+            "url": "http://docs-sandbox.openprocurement.org/get/641b70695de535a6bf85a4a12e2b3aae?KeyID=a8968c46&Signature=pHbx9oL6TMtEXzr7ogAqDQdsrX%2FewjT3WYB0IDKChcoyPFh5uurfR0V0EZ05fJCFxABWkoVQnfPnFBAS3dc5Bw%253D%253D", 
             "format": "application/msword", 
             "datePublished": "2018-01-03T02:10:00+02:00", 
-            "id": "d7ff2db11c5734fd96665133ddf46c3c", 
+            "id": "641b70695de535a6bf85a4a12e2b3aae", 
             "dateModified": "2018-01-03T02:10:00+02:00"
           }
         ], 
@@ -68,14 +68,14 @@ Content-Type: application/json; charset=UTF-8
         "title": "Lorem ipsum", 
         "author": "monitoring_owner", 
         "datePublished": "2018-01-03T02:10:00+02:00", 
-        "relatedParty": "c8e8f103105a3865bcffbc6b0f461a24", 
+        "relatedParty": "3b9246f54db034b4823638a7b901c90c", 
         "dateOverdue": "2018-01-09T02:10:00+02:00", 
-        "id": "c70ed2546691382685f7383ab687bd6d", 
+        "id": "641b70695de535a6bf85a4a12e2b3aae", 
         "postOf": "decision"
       }
     ], 
-    "tender_id": "5cdfed0712523a779273071435e1680f", 
-    "id": "043595b64f033d37bc0bbdfbfd0285fa", 
+    "tender_id": "3b9246f54db034b4823638a7b901c90c", 
+    "id": "3b9246f54db034b4823638a7b901c90c", 
     "parties": [
       {
         "name": "The State Audit Service of Ukraine", 
@@ -99,7 +99,7 @@ Content-Type: application/json; charset=UTF-8
           "id": "40165856", 
           "uri": "http://www.dkrs.gov.ua"
         }, 
-        "id": "c8e8f103105a3865bcffbc6b0f461a24"
+        "id": "3b9246f54db034b4823638a7b901c90c"
       }
     ], 
     "dateCreated": "2018-01-01T02:00:00+02:00", 
@@ -110,7 +110,7 @@ Content-Type: application/json; charset=UTF-8
     "dateModified": "2018-01-11T02:00:00+02:00", 
     "conclusion": {
       "dateCreated": "2018-01-04T02:00:00+02:00", 
-      "relatedParty": "c8e8f103105a3865bcffbc6b0f461a24", 
+      "relatedParty": "3b9246f54db034b4823638a7b901c90c", 
       "violationOccurred": false, 
       "datePublished": "2018-01-04T02:00:00+02:00"
     }

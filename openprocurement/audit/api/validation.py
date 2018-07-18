@@ -34,7 +34,7 @@ def validate_monitoring_data(request):
     monitoring = request.validated['monitoring']
     if monitoring.status != DRAFT_STATUS:
         request.errors.add(
-            'body', 'status', "Can't create a monitoring in '{}' status".format(monitoring.status)
+            'body', 'status', "Can't create a monitoring in '{}' status.".format(monitoring.status)
         )
         request.errors.status = 422
         raise error_handler(request.errors)
@@ -82,7 +82,7 @@ def validate_elimination_report_data(request):
     Validate elimination report data POST
     """
     if request.validated["monitoring"].eliminationReport is not None:
-        raise_operation_error(request, "Can't post another elimination report")
+        raise_operation_error(request, "Can't post another elimination report.")
     _validate_elimination_report_status(request)
     return validate_data(request, EliminationReport)
 
@@ -93,11 +93,11 @@ def validate_appeal_data(request):
     """
     monitoring = request.validated['monitoring']
     if monitoring.appeal is not None:
-        raise_operation_error(request, "Can't post another appeal")
+        raise_operation_error(request, "Can't post another appeal.")
 
     if monitoring.conclusion is None or monitoring.conclusion.datePublished is None:
         request.errors.status = 422
-        request.errors.add('body', 'appeal', 'Can\'t post before conclusion is published')
+        request.errors.add('body', 'appeal', 'Can\'t post before conclusion is published.')
         raise error_handler(request.errors)
 
     return validate_data(request, Appeal)
@@ -120,14 +120,13 @@ def validate_document_post_status(request):
         _validate_document_status(request, ACTIVE_STATUS)
     elif post.postOf == CONCLUSION_OBJECT_TYPE:
         _validate_document_status(request, ADDRESSED_STATUS)
-    else:
-        raise forbidden(request)
 
 
 def validate_credentials_generate(request):
-    token = get_access_token(request)
-    if not token:
-        raise_operation_error(request, 'No access token was provided')
+    try:
+        token = get_access_token(request)
+    except ValueError:
+        raise_operation_error(request, 'No access token was provided.')
 
     try:
         response = TendersClient(
@@ -152,7 +151,7 @@ def _validate_patch_monitoring_fields(request):
     difference = provided - allowed
     if difference:
         for i in difference:
-            request.errors.add('body', i, 'This field cannot be updated in the {} status'.format(
+            request.errors.add('body', i, 'This field cannot be updated in the {} status.'.format(
                 request.validated['monitoring']['status']))
         request.errors.status = 422
         raise error_handler(request.errors)
@@ -188,14 +187,14 @@ def _validate_patch_monitoring_status_draft_to_active(request):
 def _validate_patch_monitoring_status_active_to_addressed(request):
     _validate_patch_monitoring_status_active_to_addressed_or_declined(request)
     if not request.validated.get('data', {}).get('conclusion').get('violationOccurred'):
-        raise_operation_error(request, 'Can\'t set {} status to monitoring if no violation occurred'.format(
+        raise_operation_error(request, 'Can\'t set {} status to monitoring if no violation occurred.'.format(
             ADDRESSED_STATUS))
 
 
 def _validate_patch_monitoring_status_active_to_declined(request):
     _validate_patch_monitoring_status_active_to_addressed_or_declined(request)
     if request.validated.get('data', {}).get('conclusion').get('violationOccurred'):
-        raise_operation_error(request, 'Can\'t set {} status to monitoring if violation occurred'.format(
+        raise_operation_error(request, 'Can\'t set {} status to monitoring if violation occurred.'.format(
             DECLINED_STATUS))
 
 
@@ -249,13 +248,13 @@ def _validate_post_post_status(request):
     if status_current in (ADDRESSED_STATUS, DECLINED_STATUS):
         if request.authenticated_userid == monitoring.tender_owner:
             if any(post.postOf == CONCLUSION_OBJECT_TYPE and post.relatedPost is None for post in monitoring.posts):
-                raise_operation_error(request, 'Can\'t add more than one {} post in current {} monitoring status'.format(
+                raise_operation_error(request, 'Can\'t add more than one {} post in current {} monitoring status.'.format(
                     CONCLUSION_OBJECT_TYPE, status_current))
         elif post.relatedPost is None:
-            raise_operation_error(request, 'Can\'t add post in current {} monitoring status'.format(
+            raise_operation_error(request, 'Can\'t add post in current {} monitoring status.'.format(
                 status_current))
     elif status_current not in (ACTIVE_STATUS,):
-        raise_operation_error(request, 'Can\'t add post in current {} monitoring status'.format(
+        raise_operation_error(request, 'Can\'t add post in current {} monitoring status.'.format(
             status_current))
 
 
@@ -263,12 +262,12 @@ def _validate_elimination_report_status(request):
     monitoring = request.validated['monitoring']
     if monitoring.status != ADDRESSED_STATUS:
         request.errors.status = 422
-        request.errors.add('body', 'eliminationResolution',
-                           'Can\'t update in current {} monitoring status'.format(monitoring.status))
+        request.errors.add('body', 'eliminationReport',
+                           'Can\'t update in current {} monitoring status.'.format(monitoring.status))
         raise error_handler(request.errors)
 
 
 def _validate_document_status(request, status):
     status_current = request.validated['monitoring'].status
     if status_current != status:
-        raise_operation_error(request, 'Can\'t add document in current {} monitoring status'.format(status_current))
+        raise_operation_error(request, 'Can\'t add document in current {} monitoring status.'.format(status_current))

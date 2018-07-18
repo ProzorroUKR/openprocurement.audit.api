@@ -5,6 +5,7 @@ from openprocurement.audit.api.tests.base import BaseWebTest
 import unittest
 from datetime import datetime, timedelta
 
+from openprocurement.audit.api.tests.utils import get_errors_field_names
 from openprocurement.audit.api.utils import calculate_business_date
 
 
@@ -34,11 +35,12 @@ class MonitoringResourceTest(BaseWebTest):
 
     def test_patch_without_decision(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
-        self.app.patch_json(
+        response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {"status": "active"}},
             status=422
         )
+        self.assertEqual(('body', 'decision'), next(get_errors_field_names(response, 'This field is required.')))
 
     @freeze_time('2018-01-01T12:00:00.000000+02:00')
     def test_patch_nothing(self):
@@ -86,7 +88,7 @@ class MonitoringResourceTest(BaseWebTest):
     def test_patch_risk_indicators_forbidden(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
 
-        response = self.app.patch_json(
+        self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
                 "riskIndicators": ["some_new_ids", 'fooBar']
@@ -123,9 +125,9 @@ class MonitoringResourceTest(BaseWebTest):
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
-                "status": "draft"
+                "status": "active"
             }},
-            status=422
+            status=200
         )
 
     def test_patch_to_cancelled(self):
@@ -143,6 +145,34 @@ class MonitoringResourceTest(BaseWebTest):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["status"], "cancelled")
+
+    def test_patch_to_cancelled_with_no_report(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "status": "cancelled"
+            }}, status=422
+        )
+        self.assertEqual(('body', 'cancellation'), next(get_errors_field_names(response, 'This field is required.')))
+
+    def test_fail_change_status_not_exists(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "status": "closed",
+            }},
+            status=422
+        )
+        self.assertEqual(
+            response.json["errors"],
+            [{
+                'description': 'Status update from "draft" to "closed" is not allowed.',
+                'location': 'body',
+                'name': 'status'
+            }]
+        )
 
 
 class ActiveMonitoringResourceTest(BaseWebTest):
@@ -206,6 +236,16 @@ class ActiveMonitoringResourceTest(BaseWebTest):
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["status"], "declined")
 
+    def test_patch_to_declined_with_no_conclusion(self):
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "status": "declined",
+            }}, status=422
+        )
+
+        self.assertEqual(('body', 'conclusion'), next(get_errors_field_names(response, 'This field is required.')))
+
     def test_patch_to_declined_if_violation_occurred(self):
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
@@ -238,6 +278,16 @@ class ActiveMonitoringResourceTest(BaseWebTest):
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["status"], "addressed")
 
+    def test_patch_to_addressed_with_no_conclusion(self):
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "status": "addressed",
+            }}, status=422
+        )
+
+        self.assertEqual(('body', 'conclusion'), next(get_errors_field_names(response, 'This field is required.')))
+
     def test_patch_to_addressed_if_no_violation_occurred(self):
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
@@ -268,6 +318,15 @@ class ActiveMonitoringResourceTest(BaseWebTest):
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["status"], "stopped")
         self.assertIn('cancellation', response.json['data'])
+
+    def test_patch_to_stopped_with_no_report(self):
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "status": "stopped"
+            }}, status=422
+        )
+        self.assertEqual(('body', 'cancellation'), next(get_errors_field_names(response, 'This field is required.')))
 
 
 @freeze_time('2018-01-01T12:00:00.000000+03:00')
@@ -328,6 +387,15 @@ class AddressedMonitoringResourceTest(BaseWebTest):
         self.assertEqual(response.json['data']["status"], "stopped")
         self.assertIn('cancellation', response.json['data'])
 
+    def test_patch_to_stopped_with_no_report(self):
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "status": "stopped"
+            }}, status=422
+        )
+        self.assertEqual(('body', 'cancellation'), next(get_errors_field_names(response, 'This field is required.')))
+
 
 @freeze_time('2018-01-01T12:00:00.000000+03:00')
 class DeclinedMonitoringResourceTest(BaseWebTest):
@@ -368,6 +436,24 @@ class DeclinedMonitoringResourceTest(BaseWebTest):
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["status"], "closed")
 
+    def test_fail_change_status(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "status": "closed",
+            }},
+            status=403
+        )
+        self.assertEqual(
+            response.json["errors"],
+            [{
+                'description': "Can't change status to closed before elimination period ends.",
+                'location': 'body',
+                'name': 'data'
+            }]
+        )
+
     def test_patch_add_cancellation(self):
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
@@ -397,6 +483,15 @@ class DeclinedMonitoringResourceTest(BaseWebTest):
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["status"], "stopped")
         self.assertIn('cancellation', response.json['data'])
+
+    def test_patch_to_stopped_with_no_report(self):
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "status": "stopped"
+            }}, status=422
+        )
+        self.assertEqual(('body', 'cancellation'), next(get_errors_field_names(response, 'This field is required.')))
 
 
 def suite():

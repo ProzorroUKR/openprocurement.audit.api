@@ -1,6 +1,6 @@
 from freezegun import freeze_time
 from hashlib import sha512
-from webtest import TestApp
+from webtest import TestApp, AppError
 from datetime import datetime
 import openprocurement.audit.api.tests.base as base_test
 import ConfigParser
@@ -37,7 +37,9 @@ class DumpsTestAppwebtest(TestApp):
 
             if resp.testbody:
                 try:
-                    self.file_obj.write('\n' + json.dumps(json.loads(resp.testbody), indent=2, ensure_ascii=False).encode('utf8'))
+                    self.file_obj.write(
+                        '\n' + json.dumps(json.loads(resp.testbody), indent=2, ensure_ascii=False).encode('utf8')
+                    )
                 except:
                     pass
             self.file_obj.write("\n\n")
@@ -78,10 +80,17 @@ class BaseDocWebTest(base_test.BaseWebTest):
         super(BaseDocWebTest, self).tearDown()
 
     def _generate_test_uuid(self):
-        self.uuid_counter += 1
-        return uuid.uuid3(uuid.UUID(int=0), self.id() + str(self.uuid_counter))
+        return uuid.uuid3(uuid.UUID(int=0), self.id() + str(datetime.now()) + str(self.uuid_counter))
+
+    def create_monitoring(self, **kwargs):
+        try:
+            return super(BaseDocWebTest, self).create_monitoring(**kwargs)
+        except AppError:
+            self.uuid_counter += 1
+            self.create_monitoring(**kwargs)
 
 
+@freeze_time("2018.01.01 00:00")
 class OptionsResourceTest(BaseDocWebTest):
 
     def test_monitoring_list_options_query_params(self):
@@ -107,6 +116,7 @@ class OptionsResourceTest(BaseDocWebTest):
         self.assertEqual(len(response.json['data']), 1)
 
 
+@freeze_time("2018.01.01 00:00")
 class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
     def setUp(self):
         super(MonitoringsResourceTest, self).setUp()
@@ -325,7 +335,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
 
         self.app.authorization = ('Basic', (self.broker_token, ''))
 
-        with freeze_time("2018.01.03 00:05"):
+        with freeze_time("2018.01.04 01:05"):
             with open('docs/source/tutorial/http/post-broker-publish.http', 'w') as self.app.file_obj:
                 response = self.app.post_json(
                     '/monitorings/{}/posts?acc_token={}'.format(monitoring_id, tender_owner_token),
@@ -346,7 +356,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
 
         self.app.authorization = ('Basic', (self.sas_token, ''))
 
-        with freeze_time("2018.01.03 00:05"):
+        with freeze_time("2018.01.04 01:15"):
             with open('docs/source/tutorial/http/post-broker-sas-answer.http', 'w') as self.app.file_obj:
                 self.app.post_json(
                     '/monitorings/{}/posts'.format(monitoring_id),
@@ -783,6 +793,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                 )
 
 
+@freeze_time("2018.01.01 00:00")
 class FeedDocsTest(BaseDocWebTest):
 
     def setUp(self):

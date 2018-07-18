@@ -1,4 +1,4 @@
-POST /api/2.4/monitorings/740f121e638537efb727c70bc0451507/posts HTTP/1.0
+POST /api/2.4/monitorings/f6b4660221b037c38c99ad2288e65a4e/posts HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
 Content-Length: 511
 Content-Type: application/json
@@ -7,11 +7,11 @@ Host: audit-api-sandbox.prozorro.gov.ua
 {
   "data": {
     "title": "Lorem ipsum", 
-    "relatedParty": "3f193d61e4ca3863a60e29557b338073", 
-    "relatedPost": "f3be0e4f0e65340bae3650ce7b759358", 
+    "relatedParty": "f6b4660221b037c38c99ad2288e65a4e", 
+    "relatedPost": "cacc1c94c95130f18a157805ef015cb3", 
     "documents": [
       {
-        "url": "http://docs-sandbox.openprocurement.org/get/60203562d60034da805df5bc3e2d12a8?KeyID=a8968c46&Signature=RXgJenXIQjN3eMdcgbaK%2BVjCf7fdpCMGwNz9vzsP2OTxGVoIPHRUjN4uTy7NtTvaLLTFXxj2Hyyw3rBysmd%2FCg%3D%3D", 
+        "url": "http://docs-sandbox.openprocurement.org/get/da26cf82b11630738c206318a5b1d327?KeyID=a8968c46&Signature=e89sOgQuQuyGqtYZDlbSVHYUNT4hng0AuzG9EAnCS9kfo0g9%2FZLqwKP3mO4s6NkuiZ9BqCxVp1w%2FppnG4vfFDQ%3D%3D", 
         "title": "ipsum.doc", 
         "hash": "md5:00000000000000000000000000000000", 
         "format": "application/msword"
@@ -24,7 +24,7 @@ Host: audit-api-sandbox.prozorro.gov.ua
 
 201 Created
 Content-Type: application/json; charset=UTF-8
-Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/740f121e638537efb727c70bc0451507/posts/e9ae8258df8435deb79bb43b2954d88a
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/f6b4660221b037c38c99ad2288e65a4e/posts/da26cf82b11630738c206318a5b1d327
 
 {
   "data": {
@@ -33,20 +33,20 @@ Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/740f121e6
         "hash": "md5:00000000000000000000000000000000", 
         "author": "monitoring_owner", 
         "title": "ipsum.doc", 
-        "url": "http://docs-sandbox.openprocurement.org/get/60203562d60034da805df5bc3e2d12a8?KeyID=a8968c46&Signature=%2FcVpgViB9DE8IJ8TlfLN3cZIvyR3v7D9tE1jbXwV1SgcJ2vNmWAsy5hJOfgcc5g9sWhNDagAiQ%252BCkkUWA9gDDA%253D%253D", 
+        "url": "http://docs-sandbox.openprocurement.org/get/da26cf82b11630738c206318a5b1d327?KeyID=a8968c46&Signature=yOyX%2Fqh%2FcfV1LxKLW%252B%2Fim1A6ETzrtm5QQkS9wJGXxA1wzv%252BKkoeEqkG0suusadn9yvtCae1n5MgtuxOO8KnwCQ%253D%253D", 
         "format": "application/msword", 
-        "datePublished": "2018-01-03T02:05:00+02:00", 
-        "id": "2a73ab9646ee3b899ecbb07361966d89", 
-        "dateModified": "2018-01-03T02:05:00+02:00"
+        "datePublished": "2018-01-04T03:15:00+02:00", 
+        "id": "da26cf82b11630738c206318a5b1d327", 
+        "dateModified": "2018-01-04T03:15:00+02:00"
       }
     ], 
     "description": "Lorem ipsum dolor sit amet.", 
     "title": "Lorem ipsum", 
     "author": "monitoring_owner", 
-    "datePublished": "2018-01-03T02:05:00+02:00", 
-    "relatedParty": "3f193d61e4ca3863a60e29557b338073", 
-    "relatedPost": "f3be0e4f0e65340bae3650ce7b759358", 
-    "id": "e9ae8258df8435deb79bb43b2954d88a", 
+    "datePublished": "2018-01-04T03:15:00+02:00", 
+    "relatedParty": "f6b4660221b037c38c99ad2288e65a4e", 
+    "relatedPost": "cacc1c94c95130f18a157805ef015cb3", 
+    "id": "da26cf82b11630738c206318a5b1d327", 
     "postOf": "decision"
   }
 }

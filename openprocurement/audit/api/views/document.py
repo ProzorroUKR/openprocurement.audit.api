@@ -146,6 +146,11 @@ class MonitoringsDocumentDecisionResource(MonitoringsDocumentBaseResource):
 
     @json_view(permission='edit_monitoring',
                validators=(validate_document_decision_status, validate_file_update,))
+    def patch(self):
+        return super(MonitoringsDocumentDecisionResource, self).patch()
+
+    @json_view(permission='edit_monitoring',
+               validators=(validate_document_decision_status, validate_file_update,))
     def put(self):
         return super(MonitoringsDocumentDecisionResource, self).put()
 
@@ -164,6 +169,11 @@ class MonitoringsDocumentConclusionResource(MonitoringsDocumentBaseResource):
 
     @json_view(permission='edit_monitoring',
                validators=(validate_document_conclusion_status, validate_file_update,))
+    def patch(self):
+        return super(MonitoringsDocumentConclusionResource, self).patch()
+
+    @json_view(permission='edit_monitoring',
+               validators=(validate_document_conclusion_status, validate_file_update,))
     def put(self):
         return super(MonitoringsDocumentConclusionResource, self).put()
 
@@ -179,6 +189,11 @@ class MonitoringsDocumentPostResource(MonitoringsDocumentBaseResource):
                validators=(validate_document_post_status, validate_file_upload,))
     def collection_post(self):
         return super(MonitoringsDocumentPostResource, self).collection_post()
+
+    @json_view(permission='create_post',
+               validators=(validate_document_post_status, validate_file_update,))
+    def patch(self):
+        return super(MonitoringsDocumentPostResource, self).patch()
 
     @json_view(permission='create_post',
                validators=(validate_document_post_status, validate_file_update,))
@@ -216,7 +231,6 @@ class MonitoringsDocumentEliminationResolutionResource(MonitoringsDocumentBaseRe
 
     def put(self):
         raise forbidden(self.request)
-
 
 
 @op_resource(name='Monitoring Appeal Documents',

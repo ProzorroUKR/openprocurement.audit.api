@@ -68,7 +68,7 @@ class MonitoringResourceTest(BaseWebTest):
         end_date = calculate_business_date(
             now_date,
             MONITORING_TIME,
-            accelerator=accelerator, 
+            accelerator=accelerator,
             working_days=True
         )
         m_end_date = calculate_business_date(

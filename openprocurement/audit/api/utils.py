@@ -1,5 +1,8 @@
 from couchdb import ResourceConflict
+from datetime import timedelta
 from gevent import sleep
+from openprocurement.api.constants import TZ
+
 from openprocurement.audit.api.traversal import factory
 from functools import partial
 from cornice.resource import resource
@@ -144,10 +147,10 @@ def generate_monitoring_id(ctime, db, server_id=''):
     return 'UA-M-{:04}-{:02}-{:02}-{:06}{}'.format(
         ctime.year, ctime.month, ctime.day, index, server_id and '-' + server_id)
 
-def generate_period(date, delta, context):
+def generate_period(date, delta, accelerator=None):
     period = Period()
     period.startDate = date
-    period.endDate = calculate_business_date(date, delta, context, True)
+    period.endDate = calculate_business_date(date, delta, accelerator, True)
     return period
 
 
@@ -166,12 +169,21 @@ def get_monitoring_role(role):
     return 'monitoring_owner' if role == 'sas' else 'tender_owner'
 
 
-def calculate_business_date(date_obj, timedelta_obj, context=None, working_days=False):
+def get_monitoring_accelerator(context):
     if context and 'monitoringDetails' in context and context['monitoringDetails']:
         re_obj = ACCELERATOR_RE.search(context['monitoringDetails'])
         if re_obj and 'accelerator' in re_obj.groupdict():
-            return date_obj + (timedelta_obj / int(re_obj.groupdict()['accelerator']))
-    return calculate_business_date_base(date_obj, timedelta_obj, context=context, working_days=working_days)
+            try:
+                return int(re_obj.groupdict()['accelerator'])
+            except ValueError:
+                pass
+    return 0
+
+
+def calculate_business_date(date_obj, timedelta_obj, accelerator=None, working_days=False):
+    if accelerator:
+        return date_obj + (timedelta_obj / accelerator)
+    return calculate_business_date_base(date_obj, timedelta_obj, working_days=working_days)
 
 
 def get_access_token(request):

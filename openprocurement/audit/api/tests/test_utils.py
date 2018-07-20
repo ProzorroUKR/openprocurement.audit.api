@@ -138,9 +138,6 @@ class TestGetMonitoringAccelerator(unittest.TestCase):
     def test_acceleration_value(self):
         self.assertEqual(get_monitoring_accelerator({'monitoringDetails': 'accelerator=2'}), 2)
 
-    def test_wrong_acceleration_format(self):
-        self.assertEqual(get_monitoring_accelerator({'monitoringDetails': 'accelerator=accelerator'}), 0)
-
     def test_no_acceleration(self):
         self.assertEqual(get_monitoring_accelerator({}), 0)
 

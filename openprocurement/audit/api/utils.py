@@ -173,10 +173,7 @@ def get_monitoring_accelerator(context):
     if context and 'monitoringDetails' in context and context['monitoringDetails']:
         re_obj = ACCELERATOR_RE.search(context['monitoringDetails'])
         if re_obj and 'accelerator' in re_obj.groupdict():
-            try:
-                return int(re_obj.groupdict()['accelerator'])
-            except ValueError:
-                pass
+            return int(re_obj.groupdict()['accelerator'])
     return 0
 
 

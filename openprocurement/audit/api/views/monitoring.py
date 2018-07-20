@@ -30,7 +30,7 @@ from openprocurement.audit.api.utils import (
     set_ownership,
     set_author,
     upload_objects_documents,
-    calculate_business_date,
+    calculate_normalized_business_date,
     get_monitoring_accelerator)
 from openprocurement.audit.api.design import (
     monitorings_real_by_dateModified_view,
@@ -130,7 +130,7 @@ class MonitoringResource(APIResource):
             accelerator = get_monitoring_accelerator(self.context)
             monitoring.monitoringPeriod = generate_period(now, MONITORING_TIME, accelerator)
             monitoring.decision.datePublished = now
-            monitoring.endDate = calculate_business_date(now, MONITORING_END_PERIOD, accelerator, True)
+            monitoring.endDate = calculate_normalized_business_date(now, MONITORING_END_PERIOD, accelerator, True)
         elif monitoring_old_status == ACTIVE_STATUS and monitoring.status == ADDRESSED_STATUS:
             set_author(monitoring.conclusion.documents, self.request, 'author')
             accelerator = get_monitoring_accelerator(self.context)

@@ -4,8 +4,13 @@ import mock
 from datetime import datetime, timedelta
 from openprocurement.api.constants import TZ
 
-from openprocurement.audit.api.utils import calculate_business_date, get_access_token, get_monitoring_accelerator, \
-    calculate_normalized_business_date
+from openprocurement.audit.api.utils import (
+    calculate_business_date,
+    get_access_token,
+    get_monitoring_accelerator,
+    calculate_normalized_business_date,
+    calculate_normalized_date,
+)
 
 
 class CalculateBusinessDateTests(unittest.TestCase):
@@ -177,3 +182,18 @@ class GetAccessTokenTests(unittest.TestCase):
             json_body={}
         )
         self.assertRaises(ValueError, get_access_token, request=request)
+
+
+class CalculateNormalizedDateTest(unittest.TestCase):
+
+    def test_calculate_ceil(self):
+        self.assertEqual(
+            calculate_normalized_date(datetime(2018, 1, 1, 12, 0, 0, tzinfo=TZ), ceil=True),
+            datetime(2018, 1, 2, 0, 0, 0, tzinfo=TZ)
+        )
+
+    def test_calculate_no_ceil(self):
+        self.assertEqual(
+            calculate_normalized_date(datetime(2018, 1, 1, 12, 0, 0, tzinfo=TZ), ceil=False),
+            datetime(2018, 1, 1, 0, 0, 0, tzinfo=TZ)
+        )

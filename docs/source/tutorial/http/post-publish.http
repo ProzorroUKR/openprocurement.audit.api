@@ -44,7 +44,7 @@ Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/f6b466022
     "author": "monitoring_owner", 
     "datePublished": "2018-01-03T02:05:00+02:00", 
     "relatedParty": "f6b4660221b037c38c99ad2288e65a4e", 
-    "dateOverdue": "2018-01-09T02:05:00+02:00", 
+    "dateOverdue": "2018-01-10T00:00:00+02:00", 
     "id": "c64d148770453363b9c5bb96d05a4222", 
     "postOf": "decision"
   }

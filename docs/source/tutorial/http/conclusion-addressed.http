@@ -19,16 +19,16 @@ Content-Type: application/json; charset=UTF-8
     "status": "addressed", 
     "eliminationPeriod": {
       "startDate": "2018-01-05T02:25:00+02:00", 
-      "endDate": "2018-01-22T02:25:00+02:00"
+      "endDate": "2018-01-23T00:00:00+02:00"
     }, 
-    "endDate": "2018-01-24T03:15:00+02:00", 
+    "endDate": "2018-01-25T00:00:00+02:00", 
     "reasons": [
       "public", 
       "fiscal"
     ], 
     "monitoringPeriod": {
       "startDate": "2018-01-02T03:15:00+02:00", 
-      "endDate": "2018-01-26T03:15:00+02:00"
+      "endDate": "2018-01-30T00:00:00+02:00"
     }, 
     "decision": {
       "documents": [
@@ -89,7 +89,7 @@ Content-Type: application/json; charset=UTF-8
         "author": "monitoring_owner", 
         "datePublished": "2018-01-03T02:05:00+02:00", 
         "relatedParty": "f6b4660221b037c38c99ad2288e65a4e", 
-        "dateOverdue": "2018-01-09T02:05:00+02:00", 
+        "dateOverdue": "2018-01-10T00:00:00+02:00", 
         "id": "c64d148770453363b9c5bb96d05a4222", 
         "postOf": "decision"
       }, 

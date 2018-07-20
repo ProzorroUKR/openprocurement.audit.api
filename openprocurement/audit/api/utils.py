@@ -1,5 +1,8 @@
 from couchdb import ResourceConflict
+from datetime import timedelta
 from gevent import sleep
+from openprocurement.api.constants import TZ, WORKING_DAYS
+
 from openprocurement.audit.api.traversal import factory
 from functools import partial
 from cornice.resource import resource
@@ -144,10 +147,10 @@ def generate_monitoring_id(ctime, db, server_id=''):
     return 'UA-M-{:04}-{:02}-{:02}-{:06}{}'.format(
         ctime.year, ctime.month, ctime.day, index, server_id and '-' + server_id)
 
-def generate_period(date, delta, context):
+def generate_period(date, delta, accelerator=None):
     period = Period()
     period.startDate = date
-    period.endDate = calculate_business_date(date, delta, context, True)
+    period.endDate = calculate_normalized_business_date(date, delta, accelerator, True)
     return period
 
 
@@ -166,12 +169,44 @@ def get_monitoring_role(role):
     return 'monitoring_owner' if role == 'sas' else 'tender_owner'
 
 
-def calculate_business_date(date_obj, timedelta_obj, context=None, working_days=False):
+def get_monitoring_accelerator(context):
     if context and 'monitoringDetails' in context and context['monitoringDetails']:
         re_obj = ACCELERATOR_RE.search(context['monitoringDetails'])
         if re_obj and 'accelerator' in re_obj.groupdict():
-            return date_obj + (timedelta_obj / int(re_obj.groupdict()['accelerator']))
-    return calculate_business_date_base(date_obj, timedelta_obj, context=context, working_days=working_days)
+            return int(re_obj.groupdict()['accelerator'])
+    return 0
+
+
+def calculate_business_date(date_obj, timedelta_obj, accelerator=None, working_days=False):
+    if accelerator:
+        return date_obj + (timedelta_obj / accelerator)
+    return calculate_business_date_base(date_obj, timedelta_obj, working_days=working_days)
+
+
+def calculate_normalized_date(dt, ceil=False):
+    if ceil:
+        return dt.astimezone(TZ).replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1)
+    return dt.astimezone(TZ).replace(hour=0, minute=0, second=0, microsecond=0)
+
+
+def calculate_normalized_business_date(date_obj, timedelta_obj, accelerator=None, working_days=False):
+    normalized_date = calculate_normalized_date(date_obj) if not accelerator else date_obj
+    business_date = calculate_business_date(
+        normalized_date,
+        timedelta_obj,
+        accelerator=accelerator,
+        working_days=working_days
+    )
+    if is_non_working_date(date_obj) or accelerator:
+        return business_date
+    return business_date + timedelta(days=1)
+
+
+def is_non_working_date(date_obj):
+    return any([
+        date_obj.weekday() in [5, 6] and WORKING_DAYS.get(date_obj.date().isoformat(), True),
+        WORKING_DAYS.get(date_obj.date().isoformat(), False)
+    ])
 
 
 def get_access_token(request):

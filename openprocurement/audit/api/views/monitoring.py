@@ -30,8 +30,8 @@ from openprocurement.audit.api.utils import (
     set_ownership,
     set_author,
     upload_objects_documents,
-    calculate_business_date,
-)
+    calculate_normalized_business_date,
+    get_monitoring_accelerator)
 from openprocurement.audit.api.design import (
     monitorings_real_by_dateModified_view,
     monitorings_test_by_dateModified_view,
@@ -127,15 +127,18 @@ class MonitoringResource(APIResource):
         now = get_now()
         if monitoring_old_status == DRAFT_STATUS and monitoring.status == ACTIVE_STATUS:
             set_author(monitoring.decision.documents, self.request, 'author')
-            monitoring.monitoringPeriod = generate_period(now, MONITORING_TIME, self.context)
+            accelerator = get_monitoring_accelerator(self.context)
+            monitoring.monitoringPeriod = generate_period(now, MONITORING_TIME, accelerator)
             monitoring.decision.datePublished = now
-            monitoring.endDate = calculate_business_date(now, MONITORING_END_PERIOD, self.context, True)
+            monitoring.endDate = calculate_normalized_business_date(now, MONITORING_END_PERIOD, accelerator, True)
         elif monitoring_old_status == ACTIVE_STATUS and monitoring.status == ADDRESSED_STATUS:
             set_author(monitoring.conclusion.documents, self.request, 'author')
+            accelerator = get_monitoring_accelerator(self.context)
             monitoring.conclusion.datePublished = now
-            monitoring.eliminationPeriod = generate_period(now, ELIMINATION_PERIOD_TIME, self.context)
+            monitoring.eliminationPeriod = generate_period(now, ELIMINATION_PERIOD_TIME, accelerator)
         elif monitoring_old_status == ACTIVE_STATUS and monitoring.status == DECLINED_STATUS:
-            monitoring.eliminationPeriod = generate_period(now, ELIMINATION_PERIOD_NO_VIOLATIONS_TIME, self.context)
+            accelerator = get_monitoring_accelerator(self.context)
+            monitoring.eliminationPeriod = generate_period(now, ELIMINATION_PERIOD_NO_VIOLATIONS_TIME, accelerator)
             monitoring.conclusion.datePublished = now
         elif any([
             monitoring_old_status == DRAFT_STATUS and monitoring.status == CANCELLED_STATUS,

@@ -6,7 +6,7 @@ import unittest
 from datetime import datetime, timedelta
 
 from openprocurement.audit.api.tests.utils import get_errors_field_names
-from openprocurement.audit.api.utils import calculate_business_date
+from openprocurement.audit.api.utils import calculate_business_date, get_monitoring_accelerator
 
 
 @freeze_time('2018-01-01T09:00:00+02:00')
@@ -62,10 +62,21 @@ class MonitoringResourceTest(BaseWebTest):
         self.app.authorization = ('Basic', (self.sas_token, ''))
 
         context = self.acceleration if SANDBOX_MODE else {}
+        accelerator = get_monitoring_accelerator(context)
 
         now_date = datetime.now(TZ)
-        end_date = calculate_business_date(now_date, MONITORING_TIME, working_days=True, context=context)
-        m_end_date = calculate_business_date(now_date, MONITORING_END_PERIOD, working_days=True, context=context)
+        end_date = calculate_business_date(
+            now_date,
+            MONITORING_TIME,
+            accelerator=accelerator,
+            working_days=True
+        )
+        m_end_date = calculate_business_date(
+            now_date,
+            MONITORING_END_PERIOD,
+            accelerator=accelerator,
+            working_days=True
+        )
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {

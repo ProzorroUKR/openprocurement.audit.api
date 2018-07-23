@@ -5,7 +5,7 @@ from openprocurement.api.utils import get_now
 from openprocurement.api.models import Model, Revision, Period, Identifier, Address, ContactPoint
 from openprocurement.api.models import Document as BaseDocument
 from openprocurement.api.models import schematics_embedded_role, schematics_default_role, IsoDateTimeType, ListType
-from schematics.types import StringType, MD5Type, BaseType, BooleanType
+from schematics.types import StringType, MD5Type, BaseType, BooleanType, FloatType
 from schematics.types.serializable import serializable
 from schematics.types.compound import ModelType, DictType
 from schematics.transforms import whitelist, blacklist
@@ -226,7 +226,8 @@ class Monitoring(SchematicsDocument, Model):
             'revision': whitelist('revisions'),
             'create': whitelist(
                 "tender_id", "reasons", "procuringStages", "status",
-                "mode", "monitoringDetails", "parties", "riskIndicators"
+                "mode", "monitoringDetails", "parties",
+                "riskIndicators", "riskIndicatorsTotalImpact",
             ),
             'edit_draft': whitelist('decision', 'cancellation') + _perm_edit_whitelist,
             'edit_active': whitelist('conclusion', 'cancellation') + _perm_edit_whitelist,
@@ -253,7 +254,9 @@ class Monitoring(SchematicsDocument, Model):
     monitoringPeriod = ModelType(Period)
 
     documents = ListType(ModelType(Document), default=[])
+
     riskIndicators = ListType(StringType(), default=[])
+    riskIndicatorsTotalImpact = FloatType()
 
     decision = ModelType(Decision)
     conclusion = ModelType(Conclusion)

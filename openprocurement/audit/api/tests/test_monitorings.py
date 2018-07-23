@@ -66,7 +66,8 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest):
                 "tender_id": "f" * 32,
                 "reasons": ["public", "fiscal"],
                 "procuringStages": ["awarding", "contracting"],
-                "riskIndicators": ['some_risk_indicator_id', 'some_other_id']
+                "riskIndicators": ['some_risk_indicator_id', 'some_other_id'],
+                "riskIndicatorsTotalImpact": 1.099999,
             }},
             status=201
         )
@@ -74,8 +75,8 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest):
         self.assertIn("data", response.json)
         self.assertEqual(
             set(response.json["data"]),
-            {"id", "status", "tender_id", "dateModified",
-             "dateCreated", "reasons", "monitoring_id", "procuringStages", "riskIndicators"}
+            {"id", "status", "tender_id", "dateModified", "dateCreated", "reasons", "monitoring_id",
+             "procuringStages", "riskIndicators", "riskIndicatorsTotalImpact"}
         )
         self.assertEqual(response.json["data"]["status"], "draft")
 

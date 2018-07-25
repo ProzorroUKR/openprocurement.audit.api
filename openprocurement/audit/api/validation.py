@@ -119,7 +119,7 @@ def validate_document_post_status(request):
     if post.postOf == DECISION_OBJECT_TYPE:
         _validate_document_status(request, ACTIVE_STATUS)
     elif post.postOf == CONCLUSION_OBJECT_TYPE:
-        _validate_document_status(request, ADDRESSED_STATUS)
+        _validate_document_status(request, (ADDRESSED_STATUS, DECLINED_STATUS))
 
 
 def validate_credentials_generate(request):
@@ -269,5 +269,6 @@ def _validate_elimination_report_status(request):
 
 def _validate_document_status(request, status):
     status_current = request.validated['monitoring'].status
-    if status_current != status:
+    statuses = status if isinstance(status, tuple) else (status,)
+    if status_current not in statuses:
         raise_operation_error(request, 'Can\'t add document in current {} monitoring status.'.format(status_current))

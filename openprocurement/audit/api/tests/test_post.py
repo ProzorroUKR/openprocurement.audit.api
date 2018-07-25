@@ -527,6 +527,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
             ('body', 'relatedParty'),
             next(get_errors_field_names(response, 'relatedParty should be one of parties.')))
 
+
 @freeze_time('2018-01-01T12:00:00.000000+03:00')
 class DeclinedMonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
 
@@ -620,6 +621,8 @@ class DeclinedMonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
         )
 
         tender_owner_token = response.json['access']['token']
+
+        # add first
         response = self.app.post_json(
             '/monitorings/{}/posts?acc_token={}'.format(self.monitoring_id, tender_owner_token),
             {'data': {
@@ -628,13 +631,27 @@ class DeclinedMonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
             }})
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.content_type, 'application/json')
+        post_id = response.json["data"]["id"]
+        print(post_id)
 
+        # add second
         self.app.post_json(
             '/monitorings/{}/posts?acc_token={}'.format(self.monitoring_id, tender_owner_token),
             {'data': {
                 'title': 'Lorem ipsum',
                 'description': 'Lorem ipsum dolor sit amet'
             }}, status=403)
+
+        # add a document to the post
+        response = self.app.post_json(
+            '/monitorings/{}/posts/{}/documents?acc_token={}'.format(self.monitoring_id, post_id, tender_owner_token),
+            {'data': {
+                'title': 'ipsum.doc',
+                'url': self.generate_docservice_url(),
+                'hash': 'md5:' + '0' * 32,
+                'format': 'application/msword',
+            }})
+        self.assertEqual(response.status_code, 201)
 
     def test_post_create_by_monitoring_owner(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))

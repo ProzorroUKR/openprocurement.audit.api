@@ -61,19 +61,6 @@ monitorings_test_by_status_dateModified_view = ViewDefinition('monitorings', 'te
     }
 }''' % FIELDS)
 
-monitorings_draft_by_status_dateModified_view = ViewDefinition('monitorings', 'draft_by_status_dateModified', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && !doc.mode && doc.status == 'draft') {
-        var fields=%s, data={};
-        for (var i in fields) {
-            if (doc[fields[i]]) {
-                data[fields[i]] = doc[fields[i]]
-            }
-        }
-        emit([doc.status, doc.dateModified], data);
-    }
-}''' % FIELDS)
-
-
 monitorings_by_dateModified_view = ViewDefinition('monitorings', 'by_dateModified', '''function(doc) {
     if(doc.doc_type == 'Monitoring' && doc.status != 'draft') {
         var fields=%s, data={};
@@ -110,8 +97,8 @@ monitorings_test_by_dateModified_view = ViewDefinition('monitorings', 'test_by_d
     }
 }''' % FIELDS)
 
-monitorings_draft_by_dateModified_view = ViewDefinition('monitorings', 'draft_by_dateModified', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && !doc.mode && doc.status == 'draft') {
+monitorings_real_draft_by_dateModified_view = ViewDefinition('monitorings', 'draft_by_dateModified', '''function(doc) {
+    if(doc.doc_type == 'Monitoring' && !doc.mode) {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {
@@ -122,6 +109,17 @@ monitorings_draft_by_dateModified_view = ViewDefinition('monitorings', 'draft_by
     }
 }''' % FIELDS)
 
+monitorings_all_draft_by_dateModified_view = ViewDefinition('monitorings', 'draft_by_dateModified', '''function(doc) {
+    if(doc.doc_type == 'Monitoring') {
+        var fields=%s, data={};
+        for (var i in fields) {
+            if (doc[fields[i]]) {
+                data[fields[i]] = doc[fields[i]]
+            }
+        }
+        emit(doc.dateModified, data);
+    }
+}''' % FIELDS)
 
 monitorings_by_local_seq_view = ViewDefinition('monitorings', 'by_local_seq', '''function(doc) {
     if(doc.doc_type == 'Monitoring' && doc.status != 'draft') {
@@ -149,19 +147,6 @@ monitorings_real_by_local_seq_view = ViewDefinition('monitorings', 'real_by_loca
 
 monitorings_test_by_local_seq_view = ViewDefinition('monitorings', 'test_by_local_seq', '''function(doc) {
     if(doc.doc_type == 'Monitoring' && doc.mode == 'test' && doc.status != 'draft') {
-        var fields=%s, data={};
-        for (var i in fields) {
-            if (doc[fields[i]]) {
-                data[fields[i]] = doc[fields[i]]
-            }
-        }
-        emit(doc._local_seq, data);
-    }
-}''' % CHANGES_FIELDS)
-
-
-monitorings_draft_by_local_seq_view = ViewDefinition('monitorings', 'draft_by_local_seq', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && !doc.mode && doc.status == 'draft') {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {

@@ -8,6 +8,7 @@ from openprocurement.api.constants import VERSION, SANDBOX_MODE
 from uuid import uuid4
 from urllib import urlencode
 from base64 import b64encode
+from datetime import datetime
 import ConfigParser
 
 
@@ -95,6 +96,22 @@ class BaseWebTest(unittest.TestCase):
 
         return monitoring
 
+    def create_active_monitoring(self, **kwargs):
+        self.create_monitoring(**kwargs)
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "decision": {
+                    "description": "text",
+                    "date": datetime.now().isoformat()
+                },
+                "status": "active",
+            }}
+        )
+        self.app.authorization = None
+        return response.json['data']
 
 class DSWebTestMixin(object):
     def generate_docservice_url(self):

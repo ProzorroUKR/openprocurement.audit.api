@@ -1,5 +1,6 @@
 from openprocurement.audit.api.tests.base import BaseWebTest
 import unittest
+from datetime import datetime
 
 
 class TenderMonitoringsResourceTest(BaseWebTest):
@@ -21,7 +22,8 @@ class TenderMonitoringsResourceTest(BaseWebTest):
         for i in range(5):  # these are not on the list
             self.create_monitoring(tender_id="a" * 32)
 
-        response = self.app.get('/tenders/{}/monitorings'.format(tender_id))
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        response = self.app.get('/tenders/{}/monitorings?mode=draft'.format(tender_id))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual([e["id"] for e in response.json['data']], ids)
@@ -36,8 +38,9 @@ class TenderMonitoringsResourceTest(BaseWebTest):
             self.create_monitoring(tender_id=tender_id)
             ids.append(self.monitoring_id)
 
+        self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.get(
-            '/tenders/{}/monitorings?opt_fields=dateModified%2Creasons'.format(
+            '/tenders/{}/monitorings?mode=draft&opt_fields=dateModified%2Creasons'.format(
                 tender_id
             )
         )
@@ -59,21 +62,6 @@ class TenderMonitoringsResourceTest(BaseWebTest):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data'], [])
-
-    def test_get_test(self):
-        tender_id = "a" * 32
-
-        ids = []
-        for i in range(10):
-            self.create_monitoring(tender_id=tender_id, mode="test")
-            ids.append(self.monitoring_id)
-
-        response = self.app.get(
-            '/tenders/{}/monitorings?mode=test'.format(tender_id)
-        )
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content_type, 'application/json')
-        self.assertEqual([e["id"] for e in response.json['data']], ids)
 
 
 def suite():

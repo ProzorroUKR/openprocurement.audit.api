@@ -4,6 +4,7 @@ from openprocurement.api.utils import (
     generate_id,
     json_view,
     APIResourceListing,
+    forbidden,
 )
 
 from openprocurement.audit.api.constants import (
@@ -42,6 +43,8 @@ from openprocurement.audit.api.design import (
     monitorings_by_status_dateModified_view,
     monitorings_real_by_status_dateModified_view,
     monitorings_test_by_status_dateModified_view,
+    monitorings_real_draft_by_dateModified_view,
+    monitorings_all_draft_by_dateModified_view,
 )
 from openprocurement.audit.api.validation import (
     validate_monitoring_data,
@@ -50,12 +53,15 @@ from openprocurement.audit.api.validation import (
 )
 from openprocurement.audit.api.design import FIELDS
 from logging import getLogger
+from pyramid.security import ACLAllowed
 
 LOGGER = getLogger(__name__)
 
 VIEW_MAP = {
     u'': monitorings_real_by_dateModified_view,
     u'test': monitorings_test_by_dateModified_view,
+    u'real_draft': monitorings_real_draft_by_dateModified_view,
+    u'all_draft': monitorings_all_draft_by_dateModified_view,
     u'_all_': monitorings_by_dateModified_view,
 }
 STATUS_VIEW_MAP = {
@@ -89,6 +95,14 @@ class MonitoringsResource(APIResourceListing):
         self.serialize_func = monitoring_serialize
         self.object_name_for_listing = 'Monitorings'
         self.log_message_id = 'monitoring_list_custom'
+
+    def get(self):
+        if self.request.params.get('mode') in ('real_draft', 'all_draft'):
+            perm = self.request.has_permission('view_draft_monitoring')
+            if not isinstance(perm, ACLAllowed):
+                return forbidden(self.request)
+        return super(MonitoringsResource, self).get()
+
 
     @json_view(content_type='application/json',
                permission='create_monitoring',

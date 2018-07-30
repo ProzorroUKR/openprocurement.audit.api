@@ -23,7 +23,7 @@ Let's provide the required fields and some additional information:
 .. include:: http/monitoring-post.http
     :code:
 
-Success! And the object is seen on the list
+Success! Please note that monitoring is in 'draft' status. Monitorings in 'draft' status are not visible in general list. Such monitorings would only be visible in a separate feed (mode=real_draft) and you'll need an acess token to see them:
 
 .. include:: http/monitorings-with-object.http
     :code:

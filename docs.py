@@ -89,6 +89,13 @@ class BaseDocWebTest(base_test.BaseWebTest):
             self.uuid_counter += 1
             self.create_monitoring(**kwargs)
 
+    def create_active_monitoring(self, **kwargs):
+        try:
+            return super(BaseDocWebTest, self).create_active_monitoring(**kwargs)
+        except AppError:
+            self.uuid_counter += 1
+            self.create_active_monitoring(**kwargs)
+
 
 @freeze_time("2018.01.01 00:00")
 class OptionsResourceTest(BaseDocWebTest):
@@ -111,7 +118,7 @@ class OptionsResourceTest(BaseDocWebTest):
         self.assertEqual(response.status, '201 Created')
 
         with open('docs/source/feed/http/monitorings-with-options-query-params.http', 'w') as self.app.file_obj:
-            response = self.app.get('/monitorings?opt_fields=status')
+            response = self.app.get('/monitorings?mode=real_draft&opt_fields=status')
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(len(response.json['data']), 1)
 
@@ -178,7 +185,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
             party_id = response.json["data"]["parties"][0]["id"]
 
         with open('docs/source/tutorial/http/monitorings-with-object.http', 'w') as self.app.file_obj:
-            response = self.app.get('/monitorings')
+            response = self.app.get('/monitorings?mode=real_draft')
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(len(response.json['data']), 1)
 
@@ -800,7 +807,7 @@ class FeedDocsTest(BaseDocWebTest):
         super(FeedDocsTest, self).setUp()
 
         for i in range(5):
-            self.create_monitoring()
+            self.create_active_monitoring()
 
     def test_changes_feed(self):
         with open('docs/source/feed/http/changes-feed.http', 'w') as self.app.file_obj:
@@ -821,7 +828,7 @@ class FeedDocsTest(BaseDocWebTest):
             self.assertEqual(len(response.json["data"]), 0)
             self.assertIn("next_page", response.json)
 
-        self.create_monitoring()
+        self.create_active_monitoring()
 
         with open('docs/source/feed/http/changes-feed-new.http', 'w') as self.app.file_obj:
             response = self.app.get(response.json["next_page"]["path"])
@@ -836,7 +843,7 @@ class FeedDocsTest(BaseDocWebTest):
             self.assertEqual(len(response.json["data"]), 0)
             self.assertIn("next_page", response.json)
 
-        self.create_monitoring()
+        self.create_active_monitoring()
 
         # TODO: why doesn't this make the tender be shown on the next page?
         # self.app.authorization = ('Basic', (self.sas_token, ''))

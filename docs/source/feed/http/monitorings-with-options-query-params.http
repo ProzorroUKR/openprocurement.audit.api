@@ -1,4 +1,4 @@
-GET /api/2.4/monitorings?opt_fields=status HTTP/1.0
+GET /api/2.4/monitorings?mode=real_draft&opt_fields=status HTTP/1.0
 Authorization: Basic dGVzdF9zYXNfdG9rZW46
 Host: audit-api-sandbox.prozorro.gov.ua
 
@@ -8,8 +8,8 @@ Content-Type: application/json; charset=UTF-8
 
 {
   "next_page": {
-    "path": "/api/2.4/monitorings?offset=2018-01-01T02%3A00%3A00%2B02%3A00&opt_fields=status", 
-    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings?offset=2018-01-01T02%3A00%3A00%2B02%3A00&opt_fields=status", 
+    "path": "/api/2.4/monitorings?offset=2018-01-01T02%3A00%3A00%2B02%3A00&mode=real_draft&opt_fields=status", 
+    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings?offset=2018-01-01T02%3A00%3A00%2B02%3A00&mode=real_draft&opt_fields=status", 
     "offset": "2018-01-01T02:00:00+02:00"
   }, 
   "data": [

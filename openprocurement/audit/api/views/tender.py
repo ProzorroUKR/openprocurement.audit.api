@@ -1,4 +1,4 @@
-from openprocurement.api.utils import json_view
+from openprocurement.api.utils import json_view, forbidden
 from openprocurement.audit.api.utils import (
     op_resource,
     context_unpack,
@@ -8,9 +8,11 @@ from openprocurement.audit.api.utils import (
 from openprocurement.audit.api.design import (
     monitorings_by_tender_id_view,
     test_monitorings_by_tender_id_view,
+    draft_monitorings_by_tender_id_view,
     MONITORINGS_BY_TENDER_FIELDS,
 )
 from logging import getLogger
+from pyramid.security import ACLAllowed
 
 LOGGER = getLogger(__name__)
 
@@ -23,11 +25,16 @@ class TenderMonitoringResource(APIResource):
         self.views = {
             "": monitorings_by_tender_id_view,
             "test": test_monitorings_by_tender_id_view,
+            "draft": draft_monitorings_by_tender_id_view,
         }
         self.default_fields = set(MONITORINGS_BY_TENDER_FIELDS) | {"id", "dateCreated"}
 
     @json_view(permission='view_listing')
     def get(self):
+        if self.request.params.get('mode') == 'draft':
+            perm = self.request.has_permission('view_draft_monitoring')
+            if not isinstance(perm, ACLAllowed):
+                return forbidden(self.request)
         tender_id = self.request.matchdict["tender_id"]
 
         opt_fields = self.request.params.get('opt_fields', '')

@@ -124,10 +124,11 @@ class BaseFeedResourceTest(BaseWebTest):
 
         self.expected_ids = []
         for i in range(19):
-            monitoring = self.create_monitoring()
+            monitoring = self.create_active_monitoring()
             self.expected_ids.append(monitoring["id"])
 
     def test_pagination(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
         # go through the feed forward
         url = '/monitorings?limit={}&feed={}&opt_fields={}&descending={}&status={}'.format(
             self.limit, self.feed, self.fields, self.descending, self.status

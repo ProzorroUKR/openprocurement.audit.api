@@ -26,7 +26,7 @@ monitorings_all_view = ViewDefinition('monitorings', 'all', '''function(doc) {
 
 
 monitorings_by_status_dateModified_view = ViewDefinition('monitorings', 'by_status_dateModified', '''function(doc) {
-    if(doc.doc_type == 'Monitoring') {
+    if(doc.doc_type == 'Monitoring' && doc.status != 'draft') {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {
@@ -38,7 +38,7 @@ monitorings_by_status_dateModified_view = ViewDefinition('monitorings', 'by_stat
 }''' % FIELDS)
 
 monitorings_real_by_status_dateModified_view = ViewDefinition('monitorings', 'real_by_status_dateModified', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && !doc.mode) {
+    if(doc.doc_type == 'Monitoring' && !doc.mode && doc.status != 'draft') {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {
@@ -50,7 +50,7 @@ monitorings_real_by_status_dateModified_view = ViewDefinition('monitorings', 're
 }''' % FIELDS)
 
 monitorings_test_by_status_dateModified_view = ViewDefinition('monitorings', 'test_by_status_dateModified', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && doc.mode == 'test') {
+    if(doc.doc_type == 'Monitoring' && doc.mode == 'test' && doc.status != 'draft') {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {
@@ -62,7 +62,7 @@ monitorings_test_by_status_dateModified_view = ViewDefinition('monitorings', 'te
 }''' % FIELDS)
 
 monitorings_by_dateModified_view = ViewDefinition('monitorings', 'by_dateModified', '''function(doc) {
-    if(doc.doc_type == 'Monitoring') {
+    if(doc.doc_type == 'Monitoring' && doc.status != 'draft') {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {
@@ -74,7 +74,7 @@ monitorings_by_dateModified_view = ViewDefinition('monitorings', 'by_dateModifie
 }''' % FIELDS)
 
 monitorings_real_by_dateModified_view = ViewDefinition('monitorings', 'real_by_dateModified', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && !doc.mode) {
+    if(doc.doc_type == 'Monitoring' && !doc.mode && doc.status != 'draft') {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {
@@ -86,7 +86,31 @@ monitorings_real_by_dateModified_view = ViewDefinition('monitorings', 'real_by_d
 }''' % FIELDS)
 
 monitorings_test_by_dateModified_view = ViewDefinition('monitorings', 'test_by_dateModified', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && doc.mode == 'test') {
+    if(doc.doc_type == 'Monitoring' && doc.mode == 'test' && doc.status != 'draft') {
+        var fields=%s, data={};
+        for (var i in fields) {
+            if (doc[fields[i]]) {
+                data[fields[i]] = doc[fields[i]]
+            }
+        }
+        emit(doc.dateModified, data);
+    }
+}''' % FIELDS)
+
+monitorings_real_draft_by_dateModified_view = ViewDefinition('monitorings', 'draft_by_dateModified', '''function(doc) {
+    if(doc.doc_type == 'Monitoring' && !doc.mode) {
+        var fields=%s, data={};
+        for (var i in fields) {
+            if (doc[fields[i]]) {
+                data[fields[i]] = doc[fields[i]]
+            }
+        }
+        emit(doc.dateModified, data);
+    }
+}''' % FIELDS)
+
+monitorings_all_draft_by_dateModified_view = ViewDefinition('monitorings', 'draft_by_dateModified', '''function(doc) {
+    if(doc.doc_type == 'Monitoring') {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {
@@ -98,7 +122,7 @@ monitorings_test_by_dateModified_view = ViewDefinition('monitorings', 'test_by_d
 }''' % FIELDS)
 
 monitorings_by_local_seq_view = ViewDefinition('monitorings', 'by_local_seq', '''function(doc) {
-    if(doc.doc_type == 'Monitoring') {
+    if(doc.doc_type == 'Monitoring' && doc.status != 'draft') {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {
@@ -110,7 +134,7 @@ monitorings_by_local_seq_view = ViewDefinition('monitorings', 'by_local_seq', ''
 }''' % CHANGES_FIELDS)
 
 monitorings_real_by_local_seq_view = ViewDefinition('monitorings', 'real_by_local_seq', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && !doc.mode) {
+    if(doc.doc_type == 'Monitoring' && !doc.mode && doc.status != 'draft') {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {
@@ -122,7 +146,7 @@ monitorings_real_by_local_seq_view = ViewDefinition('monitorings', 'real_by_loca
 }''' % CHANGES_FIELDS)
 
 monitorings_test_by_local_seq_view = ViewDefinition('monitorings', 'test_by_local_seq', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && doc.mode == 'test') {
+    if(doc.doc_type == 'Monitoring' && doc.mode == 'test' && doc.status != 'draft') {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {
@@ -139,7 +163,7 @@ MONITORINGS_BY_TENDER_FIELDS = [
 ]
 
 monitorings_by_tender_id_view = ViewDefinition('monitorings', 'by_tender_id', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && !doc.mode) {
+    if(doc.doc_type == 'Monitoring' && !doc.mode && doc.status != 'draft') {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {
@@ -151,7 +175,19 @@ monitorings_by_tender_id_view = ViewDefinition('monitorings', 'by_tender_id', ''
 }''' % MONITORINGS_BY_TENDER_FIELDS)
 
 test_monitorings_by_tender_id_view = ViewDefinition('monitorings', 'test_by_tender_id', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && doc.mode == 'test') {
+    if(doc.doc_type == 'Monitoring' && doc.mode == 'test' && doc.status != 'draft') {
+        var fields=%s, data={};
+        for (var i in fields) {
+            if (doc[fields[i]]) {
+                data[fields[i]] = doc[fields[i]]
+            }
+        }
+        emit([doc.tender_id, doc.dateCreated], data);
+    }
+}''' % MONITORINGS_BY_TENDER_FIELDS)
+
+draft_monitorings_by_tender_id_view = ViewDefinition('monitorings', 'draft_by_tender_id', '''function(doc) {
+    if(doc.doc_type == 'Monitoring' && !doc.mode) {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {

@@ -227,7 +227,7 @@ class Monitoring(SchematicsDocument, Model):
             'create': whitelist(
                 "tender_id", "reasons", "procuringStages", "status",
                 "mode", "monitoringDetails", "parties",
-                "riskIndicators", "riskIndicatorsTotalImpact",
+                "riskIndicators", "riskIndicatorsTotalImpact", "riskIndicatorsRegion",
             ),
             'edit_draft': whitelist('decision', 'cancellation') + _perm_edit_whitelist,
             'edit_active': whitelist('conclusion', 'cancellation') + _perm_edit_whitelist,
@@ -257,6 +257,7 @@ class Monitoring(SchematicsDocument, Model):
 
     riskIndicators = ListType(StringType(), default=[])
     riskIndicatorsTotalImpact = FloatType()
+    riskIndicatorsRegion = StringType()
 
     decision = ModelType(Decision)
     conclusion = ModelType(Conclusion)

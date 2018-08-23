@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from openprocurement.audit.api.tests.base import BaseWebTest
 from math import ceil
 import unittest
@@ -68,6 +69,7 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest):
                 "procuringStages": ["awarding", "contracting"],
                 "riskIndicators": ['some_risk_indicator_id', 'some_other_id'],
                 "riskIndicatorsTotalImpact": 1.099999,
+                "riskIndicatorsRegion": u"Севастополь",
             }},
             status=201
         )
@@ -76,7 +78,7 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest):
         self.assertEqual(
             set(response.json["data"]),
             {"id", "status", "tender_id", "dateModified", "dateCreated", "reasons", "monitoring_id",
-             "procuringStages", "riskIndicators", "riskIndicatorsTotalImpact"}
+             "procuringStages", "riskIndicators", "riskIndicatorsTotalImpact", "riskIndicatorsRegion"}
         )
         self.assertEqual(response.json["data"]["status"], "draft")
 

@@ -16,6 +16,11 @@ handlers:
     formatter: simple
     stream: ext://sys.stdout
 
+  journal:
+    class: ExtendedJournalHandler.ExtendedJournalHandler
+    level: INFO
+    SYSLOG_IDENTIFIER: RISK_INDICATORS_BOT
+
 loggers:
   RiskIndicatorBridge:
     handlers: [console]

@@ -14,7 +14,7 @@ handlers:
     stream: ext://sys.stdout
 loggers:
   replichecker:
-    handlers: [console${',statsd' if 'statsd' in options else ''}]
+    handlers: [console]
     propagate: no
     level: DEBUG
 

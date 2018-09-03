@@ -180,14 +180,53 @@ class ChangesDescFeedResourceTest(BaseFeedResourceTest):
         self.expected_ids = list(reversed(self.expected_ids))
 
 
-def suite():
-    s = unittest.TestSuite()
-    s.addTest(unittest.makeSuite(MonitoringsEmptyListingResourceTest))
-    s.addTest(unittest.makeSuite(BaseFeedResourceTest))
-    s.addTest(unittest.makeSuite(ChangesFeedResourceTest))
-    s.addTest(unittest.makeSuite(ChangesDescFeedResourceTest))
-    return s
+class DraftChangesFeedTestCase(BaseWebTest):
 
+    def setUp(self):
+        super(DraftChangesFeedTestCase, self).setUp()
 
-if __name__ == '__main__':
-    unittest.main(defaultTest='suite')
+        self.expected_test_ids = []
+        self.expected_real_ids = []
+
+        for test_mode in range(2):
+            for i in range(2):
+                if test_mode:
+                    monitoring = self.create_monitoring(mode="test")
+                    self.expected_test_ids.append(monitoring["id"])
+
+                else:
+                    monitoring = self.create_monitoring()
+                    self.expected_real_ids.append(monitoring["id"])
+
+    def test_real_draft_forbidden(self):
+        self.app.authorization = None
+        url = '/monitorings?mode=real_draft&feed=changes'
+        response = self.app.get(url, status=403)
+        self.assertEqual(
+            response.json,
+            {u'status': u'error', u'errors': [
+                {u'description': u'Forbidden', u'location': u'url', u'name': u'permission'}]})
+
+    def test_all_draft_forbidden(self):
+        self.app.authorization = None
+        url = '/monitorings?mode=all_draft&feed=changes'
+        response = self.app.get(url, status=403)
+        self.assertEqual(
+            response.json,
+            {u'status': u'error', u'errors': [
+                {u'description': u'Forbidden', u'location': u'url', u'name': u'permission'}]})
+
+    def test_real_draft(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        url = '/monitorings?mode=real_draft&feed=changes'
+        response = self.app.get(url)
+        self.assertEqual(len(response.json["data"]), 2)
+        self.assertEqual(set(e["id"] for e in response.json["data"]), set(self.expected_real_ids))
+
+    def test_all_draft(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        url = '/monitorings?mode=all_draft&feed=changes'
+        response = self.app.get(url)
+        self.assertEqual(len(response.json["data"]), 4)
+        self.assertEqual(set(e["id"] for e in response.json["data"]),
+                         set(self.expected_real_ids + self.expected_test_ids))

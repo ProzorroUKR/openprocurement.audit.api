@@ -1,12 +1,11 @@
 # -*- coding: utf-8 -*-
-from openprocurement.audit.api.tests.base import BaseWebTest
+from openprocurement.audit.api.tests.base import BaseWebTest, DSWebTestMixin
 from math import ceil
-import unittest
 
 from openprocurement.audit.api.tests.utils import get_errors_field_names
 
 
-class MonitoringsEmptyListingResourceTest(BaseWebTest):
+class MonitoringsEmptyListingResourceTest(BaseWebTest, DSWebTestMixin):
 
     def test_get(self):
         response = self.app.get('/monitorings')
@@ -61,16 +60,28 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest):
 
     def test_post_monitoring_risk_bot(self):
         self.app.authorization = ('Basic', (self.risk_indicator_token, ''))
+        data = {
+            "tender_id": "f" * 32,
+            "reasons": ["public", "fiscal"],
+            "procuringStages": ["awarding", "contracting"],
+            "riskIndicators": ['some_risk_indicator_id', 'some_other_id'],
+            "riskIndicatorsTotalImpact": 1.099999,
+            "riskIndicatorsRegion": u"Севастополь",
+            "decision": {
+                "description": "some text 123",
+                "documents": [
+                    {
+                        'title': 'lorem.doc',
+                        'url': self.generate_docservice_url(),
+                        'hash': 'md5:' + '0' * 32,
+                        'format': 'application/msword',
+                    },
+                ]
+            }
+        }
         response = self.app.post_json(
             '/monitorings',
-            {"data": {
-                "tender_id": "f" * 32,
-                "reasons": ["public", "fiscal"],
-                "procuringStages": ["awarding", "contracting"],
-                "riskIndicators": ['some_risk_indicator_id', 'some_other_id'],
-                "riskIndicatorsTotalImpact": 1.099999,
-                "riskIndicatorsRegion": u"Севастополь",
-            }},
+            {"data": data},
             status=201
         )
 
@@ -81,6 +92,12 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest):
              "procuringStages", "riskIndicators", "riskIndicatorsTotalImpact", "riskIndicatorsRegion"}
         )
         self.assertEqual(response.json["data"]["status"], "draft")
+
+        obj = self.db.get(response.json["data"]["id"])
+        self.assertEqual(obj["decision"]["description"], data["decision"]["description"])
+        self.assertEqual(obj["decision"]['documents'][0]['title'], data["decision"]['documents'][0]['title'])
+        self.assertNotEqual(obj["decision"]['documents'][0]['url'], data["decision"]['documents'][0]['url'])
+        self.assertIn("author", obj["decision"]['documents'][0])
 
     def test_post_active_monitoring_risk_bot(self):
         self.app.authorization = ('Basic', (self.risk_indicator_token, ''))
@@ -180,14 +197,53 @@ class ChangesDescFeedResourceTest(BaseFeedResourceTest):
         self.expected_ids = list(reversed(self.expected_ids))
 
 
-def suite():
-    s = unittest.TestSuite()
-    s.addTest(unittest.makeSuite(MonitoringsEmptyListingResourceTest))
-    s.addTest(unittest.makeSuite(BaseFeedResourceTest))
-    s.addTest(unittest.makeSuite(ChangesFeedResourceTest))
-    s.addTest(unittest.makeSuite(ChangesDescFeedResourceTest))
-    return s
+class DraftChangesFeedTestCase(BaseWebTest):
 
+    def setUp(self):
+        super(DraftChangesFeedTestCase, self).setUp()
 
-if __name__ == '__main__':
-    unittest.main(defaultTest='suite')
+        self.expected_test_ids = []
+        self.expected_real_ids = []
+
+        for test_mode in range(2):
+            for i in range(2):
+                if test_mode:
+                    monitoring = self.create_monitoring(mode="test")
+                    self.expected_test_ids.append(monitoring["id"])
+
+                else:
+                    monitoring = self.create_monitoring()
+                    self.expected_real_ids.append(monitoring["id"])
+
+    def test_real_draft_forbidden(self):
+        self.app.authorization = None
+        url = '/monitorings?mode=real_draft&feed=changes'
+        response = self.app.get(url, status=403)
+        self.assertEqual(
+            response.json,
+            {u'status': u'error', u'errors': [
+                {u'description': u'Forbidden', u'location': u'url', u'name': u'permission'}]})
+
+    def test_all_draft_forbidden(self):
+        self.app.authorization = None
+        url = '/monitorings?mode=all_draft&feed=changes'
+        response = self.app.get(url, status=403)
+        self.assertEqual(
+            response.json,
+            {u'status': u'error', u'errors': [
+                {u'description': u'Forbidden', u'location': u'url', u'name': u'permission'}]})
+
+    def test_real_draft(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        url = '/monitorings?mode=real_draft&feed=changes'
+        response = self.app.get(url)
+        self.assertEqual(len(response.json["data"]), 2)
+        self.assertEqual(set(e["id"] for e in response.json["data"]), set(self.expected_real_ids))
+
+    def test_all_draft(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        url = '/monitorings?mode=all_draft&feed=changes'
+        response = self.app.get(url)
+        self.assertEqual(len(response.json["data"]), 4)
+        self.assertEqual(set(e["id"] for e in response.json["data"]),
+                         set(self.expected_real_ids + self.expected_test_ids))

@@ -40,9 +40,8 @@ from openprocurement.audit.api.design import (
     monitorings_real_by_local_seq_view,
     monitorings_test_by_local_seq_view,
     monitorings_by_local_seq_view,
-    monitorings_by_status_dateModified_view,
-    monitorings_real_by_status_dateModified_view,
-    monitorings_test_by_status_dateModified_view,
+    monitorings_real_draft_by_local_seq_view,
+    monitorings_all_draft_by_local_seq_view,
     monitorings_real_draft_by_dateModified_view,
     monitorings_all_draft_by_dateModified_view,
 )
@@ -64,20 +63,16 @@ VIEW_MAP = {
     u'all_draft': monitorings_all_draft_by_dateModified_view,
     u'_all_': monitorings_by_dateModified_view,
 }
-STATUS_VIEW_MAP = {
-    u'': monitorings_real_by_status_dateModified_view,
-    u'test': monitorings_test_by_status_dateModified_view,
-    u'_all_': monitorings_by_status_dateModified_view,
-}
 CHANGES_VIEW_MAP = {
     u'': monitorings_real_by_local_seq_view,
     u'test': monitorings_test_by_local_seq_view,
+    u'real_draft': monitorings_real_draft_by_local_seq_view,
+    u'all_draft': monitorings_all_draft_by_local_seq_view,
     u'_all_': monitorings_by_local_seq_view,
 }
 FEED = {
     u'dateModified': VIEW_MAP,
     u'changes': CHANGES_VIEW_MAP,
-    u'status': STATUS_VIEW_MAP,
 }
 
 
@@ -88,7 +83,6 @@ class MonitoringsResource(APIResourceListing):
         super(MonitoringsResource, self).__init__(request, context)
 
         self.VIEW_MAP = VIEW_MAP
-        self.STATUS_VIEW_MAP = STATUS_VIEW_MAP
         self.CHANGES_VIEW_MAP = CHANGES_VIEW_MAP
         self.FEED = FEED
         self.FIELDS = FIELDS
@@ -103,7 +97,6 @@ class MonitoringsResource(APIResourceListing):
                 return forbidden(self.request)
         return super(MonitoringsResource, self).get()
 
-
     @json_view(content_type='application/json',
                permission='create_monitoring',
                validators=(validate_monitoring_data,))
@@ -111,6 +104,9 @@ class MonitoringsResource(APIResourceListing):
         monitoring = self.request.validated['monitoring']
         monitoring.id = generate_id()
         monitoring.monitoring_id = generate_monitoring_id(get_now(), self.db, self.server_id)
+        if monitoring.decision:
+            upload_objects_documents(self.request, monitoring.decision, key="decision")
+            set_author(monitoring.decision.documents, self.request, 'author')
         save_monitoring(self.request, date_modified=monitoring.dateCreated)
         LOGGER.info('Created monitoring {}'.format(monitoring.id),
                     extra=context_unpack(self.request,

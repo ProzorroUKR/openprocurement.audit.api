@@ -824,7 +824,6 @@ class MonitoringEliminationResolutionDocumentResourceTest(MonitoringEliminationB
         }
         response = self.app.get('/monitorings/{}/eliminationResolution/documents'.format(self.monitoring_id))
         doc_to_update = response.json['data'][0]
-        print(doc_to_update)
 
         self.app.put_json(
             '/monitorings/{}/eliminationResolution/documents/{}?acc_token={}'.format(

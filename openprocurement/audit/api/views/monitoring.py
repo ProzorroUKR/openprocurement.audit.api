@@ -97,7 +97,6 @@ class MonitoringsResource(APIResourceListing):
                 return forbidden(self.request)
         return super(MonitoringsResource, self).get()
 
-
     @json_view(content_type='application/json',
                permission='create_monitoring',
                validators=(validate_monitoring_data,))
@@ -105,6 +104,9 @@ class MonitoringsResource(APIResourceListing):
         monitoring = self.request.validated['monitoring']
         monitoring.id = generate_id()
         monitoring.monitoring_id = generate_monitoring_id(get_now(), self.db, self.server_id)
+        if monitoring.decision:
+            upload_objects_documents(self.request, monitoring.decision, key="decision")
+            set_author(monitoring.decision.documents, self.request, 'author')
         save_monitoring(self.request, date_modified=monitoring.dateCreated)
         LOGGER.info('Created monitoring {}'.format(monitoring.id),
                     extra=context_unpack(self.request,

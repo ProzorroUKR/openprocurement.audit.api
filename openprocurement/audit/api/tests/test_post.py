@@ -632,7 +632,6 @@ class DeclinedMonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.content_type, 'application/json')
         post_id = response.json["data"]["id"]
-        print(post_id)
 
         # add second
         self.app.post_json(

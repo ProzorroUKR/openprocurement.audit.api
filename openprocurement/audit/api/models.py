@@ -226,7 +226,7 @@ class Monitoring(SchematicsDocument, Model):
             'revision': whitelist('revisions'),
             'create': whitelist(
                 "tender_id", "reasons", "procuringStages", "status",
-                "mode", "monitoringDetails", "parties",
+                "mode", "monitoringDetails", "parties", "decision",
                 "riskIndicators", "riskIndicatorsTotalImpact", "riskIndicatorsRegion",
             ),
             'edit_draft': whitelist('decision', 'cancellation') + _perm_edit_whitelist,

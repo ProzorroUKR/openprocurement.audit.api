@@ -25,7 +25,7 @@ monitorings_all_view = ViewDefinition('monitorings', 'all', '''function(doc) {
 }''')
 
 monitorings_by_dateModified_view = ViewDefinition('monitorings', 'by_dateModified', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && doc.status != 'draft') {
+    if(doc.doc_type == 'Monitoring' && ['draft', 'cancelled'].indexOf(doc.status) == -1) {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {
@@ -37,7 +37,7 @@ monitorings_by_dateModified_view = ViewDefinition('monitorings', 'by_dateModifie
 }''' % FIELDS)
 
 monitorings_real_by_dateModified_view = ViewDefinition('monitorings', 'real_by_dateModified', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && !doc.mode && doc.status != 'draft') {
+    if(doc.doc_type == 'Monitoring' && !doc.mode && ['draft', 'cancelled'].indexOf(doc.status) == -1) {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {
@@ -49,7 +49,7 @@ monitorings_real_by_dateModified_view = ViewDefinition('monitorings', 'real_by_d
 }''' % FIELDS)
 
 monitorings_test_by_dateModified_view = ViewDefinition('monitorings', 'test_by_dateModified', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && doc.mode == 'test' && doc.status != 'draft') {
+    if(doc.doc_type == 'Monitoring' && doc.mode == 'test' && ['draft', 'cancelled'].indexOf(doc.status) == -1) {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {
@@ -85,7 +85,7 @@ monitorings_all_draft_by_dateModified_view = ViewDefinition('monitorings', 'draf
 }''' % FIELDS)
 
 monitorings_by_local_seq_view = ViewDefinition('monitorings', 'by_local_seq', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && doc.status != 'draft') {
+    if(doc.doc_type == 'Monitoring' && ['draft', 'cancelled'].indexOf(doc.status) == -1) {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {
@@ -97,7 +97,7 @@ monitorings_by_local_seq_view = ViewDefinition('monitorings', 'by_local_seq', ''
 }''' % CHANGES_FIELDS)
 
 monitorings_real_by_local_seq_view = ViewDefinition('monitorings', 'real_by_local_seq', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && !doc.mode && doc.status != 'draft') {
+    if(doc.doc_type == 'Monitoring' && !doc.mode && ['draft', 'cancelled'].indexOf(doc.status) == -1) {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {
@@ -109,7 +109,7 @@ monitorings_real_by_local_seq_view = ViewDefinition('monitorings', 'real_by_loca
 }''' % CHANGES_FIELDS)
 
 monitorings_test_by_local_seq_view = ViewDefinition('monitorings', 'test_by_local_seq', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && doc.mode == 'test' && doc.status != 'draft') {
+    if(doc.doc_type == 'Monitoring' && doc.mode == 'test' && ['draft', 'cancelled'].indexOf(doc.status) == -1) {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {
@@ -150,7 +150,7 @@ MONITORINGS_BY_TENDER_FIELDS = [
 ]
 
 monitorings_by_tender_id_view = ViewDefinition('monitorings', 'by_tender_id', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && !doc.mode && doc.status != 'draft') {
+    if(doc.doc_type == 'Monitoring' && !doc.mode && ['draft', 'cancelled'].indexOf(doc.status) == -1) {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {
@@ -162,7 +162,7 @@ monitorings_by_tender_id_view = ViewDefinition('monitorings', 'by_tender_id', ''
 }''' % MONITORINGS_BY_TENDER_FIELDS)
 
 test_monitorings_by_tender_id_view = ViewDefinition('monitorings', 'test_by_tender_id', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && doc.mode == 'test' && doc.status != 'draft') {
+    if(doc.doc_type == 'Monitoring' && doc.mode == 'test' && ['draft', 'cancelled'].indexOf(doc.status) == -1) {
         var fields=%s, data={};
         for (var i in fields) {
             if (doc[fields[i]]) {

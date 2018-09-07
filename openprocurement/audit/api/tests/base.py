@@ -86,13 +86,14 @@ class BaseWebTest(unittest.TestCase):
 
         data.update(kwargs)
 
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        authorization = getattr(self.app, "authorization", None)
 
+        self.app.authorization = ('Basic', (self.sas_token, ''))
         response = self.app.post_json('/monitorings', {'data': data})
         monitoring = response.json['data']
         self.monitoring_id = monitoring['id']
 
-        self.app.authorization = None
+        self.app.authorization = authorization
 
         return monitoring
 

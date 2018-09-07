@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from openprocurement.audit.api.tests.base import BaseWebTest, DSWebTestMixin
 from math import ceil
-
+from openprocurement.audit.api.constants import CANCELLED_STATUS, ACTIVE_STATUS
 from openprocurement.audit.api.tests.utils import get_errors_field_names
 
 
@@ -132,7 +132,6 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest, DSWebTestMixin):
 
 class BaseFeedResourceTest(BaseWebTest):
     feed = ""
-    status = ""
     limit = 3
     fields = ""
     expected_fields = {"id", "dateModified"}
@@ -149,8 +148,8 @@ class BaseFeedResourceTest(BaseWebTest):
     def test_pagination(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
         # go through the feed forward
-        url = '/monitorings?limit={}&feed={}&opt_fields={}&descending={}&status={}'.format(
-            self.limit, self.feed, self.fields, self.descending, self.status
+        url = '/monitorings?limit={}&feed={}&opt_fields={}&descending={}'.format(
+            self.limit, self.feed, self.fields, self.descending,
         )
         offset = 0
         pages = int(ceil(len(self.expected_ids) / float(self.limit)))
@@ -208,12 +207,23 @@ class DraftChangesFeedTestCase(BaseWebTest):
         for test_mode in range(2):
             for i in range(2):
                 if test_mode:
-                    monitoring = self.create_monitoring(mode="test")
-                    self.expected_test_ids.append(monitoring["id"])
+                    self.create_monitoring(mode="test")
+                    self.expected_test_ids.append(self.monitoring_id)
 
                 else:
-                    monitoring = self.create_monitoring()
-                    self.expected_real_ids.append(monitoring["id"])
+                    self.create_monitoring()
+                    self.expected_real_ids.append(self.monitoring_id)
+
+                if i % 2 == 0:
+                    self.app.authorization = ('Basic', (self.sas_token, ''))
+                    self.app.patch_json(
+                        '/monitorings/{}'.format(self.monitoring_id),
+                        {'data': {
+                            "status": CANCELLED_STATUS,
+                            'cancellation': {
+                                'description': 'some_description'
+                            }
+                        }})
 
     def test_real_draft_forbidden(self):
         self.app.authorization = None
@@ -247,3 +257,178 @@ class DraftChangesFeedTestCase(BaseWebTest):
         self.assertEqual(len(response.json["data"]), 4)
         self.assertEqual(set(e["id"] for e in response.json["data"]),
                          set(self.expected_real_ids + self.expected_test_ids))
+
+
+class FeedVisibilityTestCase(BaseWebTest):
+
+    def setUp(self):
+        super(FeedVisibilityTestCase, self).setUp()
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        # real
+        self.create_monitoring()
+        self.draft_id = self.monitoring_id
+
+        self.create_monitoring()
+        self.cancelled_id = self.monitoring_id
+        self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {'data': {
+                "status": CANCELLED_STATUS,
+                'cancellation': {
+                    'description': 'some_description'
+                }
+            }})
+
+        self.create_monitoring()
+        self.active_id = self.monitoring_id
+        self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "decision": {"description": "text"},
+                "status": ACTIVE_STATUS,
+            }}
+        )
+        # test
+        self.create_monitoring(mode="test")
+        self.test_draft_id = self.monitoring_id
+
+        self.create_monitoring(mode="test")
+        self.test_cancelled_id = self.monitoring_id
+        self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {'data': {
+                "status": CANCELLED_STATUS,
+                'cancellation': {
+                    'description': 'some_description'
+                }
+            }})
+
+        self.create_monitoring(mode="test")
+        self.test_active_id = self.monitoring_id
+        self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "decision": {"description": "text"},
+                "status": ACTIVE_STATUS,
+            }}
+        )
+
+    # dateModified
+    def test_real_date_modified(self):
+        url = '/monitorings'
+        response = self.app.get(url)
+        self.assertEqual(
+            set(e["id"] for e in response.json["data"]),
+            {self.active_id}
+        )
+
+        url = '/monitorings?feed=dateModified'
+        response = self.app.get(url)
+        self.assertEqual(
+            set(e["id"] for e in response.json["data"]),
+            {self.active_id}
+        )
+
+    def test_test_date_modified(self):
+        url = '/monitorings?mode=test'
+        response = self.app.get(url)
+        self.assertEqual(
+            set(e["id"] for e in response.json["data"]),
+            {self.test_active_id}
+        )
+
+        url = '/monitorings?feed=dateModified&mode=test'
+        response = self.app.get(url)
+        self.assertEqual(
+            set(e["id"] for e in response.json["data"]),
+            {self.test_active_id}
+        )
+
+    def test_all_date_modified(self):
+        url = '/monitorings?mode=_all_'
+        response = self.app.get(url)
+        self.assertEqual(
+            set(e["id"] for e in response.json["data"]),
+            {self.active_id, self.test_active_id}
+        )
+
+        url = '/monitorings?feed=dateModified&mode=_all_'
+        response = self.app.get(url)
+        self.assertEqual(
+            set(e["id"] for e in response.json["data"]),
+            {self.active_id, self.test_active_id}
+        )
+
+    def test_real_draft_date_modified(self):
+        url = '/monitorings?mode=real_draft'
+        response = self.app.get(url)
+        self.assertEqual(
+            set(e["id"] for e in response.json["data"]),
+            {self.active_id, self.draft_id, self.cancelled_id}
+        )
+
+        url = '/monitorings?feed=dateModified&mode=real_draft'
+        response = self.app.get(url)
+        self.assertEqual(
+            set(e["id"] for e in response.json["data"]),
+            {self.active_id, self.draft_id, self.cancelled_id}
+        )
+
+    def test_all_draft_date_modified(self):
+        url = '/monitorings?mode=all_draft'
+        response = self.app.get(url)
+        self.assertEqual(
+            set(e["id"] for e in response.json["data"]),
+            {self.active_id, self.draft_id, self.cancelled_id,
+             self.test_active_id, self.test_draft_id, self.test_cancelled_id}
+        )
+
+        url = '/monitorings?feed=dateModified&mode=all_draft'
+        response = self.app.get(url)
+        self.assertEqual(
+            set(e["id"] for e in response.json["data"]),
+            {self.active_id, self.draft_id, self.cancelled_id,
+             self.test_active_id, self.test_draft_id, self.test_cancelled_id}
+        )
+
+    # changes
+    def test_real_changes(self):
+        url = '/monitorings?feed=changes'
+        response = self.app.get(url)
+        self.assertEqual(
+            set(e["id"] for e in response.json["data"]),
+            {self.active_id}
+        )
+
+    def test_test_changes(self):
+        url = '/monitorings?feed=changes&mode=test'
+        response = self.app.get(url)
+        self.assertEqual(
+            set(e["id"] for e in response.json["data"]),
+            {self.test_active_id}
+        )
+
+    def test_all_changes(self):
+        url = '/monitorings?feed=changes&mode=_all_'
+        response = self.app.get(url)
+        self.assertEqual(
+            set(e["id"] for e in response.json["data"]),
+            {self.active_id, self.test_active_id}
+        )
+
+    def test_real_draft_changes(self):
+        url = '/monitorings?feed=changes&mode=real_draft'
+        response = self.app.get(url)
+        self.assertEqual(
+            set(e["id"] for e in response.json["data"]),
+            {self.active_id, self.draft_id, self.cancelled_id}
+        )
+
+    def test_all_draft_changes(self):
+        url = '/monitorings?feed=changes&mode=all_draft'
+        response = self.app.get(url)
+        self.assertEqual(
+            set(e["id"] for e in response.json["data"]),
+            {self.active_id, self.draft_id, self.cancelled_id,
+             self.test_active_id, self.test_draft_id, self.test_cancelled_id}
+        )

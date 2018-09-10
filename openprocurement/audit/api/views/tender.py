@@ -9,7 +9,6 @@ from openprocurement.audit.api.design import (
     monitorings_by_tender_id_view,
     test_monitorings_by_tender_id_view,
     draft_monitorings_by_tender_id_view,
-    MONITORINGS_BY_TENDER_FIELDS,
 )
 from logging import getLogger
 from pyramid.security import ACLAllowed
@@ -27,7 +26,7 @@ class TenderMonitoringResource(APIResource):
             "test": test_monitorings_by_tender_id_view,
             "draft": draft_monitorings_by_tender_id_view,
         }
-        self.default_fields = set(MONITORINGS_BY_TENDER_FIELDS) | {"id", "dateCreated"}
+        self.default_fields = {"id", "dateCreated", "status"}
 
     @json_view(permission='view_listing')
     def get(self):

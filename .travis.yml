@@ -21,7 +21,9 @@ before_script:
   - sudo add-apt-repository ppa:chris-lea/libsodium -y
   - sudo apt-get -qq update
   - sudo apt-get install libsodium13 -y
-  - sudo chmod a+x "${PWD}/bin/couchpy"
+  - ls -l bin/couchpy
+  - sudo chmod a+x /bin/couchpy
+  - ls -l bin/couchpy
   - curl -X PUT http://localhost:5984/_config/query_servers/python -d "\"${PWD}/bin/couchpy\""
   - sudo tail -f /var/log/couchdb/couch.log &
 script:

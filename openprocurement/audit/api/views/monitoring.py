@@ -50,7 +50,6 @@ from openprocurement.audit.api.validation import (
     validate_patch_monitoring_data,
     validate_credentials_generate
 )
-from openprocurement.audit.api.design import FIELDS
 from logging import getLogger
 from pyramid.security import ACLAllowed
 
@@ -85,7 +84,7 @@ class MonitoringsResource(APIResourceListing):
         self.VIEW_MAP = VIEW_MAP
         self.CHANGES_VIEW_MAP = CHANGES_VIEW_MAP
         self.FEED = FEED
-        self.FIELDS = FIELDS
+        self.FIELDS = ('tender_id',)
         self.serialize_func = monitoring_serialize
         self.object_name_for_listing = 'Monitorings'
         self.log_message_id = 'monitoring_list_custom'

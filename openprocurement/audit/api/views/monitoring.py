@@ -41,16 +41,15 @@ from openprocurement.audit.api.design import (
     monitorings_test_by_local_seq_view,
     monitorings_by_local_seq_view,
     monitorings_real_draft_by_local_seq_view,
-    monitorings_all_draft_by_local_seq_view,
+    monitorings_draft_by_local_seq_view,
     monitorings_real_draft_by_dateModified_view,
-    monitorings_all_draft_by_dateModified_view,
+    monitorings_draft_by_dateModified_view,
 )
 from openprocurement.audit.api.validation import (
     validate_monitoring_data,
     validate_patch_monitoring_data,
     validate_credentials_generate
 )
-from openprocurement.audit.api.design import FIELDS
 from logging import getLogger
 from pyramid.security import ACLAllowed
 
@@ -60,14 +59,14 @@ VIEW_MAP = {
     u'': monitorings_real_by_dateModified_view,
     u'test': monitorings_test_by_dateModified_view,
     u'real_draft': monitorings_real_draft_by_dateModified_view,
-    u'all_draft': monitorings_all_draft_by_dateModified_view,
+    u'all_draft': monitorings_draft_by_dateModified_view,
     u'_all_': monitorings_by_dateModified_view,
 }
 CHANGES_VIEW_MAP = {
     u'': monitorings_real_by_local_seq_view,
     u'test': monitorings_test_by_local_seq_view,
     u'real_draft': monitorings_real_draft_by_local_seq_view,
-    u'all_draft': monitorings_all_draft_by_local_seq_view,
+    u'all_draft': monitorings_draft_by_local_seq_view,
     u'_all_': monitorings_by_local_seq_view,
 }
 FEED = {
@@ -85,7 +84,7 @@ class MonitoringsResource(APIResourceListing):
         self.VIEW_MAP = VIEW_MAP
         self.CHANGES_VIEW_MAP = CHANGES_VIEW_MAP
         self.FEED = FEED
-        self.FIELDS = FIELDS
+        self.FIELDS = ('tender_id',)
         self.serialize_func = monitoring_serialize
         self.object_name_for_listing = 'Monitorings'
         self.log_message_id = 'monitoring_list_custom'

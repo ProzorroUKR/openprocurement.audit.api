@@ -3,14 +3,6 @@ from couchdb.design import ViewDefinition
 from openprocurement.api import design
 
 
-FIELDS = [
-    'tender_id',
-]
-CHANGES_FIELDS = FIELDS + [
-    'dateModified',
-]
-
-
 def add_design():
     for i, j in globals().items():
         if "_view" in i:
@@ -18,169 +10,91 @@ def add_design():
 
 
 # the view below is used for an internal system monitoring
-monitorings_all_view = ViewDefinition('monitorings', 'all', '''function(doc) {
-    if(doc.doc_type == 'Monitoring') {
-        emit(doc.monitoring_id, null);
-    }
-}''')
-
-monitorings_by_dateModified_view = ViewDefinition('monitorings', 'by_dateModified', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && ['draft', 'cancelled'].indexOf(doc.status) == -1) {
-        var fields=%s, data={};
-        for (var i in fields) {
-            if (doc[fields[i]]) {
-                data[fields[i]] = doc[fields[i]]
-            }
-        }
-        emit(doc.dateModified, data);
-    }
-}''' % FIELDS)
-
-monitorings_real_by_dateModified_view = ViewDefinition('monitorings', 'real_by_dateModified', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && !doc.mode && ['draft', 'cancelled'].indexOf(doc.status) == -1) {
-        var fields=%s, data={};
-        for (var i in fields) {
-            if (doc[fields[i]]) {
-                data[fields[i]] = doc[fields[i]]
-            }
-        }
-        emit(doc.dateModified, data);
-    }
-}''' % FIELDS)
-
-monitorings_test_by_dateModified_view = ViewDefinition('monitorings', 'test_by_dateModified', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && doc.mode == 'test' && ['draft', 'cancelled'].indexOf(doc.status) == -1) {
-        var fields=%s, data={};
-        for (var i in fields) {
-            if (doc[fields[i]]) {
-                data[fields[i]] = doc[fields[i]]
-            }
-        }
-        emit(doc.dateModified, data);
-    }
-}''' % FIELDS)
-
-monitorings_real_draft_by_dateModified_view = ViewDefinition('monitorings', 'real_draft_by_dateModified', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && !doc.mode) {
-        var fields=%s, data={};
-        for (var i in fields) {
-            if (doc[fields[i]]) {
-                data[fields[i]] = doc[fields[i]]
-            }
-        }
-        emit(doc.dateModified, data);
-    }
-}''' % FIELDS)
-
-monitorings_all_draft_by_dateModified_view = ViewDefinition('monitorings', 'draft_by_dateModified', '''function(doc) {
-    if(doc.doc_type == 'Monitoring') {
-        var fields=%s, data={};
-        for (var i in fields) {
-            if (doc[fields[i]]) {
-                data[fields[i]] = doc[fields[i]]
-            }
-        }
-        emit(doc.dateModified, data);
-    }
-}''' % FIELDS)
-
-monitorings_by_local_seq_view = ViewDefinition('monitorings', 'by_local_seq', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && ['draft', 'cancelled'].indexOf(doc.status) == -1) {
-        var fields=%s, data={};
-        for (var i in fields) {
-            if (doc[fields[i]]) {
-                data[fields[i]] = doc[fields[i]]
-            }
-        }
-        emit(doc._local_seq, data);
-    }
-}''' % CHANGES_FIELDS)
-
-monitorings_real_by_local_seq_view = ViewDefinition('monitorings', 'real_by_local_seq', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && !doc.mode && ['draft', 'cancelled'].indexOf(doc.status) == -1) {
-        var fields=%s, data={};
-        for (var i in fields) {
-            if (doc[fields[i]]) {
-                data[fields[i]] = doc[fields[i]]
-            }
-        }
-        emit(doc._local_seq, data);
-    }
-}''' % CHANGES_FIELDS)
-
-monitorings_test_by_local_seq_view = ViewDefinition('monitorings', 'test_by_local_seq', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && doc.mode == 'test' && ['draft', 'cancelled'].indexOf(doc.status) == -1) {
-        var fields=%s, data={};
-        for (var i in fields) {
-            if (doc[fields[i]]) {
-                data[fields[i]] = doc[fields[i]]
-            }
-        }
-        emit(doc._local_seq, data);
-    }
-}''' % CHANGES_FIELDS)
-
-monitorings_real_draft_by_local_seq_view = ViewDefinition('monitorings', 'real_draft_by_local_seq', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && !doc.mode) {
-        var fields=%s, data={};
-        for (var i in fields) {
-            if (doc[fields[i]]) {
-                data[fields[i]] = doc[fields[i]]
-            }
-        }
-        emit(doc._local_seq, data);
-    }
-}''' % CHANGES_FIELDS)
-
-monitorings_all_draft_by_local_seq_view = ViewDefinition('monitorings', 'draft_by_local_seq', '''function(doc) {
-    if(doc.doc_type == 'Monitoring') {
-        var fields=%s, data={};
-        for (var i in fields) {
-            if (doc[fields[i]]) {
-                data[fields[i]] = doc[fields[i]]
-            }
-        }
-        emit(doc._local_seq, data);
-    }
-}''' % CHANGES_FIELDS)
+def monitorings_all_view(doc):
+    if doc.get("doc_type") == "Monitoring":
+        yield doc['dateModified'], None
 
 
-MONITORINGS_BY_TENDER_FIELDS = [
-    'status',
-]
 
-monitorings_by_tender_id_view = ViewDefinition('monitorings', 'by_tender_id', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && !doc.mode && ['draft', 'cancelled'].indexOf(doc.status) == -1) {
-        var fields=%s, data={};
-        for (var i in fields) {
-            if (doc[fields[i]]) {
-                data[fields[i]] = doc[fields[i]]
-            }
-        }
-        emit([doc.tender_id, doc.dateCreated], data);
-    }
-}''' % MONITORINGS_BY_TENDER_FIELDS)
+def monitorings_by_dateModified_view(doc):
+    if doc.get("doc_type") == "Monitoring" and doc["status"] not in ('draft', 'cancelled'):
+        data = {k: doc[k] for k in ('tender_id',) if doc.get(k) is not None}
+        yield doc['dateModified'], data
 
-test_monitorings_by_tender_id_view = ViewDefinition('monitorings', 'test_by_tender_id', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && doc.mode == 'test' && ['draft', 'cancelled'].indexOf(doc.status) == -1) {
-        var fields=%s, data={};
-        for (var i in fields) {
-            if (doc[fields[i]]) {
-                data[fields[i]] = doc[fields[i]]
-            }
-        }
-        emit([doc.tender_id, doc.dateCreated], data);
-    }
-}''' % MONITORINGS_BY_TENDER_FIELDS)
 
-draft_monitorings_by_tender_id_view = ViewDefinition('monitorings', 'draft_by_tender_id', '''function(doc) {
-    if(doc.doc_type == 'Monitoring' && !doc.mode) {
-        var fields=%s, data={};
-        for (var i in fields) {
-            if (doc[fields[i]]) {
-                data[fields[i]] = doc[fields[i]]
-            }
-        }
-        emit([doc.tender_id, doc.dateCreated], data);
-    }
-}''' % MONITORINGS_BY_TENDER_FIELDS)
+def monitorings_real_by_dateModified_view(doc):
+    if doc.get("doc_type") == "Monitoring" and "mode" not in doc and doc["status"] not in ('draft', 'cancelled'):
+        data = {k: doc[k] for k in ('tender_id',) if doc.get(k) is not None}
+        yield doc['dateModified'], data
+
+
+def monitorings_test_by_dateModified_view(doc):
+    if doc.get("doc_type") == "Monitoring" and doc.get("mode") == "test" and doc["status"] not in ('draft', 'cancelled'):
+        data = {k: doc[k] for k in ('tender_id',) if doc.get(k) is not None}
+        yield doc['dateModified'], data
+
+
+def monitorings_real_draft_by_dateModified_view(doc):
+    if doc.get("doc_type") == "Monitoring" and "mode" not in doc:
+        data = {k: doc[k] for k in ('tender_id',) if doc.get(k) is not None}
+        yield doc['dateModified'], data
+
+
+def monitorings_draft_by_dateModified_view(doc):
+    if doc.get("doc_type") == "Monitoring":
+        data = {k: doc[k] for k in ('tender_id',) if doc.get(k) is not None}
+        yield doc['dateModified'], data
+
+
+def monitorings_by_local_seq_view(doc):
+    if doc.get("doc_type") == "Monitoring" and doc["status"] not in ('draft', 'cancelled'):
+        data = {k: doc[k] for k in ('tender_id', 'dateModified') if doc.get(k) is not None}
+        yield doc['_local_seq'], data
+
+
+def monitorings_real_by_local_seq_view(doc):
+    if doc.get("doc_type") == "Monitoring" and "mode" not in doc and doc["status"] not in ('draft', 'cancelled'):
+        data = {k: doc[k] for k in ('tender_id', 'dateModified') if doc.get(k) is not None}
+        yield doc['_local_seq'], data
+
+
+def monitorings_test_by_local_seq_view(doc):
+    if doc.get("doc_type") == "Monitoring" and doc.get("mode") == 'test' and doc["status"] not in ('draft', 'cancelled'):
+        data = {k: doc[k] for k in ('tender_id', 'dateModified') if doc.get(k) is not None}
+        yield doc['_local_seq'], data
+
+
+def monitorings_real_draft_by_local_seq_view(doc):
+    if doc.get("doc_type") == "Monitoring" and "mode" not in doc:
+        data = {k: doc[k] for k in ('tender_id', 'dateModified') if doc.get(k) is not None}
+        yield doc['_local_seq'], data
+
+
+def monitorings_draft_by_local_seq_view(doc):
+    if doc.get("doc_type") == "Monitoring":
+        data = {k: doc[k] for k in ('tender_id', 'dateModified') if doc.get(k) is not None}
+        yield doc['_local_seq'], data
+
+
+def monitorings_by_tender_id_view(doc):
+    if doc.get("doc_type") == "Monitoring" and "mode" not in doc and doc["status"] not in ('draft', 'cancelled'):
+        data = {k: doc[k] for k in ("status",) if doc.get(k) is not None}
+        yield (doc['tender_id'], doc['dateCreated']), data
+
+
+def monitorings_test_by_tender_id_view(doc):
+    if doc.get("doc_type") == "Monitoring" and doc.get("mode") == 'test' and doc["status"] not in ('draft', 'cancelled'):
+        data = {k: doc[k] for k in ("status",) if doc.get(k) is not None}
+        yield (doc['tender_id'], doc['dateCreated']), data
+
+
+def monitorings_draft_by_tender_id_view(doc):
+    if doc.get("doc_type") == "Monitoring" and "mode" not in doc:
+        data = {k: doc[k] for k in ("status",) if doc.get(k) is not None}
+        yield (doc['tender_id'], doc['dateCreated']), data
+
+
+for name, obj in globals().items():
+    if name.endswith("_view") and callable(obj):
+        parts = name.split("_")
+        globals()[name] = ViewDefinition(parts[0], "_".join(parts[1:-1]), obj, language='python')

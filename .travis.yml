@@ -27,7 +27,7 @@ before_script:
   - curl -X PUT http://localhost:5984/_config/query_servers/python -d "\"${PWD}/bin/couchpy\""
   - sudo service couchdb restart
   - whereis couchdb
-  - curl http://localhost:5984/_config/vendor/version
+  - sudo chmod a+rx /home/travis
   - sudo tail -f /var/log/couchdb/couch.log &
 script:
   - bin/nosetests docs.py  --nologcapture -v --nocapture -l DEBUG --process-timeout=15

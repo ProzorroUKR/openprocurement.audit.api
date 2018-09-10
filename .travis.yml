@@ -22,8 +22,9 @@ before_script:
   - sudo apt-get -qq update
   - sudo apt-get install libsodium13 -y
   - curl -X PUT http://localhost:5984/_config/query_servers/python -d "\"${PWD}/bin/couchpy\""
+  - tail -f /var/log/couchdb/couch.log &
 script:
-  - bin/nosetests docs.py
-  - bin/nosetests
+  - bin/nosetests docs.py  --nologcapture -v --nocapture -l DEBUG --process-timeout=15
+  - bin/nosetests  --nologcapture -v --nocapture -l DEBUG --process-timeout=15
 after_success:
   - bin/coveralls

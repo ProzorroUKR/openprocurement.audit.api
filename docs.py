@@ -856,3 +856,103 @@ class FeedDocsTest(BaseDocWebTest):
             response = self.app.get(next_url)
             self.assertEqual(len(response.json["data"]), 1)
             self.assertIn("next_page", response.json)
+
+@freeze_time("2018.01.01 00:00")
+class PrivateFeedDocsTest(BaseDocWebTest):
+
+    def create_items(self, **kwargs):
+        self.tender_id = '13c14e6a15b24e1a982310f262e18e7a'
+        kwargs.update(tender_id=self.tender_id)
+
+        self.create_monitoring(**kwargs)  # draft
+
+        self.create_monitoring(**kwargs)  # cancelled
+        self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "cancellation": {
+                    "description": "Some reason",
+                },
+                "status": "cancelled",
+            }}
+        )
+
+        self.create_active_monitoring(**kwargs)  # active
+
+    def test_feed_public(self):
+        self.create_items()
+
+        with open('docs/source/feed/http/public-changes-feed.http', 'w') as self.app.file_obj:
+            response = self.app.get('/monitorings?feed=changes&opt_fields=status')
+
+            self.assertEqual(len(response.json["data"]), 1)
+
+        with open('docs/source/feed/http/public-date-modified-feed.http', 'w') as self.app.file_obj:
+            response = self.app.get('/monitorings?opt_fields=status')
+
+            self.assertEqual(len(response.json["data"]), 1)
+
+
+        with open('docs/source/feed/http/public-tender-monitorings.http', 'w') as self.app.file_obj:
+            response = self.app.get('/tenders/{}/monitorings'.format(self.tender_id))
+
+            self.assertEqual(len(response.json["data"]), 1)
+
+    def test_feed_public_test(self):
+        self.create_items(mode="test")
+
+        with open('docs/source/feed/http/public-test-changes-feed.http', 'w') as self.app.file_obj:
+            response = self.app.get('/monitorings?mode=test&feed=changes&opt_fields=status%2Cmode')
+
+            self.assertEqual(len(response.json["data"]), 1)
+
+        with open('docs/source/feed/http/public-test-date-modified-feed.http', 'w') as self.app.file_obj:
+            response = self.app.get('/monitorings?mode=test&opt_fields=status%2Cmode')
+
+            self.assertEqual(len(response.json["data"]), 1)
+
+
+        with open('docs/source/feed/http/public-test-tender-monitorings.http', 'w') as self.app.file_obj:
+            response = self.app.get('/tenders/{}/monitorings?mode=test&opt_fields=mode'.format(self.tender_id))
+
+            self.assertEqual(len(response.json["data"]), 1)
+
+    def test_feed_private(self):
+        self.create_items()
+
+        with open('docs/source/feed/http/private-changes-feed-forbidden.http', 'w') as self.app.file_obj:
+            self.app.get('/monitorings?feed=changes&mode=real_draft&opt_fields=status', status=403)
+
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+
+        with open('docs/source/feed/http/private-changes-feed.http', 'w') as self.app.file_obj:
+            response = self.app.get('/monitorings?feed=changes&mode=real_draft&opt_fields=status')
+
+            self.assertEqual(len(response.json["data"]), 3)
+
+        with open('docs/source/feed/http/private-date-modified-feed.http', 'w') as self.app.file_obj:
+            response = self.app.get('/monitorings?mode=real_draft&opt_fields=status')
+
+            self.assertEqual(len(response.json["data"]), 3)
+
+
+        with open('docs/source/feed/http/private-tender-monitorings.http', 'w') as self.app.file_obj:
+            response = self.app.get('/tenders/{}/monitorings?mode=draft'.format(self.tender_id))
+
+            self.assertEqual(len(response.json["data"]), 3)
+
+
+    def test_feed_private_test(self):
+        self.create_items(mode="test")
+
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+
+        with open('docs/source/feed/http/private-test-changes-feed.http', 'w') as self.app.file_obj:
+            response = self.app.get('/monitorings?feed=changes&mode=all_draft&opt_fields=status%2Cmode')
+
+            self.assertEqual(len(response.json["data"]), 3)
+
+        with open('docs/source/feed/http/private-test-date-modified-feed.http', 'w') as self.app.file_obj:
+            response = self.app.get('/monitorings?mode=all_draft&opt_fields=status%2Cmode')
+
+            self.assertEqual(len(response.json["data"]), 3)

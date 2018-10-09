@@ -1,0 +1,18 @@
+GET /api/2.4/monitorings?feed=changes&mode=real_draft&opt_fields=status HTTP/1.0
+Host: audit-api-sandbox.prozorro.gov.ua
+
+
+403 Forbidden
+Content-Type: application/json; charset=UTF-8
+
+{
+  "status": "error", 
+  "errors": [
+    {
+      "description": "Forbidden", 
+      "location": "url", 
+      "name": "permission"
+    }
+  ]
+}
+

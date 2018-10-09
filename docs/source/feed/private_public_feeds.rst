@@ -10,7 +10,7 @@ Public feeds
 ------------
 
 Changes or DateModified feeds may not display monitoring objects in some cases (`draft` status, `cancelled` status, ...)
-If we have `draft`, `cancelled` and `active` monitoring objects, only the last one if shown on the public lists:
+If we have `draft`, `cancelled` and `active` monitoring objects, only the last one is shown on the public lists:
 
 Changes
 
@@ -28,7 +28,7 @@ Monitoring by tender
     :code:
 
 
-And this is also true  for TEST mode:
+And this is also true for TEST mode:
 
 Changes [test]
 
@@ -51,7 +51,7 @@ Monitoring by tender [test]
 Private feeds
 -------------
 
-Private feeds also show `draft` and `cancelled` objects:
+Private feeds show `draft` and `cancelled` objects:
 
 But private feeds can be accessed as long as the right authorisation is provided
 

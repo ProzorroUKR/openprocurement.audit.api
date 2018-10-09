@@ -9,3 +9,4 @@ Feed
 
    options
    changes
+   private_public_feeds

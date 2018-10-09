@@ -4,7 +4,7 @@ msgstr ""
 "Project-Id-Version: openprocurement.audit.api 1.0\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2018-10-09 14:30+0300\n"
-"PO-Revision-Date: 2018-10-09 14:45+0300\n"
+"PO-Revision-Date: 2018-10-09 14:52+0300\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
@@ -85,7 +85,7 @@ msgstr ""
 
 #: ../../source/feed/private_public_feeds.rst:77
 msgid "Private feeds for TEST mode:"
-msgstr "Приватні спискі для TEST-mode:"
+msgstr "Приватні списки для TEST-mode:"
 
 #: ../../source/feed/private_public_feeds.rst:89
 msgid "Monitoring by tender [test] feed is not implemented."

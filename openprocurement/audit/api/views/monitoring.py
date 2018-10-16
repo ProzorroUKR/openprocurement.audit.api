@@ -9,7 +9,6 @@ from openprocurement.api.utils import (
 
 from openprocurement.audit.api.constants import (
     MONITORING_TIME,
-    MONITORING_END_PERIOD,
     ELIMINATION_PERIOD_TIME,
     ELIMINATION_PERIOD_NO_VIOLATIONS_TIME,
     DRAFT_STATUS,
@@ -140,7 +139,7 @@ class MonitoringResource(APIResource):
             accelerator = get_monitoring_accelerator(self.context)
             monitoring.monitoringPeriod = generate_period(now, MONITORING_TIME, accelerator)
             monitoring.decision.datePublished = now
-            monitoring.endDate = calculate_normalized_business_date(now, MONITORING_END_PERIOD, accelerator, True)
+            monitoring.endDate = calculate_normalized_business_date(now, MONITORING_TIME, accelerator, True)
         elif monitoring_old_status == ACTIVE_STATUS and monitoring.status == ADDRESSED_STATUS:
             set_author(monitoring.conclusion.documents, self.request, 'author')
             accelerator = get_monitoring_accelerator(self.context)

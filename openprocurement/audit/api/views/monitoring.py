@@ -185,7 +185,7 @@ class MonitoringCredentialsResource(APIResource):
         set_ownership(monitoring, self.request, 'tender_owner')
         if save_monitoring(self.request):
             self.LOGGER.info('Generate Monitoring credentials {}'.format(monitoring.id),
-                             extra=context_unpack(self.request, {'MESSAGE_ID': 'monitoring_patch'}))
+                             extra=context_unpack(self.request, {'MESSAGE_ID': 'monitoring_generate_credentials'}))
             return {
                 'data': monitoring.serialize('view'),
                 'access': {

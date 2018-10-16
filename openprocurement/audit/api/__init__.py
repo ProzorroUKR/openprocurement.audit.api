@@ -21,3 +21,4 @@ def includeme(config):
     config.registry.api_server = settings.get('api_server')
     config.registry.api_version = settings.get('api_version')
     config.scan("openprocurement.audit.api.views")
+    config.scan("openprocurement.api.subscribers")

@@ -44,6 +44,8 @@ from openprocurement.audit.api.design import (
     monitorings_all_draft_by_local_seq_view,
     monitorings_real_draft_by_dateModified_view,
     monitorings_all_draft_by_dateModified_view,
+    monitorings_real_count_view,
+    monitorings_test_count_view,
 )
 from openprocurement.audit.api.validation import (
     validate_monitoring_data,
@@ -192,3 +194,25 @@ class MonitoringCredentialsResource(APIResource):
                     'token': monitoring.tender_owner_token
                 }
             }
+
+
+@op_resource(name='Monitoring count', path='/monitorings/count')
+class MonitoringCountResource(APIResource):
+
+    def __init__(self, request, context):
+        super(MonitoringCountResource, self).__init__(request, context)
+        self.views = {
+            "": monitorings_real_count_view,
+            "test": monitorings_test_count_view,
+        }
+
+    @json_view(permission='view_listing')
+    def get(self):
+        mode = self.request.params.get('mode', '')
+        eval_view = self.views.get(mode, monitorings_real_count_view)
+        result = list(eval_view(self.db))
+        print(result)
+        data = {
+            'data': result[0].value if len(result) else 0,
+        }
+        return data

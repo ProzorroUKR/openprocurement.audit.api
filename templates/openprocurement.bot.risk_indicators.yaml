@@ -2,7 +2,8 @@ main:
   indicators_host: "${options['risk_indicators_host']}"
   indicators_proxy: "${options['risk_indicators_proxy']}"
   monitors_host: "${options['monitors_host']}"
-  monitors_token: "${options['monitors_token']}"
+  monitors_user: "${options['monitors_user']}"
+  monitors_pass: "${options['monitors_pass']}"
 
 version: 1
 

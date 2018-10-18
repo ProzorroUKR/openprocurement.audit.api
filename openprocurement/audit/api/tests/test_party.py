@@ -17,7 +17,7 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
     def setUp(self):
         super(MonitoringPartyResourceTest, self).setUp()
         self.create_monitoring()
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {'data': {
@@ -35,7 +35,7 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
             }})
 
     def test_party_create_required_fields(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json(
             '/monitorings/{}/parties'.format(self.monitoring_id),
             {'data': {}}, status=422)
@@ -52,7 +52,7 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
             set(get_errors_field_names(response, 'This field is required.')))
 
     def test_party_create(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json(
             '/monitorings/{}/parties'.format(self.monitoring_id),
             {'data': self.initial_party})
@@ -69,7 +69,7 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.json['data']['roles'], ['sas'])
 
     def test_party_patch(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json(
             '/monitorings/{}/parties'.format(self.monitoring_id),
             {'data': self.initial_party})
@@ -107,7 +107,7 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(len(response.json['data']), 0)
 
     def test_party_get_list(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         self.app.post_json(
             '/monitorings/{}/parties'.format(self.monitoring_id),
             {'data': self.initial_party})
@@ -119,7 +119,7 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.json['data'][0]['name'], "The State Audit Service of Ukraine")
 
     def test_party_get_missing(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         with self.assertRaisesRegexp(Exception, 'Bad response: 404 Not Found'):
             response = self.app.get('/monitorings/{}/parties/{}'.format(self.monitoring_id, 'not_existent_id'))
             self.assertEqual(response.status_code, 404)

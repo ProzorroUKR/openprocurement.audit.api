@@ -34,7 +34,7 @@ class MonitoringResourceTest(BaseWebTest):
         )
 
     def test_patch_without_decision(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {"status": "active"}},
@@ -44,7 +44,7 @@ class MonitoringResourceTest(BaseWebTest):
 
     @freeze_time('2018-01-01T12:00:00.000000+02:00')
     def test_patch_nothing(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         now_date = datetime.now(TZ)
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
@@ -59,7 +59,7 @@ class MonitoringResourceTest(BaseWebTest):
 
     @freeze_time('2018-01-01T12:00:00.000000+02:00')
     def test_patch_to_active(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         context = self.acceleration if SANDBOX_MODE else {}
         accelerator = get_monitoring_accelerator(context)
@@ -91,7 +91,7 @@ class MonitoringResourceTest(BaseWebTest):
         self.assertEqual(response.json['data']["endDate"], end_date.isoformat())
 
     def test_patch_risk_indicators_forbidden(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
@@ -102,7 +102,7 @@ class MonitoringResourceTest(BaseWebTest):
         )
 
     def test_patch_to_active_already_in_active(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
@@ -136,7 +136,7 @@ class MonitoringResourceTest(BaseWebTest):
         )
 
     def test_patch_to_cancelled(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
@@ -152,7 +152,7 @@ class MonitoringResourceTest(BaseWebTest):
         self.assertEqual(response.json['data']["status"], "cancelled")
 
     def test_patch_to_cancelled_with_no_report(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
@@ -162,7 +162,7 @@ class MonitoringResourceTest(BaseWebTest):
         self.assertEqual(('body', 'cancellation'), next(get_errors_field_names(response, 'This field is required.')))
 
     def test_fail_change_status_not_exists(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
@@ -184,7 +184,7 @@ class ActiveMonitoringResourceTest(BaseWebTest):
     def setUp(self):
         super(ActiveMonitoringResourceTest, self).setUp()
         self.create_monitoring()
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
@@ -339,7 +339,7 @@ class AddressedMonitoringResourceTest(BaseWebTest):
     def setUp(self):
         super(AddressedMonitoringResourceTest, self).setUp()
         self.create_monitoring()
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
@@ -407,7 +407,7 @@ class DeclinedMonitoringResourceTest(BaseWebTest):
     def setUp(self):
         super(DeclinedMonitoringResourceTest, self).setUp()
         self.create_monitoring()
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
@@ -442,7 +442,7 @@ class DeclinedMonitoringResourceTest(BaseWebTest):
         self.assertEqual(response.json['data']["status"], "closed")
 
     def test_fail_change_status(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {

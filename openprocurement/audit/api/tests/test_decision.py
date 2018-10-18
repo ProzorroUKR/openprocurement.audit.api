@@ -14,7 +14,7 @@ class MonitoringDecisionResourceTest(BaseWebTest, DSWebTestMixin):
         super(MonitoringDecisionResourceTest, self).setUp()
         self.app.app.registry.docservice_url = 'http://localhost'
         self.create_monitoring(parties=[self.initial_party])
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
     def test_fail_empty(self):
         self.app.patch_json(
@@ -129,19 +129,19 @@ class MonitoringDecisionResourceTest(BaseWebTest, DSWebTestMixin):
             }}
         )
 
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["decision"]["description"], "text")
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertNotIn('decision', response.json['data'])
 
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
@@ -149,13 +149,13 @@ class MonitoringDecisionResourceTest(BaseWebTest, DSWebTestMixin):
             }}
         )
 
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["decision"]["description"], "text")
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
@@ -207,7 +207,7 @@ class MonitoringDecisionResourceTest(BaseWebTest, DSWebTestMixin):
 
 
     def test_decision_party_create(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
         self.assertEqual(response.status_code, 200)
@@ -233,7 +233,7 @@ class MonitoringDecisionResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.json['data']['decision']['relatedParty'], party_id)
 
     def test_dialogue_party_create_party_id_not_exists(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         decision_date = (datetime.now(TZ) - timedelta(days=2))
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),

@@ -23,7 +23,7 @@ class TenderMonitoringsResourceTest(BaseWebTest):
         for i in range(5):  # these are not on the list
             self.create_monitoring(tender_id="a" * 32)
 
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.get('/tenders/{}/monitorings?mode=draft'.format(tender_id))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
@@ -33,7 +33,7 @@ class TenderMonitoringsResourceTest(BaseWebTest):
 
     def test_get_without_draft(self):
         tender_id = "f" * 32
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         self.create_monitoring(tender_id=tender_id)
         draft_id = self.monitoring_id
@@ -68,7 +68,7 @@ class TenderMonitoringsResourceTest(BaseWebTest):
 
     def test_get_with_draft(self):
         tender_id = "f" * 32
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         self.create_monitoring(tender_id=tender_id)
         draft_id = self.monitoring_id
@@ -119,7 +119,7 @@ class TenderMonitoringsResourceTest(BaseWebTest):
             self.create_monitoring(tender_id=tender_id)
             ids.append(self.monitoring_id)
 
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.get(
             '/tenders/{}/monitorings?mode=draft&opt_fields=dateModified%2Creasons'.format(
                 tender_id

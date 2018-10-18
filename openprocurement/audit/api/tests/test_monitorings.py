@@ -17,18 +17,18 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest, DSWebTestMixin):
         self.app.post_json('/monitorings', {}, status=403)
 
     def test_post_monitoring_broker(self):
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         self.app.post_json('/monitorings', {}, status=403)
 
     def test_post_monitoring_sas_empty_body(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json('/monitorings', {}, status=422)
         self.assertEqual(
             ('body', 'data'),
             next(get_errors_field_names(response, "Data not available")))
 
     def test_post_monitoring_sas_empty_data(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json('/monitorings', {"data": {}}, status=422)
         self.assertEqual(
             {
@@ -39,7 +39,9 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest, DSWebTestMixin):
             set(get_errors_field_names(response, 'This field is required.')))
 
     def test_post_monitoring_sas(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+
         response = self.app.post_json(
             '/monitorings',
             {"data": {
@@ -59,7 +61,7 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.json["data"]["status"], "draft")
 
     def test_post_monitoring_risk_bot(self):
-        self.app.authorization = ('Basic', (self.risk_indicator_token, ''))
+        self.app.authorization = ('Basic', (self.risk_indicator_name, self.risk_indicator_pass))
         data = {
             "tender_id": "f" * 32,
             "reasons": ["public", "fiscal"],
@@ -100,7 +102,7 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertIn("author", obj["decision"]['documents'][0])
 
     def test_post_active_monitoring_risk_bot(self):
-        self.app.authorization = ('Basic', (self.risk_indicator_token, ''))
+        self.app.authorization = ('Basic', (self.risk_indicator_name, self.risk_indicator_pass))
         response = self.app.post_json(
             '/monitorings',
             {"data": {
@@ -114,7 +116,7 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.json["errors"][0]["description"], "Can't create a monitoring in 'active' status.")
 
     def test_post_not_allowed_fields(self):
-        self.app.authorization = ('Basic', (self.risk_indicator_token, ''))
+        self.app.authorization = ('Basic', (self.risk_indicator_name, self.risk_indicator_pass))
         response = self.app.post_json(
             '/monitorings',
             {"data": {
@@ -146,7 +148,7 @@ class BaseFeedResourceTest(BaseWebTest):
             self.expected_ids.append(monitoring["id"])
 
     def test_pagination(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         # go through the feed forward
         url = '/monitorings?limit={}&feed={}&opt_fields={}&descending={}'.format(
             self.limit, self.feed, self.fields, self.descending,
@@ -215,7 +217,7 @@ class DraftChangesFeedTestCase(BaseWebTest):
                     self.expected_real_ids.append(self.monitoring_id)
 
                 if i % 2 == 0:
-                    self.app.authorization = ('Basic', (self.sas_token, ''))
+                    self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
                     self.app.patch_json(
                         '/monitorings/{}'.format(self.monitoring_id),
                         {'data': {
@@ -244,14 +246,14 @@ class DraftChangesFeedTestCase(BaseWebTest):
                 {u'description': u'Forbidden', u'location': u'url', u'name': u'permission'}]})
 
     def test_real_draft(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         url = '/monitorings?mode=real_draft&feed=changes'
         response = self.app.get(url)
         self.assertEqual(len(response.json["data"]), 2)
         self.assertEqual(set(e["id"] for e in response.json["data"]), set(self.expected_real_ids))
 
     def test_all_draft(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         url = '/monitorings?mode=all_draft&feed=changes'
         response = self.app.get(url)
         self.assertEqual(len(response.json["data"]), 4)
@@ -263,7 +265,7 @@ class FeedVisibilityTestCase(BaseWebTest):
 
     def setUp(self):
         super(FeedVisibilityTestCase, self).setUp()
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         # real
         self.create_monitoring()
         self.draft_id = self.monitoring_id

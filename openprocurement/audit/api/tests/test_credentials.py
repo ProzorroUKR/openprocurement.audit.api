@@ -14,7 +14,7 @@ class MonitoringCredentialsResourceTest(BaseWebTest):
         self.create_monitoring()
 
     def test_credentials_no_access_token(self):
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.patch_json(
             '/monitorings/{}/credentials'.format(self.monitoring_id),
             status=403
@@ -31,7 +31,7 @@ class MonitoringCredentialsResourceTest(BaseWebTest):
             body_string=lambda: json.dumps({'data': {'tender_token': sha512('tender_token').hexdigest()}})
         )
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.patch_json(
             '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token')
         )
@@ -47,7 +47,7 @@ class MonitoringCredentialsResourceTest(BaseWebTest):
             body_string=lambda: json.dumps({'data': {'tender_token': sha512('tender_token').hexdigest()}})
         )
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.patch_json(
             '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'wrong_token'),
             status=403
@@ -62,7 +62,7 @@ class MonitoringCredentialsResourceTest(BaseWebTest):
             status_int=404
         )
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.patch_json(
             '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token'),
             status=403
@@ -81,7 +81,7 @@ class MonitoringCredentialsResourceTest(BaseWebTest):
             body_string=lambda: json.dumps({'data': {'tender_token': sha512('tender_token').hexdigest()}})
         )
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.patch_json(
             '/monitorings/{}/credentials'.format(self.monitoring_id, 'tender_token'),
             headers={'X-access-token': 'tender_token'}
@@ -98,7 +98,7 @@ class MonitoringCredentialsResourceTest(BaseWebTest):
             body_string=lambda: json.dumps({'data': {'tender_token': sha512('tender_token').hexdigest()}})
         )
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.patch_json(
             '/monitorings/{}/credentials'.format(self.monitoring_id, 'tender_token'),
             headers={'X-access-token': 'wrong_token'},
@@ -115,7 +115,7 @@ class MonitoringCredentialsResourceTest(BaseWebTest):
             body_string=lambda: json.dumps({'data': {'tender_token': sha512('tender_token').hexdigest()}})
         )
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.patch_json(
             '/monitorings/{}/credentials'.format(self.monitoring_id, 'tender_token'),
             {'access': {'token': 'tender_token'}}
@@ -132,7 +132,7 @@ class MonitoringCredentialsResourceTest(BaseWebTest):
             body_string=lambda: json.dumps({'data': {'tender_token': sha512('tender_token').hexdigest()}})
         )
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.patch_json(
             '/monitorings/{}/credentials'.format(self.monitoring_id, 'tender_token'),
             {'access': {'token': 'wrong_token'}},

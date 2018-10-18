@@ -11,7 +11,7 @@ class MonitoringCancellationResourceTest(BaseWebTest, DSWebTestMixin):
     def setUp(self):
         super(MonitoringCancellationResourceTest, self).setUp()
         self.create_monitoring(parties=[self.initial_party])
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
     def test_cancellation_get(self):
         self.app.patch_json(
@@ -29,13 +29,13 @@ class MonitoringCancellationResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEquals('some_description', response.json['data']['description'])
 
     def test_get_cancellation_from_active_monitoring(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         with self.assertRaisesRegexp(Exception, 'Bad response: 403 Forbidden'):
             response = self.app.get('/monitorings/{}/cancellation'.format(self.monitoring_id))
             self.assertEqual(response.status_code, 404)
 
     def test_decision_party_create(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
         self.assertEqual(response.status_code, 200)
@@ -59,7 +59,7 @@ class MonitoringCancellationResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.json['data']['cancellation']['relatedParty'], party_id)
 
     def test_dialogue_party_create_party_id_not_exists(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {

@@ -24,6 +24,20 @@ monitorings_all_view = ViewDefinition('monitorings', 'all', '''function(doc) {
     }
 }''')
 
+# count aggregation
+monitorings_real_count_view = ViewDefinition('monitorings', 'real_count', '''function(doc) {
+    if(doc.doc_type == 'Monitoring' && !doc.mode) {
+        emit(doc.id, 1);
+    }
+}''', '_count')
+
+monitorings_test_count_view = ViewDefinition('monitorings', 'test_count', '''function(doc) {
+    if(doc.doc_type == 'Monitoring' && doc.mode == 'test') {
+        emit(doc.id, 1);
+    }
+}''', '_count')
+
+
 monitorings_by_dateModified_view = ViewDefinition('monitorings', 'by_dateModified', '''function(doc) {
     if(doc.doc_type == 'Monitoring' && ['draft', 'cancelled'].indexOf(doc.status) == -1) {
         var fields=%s, data={};

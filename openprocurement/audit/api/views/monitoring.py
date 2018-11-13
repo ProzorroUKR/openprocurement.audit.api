@@ -211,7 +211,6 @@ class MonitoringCountResource(APIResource):
         mode = self.request.params.get('mode', '')
         eval_view = self.views.get(mode, monitorings_real_count_view)
         result = list(eval_view(self.db))
-        print(result)
         data = {
             'data': result[0].value if len(result) else 0,
         }

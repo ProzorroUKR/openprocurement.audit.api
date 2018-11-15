@@ -93,7 +93,7 @@ msgid ""
 "``conclusion`` - means that post is related to a conclusion and was added in "
 "``addressed`` or ``declined`` monitoring status"
 msgstr ""
-"``decision`` - означає що запит/відповідь відносяться до висновку та було "
+"``conclusion`` - означає що запит/відповідь відносяться до висновку та було "
 "додано у ``active`` статусах  ``addressed`` чи ``declined``"
 
 #: ../../source/tutorial/dialogue.rst:24

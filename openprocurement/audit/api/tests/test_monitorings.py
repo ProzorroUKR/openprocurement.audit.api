@@ -67,6 +67,11 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest, DSWebTestMixin):
             "riskIndicators": ['some_risk_indicator_id', 'some_other_id'],
             "riskIndicatorsTotalImpact": 1.099999,
             "riskIndicatorsRegion": u"Севастополь",
+            "riskIndicatorsImpactCategory": "highest",
+            "riskIndicatorsLastChecks": {
+                'some_risk_indicator_id': '2018-12-20T09:34:52.646Z',
+                'some_other_id': '2018-12-20T13:34:52.646Z',
+            },
             "decision": {
                 "description": "some text 123",
                 "documents": [
@@ -88,8 +93,11 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertIn("data", response.json)
         self.assertEqual(
             set(response.json["data"]),
-            {"id", "status", "tender_id", "dateModified", "dateCreated", "reasons", "monitoring_id",
-             "procuringStages", "riskIndicators", "riskIndicatorsTotalImpact", "riskIndicatorsRegion"}
+            {
+                "id", "status", "tender_id", "dateModified", "dateCreated", "reasons", "monitoring_id",
+                "procuringStages", "riskIndicators", "riskIndicatorsTotalImpact", "riskIndicatorsRegion",
+                "riskIndicatorsImpactCategory", "riskIndicatorsLastChecks",
+            }
         )
         self.assertEqual(response.json["data"]["status"], "draft")
 
@@ -98,6 +106,14 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(obj["decision"]['documents'][0]['title'], data["decision"]['documents'][0]['title'])
         self.assertNotEqual(obj["decision"]['documents'][0]['url'], data["decision"]['documents'][0]['url'])
         self.assertIn("author", obj["decision"]['documents'][0])
+        self.assertEqual(obj["riskIndicatorsImpactCategory"], data["riskIndicatorsImpactCategory"])
+        self.assertEqual(
+            obj["riskIndicatorsLastChecks"],
+            {
+                'some_risk_indicator_id': '2018-12-20T09:34:52.646000+00:00',
+                'some_other_id': '2018-12-20T13:34:52.646000+00:00',
+            }
+        )
 
     def test_post_active_monitoring_risk_bot(self):
         self.app.authorization = ('Basic', (self.risk_indicator_token, ''))

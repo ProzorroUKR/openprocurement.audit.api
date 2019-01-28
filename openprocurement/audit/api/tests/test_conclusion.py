@@ -1,4 +1,5 @@
 from openprocurement.audit.api.tests.base import BaseWebTest, DSWebTestMixin
+from openprocurement.audit.api.constants import ADDRESSED_STATUS, ACTIVE_STATUS
 import unittest
 from datetime import datetime
 
@@ -29,7 +30,7 @@ class MonitoringConclusionResourceTest(BaseWebTest):
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
-                "status": "active",
+                "status": ACTIVE_STATUS,
                 "decision": {
                     "description": "text",
                     "date": datetime.now().isoformat()
@@ -56,7 +57,7 @@ class ActiveMonitoringConclusionResourceTest(BaseWebTest, DSWebTestMixin):
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
-                "status": "active",
+                "status": ACTIVE_STATUS,
                 "decision": {
                     "description": "text",
                     "date": datetime.now().isoformat()
@@ -290,7 +291,7 @@ class ActiveMonitoringConclusionResourceTest(BaseWebTest, DSWebTestMixin):
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
-                "status": "addressed"
+                "status": ADDRESSED_STATUS
             }}
         )
 
@@ -305,6 +306,43 @@ class ActiveMonitoringConclusionResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["conclusion"]["description"], "text")
+
+    def test_conclusion_endpoint(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.get('/monitorings/{}/conclusion'.format(self.monitoring_id), status=403)
+
+        self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "conclusion": {
+                    "description": "text",
+                    "violationOccurred": True,
+                    "violationType": ["corruptionProcurementMethodType"],
+                }
+            }}
+        )
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.get('/monitorings/{}/conclusion'.format(self.monitoring_id), status=403)
+        self.app.authorization = None
+        self.app.get('/monitorings/{}/conclusion'.format(self.monitoring_id), status=403)
+
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        response = self.app.get('/monitorings/{}/conclusion'.format(self.monitoring_id))
+        self.assertEqual(set(response.json["data"].keys()),
+                         {"dateCreated", "description", "violationOccurred", "violationType"})
+
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "status": ADDRESSED_STATUS
+            }}
+        )
+
+        self.app.authorization = None
+        response = self.app.get('/monitorings/{}/conclusion'.format(self.monitoring_id))
+        self.assertEqual(set(response.json["data"].keys()),
+                         {"dateCreated", "description", "datePublished", "violationOccurred", "violationType"})
 
     def test_conclusion_party_create(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))

@@ -161,6 +161,51 @@ class MonitoringDecisionResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["decision"]["description"], "text")
 
+    def test_decision_endpoint(self):
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.get('/monitorings/{}/decision'.format(self.monitoring_id), status=403)
+
+        self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "decision": {
+                    "description": "text",
+                    "date": datetime.now(TZ).isoformat(),
+                    "documents": [
+                        {
+                            'title': 'lorem.doc',
+                            'url': self.generate_docservice_url(),
+                            'hash': 'md5:' + '0' * 32,
+                            'format': 'application/msword',
+                        }
+                    ]
+                }
+            }}
+        )
+        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.get('/monitorings/{}/decision'.format(self.monitoring_id), status=403)
+        self.app.authorization = None
+        self.app.get('/monitorings/{}/decision'.format(self.monitoring_id), status=403)
+
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        response = self.app.get('/monitorings/{}/decision'.format(self.monitoring_id))
+        self.assertEqual(set(response.json["data"].keys()),
+                         {"date", "dateCreated", "description", "documents"})
+
+        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "status": ACTIVE_STATUS
+            }}
+        )
+
+        self.app.authorization = None
+        response = self.app.get('/monitorings/{}/decision'.format(self.monitoring_id))
+        self.assertEqual(set(response.json["data"].keys()),
+                         {"date", "dateCreated", "description", "documents", "datePublished"})
+
+
     def test_decision_party_create(self):
         self.app.authorization = ('Basic', (self.sas_token, ''))
 

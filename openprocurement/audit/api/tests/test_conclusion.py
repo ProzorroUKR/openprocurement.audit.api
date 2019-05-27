@@ -308,7 +308,7 @@ class ActiveMonitoringConclusionResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.json['data']["conclusion"]["description"], "text")
 
     def test_conclusion_endpoint(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         self.app.get('/monitorings/{}/conclusion'.format(self.monitoring_id), status=403)
 
         self.app.patch_json(
@@ -321,17 +321,17 @@ class ActiveMonitoringConclusionResourceTest(BaseWebTest, DSWebTestMixin):
                 }
             }}
         )
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         self.app.get('/monitorings/{}/conclusion'.format(self.monitoring_id), status=403)
         self.app.authorization = None
         self.app.get('/monitorings/{}/conclusion'.format(self.monitoring_id), status=403)
 
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.get('/monitorings/{}/conclusion'.format(self.monitoring_id))
         self.assertEqual(set(response.json["data"].keys()),
                          {"dateCreated", "description", "violationOccurred", "violationType"})
 
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {

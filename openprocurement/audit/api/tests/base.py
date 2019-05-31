@@ -68,11 +68,12 @@ class BaseWebTest(unittest.TestCase):
         self.db = self.app.app.registry.db
         self.app.app.registry.docservice_url = 'http://localhost'
 
-        config = ConfigParser.RawConfigParser()
-        config.read(os.path.join(os.path.dirname(__file__), 'auth.ini'))
-        self.broker_token = config.get("brokers", "broker")
-        self.sas_token = config.get("sas", "test_sas")
-        self.risk_indicator_token = config.get("risk_indicators", "risk_indicator_bot")
+        self.broker_name = "broker"
+        self.broker_pass = "broker"
+        self.sas_name = "test_sas"
+        self.sas_pass = "test_sas_token"
+        self.risk_indicator_name = "risk_indicator_bot"
+        self.risk_indicator_pass = "test_risk_indicator_bot_token"
 
     def tearDown(self):
         del self.couchdb_server[self.db.name]
@@ -88,7 +89,7 @@ class BaseWebTest(unittest.TestCase):
 
         authorization = getattr(self.app, "authorization", None)
 
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json('/monitorings', {'data': data})
         monitoring = response.json['data']
         self.monitoring_id = monitoring['id']
@@ -99,7 +100,7 @@ class BaseWebTest(unittest.TestCase):
 
     def create_active_monitoring(self, **kwargs):
         self.create_monitoring(**kwargs)
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),

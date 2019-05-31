@@ -19,7 +19,7 @@ class BaseAppealTest(BaseWebTest, DSWebTestMixin):
 
     def post_conclusion(self, publish=True):
         authorization = self.app.authorization
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {'data': {
@@ -46,7 +46,7 @@ class BaseAppealTest(BaseWebTest, DSWebTestMixin):
 class MonitoringAppealResourceTest(BaseAppealTest):
 
     def test_fail_appeal_before_conclusion(self):
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.put_json(
             '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
             {'data': {
@@ -62,7 +62,7 @@ class MonitoringAppealResourceTest(BaseAppealTest):
     def test_fail_appeal_before_conclusion_posted(self):
         self.post_conclusion(publish=False)
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.put_json(
             '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
             {'data': {
@@ -90,7 +90,7 @@ class MonitoringAppealResourceTest(BaseAppealTest):
     def test_fail_appeal_sas(self):
         self.post_conclusion()
 
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         self.app.put_json(
             '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
             {'data': {
@@ -102,7 +102,7 @@ class MonitoringAppealResourceTest(BaseAppealTest):
     def test_success_appeal_minimum(self):
         self.post_conclusion()
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.put_json(
             '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
             {'data': {
@@ -118,7 +118,7 @@ class MonitoringAppealResourceTest(BaseAppealTest):
     def test_success_appeal_with_document(self):
         self.post_conclusion()
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.put_json(
             '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
             {'data': {
@@ -149,7 +149,7 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
     def setUp(self):
         super(MonitoringAppealPostedResourceTest, self).setUp()
         self.post_conclusion()
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.put_json(
             '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
             {'data': {
@@ -167,7 +167,7 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
         self.document_id = response.json["data"]["documents"][0]["id"]
 
     def test_get_appeal(self):
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.get(
             '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token)
         )
@@ -176,7 +176,7 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
         self.assertEqual(response.json["data"]["description"], 'Lorem ipsum dolor sit amet')
 
     def test_fail_update_appeal(self):
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.put_json(
             '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
             {'data': {
@@ -196,7 +196,7 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
         )
 
     def test_success_post_document(self):
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.post_json(
             '/monitorings/{}/appeal/documents?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
             {'data': {
@@ -212,7 +212,7 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
         )
 
     def test_success_put_document(self):
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         request_data = {
             'title': 'another.doc',
             'url': self.generate_docservice_url(),
@@ -235,7 +235,7 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
         self.assertEqual(data["title"], request_data["title"])
 
     def test_success_patch_document(self):
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         request_data = {
             'title': 'another.doc',
             'url': self.generate_docservice_url(),

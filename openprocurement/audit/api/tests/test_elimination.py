@@ -17,7 +17,7 @@ class MonitoringEliminationBaseTest(BaseWebTest, DSWebTestMixin):
 
     def create_active_monitoring(self, **kwargs):
         self.create_monitoring(**kwargs)
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
@@ -31,7 +31,7 @@ class MonitoringEliminationBaseTest(BaseWebTest, DSWebTestMixin):
         )
 
         # get credentials for tha monitoring owner
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         with mock.patch('openprocurement.audit.api.validation.TendersClient') as mock_api_client:
             mock_api_client.return_value.extract_credentials.return_value = {
                 'data': {'tender_token': sha512('tender_token').hexdigest()}
@@ -43,7 +43,7 @@ class MonitoringEliminationBaseTest(BaseWebTest, DSWebTestMixin):
 
     def create_addressed_monitoring(self, **kwargs):
         self.create_active_monitoring(**kwargs)
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
@@ -55,7 +55,7 @@ class MonitoringEliminationBaseTest(BaseWebTest, DSWebTestMixin):
                 "status": "addressed",
             }}
         )
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
 
     def create_monitoring_with_elimination(self, **kwargs):
         self.create_addressed_monitoring(**kwargs)
@@ -77,7 +77,7 @@ class MonitoringEliminationBaseTest(BaseWebTest, DSWebTestMixin):
 
     def create_monitoring_with_resolution(self, **kwargs):
         self.create_monitoring_with_elimination(**kwargs)
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
@@ -109,7 +109,7 @@ class MonitoringActiveEliminationResourceTest(MonitoringEliminationBaseTest):
         self.create_active_monitoring()
 
     def test_fail_post_elimination_report_when_not_in_addressed_state(self):
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         request_data = {
             "description": "Five pint, six pint, seven pint, flour."
         }
@@ -145,7 +145,7 @@ class MonitoringEliminationResourceTest(MonitoringEliminationBaseTest):
         )
 
     def test_patch_sas_elimination(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         self.app.patch_json(
             '/monitorings/{}/eliminationReport'.format(self.monitoring_id),
             {"data": {"description": "One pint, two pint, three pint, four,"}},
@@ -153,7 +153,7 @@ class MonitoringEliminationResourceTest(MonitoringEliminationBaseTest):
         )
 
     def test_success_put(self):
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         request_data = {
             "description": "Five pint, six pint, seven pint, flour.",
             "dateCreated": "1988-07-11T15:53:06.068598+03:00",
@@ -185,7 +185,7 @@ class MonitoringEliminationResourceTest(MonitoringEliminationBaseTest):
         self.assertEqual(document["author"], "tender_owner")
 
     def test_fail_update_resolution(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         request_data = {
             "result": "partly",
             "resultByType": {
@@ -237,7 +237,7 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         self.create_monitoring_with_elimination(parties=[self.initial_party])
 
     def test_forbidden_sas_patch(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         request_data = {
             "description": "I'm gonna change this",
             "documents": [],
@@ -249,7 +249,7 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         )
 
     def test_forbidden_patch(self):
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         request_data = {
             "description": "I'm gonna change this",
             "documents": [],
@@ -261,7 +261,7 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         )
 
     def test_forbidden_put(self):
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.put_json(
             '/monitorings/{}/eliminationReport?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
             {"data": {
@@ -283,7 +283,7 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         )
 
     def test_forbidden_sas_post_document(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         document = {
             'title': 'lol.doc',
             'url': self.generate_docservice_url(),
@@ -298,7 +298,7 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         )
 
     def test_forbidden_without_token_post_document(self):
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         document = {
             'title': 'lol.doc',
             'url': self.generate_docservice_url(),
@@ -317,7 +317,7 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json["data"]["dateModified"], '2018-01-01T11:00:00+02:00')
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         document = {
             'title': 'lol.doc',
             'url': self.generate_docservice_url(),
@@ -342,7 +342,7 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         self.assertEqual(data["dateModified"], post_time)
 
     def test_patch_document_forbidden(self):
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         document = {
             'title': 'another.txt',
             'url': self.generate_docservice_url(),
@@ -360,7 +360,7 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         )
 
     def test_put_document_forbidden(self):
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         document = {
             'title': 'my_new_file.txt',
             'url': self.generate_docservice_url(),
@@ -378,7 +378,7 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         )
 
     def test_fail_update_resolution_wo_result_by_type(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         request_data = {
             "result": "partly",
         }
@@ -393,7 +393,7 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
                          {"resultByType": ["This field is required."]})
 
     def test_fail_update_resolution_wrong_result_by_type(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         request_data = {
             "result": "partly",
             "resultByType": {
@@ -409,7 +409,7 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         )
 
     def test_fail_update_resolution_wrong_result_by_type_value(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         request_data = {
             "result": "partly",
             "resultByType": {
@@ -426,7 +426,7 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         )
 
     def test_success_update_resolution(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         request_data = {
             "result": "partly",
             "resultByType": {
@@ -461,7 +461,7 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         self.assertEqual(len(resolution["documents"]), len(request_data["documents"]))
 
     def test_success_update_party_resolution(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
         self.assertEqual(response.status_code, 200)
@@ -491,7 +491,7 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         self.assertEqual(response.json['data']['eliminationResolution']['relatedParty'], party_id)
 
     def test_success_update_party_resolution_party_id_not_exists(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         request_data = {
             "result": "partly",
@@ -517,7 +517,7 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
             next(get_errors_field_names(response, 'relatedParty should be one of parties.')))
 
     def test_fail_change_status(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
@@ -536,7 +536,7 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
 
     @freeze_time('2018-01-20T12:00:00.000000+03:00')
     def test_change_status_without_report(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
@@ -553,7 +553,7 @@ class ResolutionMonitoringResourceTest(MonitoringEliminationBaseTest):
         self.create_monitoring_with_resolution()
 
     def test_change_report_not_allowed(self):
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         self.app.patch_json(
             '/monitorings/{}/eliminationReport?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
             {"data": {"description": "I want to change this description"}},
@@ -562,7 +562,7 @@ class ResolutionMonitoringResourceTest(MonitoringEliminationBaseTest):
 
     @freeze_time('2018-01-20T12:00:00.000000+03:00')
     def test_success_change_status(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
@@ -583,7 +583,7 @@ class ResolutionMonitoringResourceTest(MonitoringEliminationBaseTest):
         )
 
         # can't update elimination report
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         self.app.patch_json(
             '/monitorings/{}/eliminationReport?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
             {"data": {"description": "I want to change this description"}},

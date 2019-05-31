@@ -1,7 +1,7 @@
-from openprocurement.api.auth import authenticated_role
 from pyramid.events import ContextFound
 from openprocurement.audit.api.design import add_design
 from openprocurement.audit.api.utils import monitoring_from_data, extract_monitoring, set_logging_context
+from openprocurement.audit.api.auth import AuthenticationPolicy
 from logging import getLogger
 from pkg_resources import get_distribution
 
@@ -12,6 +12,7 @@ LOGGER = getLogger(PKG.project_name)
 
 def includeme(config):
     LOGGER.info('init audit plugin')
+    config.set_authentication_policy(AuthenticationPolicy(config.registry.settings['auth.file']))
     add_design()
     config.add_subscriber(set_logging_context, ContextFound)
     config.add_request_method(extract_monitoring, 'monitoring', reify=True)

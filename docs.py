@@ -56,10 +56,10 @@ class BaseDocWebTest(base_test.BaseWebTest):
         self.couchdb_server = self.app.app.registry.couchdb_server
         self.db = self.app.app.registry.db
 
-        config = ConfigParser.RawConfigParser()
-        config.read(os.path.join(os.path.dirname(__file__), 'openprocurement/audit/api/tests/auth.ini'))
-        self.sas_token = config.get("sas", "test_sas")
-        self.broker_token = config.get("brokers", "broker")
+        self.broker_name = "broker"
+        self.broker_pass = "broker"
+        self.sas_name = "test_sas"
+        self.sas_pass = "test_sas_token"
 
         self.uuid_counter = 0
         self.uuid_patches = [
@@ -102,7 +102,7 @@ class OptionsResourceTest(BaseDocWebTest):
 
     def test_monitoring_list_options_query_params(self):
         with open('docs/source/feed/http/monitorings-with-options.http', 'w') as self.app.file_obj:
-            self.app.authorization = ('Basic', (self.sas_token, ''))
+            self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
             response = self.app.post_json(
                 '/monitorings',
                 {
@@ -159,7 +159,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
             'data': {'tender_token': sha512(tender_token).hexdigest()}
         }
 
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         with open('docs/source/tutorial/http/monitorings-empty.http', 'w') as self.app.file_obj:
             response = self.app.get('/monitorings', status=200)
@@ -256,7 +256,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
 
         # CREDENTIALS
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
 
         with freeze_time("2018.01.04 00:00"):
             with open('docs/source/tutorial/http/dialogue-get-credentials.http', 'w') as self.app.file_obj:
@@ -268,7 +268,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
         tender_owner_token = response.json['access']['token']
 
         # DIALOGUE
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         with freeze_time("2018.01.03 00:05"):
             with open('docs/source/tutorial/http/post-publish.http', 'w') as self.app.file_obj:
@@ -309,7 +309,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                 status=200
             )
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
 
         with freeze_time("2018.01.04 00:05"):
             with open('docs/source/tutorial/http/post-answer.http', 'w') as self.app.file_obj:
@@ -340,7 +340,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                     status=201
                 )
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
 
         with freeze_time("2018.01.04 01:05"):
             with open('docs/source/tutorial/http/post-broker-publish.http', 'w') as self.app.file_obj:
@@ -361,7 +361,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
 
         post_broker_id = response.json['data']['id']
 
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         with freeze_time("2018.01.04 01:15"):
             with open('docs/source/tutorial/http/post-broker-sas-answer.http', 'w') as self.app.file_obj:
@@ -389,7 +389,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
             )
 
         # CONCLUSION
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         with freeze_time("2018.01.05 00:00"):
             with open('docs/source/tutorial/http/conclusion-wo-violations.http', 'w') as self.app.file_obj:
@@ -485,7 +485,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.json["data"]["status"], "addressed")
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
 
         with freeze_time("2018.01.06 00:00"):
             with open('docs/source/tutorial/http/conclusion-post.http', 'w') as self.app.file_obj:
@@ -521,7 +521,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                 )
 
         # APPEAL
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
 
         with freeze_time("2018.01.06 07:00"):
             with open('docs/source/tutorial/http/appeal-post.http', 'w') as self.app.file_obj:
@@ -581,7 +581,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                 )
 
         # ELIMINATION REPORT
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
 
         with freeze_time("2018.01.07 00:00"):
             with open('docs/source/tutorial/http/elimination-report-post.http', 'w') as self.app.file_obj:
@@ -603,7 +603,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
         self.assertEqual(response.status_code, 200)
 
         # ELIMINATION RESOLUTION
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         with freeze_time("2018.01.09 00:00"):
             with open('docs/source/tutorial/http/elimination-resolution-post.http', 'w') as self.app.file_obj:
@@ -641,7 +641,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                 )
 
     def test_monitoring_life_cycle_with_no_violations(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         with freeze_time("2018.01.01 00:00"):
             response = self.app.post_json(
@@ -718,7 +718,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                 )
 
     def test_monitoring_life_cycle_stopped(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         with freeze_time("2018.01.01 00:00"):
             response = self.app.post_json(
@@ -769,7 +769,7 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                 )
 
     def test_monitoring_life_cycle_cancelled(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         with freeze_time("2018.01.01 00:00"):
             response = self.app.post_json(
@@ -846,7 +846,7 @@ class FeedDocsTest(BaseDocWebTest):
         self.create_active_monitoring()
 
         # TODO: why doesn't this make the tender be shown on the next page?
-        # self.app.authorization = ('Basic', (self.sas_token, ''))
+        # self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         # self.app.patch_json(
         #     '/monitorings/{}?acc_token={}'.format(self.monitoring_id, monitoring_token),
         #     {'data': {"reasons": ['media', 'public']}}
@@ -923,7 +923,7 @@ class PrivateFeedDocsTest(BaseDocWebTest):
         with open('docs/source/feed/http/private-changes-feed-forbidden.http', 'w') as self.app.file_obj:
             self.app.get('/monitorings?feed=changes&mode=real_draft&opt_fields=status', status=403)
 
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         with open('docs/source/feed/http/private-changes-feed.http', 'w') as self.app.file_obj:
             response = self.app.get('/monitorings?feed=changes&mode=real_draft&opt_fields=status')
@@ -945,7 +945,7 @@ class PrivateFeedDocsTest(BaseDocWebTest):
     def test_feed_private_test(self):
         self.create_items(mode="test")
 
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         with open('docs/source/feed/http/private-test-changes-feed.http', 'w') as self.app.file_obj:
             response = self.app.get('/monitorings?feed=changes&mode=all_draft&opt_fields=status%2Cmode')

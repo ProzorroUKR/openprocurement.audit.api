@@ -16,7 +16,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
         super(MonitoringPostResourceTest, self).setUp()
         self.app.app.registry.docservice_url = 'http://localhost'
         self.create_monitoring()
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {'data': {
@@ -34,14 +34,14 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
             }})
 
     def test_post_get_empty_list(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.get('/monitorings/{}/posts'.format(self.monitoring_id))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(len(response.json['data']), 0)
 
     def test_post_create_required_fields(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json(
             '/monitorings/{}/posts'.format(self.monitoring_id),
             {'data': {}}, status=422)
@@ -58,7 +58,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
 
     @freeze_time('2018-01-02T12:30:00+02:00')
     def test_post_create_by_monitoring_owner(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         # check initial date modified
         response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
@@ -104,7 +104,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
             'data': {'tender_token': sha512('tender_token').hexdigest()}
         }
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.patch_json(
             '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token')
         )
@@ -138,7 +138,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
             }})
         post_id = response.json['data']['id']
 
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json(
             '/monitorings/{}/posts'.format(self.monitoring_id),
             {'data': {
@@ -158,7 +158,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
             body_string=lambda: json.dumps({'data': {'tender_token': sha512('tender_token').hexdigest()}})
         )
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.patch_json(
             '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token')
         )
@@ -197,7 +197,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
             }})
         post_id = response.json['data']['id']
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.patch_json(
             '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token')
         )
@@ -243,7 +243,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
             }})
         post_id = response.json['data']['id']
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.patch_json(
             '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token')
         )
@@ -304,7 +304,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
 
         post_id = response.json['data']['id']
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.patch_json(
             '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token')
         )
@@ -328,7 +328,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
             'data': {'tender_token': sha512('tender_token').hexdigest()}
         }
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.patch_json(
             '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token')
         )
@@ -342,7 +342,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
             }})
         post_id = response.json['data']['id']
 
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json(
             '/monitorings/{}/posts'.format(self.monitoring_id, post_id),
             {'data': {
@@ -367,7 +367,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
             'data': {'tender_token': sha512('tender_token').hexdigest()}
         }
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.patch_json(
             '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token')
         )
@@ -412,7 +412,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
             'data': {'tender_token': sha512('tender_token').hexdigest()}
         }
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.patch_json(
             '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token')
         )
@@ -426,7 +426,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
             }})
         post_id = response.json['data']['id']
 
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json(
             '/monitorings/{}/posts'.format(self.monitoring_id, post_id),
             {'data': {
@@ -438,7 +438,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
 
         answer_id = response.json['data']['id']
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.post_json(
             '/monitorings/{}/posts?acc_token={}'.format(self.monitoring_id, tender_owner_token),
             {'data': {
@@ -452,7 +452,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
             next(get_errors_field_names(response, 'relatedPost can\'t be have relatedPost defined.')))
 
     def test_dialogue_party_create(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json(
             '/monitorings/{}/parties'.format(self.monitoring_id),
             {'data': self.initial_party})
@@ -490,7 +490,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.json['data']['relatedParty'], party_id)
 
     def test_dialogue_party_create_party_id_not_exists(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json(
             '/monitorings/{}/parties'.format(self.monitoring_id),
             {'data': self.initial_party})
@@ -534,7 +534,7 @@ class DeclinedMonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
     def setUp(self):
         super(DeclinedMonitoringPostResourceTest, self).setUp()
         self.create_monitoring()
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
@@ -559,7 +559,7 @@ class DeclinedMonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
             'data': {'tender_token': sha512('tender_token').hexdigest()}
         }
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.patch_json(
             '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token')
         )
@@ -580,7 +580,7 @@ class DeclinedMonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
             'data': {'tender_token': sha512('tender_token').hexdigest()}
         }
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.patch_json(
             '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token')
         )
@@ -597,7 +597,7 @@ class DeclinedMonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
 
         post_id = response.json['data']['id']
 
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         response = self.app.post_json(
             '/monitorings/{}/posts'.format(self.monitoring_id, tender_owner_token),
@@ -615,7 +615,7 @@ class DeclinedMonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
             'data': {'tender_token': sha512('tender_token').hexdigest()}
         }
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.patch_json(
             '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token')
         )
@@ -653,7 +653,7 @@ class DeclinedMonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.status_code, 201)
 
     def test_post_create_by_monitoring_owner(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json(
             '/monitorings/{}/posts'.format(self.monitoring_id),
             {'data': {
@@ -664,7 +664,7 @@ class DeclinedMonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
 
     @freeze_time('2018-01-20T12:00:00.000000+03:00')
     def test_post_create_in_non_allowed_status(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {'data': {
@@ -672,7 +672,7 @@ class DeclinedMonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
             }})
         self.assertEqual(response.status_code, 200)
 
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json(
             '/monitorings/{}/posts'.format(self.monitoring_id),
             {'data': {

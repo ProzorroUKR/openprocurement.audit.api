@@ -31,7 +31,7 @@ class MonitoringDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         }
 
     def test_document_get_single(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {'data': self.test_monitoring_activation_data})
@@ -52,7 +52,7 @@ class MonitoringDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertNotIn('Expires=', document_data["url"])
 
     def test_document_get_list(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {'data': self.test_monitoring_activation_data})
@@ -69,7 +69,7 @@ class MonitoringDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(document_data['title'], 'lorem.doc')
 
     def test_document_download(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {'data': self.test_monitoring_activation_data})
@@ -98,7 +98,7 @@ class MonitoringDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertNotIn('Expires=', response.location)
 
     def test_document_upload(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {'data': {'decision': self.test_monitoring_activation_data['decision']}})
@@ -112,7 +112,7 @@ class MonitoringDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.content_type, 'application/json')
 
     def test_document_upload_forbidden(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {'data': self.test_monitoring_activation_data})
@@ -141,7 +141,7 @@ class MonitoringPostActiveDocumentResourceTest(BaseWebTest, DSWebTestMixin):
             'hash': 'md5:' + '0' * 32,
             'format': 'application/msword',
         }
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {'data': {
@@ -160,7 +160,7 @@ class MonitoringPostActiveDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         }
 
     def test_document_get_single(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json(
             '/monitorings/{}/posts'.format(self.monitoring_id),
             {'data': self.post_data})
@@ -182,7 +182,7 @@ class MonitoringPostActiveDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertNotIn('Expires=', document_data["url"])
 
     def test_document_get_list(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json(
             '/monitorings/{}/posts'.format(self.monitoring_id),
             {'data': self.post_data})
@@ -201,7 +201,7 @@ class MonitoringPostActiveDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(document_data['title'], 'lorem.doc')
 
     def test_document_download(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json(
             '/monitorings/{}/posts'.format(self.monitoring_id),
             {'data': self.post_data})
@@ -231,7 +231,7 @@ class MonitoringPostActiveDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertNotIn('Expires=', response.location)
 
     def test_document_upload(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json(
             '/monitorings/{}/posts'.format(self.monitoring_id),
             {'data': self.post_data})
@@ -247,7 +247,7 @@ class MonitoringPostActiveDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.content_type, 'application/json')
 
     def test_document_upload_forbidden(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json(
             '/monitorings/{}/posts'.format(self.monitoring_id),
             {'data': self.post_data})
@@ -256,7 +256,7 @@ class MonitoringPostActiveDocumentResourceTest(BaseWebTest, DSWebTestMixin):
 
         post_id = response.json['data']['id']
 
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {'data': {
@@ -268,7 +268,7 @@ class MonitoringPostActiveDocumentResourceTest(BaseWebTest, DSWebTestMixin):
             }}
         )
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
 
         response = self.app.post_json('/monitorings/{}/posts/{}/documents'.format(
             self.monitoring_id, post_id),
@@ -288,7 +288,7 @@ class MonitoringPostAddressedDocumentResourceTest(BaseWebTest, DSWebTestMixin):
             'hash': 'md5:' + '0' * 32,
             'format': 'application/msword',
         }
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {'data': {
@@ -324,7 +324,7 @@ class MonitoringPostAddressedDocumentResourceTest(BaseWebTest, DSWebTestMixin):
             'data': {'tender_token': sha512('tender_token').hexdigest()}
         }
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.patch_json(
             '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token')
         )
@@ -356,7 +356,7 @@ class MonitoringPostAddressedDocumentResourceTest(BaseWebTest, DSWebTestMixin):
             'data': {'tender_token': sha512('tender_token').hexdigest()}
         }
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.patch_json(
             '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token')
         )
@@ -385,7 +385,7 @@ class MonitoringPostAddressedDocumentResourceTest(BaseWebTest, DSWebTestMixin):
             'data': {'tender_token': sha512('tender_token').hexdigest()}
         }
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.patch_json(
             '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token')
         )
@@ -425,7 +425,7 @@ class MonitoringPostAddressedDocumentResourceTest(BaseWebTest, DSWebTestMixin):
             'data': {'tender_token': sha512('tender_token').hexdigest()}
         }
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.patch_json(
             '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token')
         )
@@ -451,7 +451,7 @@ class MonitoringPostAddressedDocumentResourceTest(BaseWebTest, DSWebTestMixin):
             'data': {'tender_token': sha512('tender_token').hexdigest()}
         }
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.patch_json(
             '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token')
         )
@@ -477,7 +477,7 @@ class MonitoringPostAddressedDocumentResourceTest(BaseWebTest, DSWebTestMixin):
             'data': {'tender_token': sha512('tender_token').hexdigest()}
         }
 
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.patch_json(
             '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token')
         )
@@ -491,7 +491,7 @@ class MonitoringPostAddressedDocumentResourceTest(BaseWebTest, DSWebTestMixin):
 
         post_id = response.json['data']['id']
 
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         self.app.post_json('/monitorings/{}/posts/{}/documents'.format(
             self.monitoring_id, post_id),
@@ -514,7 +514,7 @@ class MonitoringDocumentResourceTest(BaseWebTest, DSWebTestMixin):
             "documents": [self.test_docservice_document_data],
         }
 
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
@@ -623,7 +623,7 @@ class MonitoringCancellationDocumentResourceTest(BaseWebTest, DSWebTestMixin):
             }
         }
 
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
@@ -720,7 +720,7 @@ class MonitoringEliminationResolutionDocumentResourceTest(MonitoringEliminationB
         self.create_monitoring_with_resolution()
 
     def test_document_get_single(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json(
             '/monitorings/{}/eliminationResolution/documents'.format(self.monitoring_id),
             {'data': self.test_docservice_document_data})
@@ -742,7 +742,7 @@ class MonitoringEliminationResolutionDocumentResourceTest(MonitoringEliminationB
         self.assertNotIn('Expires=', document_data["url"])
 
     def test_document_get_list(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json(
             '/monitorings/{}/eliminationResolution/documents'.format(self.monitoring_id),
             {'data': self.test_docservice_document_data})
@@ -759,7 +759,7 @@ class MonitoringEliminationResolutionDocumentResourceTest(MonitoringEliminationB
         self.assertIn('lorem.doc', [doc['title'] for doc in response.json['data']])
 
     def test_document_download(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json(
                 '/monitorings/{}/eliminationResolution/documents'.format(self.monitoring_id),
                 {'data': self.test_docservice_document_data})
@@ -788,7 +788,7 @@ class MonitoringEliminationResolutionDocumentResourceTest(MonitoringEliminationB
         self.assertNotIn('Expires=', response.location)
 
     def test_document_upload(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json('/monitorings/{}/eliminationResolution/documents'.format(
             self.monitoring_id),
             {'data': self.test_docservice_document_data})
@@ -796,7 +796,7 @@ class MonitoringEliminationResolutionDocumentResourceTest(MonitoringEliminationB
         self.assertEqual(response.content_type, 'application/json')
 
     def test_patch_document_forbidden(self):
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         document = {
             'title': 'another.txt',
             'url': self.generate_docservice_url(),
@@ -815,7 +815,7 @@ class MonitoringEliminationResolutionDocumentResourceTest(MonitoringEliminationB
         )
 
     def test_put_document_forbidden(self):
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         document = {
             'title': 'my_new_file.txt',
             'url': self.generate_docservice_url(),
@@ -845,7 +845,7 @@ class MonitoringConclusionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
             'hash': 'md5:' + '0' * 32,
             'format': 'application/msword',
         }
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {'data': {
@@ -868,7 +868,7 @@ class MonitoringConclusionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         }
 
     def test_document_get_single(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {'data': self.test_monitoring_addressed_data})
@@ -889,7 +889,7 @@ class MonitoringConclusionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertNotIn('Expires=', document_data["url"])
 
     def test_document_get_list(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {'data': self.test_monitoring_addressed_data})
@@ -906,7 +906,7 @@ class MonitoringConclusionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(document_data['title'], 'lorem.doc')
 
     def test_document_upload(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {'data': {'conclusion': self.test_monitoring_addressed_data['conclusion']}})
@@ -920,7 +920,7 @@ class MonitoringConclusionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.content_type, 'application/json')
 
     def test_document_upload_forbidden(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {'data': self.test_monitoring_addressed_data})

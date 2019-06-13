@@ -1,13 +1,14 @@
-from freezegun import freeze_time
-from hashlib import sha512
-from webtest import TestApp, AppError
-from datetime import datetime
-import openprocurement.audit.api.tests.base as base_test
-import ConfigParser
 import json
+import os
+from hashlib import sha512
+
 import mock
 import uuid
-import os
+from datetime import datetime
+from freezegun import freeze_time
+from webtest import TestApp, AppError
+
+import openprocurement.audit.api.tests.base as base_test
 
 
 class DumpsTestAppwebtest(TestApp):
@@ -65,9 +66,8 @@ class BaseDocWebTest(base_test.BaseWebTest):
         self.uuid_patches = [
             mock.patch(path, side_effect=self._generate_test_uuid)
             for path in (
-                'openprocurement.api.utils.uuid4',
+                'openprocurement.audit.api.utils.uuid4',
                 'openprocurement.audit.api.tests.base.uuid4',
-                'openprocurement.api.models.uuid4',
                 'openprocurement.audit.api.models.uuid4',
             )
         ]

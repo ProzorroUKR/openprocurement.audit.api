@@ -1,6 +1,12 @@
 image: docker:stable
 stages:
   - build
+  - test
+
+variables:
+  COUCHDB_USER: op
+  COUCHDB_PASSWORD: op
+  GIT_STRATEGY: none
 
 Build:
   stage: build
@@ -17,3 +23,43 @@ Build:
     - schedules
   variables:
     GIT_STRATEGY: fetch
+
+.test:
+  image: $CI_REGISTRY_IMAGE:ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
+  stage: test
+  services:
+    - couchdb:1.6
+  tags:
+    - kube
+  only:
+    - branches
+  dependencies:
+    - Build
+  script:
+    - echo '127.0.0.1  couchdb' >> /etc/hosts
+    - cd /app
+    - py.test $TESTS_PATH --cov=$COV_PATH --cov-config=$COV_FILE -v --maxfail=1 --color=yes --dist=each
+      --tx=popen//id=sand//env:DB_NAME=test_sandbox//env:SANDBOX_MODE=1
+      --tx=popen//id=prod//env:DB_NAME=test_prod//env:SANDBOX_MODE=
+  coverage: '/TOTAL\s+\d+\s+\d+\s+(\d+%)/'
+
+test_api:
+  extends: .test
+  variables:
+    TESTS_PATH: openprocurement/audit/api/tests
+    COV_PATH: openprocurement/audit/api
+    COV_FILE: .coveragerc
+
+test_monitoring:
+  extends: .test
+  variables:
+    TESTS_PATH: openprocurement/audit/monitoring/tests
+    COV_PATH: openprocurement/audit/monitoring
+    COV_FILE: .coveragerc
+
+test_inspection:
+  extends: .test
+  variables:
+    TESTS_PATH: openprocurement/audit/inspection/tests
+    COV_PATH: openprocurement/audit/inspection
+    COV_FILE: .coveragerc

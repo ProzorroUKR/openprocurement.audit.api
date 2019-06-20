@@ -64,3 +64,15 @@ test_inspection:
     TESTS_PATH: openprocurement/audit/inspection/tests
     COV_PATH: openprocurement/audit/inspection
     COV_FILE: .coveragerc
+
+test_docs:
+  extends: .test
+  script:
+    - echo '127.0.0.1  couchdb' >> /etc/hosts
+    - cd /app
+    - pip install .[test]
+    - py.test docs.py
+  variables:
+    TESTS_PATH: openprocurement/audit/inspection/tests
+    COV_PATH: openprocurement/audit/inspection
+    COV_FILE: .coveragerc

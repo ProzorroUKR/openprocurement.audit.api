@@ -67,6 +67,7 @@ isodate==0.6.0
 python-json-logger==0.1.10
 jmespath==0.9.3
 execnet==1.1
+freezegun==0.3.12
 
 git+git://github.com/ProzorroUKR/openprocurement.client.python@1.0b3#egg=openprocurement_client
 git+git://github.com/ProzorroUKR/request_id_middleware.git@0.1.2

@@ -1,43 +1,11 @@
-from couchdb_schematics.document import SchematicsDocument
 from schematics.transforms import whitelist, blacklist
 from schematics.types import StringType, MD5Type, BaseType
 from schematics.types.compound import ModelType, DictType
-from schematics.types.serializable import serializable
 
-from openprocurement.audit.api.models import Model
+from openprocurement.audit.api.models import Revision, Document, BaseModel
+from openprocurement.audit.api.models import schematics_default_role, schematics_embedded_role
 from openprocurement.audit.api.types import IsoDateTimeType, ListType
 from openprocurement.audit.api.utils import get_now
-from openprocurement.audit.monitoring.models import Revision, Document, schematics_embedded_role, \
-    schematics_default_role
-
-
-class BaseModel(SchematicsDocument, Model):
-
-    @serializable(serialized_name='id')
-    def doc_id(self):
-        """
-        A property that is serialized by schematics exports.
-        """
-        return self._id
-
-    def import_data(self, raw_data, **kw):
-        """
-        Converts and imports the raw data into the instance of the model
-        according to the fields in the model.
-        :param raw_data:
-            The data to be imported.
-        """
-        data = self.convert(raw_data, **kw)
-        del_keys = [
-            k for k in data.keys()
-            if data[k] == self.__class__.fields[k].default
-               or data[k] == getattr(self, k)
-        ]
-        for k in del_keys:
-            del data[k]
-
-        self._data.update(data)
-        return self
 
 
 class Inspection(BaseModel):

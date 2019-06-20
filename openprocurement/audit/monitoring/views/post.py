@@ -6,12 +6,13 @@ from openprocurement.audit.api.constants import (
     POST_OVERDUE_TIME,
 )
 from openprocurement.audit.api.utils import (
-    get_now, context_unpack, APIResource, op_resource, json_view
+    get_now, context_unpack, APIResource, json_view
 )
 from openprocurement.audit.monitoring.utils import (
     save_monitoring, set_author,
     get_monitoring_role, get_monitoring_accelerator,
     calculate_normalized_business_date, upload_objects_documents,
+    op_resource,
 )
 from openprocurement.audit.monitoring.validation import (
     validate_post_data,

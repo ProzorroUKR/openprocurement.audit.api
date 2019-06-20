@@ -33,7 +33,7 @@ class MonitoringEliminationBaseTest(BaseWebTest, DSWebTestMixin):
 
         # get credentials for tha monitoring owner
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
-        with mock.patch('openprocurement.audit.api.validation.TendersClient') as mock_api_client:
+        with mock.patch('openprocurement.audit.monitoring.validation.TendersClient') as mock_api_client:
             mock_api_client.return_value.extract_credentials.return_value = {
                 'data': {'tender_token': sha512('tender_token').hexdigest()}
             }

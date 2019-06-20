@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
-from openprocurement.audit.api.utils import APIResource, op_resource
-from openprocurement.audit.api.utils import json_view
+from openprocurement.audit.api.utils import APIResource, json_view
+from openprocurement.audit.monitoring.utils import op_resource
 
 
 @op_resource(name='Monitoring Cancellation',

@@ -51,6 +51,7 @@ def main(global_config, **settings):
         if not plugins or entry_point.name in plugins:
             plugin = entry_point.load()
             plugin(config)
+            pass
 
     # CouchDB connection
     aserver, server, db = set_api_security(settings)

@@ -151,7 +151,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
         )
         self.assertNotEqual(response.json["data"]["hash"], request_data["hash"])
 
-    @mock.patch('openprocurement.audit.api.validation.TendersClient')
+    @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_post_create_by_tender_owner(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
             'data': {'tender_token': sha512('tender_token').hexdigest()}
@@ -230,7 +230,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
             status=403
         )
 
-    @mock.patch('openprocurement.audit.api.validation.TendersClient')
+    @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_monitoring_owner_answer_post_by_tender_owner(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
             'data': {'tender_token': sha512('tender_token').hexdigest()}
@@ -276,7 +276,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.json['data']['description'], 'Gotcha')
         self.assertEqual(response.json['data']['relatedPost'], post_id)
 
-    @mock.patch('openprocurement.audit.api.validation.TendersClient')
+    @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_monitoring_owner_answer_post_by_tender_owner_multiple(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
             'data': {'tender_token': sha512('tender_token').hexdigest()}
@@ -324,12 +324,12 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
             ('body', 'posts', 'relatedPost'),
             next(get_errors_field_names(response, 'relatedPost must be unique.')))
 
-    @mock.patch('openprocurement.audit.api.validation.TendersClient')
+    @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_monitoring_owner_answer_post_for_not_unique_id(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
             'data': {'tender_token': sha512('tender_token').hexdigest()}
         }
-        with mock.patch('openprocurement.audit.api.models.uuid4', mock.Mock(return_value=mock.Mock(hex='f'*32))):
+        with mock.patch('openprocurement.audit.monitoring.models.uuid4', mock.Mock(return_value=mock.Mock(hex='f'*32))):
             self.app.post_json(
                 '/monitorings/{}/posts'.format(self.monitoring_id),
                 {'data': {
@@ -375,7 +375,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
             ('body', 'relatedPost'),
             next(get_errors_field_names(response, 'relatedPost can\'t be a link to more than one post.')))
 
-    @mock.patch('openprocurement.audit.api.validation.TendersClient')
+    @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_tender_owner_answer_post_by_monitoring_owner(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
             'data': {'tender_token': sha512('tender_token').hexdigest()}
@@ -414,7 +414,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.json['data']['description'], 'The Force will be with you. Always.')
         self.assertEqual(response.json['data']['relatedPost'], post_id)
 
-    @mock.patch('openprocurement.audit.api.validation.TendersClient')
+    @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_tender_owner_answer_post_by_tender_owner(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
             'data': {'tender_token': sha512('tender_token').hexdigest()}
@@ -459,7 +459,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
             ('body', 'relatedPost'),
             next(get_errors_field_names(response, 'relatedPost should be one of posts of current monitoring.')))
 
-    @mock.patch('openprocurement.audit.api.validation.TendersClient')
+    @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_two_answers_in_a_row(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
             'data': {'tender_token': sha512('tender_token').hexdigest()}
@@ -606,7 +606,7 @@ class DeclinedMonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
                 "status": "declined",
             }})
 
-    @mock.patch('openprocurement.audit.api.validation.TendersClient')
+    @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_post_create_by_tender_owner(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
             'data': {'tender_token': sha512('tender_token').hexdigest()}
@@ -627,7 +627,7 @@ class DeclinedMonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.content_type, 'application/json')
 
-    @mock.patch('openprocurement.audit.api.validation.TendersClient')
+    @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_post_answer_by_monitoring_owner(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
             'data': {'tender_token': sha512('tender_token').hexdigest()}
@@ -662,7 +662,7 @@ class DeclinedMonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.content_type, 'application/json')
 
-    @mock.patch('openprocurement.audit.api.validation.TendersClient')
+    @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_post_create_by_tender_owner_multiple(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
             'data': {'tender_token': sha512('tender_token').hexdigest()}

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from openprocurement.audit.api.constants import DRAFT_STATUS
-from openprocurement.audit.api.utils import APIResource, forbidden, op_resource, json_view
+from openprocurement.audit.api.utils import APIResource, forbidden, json_view
+from openprocurement.audit.monitoring.utils import op_resource
 
 
 @op_resource(name='Monitoring Decision',

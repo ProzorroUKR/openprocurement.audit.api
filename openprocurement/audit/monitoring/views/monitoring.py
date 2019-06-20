@@ -14,7 +14,7 @@ from openprocurement.audit.api.constants import (
     CANCELLED_STATUS,
 )
 from openprocurement.audit.api.utils import (
-    context_unpack, APIResource, APIResourceListing, json_view, forbidden, op_resource
+    context_unpack, APIResource, APIResourceListing, json_view, forbidden
 )
 from openprocurement.audit.api.utils import (
     generate_id,
@@ -46,6 +46,7 @@ from openprocurement.audit.monitoring.utils import (
     set_ownership,
     set_author,
     get_monitoring_accelerator,
+    op_resource
 )
 from openprocurement.audit.monitoring.validation import (
     validate_monitoring_data,

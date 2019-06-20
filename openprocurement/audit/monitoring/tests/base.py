@@ -1,34 +1,24 @@
 # -*- coding: utf-8 -*-
-
 import os
-import unittest
 from base64 import b64encode
 from copy import deepcopy
 from urllib import urlencode
 
-import webtest
+from openprocurement.audit.api.tests.base import BaseWebTest as BaseApiWebTest
 from datetime import datetime
 from uuid import uuid4
 
-from openprocurement.audit.api.constants import VERSION, SANDBOX_MODE
+from openprocurement.audit.api.constants import SANDBOX_MODE
 
 
-class PrefixedRequestClass(webtest.app.TestRequest):
-
-    @classmethod
-    def blank(cls, path, *args, **kwargs):
-        prefix = '/api/{}'.format(VERSION)
-        if not path.startswith(prefix):
-            path = prefix + path
-        return webtest.app.TestRequest.blank(path, *args, **kwargs)
-
-
-class BaseWebTest(unittest.TestCase):
+class BaseWebTest(BaseApiWebTest):
     """
-    Base Web Test to test openprocurement.planning.api.
+    Base Web Test to test openprocurement.monitoring.api.
 
     It setups the database before each test and delete it after.
     """
+    relative_to = os.path.dirname(__file__)
+
     initial_data = {
         "tender_id": "f" * 32,
         "reasons": ["indicator"],
@@ -63,21 +53,13 @@ class BaseWebTest(unittest.TestCase):
     }
 
     def setUp(self):
-        self.app = webtest.TestApp("config:tests.ini", relative_to=os.path.dirname(__file__))
-        self.app.RequestClass = PrefixedRequestClass
-        self.couchdb_server = self.app.app.registry.couchdb_server
-        self.db = self.app.app.registry.db
-        self.app.app.registry.docservice_url = 'http://localhost'
-
+        super(BaseWebTest, self).setUp()
         self.broker_name = "broker"
         self.broker_pass = "broker"
         self.sas_name = "test_sas"
         self.sas_pass = "test_sas_token"
         self.risk_indicator_name = "risk_indicator_bot"
         self.risk_indicator_pass = "test_risk_indicator_bot_token"
-
-    def tearDown(self):
-        del self.couchdb_server[self.db.name]
 
     def create_monitoring(self, **kwargs):
 

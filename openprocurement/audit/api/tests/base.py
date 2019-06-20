@@ -39,7 +39,9 @@ class PrefixedTestRequest(webtest.app.TestRequest):
 
     @classmethod
     def blank(cls, path, *args, **kwargs):
-        path = '/api/%s%s' % (VERSION, path)
+        prefix = '/api/{}'.format(VERSION)
+        if not path.startswith(prefix):
+            path = prefix + path
         return webtest.app.TestRequest.blank(path, *args, **kwargs)
 
 

@@ -1,10 +1,10 @@
 # -*- coding: utf-8 -*-
 from openprocurement.audit.api.utils import (
-    APIResource, op_resource
+    APIResource
 )
 from openprocurement.audit.api.utils import context_unpack, json_view
 from openprocurement.audit.monitoring.utils import (
-    apply_patch, set_author, upload_objects_documents
+    apply_patch, set_author, upload_objects_documents, op_resource
 )
 from openprocurement.audit.monitoring.validation import validate_appeal_data
 

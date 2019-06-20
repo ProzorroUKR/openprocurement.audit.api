@@ -15,7 +15,7 @@ from openprocurement.audit.monitoring.design import (
     draft_monitorings_by_tender_id_view,
     MONITORINGS_BY_TENDER_FIELDS,
 )
-from openprocurement.audit.monitoring.utils import monitoring_serialize
+from openprocurement.audit.monitoring.utils import monitoring_serialize, op_resource
 
 LOGGER = getLogger(__name__)
 

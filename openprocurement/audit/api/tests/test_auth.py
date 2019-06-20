@@ -2,7 +2,6 @@
 import os
 import unittest
 
-from pyramid import testing
 from pyramid.tests.test_authentication import TestBasicAuthAuthenticationPolicy
 
 from openprocurement.audit.api.auth import AuthenticationPolicy
@@ -15,12 +14,6 @@ class AuthTest(TestBasicAuthAuthenticationPolicy):
 
     test_authenticated_userid_utf8 = None
     test_authenticated_userid_latin1 = None
-
-    def test_unauthenticated_userid_bearer(self):
-        request = testing.DummyRequest()
-        request.headers['Authorization'] = 'Bearer chrisr'
-        policy = self._makeOne(None)
-        self.assertEqual(policy.unauthenticated_userid(request), 'chrisr')
 
 
 def suite():

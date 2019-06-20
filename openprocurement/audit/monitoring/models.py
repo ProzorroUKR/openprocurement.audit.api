@@ -1,7 +1,3 @@
-from string import hexdigits
-from urlparse import urlparse, parse_qs
-
-from couchdb_schematics.document import Document as SchematicsDocument
 from pyramid.security import Allow
 from schematics.exceptions import ValidationError
 from schematics.transforms import whitelist, blacklist
@@ -16,8 +12,9 @@ from openprocurement.audit.api.constants import (
     OTHER_VIOLATION,
 )
 from openprocurement.audit.api.constants import SANDBOX_MODE, ORA_CODES
-from openprocurement.audit.api.models import Model
-from openprocurement.audit.api.types import HashType, ListType, IsoDateTimeType
+from openprocurement.audit.api.models import Model, Revision, Document, BaseModel
+from openprocurement.audit.api.models import schematics_default_role, schematics_embedded_role
+from openprocurement.audit.api.types import ListType, IsoDateTimeType
 from openprocurement.audit.api.utils import get_now
 from openprocurement.audit.monitoring.choices import (
     DIALOGUE_TYPE_CHOICES,
@@ -29,90 +26,6 @@ from openprocurement.audit.monitoring.choices import (
     RESOLUTION_RESULT_CHOICES,
     RESOLUTION_BY_TYPE_CHOICES,
 )
-
-schematics_default_role = SchematicsDocument.Options.roles['default'] + blacklist("__parent__")
-schematics_embedded_role = SchematicsDocument.Options.roles['embedded'] + blacklist("__parent__")
-
-
-class Revision(Model):
-    author = StringType()
-    date = IsoDateTimeType(default=get_now)
-    changes = ListType(DictType(BaseType), default=list())
-    rev = StringType()
-
-
-class Document(Model):
-    class Options:
-        roles = {
-            'create': blacklist('id', 'datePublished', 'dateModified', 'author', 'download_url'),
-            'edit': blacklist('id', 'url', 'datePublished', 'dateModified', 'author', 'hash', 'download_url'),
-            'embedded': (blacklist('url', 'download_url') + schematics_embedded_role),
-            'default': blacklist("__parent__"),
-            'view': (blacklist('revisions') + schematics_default_role),
-            'revisions': whitelist('url', 'dateModified'),
-        }
-
-    id = MD5Type(required=True, default=lambda: uuid4().hex)
-    hash = HashType()
-    title = StringType(required=True)  # A title of the document.
-    title_en = StringType()
-    title_ru = StringType()
-    description = StringType()  # A description of the document.
-    description_en = StringType()
-    description_ru = StringType()
-    format = StringType(required=True, regex='^[-\w]+/[-\.\w\+]+$')
-    url = StringType(required=True)  # Link to the document or attachment.
-    datePublished = IsoDateTimeType(default=get_now)
-    dateModified = IsoDateTimeType(default=get_now)  # Date that the document was last dateModified
-    language = StringType()
-    relatedItem = MD5Type()
-    author = StringType()
-
-    @serializable(serialized_name="url")
-    def download_url(self):
-        url = self.url
-        if not url or '?download=' not in url:
-            return url
-        doc_id = parse_qs(urlparse(url).query)['download'][-1]
-        root = self.__parent__
-        parents = []
-        while root.__parent__ is not None:
-            parents[0:0] = [root]
-            root = root.__parent__
-        request = root.request
-        if not request.registry.docservice_url:
-            return url
-        if 'status' in parents[0] and parents[0].status in type(parents[0])._options.roles:
-            role = parents[0].status
-            for index, obj in enumerate(parents):
-                if obj.id != url.split('/')[(index - len(parents)) * 2 - 1]:
-                    break
-                field = url.split('/')[(index - len(parents)) * 2]
-                if "_" in field:
-                    field = field[0] + field.title().replace("_", "")[1:]
-                roles = type(obj)._options.roles
-                if roles[role if role in roles else 'default'](field, []):
-                    return url
-        from openprocurement.audit.api.utils import generate_docservice_url
-        if not self.hash:
-            path = [i for i in urlparse(url).path.split('/') if len(i) == 32 and not set(i).difference(hexdigits)]
-            return generate_docservice_url(request, doc_id, False, '{}/{}'.format(path[0], path[-1]))
-        return generate_docservice_url(request, doc_id, False)
-
-    def import_data(self, raw_data, **kw):
-        """
-        Converts and imports the raw data into the instance of the model
-        according to the fields in the model.
-        :param raw_data:
-            The data to be imported.
-        """
-        data = self.convert(raw_data, **kw)
-        del_keys = [k for k in data.keys() if data[k] == getattr(self, k)]
-        for k in del_keys:
-            del data[k]
-
-        self._data.update(data)
-        return self
 
 
 class Period(Model):
@@ -340,7 +253,7 @@ class Party(Model):
     datePublished = IsoDateTimeType(default=get_now)
 
 
-class Monitoring(SchematicsDocument, Model):
+class Monitoring(BaseModel):
 
     class Options:
         _perm_edit_whitelist = whitelist('status', 'reasons', 'procuringStages')
@@ -441,29 +354,3 @@ class Monitoring(SchematicsDocument, Model):
 
     def __repr__(self):
         return '<%s:%r-%r@%r>' % (type(self).__name__, self.tender_id, self.id, self.rev)
-
-    @serializable(serialized_name='id')
-    def doc_id(self):
-        """
-        A property that is serialized by schematics exports.
-        """
-        return self._id
-
-    def import_data(self, raw_data, **kw):
-        """
-        Converts and imports the raw data into the instance of the model
-        according to the fields in the model.
-        :param raw_data:
-            The data to be imported.
-        """
-        data = self.convert(raw_data, **kw)
-        del_keys = [
-            k for k in data.keys()
-            if data[k] == self.__class__.fields[k].default
-            or data[k] == getattr(self, k)
-        ]
-        for k in del_keys:
-            del data[k]
-
-        self._data.update(data)
-        return self

@@ -1,3 +1,5 @@
+from cornice.resource import resource
+from functools import partial
 from logging import getLogger
 from re import compile
 
@@ -12,11 +14,14 @@ from openprocurement.audit.api.utils import (
     apply_data_patch, error_handler, generate_id, get_now,
     check_document, update_document_url
 )
-from openprocurement.audit.monitoring.models import Monitoring
-from openprocurement.audit.monitoring.models import Revision, Period
+from openprocurement.audit.monitoring.models import Period, Monitoring
+from openprocurement.audit.api.models import Revision
+from openprocurement.audit.monitoring.traversal import factory
 
 LOGGER = getLogger(__package__)
 ACCELERATOR_RE = compile(r'accelerator=(?P<accelerator>\d+)')
+
+op_resource = partial(resource, error_handler=error_handler, factory=factory)
 
 
 def monitoring_serialize(request, monitoring_data, fields):

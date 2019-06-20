@@ -318,7 +318,7 @@ class MonitoringPostAddressedDocumentResourceTest(BaseWebTest, DSWebTestMixin):
             'documents': [self.test_docservice_document_data]
         }
 
-    @mock.patch('openprocurement.audit.api.validation.TendersClient')
+    @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_document_get_single(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
             'data': {'tender_token': sha512('tender_token').hexdigest()}
@@ -350,7 +350,7 @@ class MonitoringPostAddressedDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertIn('KeyID=', document_data["url"])
         self.assertNotIn('Expires=', document_data["url"])
 
-    @mock.patch('openprocurement.audit.api.validation.TendersClient')
+    @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_document_get_list(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
             'data': {'tender_token': sha512('tender_token').hexdigest()}
@@ -379,7 +379,7 @@ class MonitoringPostAddressedDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         document_data = response.json['data'][-1]
         self.assertEqual(document_data['title'], 'lorem.doc')
 
-    @mock.patch('openprocurement.audit.api.validation.TendersClient')
+    @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_document_download(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
             'data': {'tender_token': sha512('tender_token').hexdigest()}
@@ -419,7 +419,7 @@ class MonitoringPostAddressedDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertIn('KeyID=', response.location)
         self.assertNotIn('Expires=', response.location)
 
-    @mock.patch('openprocurement.audit.api.validation.TendersClient')
+    @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_document_upload_no_token(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
             'data': {'tender_token': sha512('tender_token').hexdigest()}
@@ -445,7 +445,7 @@ class MonitoringPostAddressedDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response.content_type, 'application/json')
 
-    @mock.patch('openprocurement.audit.api.validation.TendersClient')
+    @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_document_upload(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
             'data': {'tender_token': sha512('tender_token').hexdigest()}
@@ -471,7 +471,7 @@ class MonitoringPostAddressedDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.content_type, 'application/json')
 
-    @mock.patch('openprocurement.audit.api.validation.TendersClient')
+    @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_document_upload_author_forbidden(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
             'data': {'tender_token': sha512('tender_token').hexdigest()}

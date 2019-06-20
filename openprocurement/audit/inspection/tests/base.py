@@ -2,41 +2,23 @@
 
 import ConfigParser
 import os
-import unittest
 from base64 import b64encode
 from urllib import urlencode
 
-import webtest
-from openprocurement.api.constants import VERSION
+from openprocurement.audit.api.tests.base import BaseWebTest as BaseApiWebTest
 from uuid import uuid4
 
 
-class PrefixedRequestClass(webtest.app.TestRequest):
-
-    @classmethod
-    def blank(cls, path, *args, **kwargs):
-        prefix = '/api/{}'.format(VERSION)
-        if not path.startswith(prefix):
-            path = prefix + path
-        return webtest.app.TestRequest.blank(path, *args, **kwargs)
-
-
-class BaseWebTest(unittest.TestCase):
+class BaseWebTest(BaseApiWebTest):
+    relative_to = os.path.dirname(__file__)
 
     def setUp(self):
-        self.app = webtest.TestApp("config:tests.ini", relative_to=os.path.dirname(__file__))
-        self.app.RequestClass = PrefixedRequestClass
-        self.couchdb_server = self.app.app.registry.couchdb_server
-        self.db = self.app.app.registry.db
+        super(BaseWebTest, self).setUp()
         self.app.app.registry.docservice_url = 'http://localhost'
-
-        config = ConfigParser.RawConfigParser()
-        config.read(os.path.join(os.path.dirname(__file__), 'auth.ini'))
-        self.broker_token = config.get("brokers", "broker")
-        self.sas_token = config.get("sas", "test_sas")
-
-    def tearDown(self):
-        del self.couchdb_server[self.db.name]
+        self.broker_name = "broker"
+        self.broker_pass = "broker"
+        self.sas_name = "test_sas"
+        self.sas_pass = "test_sas_token"
 
     def generate_docservice_url(self):
         uuid = uuid4().hex
@@ -60,7 +42,7 @@ class BaseWebTest(unittest.TestCase):
             ]
         }
         data.update(kwargs)
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json('/inspections', {'data': data})
 
         self.inspection_id = response.json['data']['id']

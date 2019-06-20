@@ -8,7 +8,6 @@ COPY requirements.txt /app/
 RUN pip install setuptools==33.1.1
 RUN pip install --upgrade pip && pip install -r requirements.txt
 
-RUN pip freeze
 COPY . /app
 RUN pip install -e .
 

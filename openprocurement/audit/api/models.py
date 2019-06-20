@@ -1,10 +1,23 @@
-from couchdb_schematics.document import DocumentMeta
+from string import hexdigits
+from urlparse import parse_qs, urlparse
+
+from schematics.types.serializable import serializable
+from uuid import uuid4
+
+from couchdb_schematics.document import DocumentMeta, Document as SchematicsDocument
 from schematics.models import Model as SchematicsModel
-from schematics.transforms import blacklist, convert, export_loop
-from schematics.types import BaseType
+from schematics.transforms import blacklist, convert, export_loop, whitelist
+from schematics.types import BaseType, StringType, MD5Type
+from schematics.types.compound import DictType
 from zope.component import queryAdapter, getAdapters
 
 from openprocurement.audit.api.interfaces import IValidator, ISerializable
+from openprocurement.audit.api.types import IsoDateTimeType, ListType, HashType
+from openprocurement.audit.api.utils import set_parent, get_now
+
+
+schematics_default_role = SchematicsDocument.Options.roles['default'] + blacklist("__parent__")
+schematics_embedded_role = SchematicsDocument.Options.roles['embedded'] + blacklist("__parent__")
 
 
 class AdaptiveDict(dict):
@@ -67,9 +80,9 @@ class OpenprocurementCouchdbDocumentMeta(DocumentMeta):
             klass._validator_functions
         )
         klass._serializables = AdaptiveDict(
-                klass, ISerializable,
-                klass._serializables,
-            )
+            klass, ISerializable,
+            klass._serializables,
+        )
         return klass
 
 
@@ -117,9 +130,9 @@ class Model(SchematicsModel):
         for i, j in value.items():
             if isinstance(j, list):
                 for x in j:
-                    self.set_parent(x)
+                    set_parent(x, self)
             else:
-                self.set_parent(j)
+                set_parent(j, self)
         return value
 
     def to_patch(self, role=None):
@@ -131,9 +144,115 @@ class Model(SchematicsModel):
         data = export_loop(self.__class__, self, field_converter, role=role, raise_error_on_role=True, print_none=True)
         return data
 
-    def set_parent(self, item):
-        if hasattr(item, '__parent__') and item.__parent__ is None:
-            item.__parent__ = self
-
     def get_role(self):
         return self.default_role
+
+
+class Revision(Model):
+    author = StringType()
+    date = IsoDateTimeType(default=get_now)
+    changes = ListType(DictType(BaseType), default=list())
+    rev = StringType()
+
+
+class Document(Model):
+    class Options:
+        roles = {
+            'create': blacklist('id', 'datePublished', 'dateModified', 'author', 'download_url'),
+            'edit': blacklist('id', 'url', 'datePublished', 'dateModified', 'author', 'hash', 'download_url'),
+            'embedded': (blacklist('url', 'download_url') + schematics_embedded_role),
+            'default': blacklist("__parent__"),
+            'view': (blacklist('revisions') + schematics_default_role),
+            'revisions': whitelist('url', 'dateModified'),
+        }
+
+    id = MD5Type(required=True, default=lambda: uuid4().hex)
+    hash = HashType()
+    title = StringType(required=True)  # A title of the document.
+    title_en = StringType()
+    title_ru = StringType()
+    description = StringType()  # A description of the document.
+    description_en = StringType()
+    description_ru = StringType()
+    format = StringType(required=True, regex='^[-\w]+/[-\.\w\+]+$')
+    url = StringType(required=True)  # Link to the document or attachment.
+    datePublished = IsoDateTimeType(default=get_now)
+    dateModified = IsoDateTimeType(default=get_now)  # Date that the document was last dateModified
+    language = StringType()
+    relatedItem = MD5Type()
+    author = StringType()
+
+    @serializable(serialized_name="url")
+    def download_url(self):
+        url = self.url
+        if not url or '?download=' not in url:
+            return url
+        doc_id = parse_qs(urlparse(url).query)['download'][-1]
+        root = self.__parent__
+        parents = []
+        while root.__parent__ is not None:
+            parents[0:0] = [root]
+            root = root.__parent__
+        request = root.request
+        if not request.registry.docservice_url:
+            return url
+        if 'status' in parents[0] and parents[0].status in type(parents[0])._options.roles:
+            role = parents[0].status
+            for index, obj in enumerate(parents):
+                if obj.id != url.split('/')[(index - len(parents)) * 2 - 1]:
+                    break
+                field = url.split('/')[(index - len(parents)) * 2]
+                if "_" in field:
+                    field = field[0] + field.title().replace("_", "")[1:]
+                roles = type(obj)._options.roles
+                if roles[role if role in roles else 'default'](field, []):
+                    return url
+        from openprocurement.audit.api.utils import generate_docservice_url
+        if not self.hash:
+            path = [i for i in urlparse(url).path.split('/') if len(i) == 32 and not set(i).difference(hexdigits)]
+            return generate_docservice_url(request, doc_id, False, '{}/{}'.format(path[0], path[-1]))
+        return generate_docservice_url(request, doc_id, False)
+
+    def import_data(self, raw_data, **kw):
+        """
+        Converts and imports the raw data into the instance of the model
+        according to the fields in the model.
+        :param raw_data:
+            The data to be imported.
+        """
+        data = self.convert(raw_data, **kw)
+        del_keys = [k for k in data.keys() if data[k] == getattr(self, k)]
+        for k in del_keys:
+            del data[k]
+
+        self._data.update(data)
+        return self
+
+
+class BaseModel(SchematicsDocument, Model):
+
+    @serializable(serialized_name='id')
+    def doc_id(self):
+        """
+        A property that is serialized by schematics exports.
+        """
+        return self._id
+
+    def import_data(self, raw_data, **kw):
+        """
+        Converts and imports the raw data into the instance of the model
+        according to the fields in the model.
+        :param raw_data:
+            The data to be imported.
+        """
+        data = self.convert(raw_data, **kw)
+        del_keys = [
+            k for k in data.keys()
+            if data[k] == self.__class__.fields[k].default
+               or data[k] == getattr(self, k)
+        ]
+        for k in del_keys:
+            del data[k]
+
+        self._data.update(data)
+        return self

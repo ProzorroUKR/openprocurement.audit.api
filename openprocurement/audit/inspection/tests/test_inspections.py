@@ -2,7 +2,7 @@ import unittest
 
 from freezegun import freeze_time
 
-from openprocurement.audit.api.tests.utils import get_errors_field_names
+from openprocurement.audit.monitoring.tests.utils import get_errors_field_names
 from openprocurement.audit.inspection.tests.base import BaseWebTest
 
 
@@ -29,13 +29,13 @@ class InspectionsListingResourceTest(BaseWebTest):
     def test_get_opt_fields(self):
         self.create_inspection()
 
-        response = self.app.get('/inspections?opt_fields=description')
+        response = self.app.get('/inspections?opt_fields=inspection_id')
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(
             response.json['data'],
             [{u'dateModified': u'2018-01-01T11:00:00+02:00',
-              u'description': u'Yo-ho-ho',
+              u'inspection_id': u'UA-I-2018-01-01-000001',
               u'id': self.inspection_id}]
         )
 
@@ -43,18 +43,18 @@ class InspectionsListingResourceTest(BaseWebTest):
         self.app.post_json('/inspections', {}, status=403)
 
     def test_post_inspection_broker(self):
-        self.app.authorization = ('Basic', (self.broker_token, ''))
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         self.app.post_json('/inspections', {}, status=403)
 
     def test_post_inspection_sas_empty_body(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json('/inspections', {}, status=422)
         self.assertEqual(
             {('body', 'data')},
             set(get_errors_field_names(response, "Data not available")))
 
     def test_post_inspection_sas_empty_data(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json('/inspections', {"data": {}}, status=422)
         self.assertEqual(
             {('body', "monitoring_ids"),
@@ -63,7 +63,7 @@ class InspectionsListingResourceTest(BaseWebTest):
         )
 
     def test_post_inspection_sas(self):
-        self.app.authorization = ('Basic', (self.sas_token, ''))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json(
             '/inspections',
             {"data": {

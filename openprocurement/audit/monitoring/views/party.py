@@ -1,13 +1,13 @@
 # -*- coding: utf-8 -*-
 from openprocurement.audit.api.utils import (
     APIResource,
-    op_resource,
     json_view,
     context_unpack,
 )
 from openprocurement.audit.monitoring.utils import (
     save_monitoring,
     apply_patch,
+    op_resource
 )
 from openprocurement.audit.monitoring.validation import (
     validate_party_data,

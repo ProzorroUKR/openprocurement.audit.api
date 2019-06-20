@@ -21,6 +21,7 @@ from openprocurement.audit.monitoring.utils import (
     save_monitoring,
     apply_patch,
     set_author,
+    op_resource
 )
 from openprocurement.audit.monitoring.validation import (
     validate_document_decision_status,

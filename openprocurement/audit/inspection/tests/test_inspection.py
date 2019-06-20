@@ -127,13 +127,3 @@ class InspectionResourceTest(BaseWebTest):
                 }
             ]
         )
-
-
-def suite():
-    s = unittest.TestSuite()
-    s.addTest(unittest.makeSuite(InspectionResourceTest))
-    return s
-
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='suite')

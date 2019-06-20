@@ -936,18 +936,3 @@ class MonitoringConclusionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(
             ('body', 'data'),
             next(get_errors_field_names(response, 'Can\'t add document in current addressed monitoring status.')))
-
-
-def suite():
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(MonitoringDecisionDocumentResourceTest))
-    suite.addTest(unittest.makeSuite(MonitoringPostActiveDocumentResourceTest))
-    suite.addTest(unittest.makeSuite(MonitoringPostAddressedDocumentResourceTest))
-    suite.addTest(unittest.makeSuite(MonitoringConclusionDocumentResourceTest))
-    suite.addTest(unittest.makeSuite(MonitoringDocumentResourceTest))
-    return suite
-
-
-if __name__ == '__main__':
-    # TODO: test put with versions
-    unittest.main(defaultTest='suite')

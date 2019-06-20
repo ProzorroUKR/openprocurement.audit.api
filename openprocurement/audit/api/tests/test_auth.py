@@ -14,13 +14,3 @@ class AuthTest(TestBasicAuthAuthenticationPolicy):
 
     test_authenticated_userid_utf8 = None
     test_authenticated_userid_latin1 = None
-
-
-def suite():
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(AuthTest))
-    return suite
-
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='suite')

@@ -258,14 +258,3 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
         self.assertEqual(data["format"], request_data["format"])
         self.assertEqual(data["title"], request_data["title"])
         self.assertNotEqual(data["url"], request_data["url"])
-
-
-def suite():
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(MonitoringAppealResourceTest))
-    suite.addTest(unittest.makeSuite(MonitoringAppealPostedResourceTest))
-    return suite
-
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='suite')

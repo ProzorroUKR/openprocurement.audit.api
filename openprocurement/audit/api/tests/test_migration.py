@@ -20,13 +20,3 @@ class MigrateTest(BaseWebTest):
         self.assertEqual(get_db_schema_version(self.db), SCHEMA_VERSION)
         migrate_data(self.app.app.registry, 1)
         self.assertEqual(get_db_schema_version(self.db), SCHEMA_VERSION)
-
-
-def suite():
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(MigrateTest))
-    return suite
-
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='suite')

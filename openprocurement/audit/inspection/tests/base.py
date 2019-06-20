@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-
-import ConfigParser
 import os
 from base64 import b64encode
 from urllib import urlencode

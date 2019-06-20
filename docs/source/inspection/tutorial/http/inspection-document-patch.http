@@ -1,0 +1,15 @@
+POST /api/2.4/inspections/1e3a0b5187993d98829b70c32c006d62/documents/5366ec14af1734cc92a9a5847f6b121e HTTP/1.0
+Authorization: Basic dGVzdF9zYXNfdG9rZW46
+Content-Length: 323
+Content-Type: application/json
+Host: audit-api-dev.prozorro.gov.ua
+
+{
+  "data": {
+    "url": "http://docs-sandbox.openprocurement.org/get/d21d182196144739826e100d09883041?KeyID=a8968c46&Signature=F7O8NAFry1u5qLjdZMa7QseM7Y8qIAAJNCQf%2FA%2BxzX4nIxiGuhnzuddORlHVOG0JExYpG9uxO%2BYY2tmTHfU6Cg%3D%3D", 
+    "title": "doc(1).json", 
+    "hash": "md5:00000000000000000000000000000000", 
+    "format": "application/json"
+  }
+}
+

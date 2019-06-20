@@ -1,32 +1,27 @@
-GET /api/2.4/monitorings?mode=real_draft&opt_fields=status HTTP/1.0
-Authorization: Basic dGVzdF9zYXNfdG9rZW46
+GET /api/2.5/monitorings?mode=real_draft&opt_fields=status HTTP/1.0
+Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
 Host: audit-api-sandbox.prozorro.gov.ua
 
-
-200 OK
+Response: 200 OK
 Content-Type: application/json; charset=UTF-8
-
 {
   "next_page": {
-    "path": "/api/2.4/monitorings?offset=2018-01-01T02%3A00%3A00%2B02%3A00&mode=real_draft&opt_fields=status", 
-    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings?offset=2018-01-01T02%3A00%3A00%2B02%3A00&mode=real_draft&opt_fields=status", 
+    "path": "/api/2.5/monitorings?mode=real_draft&offset=2018-01-01T02%3A00%3A00%2B02%3A00", 
+    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings?mode=real_draft&offset=2018-01-01T02%3A00%3A00%2B02%3A00", 
     "offset": "2018-01-01T02:00:00+02:00"
   }, 
   "data": [
     {
-      "status": "draft", 
-      "dateModified": "2018-01-01T02:00:00+02:00", 
-      "id": "093939fc8e69322ca9f00cad395b93f8"
+      "id": "69ca6538f0724d8bb69c779cb398d722", 
+      "dateModified": "2018-01-01T02:00:00+02:00"
     }, 
     {
-      "status": "active", 
-      "dateModified": "2018-01-01T02:00:00+02:00", 
-      "id": "babbd01e29bb34e7a02ff6d2e56cd2f3"
+      "id": "d6b23d009138416ea91a6309e354a621", 
+      "dateModified": "2018-01-01T02:00:00+02:00"
     }, 
     {
-      "status": "cancelled", 
-      "dateModified": "2018-01-01T02:00:00+02:00", 
-      "id": "c58ce401f35e323c853ecdd3a51c1a3f"
+      "id": "f6cbbd9927da41d9b3026eb065bd52b1", 
+      "dateModified": "2018-01-01T02:00:00+02:00"
     }
   ]
 }

@@ -497,16 +497,3 @@ class DeclinedMonitoringResourceTest(BaseWebTest):
             }}, status=422
         )
         self.assertEqual(('body', 'cancellation'), next(get_errors_field_names(response, 'This field is required.')))
-
-
-def suite():
-    s = unittest.TestSuite()
-    s.addTest(unittest.makeSuite(MonitoringResourceTest))
-    s.addTest(unittest.makeSuite(ActiveMonitoringResourceTest))
-    s.addTest(unittest.makeSuite(AddressedMonitoringResourceTest))
-    s.addTest(unittest.makeSuite(DeclinedMonitoringResourceTest))
-    return s
-
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='suite')

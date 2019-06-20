@@ -737,14 +737,3 @@ class DeclinedMonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
             ('body', 'data'),
             next(get_errors_field_names(response, 'Can\'t add post in current closed monitoring status.'))
         )
-
-
-def suite():
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(MonitoringPostResourceTest))
-    suite.addTest(unittest.makeSuite(DeclinedMonitoringPostResourceTest))
-    return suite
-
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='suite')

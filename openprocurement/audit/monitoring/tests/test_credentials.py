@@ -141,12 +141,3 @@ class MonitoringCredentialsResourceTest(BaseWebTest):
 
         self.assertEqual(response.status_code, 403)
         self.assertEqual(response.content_type, 'application/json')
-
-def suite():
-    s = unittest.TestSuite()
-    s.addTest(unittest.makeSuite(MonitoringCredentialsResourceTest))
-    return s
-
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='suite')

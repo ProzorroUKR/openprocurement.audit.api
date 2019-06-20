@@ -1,0 +1,25 @@
+GET /api/2.5/monitorings/580997bb06674235801d75f2f6e6c6c6/inspections?opt_fields=description HTTP/1.0
+Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
+Host: audit-api-sandbox.prozorro.gov.ua
+
+Response: 200 OK
+Content-Type: application/json; charset=UTF-8
+{
+  "data": [
+    {
+      "dateModified": "2018-01-01T02:01:00+02:00", 
+      "description": "Inspection is an official visit to a building or organization to check that everything is satisfactory and that rules are being obeyed", 
+      "inspection_id": "UA-I-2018-01-01-000001", 
+      "id": "d0863edd3aaf4c6393480afae0679c2d", 
+      "dateCreated": "2018-01-01T02:01:00+02:00"
+    }, 
+    {
+      "dateModified": "2019-06-20T15:31:34.149960+03:00", 
+      "description": "La-la", 
+      "inspection_id": "UA-I-2019-06-20-000001", 
+      "id": "f3cd7e69623b4324b5cc8905da537c74", 
+      "dateCreated": "2019-06-20T15:31:34.149960+03:00"
+    }
+  ]
+}
+

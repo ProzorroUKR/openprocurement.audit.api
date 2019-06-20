@@ -590,17 +590,3 @@ class ResolutionMonitoringResourceTest(MonitoringEliminationBaseTest):
             {"data": {"description": "I want to change this description"}},
             status=405
         )
-
-
-def suite():
-    s = unittest.TestSuite()
-    s.addTest(unittest.makeSuite(MonitoringActiveEliminationResourceTest))
-    s.addTest(unittest.makeSuite(MonitoringEliminationResourceTest))
-    s.addTest(unittest.makeSuite(MonitoringEliminationResolutionResourceTest))
-    s.addTest(unittest.makeSuite(UpdateEliminationResourceTest))
-    s.addTest(unittest.makeSuite(ResolutionMonitoringResourceTest))
-    return s
-
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='suite')

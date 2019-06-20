@@ -80,13 +80,3 @@ class InspectionsListingResourceTest(BaseWebTest):
              "dateCreated", "monitoring_ids", "description"}
         )
         self.assertIn("Location", response.headers)
-
-
-def suite():
-    s = unittest.TestSuite()
-    s.addTest(unittest.makeSuite(InspectionsListingResourceTest))
-    return s
-
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='suite')

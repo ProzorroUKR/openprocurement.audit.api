@@ -116,13 +116,3 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
         with self.assertRaisesRegexp(Exception, 'Bad response: 404 Not Found'):
             response = self.app.get('/monitorings/{}/parties/{}'.format(self.monitoring_id, 'not_existent_id'))
             self.assertEqual(response.status_code, 404)
-
-
-def suite():
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(MonitoringPartyResourceTest))
-    return suite
-
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='suite')

@@ -433,13 +433,3 @@ class ActiveMonitoringConclusionResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(
             ('body', 'conclusion', 'relatedParty'),
             next(get_errors_field_names(response, 'relatedParty should be one of parties.')))
-
-
-def suite():
-    s = unittest.TestSuite()
-    s.addTest(unittest.makeSuite(MonitoringConclusionResourceTest))
-    return s
-
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='suite')

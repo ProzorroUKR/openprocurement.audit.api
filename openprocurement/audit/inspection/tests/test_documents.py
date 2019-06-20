@@ -234,13 +234,3 @@ class InspectionDocumentsResourceTest(BaseWebTest):
         response = self.app.get('/inspections/{}'.format(self.inspection_id))
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.json["data"]["dateModified"], post_time)
-
-
-def suite():
-    s = unittest.TestSuite()
-    s.addTest(unittest.makeSuite(InspectionDocumentsResourceTest))
-    return s
-
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='suite')

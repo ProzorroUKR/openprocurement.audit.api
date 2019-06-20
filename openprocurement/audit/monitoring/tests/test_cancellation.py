@@ -76,13 +76,3 @@ class MonitoringCancellationResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(
             ('body', 'cancellation', 'relatedParty'),
             next(get_errors_field_names(response, 'relatedParty should be one of parties.')))
-
-
-def suite():
-    suite = unittest.TestSuite()
-    suite.addTest(unittest.makeSuite(MonitoringCancellationResourceTest))
-    return suite
-
-
-if __name__ == '__main__':
-    unittest.main(defaultTest='suite')

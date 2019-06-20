@@ -1,37 +1,26 @@
-GET /api/2.4/monitorings?feed=changes&limit=3&opt_fields=reasons HTTP/1.0
+GET /api/2.5/monitorings?feed=changes&limit=3&opt_fields=reasons HTTP/1.0
 Host: audit-api-sandbox.prozorro.gov.ua
 
-
-200 OK
+Response: 200 OK
 Content-Type: application/json; charset=UTF-8
-
 {
   "next_page": {
-    "path": "/api/2.4/monitorings?feed=changes&offset=b22f6be6441db6986b1d33b60e2a6d75&limit=3&opt_fields=reasons", 
-    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings?feed=changes&offset=b22f6be6441db6986b1d33b60e2a6d75&limit=3&opt_fields=reasons", 
-    "offset": "b22f6be6441db6986b1d33b60e2a6d75"
+    "path": "/api/2.5/monitorings?feed=changes&limit=3&offset=e00b4608fe7efa0180c68969a7022f44", 
+    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings?feed=changes&limit=3&offset=e00b4608fe7efa0180c68969a7022f44", 
+    "offset": "e00b4608fe7efa0180c68969a7022f44"
   }, 
   "data": [
     {
-      "reasons": [
-        "indicator"
-      ], 
-      "dateModified": "2018-01-01T02:00:00+02:00", 
-      "id": "fad8e5a0a5f63c6699ae83d12f8af1c1"
+      "id": "c5c21052abc34c87b93f4852aba5d5ea", 
+      "dateModified": "2018-01-01T02:00:00+02:00"
     }, 
     {
-      "reasons": [
-        "indicator"
-      ], 
-      "dateModified": "2018-01-01T02:00:00+02:00", 
-      "id": "53377ad52b503c9687aaac42b5486a2e"
+      "id": "f0dcdef86c634647a23c1a6117a408c6", 
+      "dateModified": "2018-01-01T02:00:00+02:00"
     }, 
     {
-      "reasons": [
-        "indicator"
-      ], 
-      "dateModified": "2018-01-01T02:00:00+02:00", 
-      "id": "3ed590b35ed13b96afb3439426282ba3"
+      "id": "9ed1c8769f03420eb3000ef27c139d4d", 
+      "dateModified": "2018-01-01T02:00:00+02:00"
     }
   ]
 }

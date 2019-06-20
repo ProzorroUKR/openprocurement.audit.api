@@ -1,29 +1,14 @@
-.. image:: https://travis-ci.org/ProzorroUKR/openprocurement.audit.api.svg
-    :target: https://travis-ci.org/ProzorroUKR/openprocurement.audit.api
-
-
-.. image:: https://img.shields.io/hexpm/l/plug.svg
-    :target: https://github.com/ProzorroUKR/openprocurement.audit.api/blob/master/LICENSE.txt
-
-
-.. image:: https://coveralls.io/repos/github/ProzorroUKR/openprocurement.audit.api/badge.svg
-    :target: https://coveralls.io/github/ProzorroUKR/openprocurement.audit.api
-
-
-.. image:: https://readthedocs.org/projects/prozorro-audit-api/badge/?version=latest
-    :target: http://prozorro-audit-api.readthedocs.io/en/latest/?badge=latest
-    :alt: Documentation Status
-
+OpenProcurement Audit Api
+=========================
 
 
 Installation
 ------------
--  Clone
--  `./bootstrap.sh`
--  `bin/buildout -N`
+Run::
 
-Then you can run test
--  `bin/nosetests`
+    docker-compose build
+
+    docker-compose up
 
 
 Description
@@ -42,31 +27,60 @@ There are two types of users use the module:
 `auth.ini`  should contain [sas] group so that SAS staff users are able to pass the authorization
 
 
-Building documentation
+Documentation
 ----------------------
 
-Use following commands to build documentation from `docs/source` into `docs/html`::
+1. Install requirements by running::
 
- bin/buildout -N -c docs.cfg
- bin/docs
+    pip install -r requirements.txt -e .[test,docs]
 
-For translation into *<lang>* (2 letter ISO language code), you have to follow the scenario:
+2. Add "couchdb" to be resolved to localhost in /etc/hosts::
 
- 1. Pull all translatable strings out of documentation::
+    echo "127.0.0.1 couchdb" >> /etc/hosts
 
-     (cd docs/build; make gettext)
+3. To run couchdb if you don't have one::
 
- 2. Update translation with new/changed strings::
+    docker-compose up -d
 
-     bin/sphinx-intl update -c docs/source/conf.py -p docs/build/locale -l uk
+Update documentation
+--------------------
+Running tests to update http files::
 
- 3. Update updated/missing strings in `docs/source/locale/<lang>/LC_MESSAGES/*.po` with your-favorite-editor/poedit/transifex/pootle/etc. to have all translations complete/updated.
+    py.test doc.py  # all
 
- 4. Compile the translation::
+    py.test doc.py -k test_case  # specific
 
-      bin/sphinx-intl build -c docs/source/conf.py
+Build documentation
+-------------------
 
- 5. Build translated documentations::
+Run::
 
-     (cd docs/build; make -e SPHINXOPTS="-D language='uk'" html)
+    cd docs
+
+    make html
+
+Translation
+-----------
+
+For translation into *uk* (2 letter ISO language code), you have to follow the scenario:
+
+1. Pull all translatable strings out of documentation::
+
+    cd docs
+
+    make gettext
+
+2. Update translation with new/changed strings::
+
+    cd docs
+
+    sphinx-intl update -p build/locale -l uk
+
+3. Update updated/missing strings in `docs/source/locale/<lang>/LC_MESSAGES/*.po` with your-favorite-editor/poedit/transifex/pootle/etc. to have all translations complete/updated.
+
+4. Compile the translation::
+
+    cd docs
+
+    sphinx-intl build
 

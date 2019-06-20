@@ -1,8 +1,6 @@
 Welcome to openprocurement.audit.api documentation!
 ===================================================
 
-API includes also  `openprocurement.audit.inspection <https://prozorro-monitoring-inspection.readthedocs.io/en/latest>`_ module. Follow the link to see its documentation section.
-
 .. title:: Monitoring API
 
 .. toctree::
@@ -14,3 +12,4 @@ API includes also  `openprocurement.audit.inspection <https://prozorro-monitorin
    feed/index
    standard/index
    acceleration
+   inspection/index

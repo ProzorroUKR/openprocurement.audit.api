@@ -11,6 +11,7 @@ LOGGER = getLogger(__package__)
 
 def includeme(config):
     LOGGER.info('init audit-monitoring plugin')
+    config.set_authentication_policy(AuthenticationPolicy(config.registry.settings['auth.file']))
     add_design()
     config.add_subscriber(set_logging_context, ContextFound)
     config.add_request_method(extract_monitoring, 'monitoring', reify=True)

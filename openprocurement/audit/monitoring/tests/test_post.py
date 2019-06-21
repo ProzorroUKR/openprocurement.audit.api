@@ -586,6 +586,7 @@ class DeclinedMonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
 
     def setUp(self):
         super(DeclinedMonitoringPostResourceTest, self).setUp()
+        self.app.app.registry.docservice_url = 'http://localhost'
         self.create_monitoring()
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         self.app.patch_json(

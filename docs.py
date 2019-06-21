@@ -120,12 +120,6 @@ class MockWebTestMixin(object):
 class BaseMonitoringWebTest(MonitoringWebTest, MockWebTestMixin):
     AppClass = DumpsWebTestApp
 
-    @classmethod
-    def setUpClass(cls):
-        cls.app = cls.AppClass(cls.relative_uri, relative_to=cls.relative_to)
-        cls.couchdb_server = cls.app.app.registry.couchdb_server
-        cls.db = cls.app.app.registry.db
-
     def setUp(self):
         self.setUpMock()
         super(BaseMonitoringWebTest, self).setUp()
@@ -138,12 +132,6 @@ class BaseMonitoringWebTest(MonitoringWebTest, MockWebTestMixin):
 
 class BaseInspectionWebTest(InspectionWebTest, MockWebTestMixin):
     AppClass = DumpsWebTestApp
-
-    @classmethod
-    def setUpClass(cls):
-        cls.app = cls.AppClass(cls.relative_uri, relative_to=cls.relative_to)
-        cls.couchdb_server = cls.app.app.registry.couchdb_server
-        cls.db = cls.app.app.registry.db
 
     def setUp(self):
         self.setUpMock()

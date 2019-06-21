@@ -10,6 +10,7 @@ class MonitoringCancellationResourceTest(BaseWebTest, DSWebTestMixin):
 
     def setUp(self):
         super(MonitoringCancellationResourceTest, self).setUp()
+        self.app.app.registry.docservice_url = 'http://localhost'
         self.create_monitoring(parties=[self.initial_party])
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 

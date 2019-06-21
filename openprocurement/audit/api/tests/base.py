@@ -12,15 +12,6 @@ from openprocurement.audit.api.design import sync_design
 COUCHBD_NAME_SETTING = 'couchdb.db_name'
 
 
-wsgiapp = None
-
-
-def loadwsgiapp(uri, **kwargs):
-    global wsgiapp
-    wsgiapp = wsgiapp or loadapp(uri, **kwargs)
-    return wsgiapp
-
-
 def snitch(func):
     """
         This method is used to add test function to TestCase classes.
@@ -85,7 +76,7 @@ class BaseWebTest(unittest.TestCase):
 
     @classmethod
     def setUpClass(cls):
-        cls.app = cls.AppClass(loadwsgiapp(cls.relative_uri, relative_to=cls.relative_to))
+        cls.app = cls.AppClass(loadapp(cls.relative_uri, relative_to=cls.relative_to))
         cls.couchdb_server = cls.app.app.registry.couchdb_server
         cls.db = cls.app.app.registry.db
 

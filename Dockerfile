@@ -3,10 +3,9 @@ FROM python:2.7-slim-jessie
 RUN apt-get update && apt-get install -y libsodium-dev git libevent-dev libzmq-dev libffi-dev libssl-dev gcc
 
 WORKDIR /app
-COPY requirements.txt /app/
 
-RUN pip install setuptools==33.1.1
-RUN pip install --upgrade pip && pip install -r requirements.txt
+COPY requirements.txt /app/
+RUN pip install setuptools==33.1.1 && pip install --upgrade pip && pip install -r requirements.txt
 
 COPY . /app
 RUN pip install -e .

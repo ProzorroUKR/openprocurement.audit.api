@@ -32,6 +32,7 @@ shell:
   - pip install --no-cache-dir -r /app/requirements.txt
   setup:
   - pip install -e /app
+
 mount:
 - from: tmp_dir
   to: /var/lib/apt/lists

@@ -8,6 +8,10 @@ from openprocurement.audit.monitoring.tests.utils import get_errors_field_names
 
 class MonitoringsEmptyListingResourceTest(BaseWebTest, DSWebTestMixin):
 
+    def setUp(self):
+        super(MonitoringsEmptyListingResourceTest, self).setUp()
+        self.app.app.registry.docservice_url = 'http://localhost'
+
     def test_get(self):
         response = self.app.get('/monitorings')
         self.assertEqual(response.status_code, 200)

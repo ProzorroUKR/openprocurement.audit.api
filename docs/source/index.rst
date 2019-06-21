@@ -8,8 +8,6 @@ Welcome to openprocurement.audit.api documentation!
    :caption: Contents:
 
 
-   tutorial/index
-   feed/index
-   standard/index
-   acceleration
+   monitoring/index
    inspection/index
+   acceleration

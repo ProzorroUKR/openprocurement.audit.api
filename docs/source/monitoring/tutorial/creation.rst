@@ -1,4 +1,4 @@
-.. include:: defs.hrst
+.. include:: ../../images.hrst
 
 Monitoring Creation
 ===================

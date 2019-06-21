@@ -1,4 +1,4 @@
-.. include:: ../defs.hrst
+.. include:: ../../images.hrst
 
 Inspections by monitoring id
 ============================

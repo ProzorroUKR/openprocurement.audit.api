@@ -255,6 +255,7 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
         self.assertEqual(data["id"], self.document_id)
         self.assertEqual(data["format"], request_data["format"])
         self.assertEqual(data["title"], request_data["title"])
+        self.assertNotEqual(data["url"], request_data["url"])
 
 
 def suite():

@@ -171,20 +171,66 @@ class ActiveMonitoringConclusionResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertIn("id", response.json["data"]["conclusion"]["documents"][0])
 
         # post another document via the conclusion documents resource url
+        doc_hash = '2' * 32
         response = self.app.post_json(
             '/monitorings/{}/conclusion/documents'.format(self.monitoring_id),
             {"data": {
                 'title': 'sign.p7s',
-                'url': self.generate_docservice_url(),
-                'hash': 'md5:' + '0' * 32,
+                'url': self.generate_docservice_url(doc_hash=doc_hash),
+                'hash': 'md5:' + doc_hash,
                 'format': 'application/pkcs7-signature',
             }}
         )
         self.assertEqual(response.status_code, 201)
+        doc_data = response.json["data"]
 
         response = self.app.get(
             '/monitorings/{}/conclusion/documents'.format(self.monitoring_id))
         self.assertEqual(len(response.json["data"]), 2)
+
+        # update  document
+        request_data = {
+            'title': 'sign-1.p7s',
+            'url': self.generate_docservice_url(),
+            'format': 'application/json',
+            'hash': 'md5:' + '0' * 32,
+        }
+        response = self.app.put_json(
+            '/monitorings/{}/conclusion/documents/{}'.format(
+                self.monitoring_id,
+                doc_data["id"]
+            ),
+            {'data': request_data},
+        )
+        self.assertEqual(response.json["data"]["title"], request_data["title"])
+        self.assertEqual(
+            response.json["data"]["url"].split("Signature")[0],
+            request_data["url"].split("Signature")[0],
+        )
+        self.assertEqual(response.json["data"]["format"], request_data["format"])
+        self.assertEqual(response.json["data"]["hash"], request_data["hash"])
+
+        # update doc data
+        request_data = {
+            'title': 'sign-2.p7s',
+            'url': self.generate_docservice_url(),
+            'format': 'application/pkcs7-signature',
+            'hash': 'md5:' + '1' * 32,
+        }
+        response = self.app.patch_json(
+            '/monitorings/{}/conclusion/documents/{}'.format(
+                self.monitoring_id,
+                doc_data["id"]
+            ),
+            {'data': request_data},
+        )
+        self.assertEqual(response.json["data"]["title"], request_data["title"])
+        self.assertEqual(response.json["data"]["format"], request_data["format"])
+        self.assertNotEqual(
+            response.json["data"]["url"].split("Signature")[0],
+            request_data["url"].split("Signature")[0],
+        )
+        self.assertNotEqual(response.json["data"]["hash"], request_data["hash"])
 
     def test_fail_violation_other(self):
         response = self.app.patch_json(

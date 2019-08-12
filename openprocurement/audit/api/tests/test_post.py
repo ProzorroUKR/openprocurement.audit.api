@@ -66,15 +66,16 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']['dateModified'], '2018-01-01T12:00:00+02:00')
 
+        request_doc_data = {
+            'title': 'lorem.doc',
+            'url': self.generate_docservice_url(),
+            'hash': 'md5:' + '0' * 32,
+            'format': 'application/msword',
+        }
         request_data = {
             'title': 'Lorem ipsum',
             'description': 'Lorem ipsum dolor sit amet',
-            'documents': [{
-                'title': 'lorem.doc',
-                'url': self.generate_docservice_url(),
-                'hash': 'md5:' + '0' * 32,
-                'format': 'application/msword',
-            }]
+            'documents': [request_doc_data]
         }
         response = self.app.post_json(
             '/monitorings/{}/posts'.format(self.monitoring_id),
@@ -91,12 +92,63 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.json['data']['description'], request_data['description'])
         self.assertEqual(response.json['data']['author'], 'monitoring_owner')
         self.assertEqual(len(response.json['data']['documents']), 1)
-        self.assertNotEqual(response.json['data']['documents'][0]['url'], request_data["documents"][0]['url'])
+        doc_data = response.json['data']['documents'][0]
+        self.assertEqual(
+            doc_data['url'].split("Signature")[0],
+            request_doc_data['url'].split("Signature")[0],
+        )
 
         response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']['dateModified'], '2018-01-02T12:30:00+02:00')
+
+        # update  document
+        doc_hash = '1' * 32
+        request_data = {
+            'title': 'sign-1.p7s',
+            'url': self.generate_docservice_url(doc_hash=doc_hash),
+            'format': 'application/json',
+            'hash': 'md5:' + doc_hash,
+        }
+        response = self.app.put_json(
+            '/monitorings/{}/posts/{}/documents/{}'.format(
+                self.monitoring_id,
+                post_id,
+                doc_data["id"]
+            ),
+            {'data': request_data},
+        )
+        self.assertEqual(response.json["data"]["title"], request_data["title"])
+        self.assertEqual(
+            response.json["data"]["url"].split("Signature")[0],
+            request_data["url"].split("Signature")[0],
+        )
+        self.assertEqual(response.json["data"]["format"], request_data["format"])
+        self.assertEqual(response.json["data"]["hash"], request_data["hash"])
+
+        # update doc data
+        request_data = {
+            'title': 'sign-2.p7s',
+            'url': self.generate_docservice_url(),
+            'format': 'application/pkcs7-signature',
+            'hash': 'md5:' + '2' * 32,
+        }
+        response = self.app.patch_json(
+            '/monitorings/{}/posts/{}/documents/{}'.format(
+                self.monitoring_id,
+                post_id,
+                doc_data["id"]
+            ),
+            {'data': request_data},
+        )
+        self.assertEqual(response.json["data"]["title"], request_data["title"])
+        self.assertEqual(response.json["data"]["format"], request_data["format"])
+        self.assertNotEqual(
+            response.json["data"]["url"].split("Signature")[0],
+            request_data["url"].split("Signature")[0],
+        )
+        self.assertNotEqual(response.json["data"]["hash"], request_data["hash"])
 
     @mock.patch('openprocurement.audit.api.validation.TendersClient')
     def test_post_create_by_tender_owner(self, mock_api_client):

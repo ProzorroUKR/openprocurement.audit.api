@@ -145,7 +145,7 @@ class MonitoringsDocumentDecisionResource(MonitoringsDocumentBaseResource):
         return super(MonitoringsDocumentDecisionResource, self).collection_post()
 
     @json_view(permission='edit_monitoring',
-               validators=(validate_document_decision_status, validate_file_update,))
+               validators=(validate_document_decision_status, validate_patch_document_data,))
     def patch(self):
         return super(MonitoringsDocumentDecisionResource, self).patch()
 
@@ -168,7 +168,7 @@ class MonitoringsDocumentConclusionResource(MonitoringsDocumentBaseResource):
         return super(MonitoringsDocumentConclusionResource, self).collection_post()
 
     @json_view(permission='edit_monitoring',
-               validators=(validate_document_conclusion_status, validate_file_update,))
+               validators=(validate_document_conclusion_status, validate_patch_document_data,))
     def patch(self):
         return super(MonitoringsDocumentConclusionResource, self).patch()
 
@@ -191,7 +191,7 @@ class MonitoringsDocumentPostResource(MonitoringsDocumentBaseResource):
         return super(MonitoringsDocumentPostResource, self).collection_post()
 
     @json_view(permission='create_post',
-               validators=(validate_document_post_status, validate_file_update,))
+               validators=(validate_document_post_status, validate_patch_document_data,))
     def patch(self):
         return super(MonitoringsDocumentPostResource, self).patch()
 
@@ -246,7 +246,7 @@ class AppealDocumentResource(MonitoringsDocumentBaseResource):
         return super(AppealDocumentResource, self).collection_post()
 
     @json_view(permission='create_appeal',
-               validators=(validate_file_update,))
+               validators=(validate_patch_document_data,))
     def patch(self):
         return super(AppealDocumentResource, self).patch()
 

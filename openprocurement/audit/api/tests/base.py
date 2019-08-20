@@ -116,10 +116,11 @@ class BaseWebTest(unittest.TestCase):
         return response.json['data']
 
 class DSWebTestMixin(object):
-    def generate_docservice_url(self):
+    def generate_docservice_url(self, doc_hash=None):
         uuid = uuid4().hex
+        doc_hash = doc_hash or '0' * 32
         key = self.app.app.registry.docservice_key
         keyid = key.hex_vk()[:8]
-        signature = b64encode(key.signature("{}\0{}".format(uuid, '0' * 32)))
+        signature = b64encode(key.signature("{}\0{}".format(uuid, doc_hash)))
         query = {'Signature': signature, 'KeyID': keyid}
         return '{}/get/{}?{}'.format(self.app.app.registry.docservice_url, uuid, urlencode(query))

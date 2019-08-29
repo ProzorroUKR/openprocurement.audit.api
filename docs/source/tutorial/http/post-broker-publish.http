@@ -1,5 +1,5 @@
 POST /api/2.4/monitorings/f6b4660221b037c38c99ad2288e65a4e/posts?acc_token=1609784ffe59301f8cf84fce86d9342d HTTP/1.0
-Authorization: Basic YnJva2VyOg==
+Authorization: Basic YnJva2VyOmJyb2tlcg==
 Content-Length: 411
 Content-Type: application/json
 Host: audit-api-sandbox.prozorro.gov.ua

@@ -640,6 +640,61 @@ class MonitoringsResourceTest(BaseDocWebTest, base_test.DSWebTestMixin):
                     status=200
                 )
 
+        with freeze_time("2018.01.25 01:00"):
+            with open('docs/source/tutorial/http/monitoring-documents.http', 'w') as self.app.file_obj:
+                response = self.app.post_json(
+                    '/monitorings/{}/documents'.format(monitoring_id),
+                    {"data": {
+                        "url": self.generate_docservice_url(),
+                        "title": "sign.p7s",
+                        "hash": "md5:00000000000000000000000000000000",
+                        "format": "application/ms-word"
+                    }},
+                    status=201
+                )
+
+        doc_id = response.json["data"]["id"]
+        with freeze_time("2018.01.25 01:30"):
+            with open('docs/source/tutorial/http/monitoring-documents-put.http', 'w') as self.app.file_obj:
+                doc_hash = "1" * 32
+                self.app.put_json(
+                    '/monitorings/{}/documents/{}'.format(monitoring_id, doc_id),
+                    {"data": {
+                        "url": self.generate_docservice_url(doc_hash=doc_hash),
+                        "title": "sign_updated.p7s",
+                        "hash": "md5:{}".format(doc_hash),
+                        "format": "application/ms-word",
+                    }},
+                    status=200
+                )
+
+        with freeze_time("2018.01.25 01:32"):
+            with open('docs/source/tutorial/http/monitoring-documents-get.http', 'w') as self.app.file_obj:
+                self.app.get(
+                    '/monitorings/{}/documents/{}'.format(monitoring_id, doc_id),
+                    status=200
+                )
+
+        with freeze_time("2018.01.25 01:35"):
+            with open('docs/source/tutorial/http/monitoring-documents-patch.http', 'w') as self.app.file_obj:
+                self.app.patch_json(
+                    '/monitorings/{}/documents/{}'.format(monitoring_id, doc_id),
+                    {"data": {
+                        "title": "sign.p7s",
+                        "format": "application/pkcs7-signature",
+                        "description": "Description? Wow!",
+                        "language": "It's some kind of Elvish.I can't read it.",
+                    }},
+                    status=200
+                )
+
+        with freeze_time("2018.01.25 01:40"):
+            with open('docs/source/tutorial/http/monitoring-documents-get-collection.http', 'w') as self.app.file_obj:
+                self.app.get(
+                    '/monitorings/{}/documents'.format(monitoring_id),
+                    status=200
+                )
+
     def test_monitoring_life_cycle_with_no_violations(self):
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 

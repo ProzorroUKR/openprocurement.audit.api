@@ -1,5 +1,5 @@
 PATCH /api/2.4/monitorings/f6b4660221b037c38c99ad2288e65a4e HTTP/1.0
-Authorization: Basic dGVzdF9zYXNfdG9rZW46
+Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
 Content-Length: 33
 Content-Type: application/json
 Host: audit-api-sandbox.prozorro.gov.ua
@@ -28,7 +28,7 @@ Content-Type: application/json; charset=UTF-8
           "hash": "md5:00000000000000000000000000000000", 
           "author": "tender_owner", 
           "title": "letter(0).doc", 
-          "url": "http://docs-sandbox.openprocurement.org/get/8606039a66723931a80666d4880878f6?KeyID=a8968c46&Signature=K9TaC5M4CeHtXXdYnbvihkUOShGnhggQNY8O2aZTO2QpsdtL9tKmr3TJ6Dszvp%2Fk9hV4E%2FiLw%2Fudv%2Fn9Fp4tDw%3D%3D", 
+          "url": "http://docs-sandbox.openprocurement.org/get/5856f5f3590235e4a6930df212c34c0c?KeyID=a8968c46&Signature=ZUI9ffQoVv1LzVz4NP6ROyfy1s9WTt0GFZnPBGsPhg1VUvK6Zy7fiMb2v96GNa1KuUnii7AljKTdDf2HRW%2FhDQ%253D%253D", 
           "format": "application/json", 
           "datePublished": "2018-01-06T09:00:00+02:00", 
           "id": "5856f5f3590235e4a6930df212c34c0c", 
@@ -55,7 +55,7 @@ Content-Type: application/json; charset=UTF-8
     ], 
     "monitoringPeriod": {
       "startDate": "2018-01-02T03:15:00+02:00", 
-      "endDate": "2018-01-30T00:00:00+02:00"
+      "endDate": "2018-01-25T00:00:00+02:00"
     }, 
     "decision": {
       "documents": [

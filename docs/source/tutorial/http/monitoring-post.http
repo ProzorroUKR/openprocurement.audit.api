@@ -1,5 +1,5 @@
 POST /api/2.4/monitorings HTTP/1.0
-Authorization: Basic dGVzdF9zYXNfdG9rZW46
+Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
 Content-Length: 526
 Content-Type: application/json
 Host: audit-api-sandbox.prozorro.gov.ua

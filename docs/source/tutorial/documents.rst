@@ -12,3 +12,26 @@ As soon as the monitoring goes to terminal status (``cancelled``,  ``stopped``, 
 
 .. include:: http/monitoring-documents.http
    :code:
+
+
+To update a document, you can use PUT method as follows
+
+.. include:: http/monitoring-documents-put.http
+   :code:
+
+
+The initial version is shown in "previousVersions" field
+
+.. include:: http/monitoring-documents-get.http
+   :code:
+
+
+It also possible to update the document info (but not the document itself). This method doesn't produce a new version
+
+.. include:: http/monitoring-documents-patch.http
+   :code:
+
+The eventual list should will look like this
+
+.. include:: http/monitoring-documents-get-collection.http
+   :code:

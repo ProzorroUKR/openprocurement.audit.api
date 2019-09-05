@@ -1,5 +1,5 @@
 GET /api/2.4/monitorings/f6b4660221b037c38c99ad2288e65a4e/posts HTTP/1.0
-Authorization: Basic dGVzdF9zYXNfdG9rZW46
+Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
 Host: audit-api-sandbox.prozorro.gov.ua
 
 

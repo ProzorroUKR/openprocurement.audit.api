@@ -17,12 +17,11 @@ msgstr ""
 
 #: ../../source/tutorial/documents.rst:4
 msgid "Monitoring Documents"
-msgstr ""
+msgstr "Документи моніторингу"
 
 #: ../../source/tutorial/documents.rst:0
 msgid "This section contains available actions for next roles:"
-msgstr ""
-"Секція містить опис можливих дій для наступний учасників моніторингу:"
+msgstr "Секція містить опис можливих дій для наступний учасників моніторингу:"
 
 #: ../../source/tutorial/documents.rst:0
 msgid "|yes| Monitoring owner"
@@ -39,5 +38,25 @@ msgid ""
 "monitoring"
 msgstr ""
 "Після того як моніторинг переходить до термінального статусу "
-"(``cancelled``,  ``stopped``, ``completed``, ``closed``), співробітник "
-"ДАСУ має можливість додати документи до моніторингу"
+"(``cancelled``,  ``stopped``, ``completed``, ``closed``), співробітник ДАСУ "
+"має можливість додати документи до моніторингу"
+
+#: ../../source/tutorial/documents.rst:17
+msgid "To update a document, you can use PUT method as follows"
+msgstr "Щоб оновити документ, можна використовувати метод PUT наступним чином"
+
+#: ../../source/tutorial/documents.rst:23
+msgid "The initial version is shown in \"previousVersions\" field"
+msgstr "Початкова версія відображається в “previousVersions” полі"
+
+#: ../../source/tutorial/documents.rst:29
+msgid ""
+"It also possible to update the document info (but not the document itself). "
+"This method doesn't produce a new version"
+msgstr ""
+"Також можна оновити інформацію про документ (але не сам документ). Цей "
+"метод не генерує нову версію"
+
+#: ../../source/tutorial/documents.rst:34
+msgid "The eventual list should will look like this"
+msgstr "В кінцевому підсумку список документів буде виглядати так"

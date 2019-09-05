@@ -103,7 +103,7 @@ class MonitoringsDocumentBaseResource(APIResource):
             return {'data': document.serialize('view')}
 
     @json_view(content_type='application/json',
-               permission='edit_monitoring_documents',
+               permission='edit_monitoring',
                validators=(validate_patch_document_data,))
     def patch(self):
         """
@@ -117,6 +117,7 @@ class MonitoringsDocumentBaseResource(APIResource):
                                                   {'MESSAGE_ID': 'monitoring_document_patch'},
                                                   {'DOCUMENT_ID': document.id}))
             return {'data': self.request.context.serialize('view')}
+
 
 @op_resource(name='Monitoring Documents',
              collection_path='/monitorings/{monitoring_id}/documents',

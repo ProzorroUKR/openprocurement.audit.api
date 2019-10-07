@@ -39,7 +39,7 @@ class PostResource(APIResource):
         upload_objects_documents(self.request, post)
         if post.author == get_monitoring_role('sas') and post.relatedPost is None:
             accelerator = get_monitoring_accelerator(self.context)
-            post.dateOverdue = calculate_normalized_business_date(get_now(), POST_OVERDUE_TIME, accelerator, True)
+            post.dateOverdue = calculate_normalized_business_date(get_now(), POST_OVERDUE_TIME, accelerator)
         if monitoring.status in (ADDRESSED_STATUS, DECLINED_STATUS):
             post.postOf = CONCLUSION_OBJECT_TYPE
         monitoring.posts.append(post)

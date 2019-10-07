@@ -4,6 +4,7 @@ from logging import getLogger
 from re import compile
 
 from couchdb import ResourceConflict
+from dateorro import calc_datetime, calc_normalized_datetime, calc_working_datetime
 from datetime import timedelta, datetime, time
 from gevent import sleep
 from schematics.exceptions import ModelValidationError
@@ -136,7 +137,7 @@ def generate_monitoring_id(ctime, db, server_id=''):
 def generate_period(date, delta, accelerator=None):
     period = Period()
     period.startDate = date
-    period.endDate = calculate_normalized_business_date(date, delta, accelerator, True)
+    period.endDate = calculate_normalized_business_date(date, delta, accelerator)
     return period
 
 
@@ -163,53 +164,11 @@ def get_monitoring_accelerator(context):
     return 0
 
 
-def calculate_business_date(date_obj, timedelta_obj, accelerator=None, working_days=False):
+def calculate_normalized_business_date(date_obj, timedelta_obj, accelerator=None):
     if accelerator:
-        return date_obj + (timedelta_obj / accelerator)
-    if working_days:
-        if timedelta_obj > timedelta():
-            if is_non_working_date(date_obj):
-                date_obj = datetime.combine(date_obj.date(), time(0, tzinfo=date_obj.tzinfo)) + timedelta(1)
-                while is_non_working_date(date_obj):
-                    date_obj += timedelta(1)
-        else:
-            if is_non_working_date(date_obj):
-                date_obj = datetime.combine(date_obj.date(), time(0, tzinfo=date_obj.tzinfo))
-                while is_non_working_date(date_obj):
-                    date_obj -= timedelta(1)
-                date_obj += timedelta(1)
-        for _ in xrange(abs(timedelta_obj.days)):
-            date_obj += timedelta(1) if timedelta_obj > timedelta() else -timedelta(1)
-            while is_non_working_date(date_obj):
-                date_obj += timedelta(1) if timedelta_obj > timedelta() else -timedelta(1)
-        return date_obj
-    return date_obj + timedelta_obj
-
-
-def calculate_normalized_date(dt, ceil=False):
-    if ceil:
-        return dt.astimezone(TZ).replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1)
-    return dt.astimezone(TZ).replace(hour=0, minute=0, second=0, microsecond=0)
-
-
-def calculate_normalized_business_date(date_obj, timedelta_obj, accelerator=None, working_days=False):
-    normalized_date = calculate_normalized_date(date_obj) if not accelerator else date_obj
-    business_date = calculate_business_date(
-        normalized_date,
-        timedelta_obj,
-        accelerator=accelerator,
-        working_days=working_days
-    )
-    if is_non_working_date(date_obj) or accelerator:
-        return business_date
-    return business_date + timedelta(days=1)
-
-
-def is_non_working_date(date_obj):
-    return any([
-        date_obj.weekday() in [5, 6] and WORKING_DAYS.get(date_obj.date().isoformat(), True),
-        WORKING_DAYS.get(date_obj.date().isoformat(), False)
-    ])
+        return calc_datetime(date_obj, timedelta_obj, accelerator)
+    normalized_date = calc_normalized_datetime(date_obj, ceil=timedelta_obj > timedelta())
+    return calc_working_datetime(normalized_date, timedelta_obj, midnight=True, calendar=WORKING_DAYS)
 
 
 def get_access_token(request):

@@ -1,12 +1,11 @@
-import unittest
-
+from dateorro import calc_working_datetime, calc_datetime
 from datetime import datetime, timedelta
 from freezegun import freeze_time
 
-from openprocurement.audit.api.constants import MONITORING_TIME, TZ, SANDBOX_MODE
+from openprocurement.audit.api.constants import MONITORING_TIME, TZ, SANDBOX_MODE, WORKING_DAYS
 from openprocurement.audit.monitoring.tests.base import BaseWebTest
 from openprocurement.audit.monitoring.tests.utils import get_errors_field_names
-from openprocurement.audit.monitoring.utils import get_monitoring_accelerator, calculate_business_date
+from openprocurement.audit.monitoring.utils import get_monitoring_accelerator
 
 
 @freeze_time('2018-01-01T09:00:00+02:00')
@@ -65,12 +64,19 @@ class MonitoringResourceTest(BaseWebTest):
         accelerator = get_monitoring_accelerator(context)
 
         now_date = datetime.now(TZ)
-        end_date = calculate_business_date(
-            now_date,
-            MONITORING_TIME,
-            accelerator=accelerator,
-            working_days=True
-        )
+        if accelerator:
+            end_date = calc_datetime(
+                now_date,
+                MONITORING_TIME,
+                accelerator=accelerator
+            )
+        else:
+            end_date = calc_working_datetime(
+                now_date,
+                MONITORING_TIME,
+                midnight=True,
+                calendar=WORKING_DAYS
+            )
         response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {

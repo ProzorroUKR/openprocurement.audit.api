@@ -24,7 +24,7 @@ requires = [
     'six',
     'pytz',
     'pyramid_exclog',
-    'jsonpatch==1.13-jsondiff.unicode.replacefix.0',
+    'jsonpatch==1.13',
     'rfc6266==0.0.6',
     'openprocurement_client==1.0b3'
 ]
@@ -50,7 +50,7 @@ dependency_links = [
     "https://github.com/ProzorroUKR/barbecue/tarball/master#egg=barbecue",
     "https://github.com/ProzorroUKR/cornice/tarball/1.2.0.dev0#egg=cornice-1.2.0.dev0",
     "https://github.com/ProzorroUKR/rfc6266/tarball/0.0.6#egg=rfc6266-0.0.6",
-    "https://github.com/ProzorroUKR/python-json-patch/tarball/1.13-jsondiff.unicode.replacefix.0#egg=jsonpatch-1.13-jsondiff.unicode.replacefix.0",
+    "https://github.com/ProzorroUKR/python-json-patch/tarball/1.13-jsondiff.unicode.replacefix.0#egg=jsonpatch-1.13",
 ]
 
 

@@ -13,11 +13,11 @@ develop-eggs/
 dist/
 downloads/
 eggs/
+.eggs/
 lib/
 lib64
 parts/
 sdist/
-etc/
 include/
 var/
 src/
@@ -62,8 +62,3 @@ bin/
 
 cover/
 output.html
-
-.idea/
-
-auth.ini
-local.cfg

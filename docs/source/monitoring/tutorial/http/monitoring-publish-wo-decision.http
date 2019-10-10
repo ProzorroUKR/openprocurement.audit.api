@@ -1,0 +1,27 @@
+PATCH /api/2.4/monitorings/f6b4660221b037c38c99ad2288e65a4e HTTP/1.0
+Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
+Content-Length: 30
+Content-Type: application/json
+Host: audit-api-sandbox.prozorro.gov.ua
+
+{
+  "data": {
+    "status": "active"
+  }
+}
+
+
+422 Unprocessable Entity
+Content-Type: application/json; charset=UTF-8
+
+{
+  "status": "error", 
+  "errors": [
+    {
+      "description": "This field is required.", 
+      "location": "body", 
+      "name": "decision"
+    }
+  ]
+}
+

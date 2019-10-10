@@ -1,0 +1,33 @@
+POST /api/2.4/monitorings/f6b4660221b037c38c99ad2288e65a4e/posts/e80df966d95f3b5d99f744ec5cadc971/documents?acc_token=1609784ffe59301f8cf84fce86d9342d HTTP/1.0
+Authorization: Basic YnJva2VyOmJyb2tlcg==
+Content-Length: 321
+Content-Type: application/json
+Host: audit-api-sandbox.prozorro.gov.ua
+
+{
+  "data": {
+    "url": "http://docs-sandbox.openprocurement.org/get/7c15c91cda27332f959d002adf747412?KeyID=a8968c46&Signature=sHWKzxHc1VBq%2BQNAxYY3N3Wg4KoS3EYwba5h9HtkzmjaxXHmQO8R9UONBdKPgUEz%2BVIykBF5yzCSHqnUZGaxAQ%3D%3D", 
+    "title": "dolor.doc", 
+    "hash": "md5:00000000000000000000000000000000", 
+    "format": "application/msword"
+  }
+}
+
+
+201 Created
+Content-Type: application/json; charset=UTF-8
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/f6b4660221b037c38c99ad2288e65a4e/posts/e80df966d95f3b5d99f744ec5cadc971/documents/7c15c91cda27332f959d002adf747412
+
+{
+  "data": {
+    "hash": "md5:00000000000000000000000000000000", 
+    "author": "tender_owner", 
+    "title": "dolor.doc", 
+    "url": "http://docs-sandbox.openprocurement.org/get/7c15c91cda27332f959d002adf747412?KeyID=a8968c46&Signature=wHmcsSyT70A9OnRdEHDapUj01vtD8FVPrmiAMdoXCQ3c3ab2OYBhpwtyZPMhtUGf7O%252BQAuvvVeS7SFPGT%2FsWBg%253D%253D", 
+    "format": "application/msword", 
+    "datePublished": "2018-01-03T02:10:00+02:00", 
+    "id": "7c15c91cda27332f959d002adf747412", 
+    "dateModified": "2018-01-03T02:10:00+02:00"
+  }
+}
+

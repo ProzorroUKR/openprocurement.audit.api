@@ -1,0 +1,33 @@
+POST /api/2.4/monitorings/f6b4660221b037c38c99ad2288e65a4e/appeal/documents?acc_token=1609784ffe59301f8cf84fce86d9342d HTTP/1.0
+Authorization: Basic YnJva2VyOmJyb2tlcg==
+Content-Length: 332
+Content-Type: application/json
+Host: audit-api-sandbox.prozorro.gov.ua
+
+{
+  "data": {
+    "url": "http://docs-sandbox.openprocurement.org/get/f6b4660221b037c38c99ad2288e65a4e?KeyID=a8968c46&Signature=8ZN3Ia1j%2B5a30eXGcctmvWYNzNc1z6YQiwUGn5Ep3Soy%2FHsi2Z1pYnVK9zA3CchdcvlNQZzVF%2Bn5t91qXuEUCw%3D%3D", 
+    "title": "another-letter.doc", 
+    "hash": "md5:00000000000000000000000000000000", 
+    "format": "application/msword"
+  }
+}
+
+
+201 Created
+Content-Type: application/json; charset=UTF-8
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/f6b4660221b037c38c99ad2288e65a4e/appeal/documents/38acb151a83a3cd1bc15bcd267d927ad
+
+{
+  "data": {
+    "hash": "md5:00000000000000000000000000000000", 
+    "author": "tender_owner", 
+    "title": "another-letter.doc", 
+    "url": "http://docs-sandbox.openprocurement.org/get/f6b4660221b037c38c99ad2288e65a4e?KeyID=a8968c46&Signature=pOF8xT8UsYA3toLPFerqgJ1XuR9J94AkAKshjawUT1MPLsKqHmU0b0GE8U1qUhU6gqKmVhpx4zKiUpWbrLQfCA%253D%253D", 
+    "format": "application/msword", 
+    "datePublished": "2018-01-06T10:00:00+02:00", 
+    "id": "38acb151a83a3cd1bc15bcd267d927ad", 
+    "dateModified": "2018-01-06T10:00:00+02:00"
+  }
+}
+

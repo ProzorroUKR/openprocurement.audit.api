@@ -1,0 +1,17 @@
+GET /api/2.4/monitorings HTTP/1.0
+Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
+Host: audit-api-sandbox.prozorro.gov.ua
+
+
+200 OK
+Content-Type: application/json; charset=UTF-8
+
+{
+  "next_page": {
+    "path": "/api/2.4/monitorings?offset=", 
+    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings?offset=", 
+    "offset": ""
+  }, 
+  "data": []
+}
+

@@ -1,0 +1,108 @@
+GET /api/2.4/monitorings/f6b4660221b037c38c99ad2288e65a4e/posts HTTP/1.0
+Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
+Host: audit-api-sandbox.prozorro.gov.ua
+
+
+200 OK
+Content-Type: application/json; charset=UTF-8
+
+{
+  "data": [
+    {
+      "documents": [
+        {
+          "hash": "md5:00000000000000000000000000000000", 
+          "author": "monitoring_owner", 
+          "title": "ipsum.doc", 
+          "url": "http://docs-sandbox.openprocurement.org/get/c64d148770453363b9c5bb96d05a4222?KeyID=a8968c46&Signature=ogAx5k%252B6W7pS6fCBx3Vtx2G%252BhmmbT1ldJjrmkPrKMfmUlmAeBX6%252BXfof2PseQyjD2tJTia9JXRU069eo9soVCw%253D%253D", 
+          "format": "application/msword", 
+          "datePublished": "2018-01-03T02:05:00+02:00", 
+          "id": "c64d148770453363b9c5bb96d05a4222", 
+          "dateModified": "2018-01-03T02:05:00+02:00"
+        }, 
+        {
+          "hash": "md5:00000000000000000000000000000000", 
+          "author": "monitoring_owner", 
+          "title": "dolor.doc", 
+          "url": "http://docs-sandbox.openprocurement.org/get/7c15c91cda27332f959d002adf747412?KeyID=a8968c46&Signature=wHmcsSyT70A9OnRdEHDapUj01vtD8FVPrmiAMdoXCQ3c3ab2OYBhpwtyZPMhtUGf7O%252BQAuvvVeS7SFPGT%2FsWBg%253D%253D", 
+          "format": "application/msword", 
+          "datePublished": "2018-01-03T02:10:00+02:00", 
+          "id": "7c15c91cda27332f959d002adf747412", 
+          "dateModified": "2018-01-03T02:10:00+02:00"
+        }
+      ], 
+      "description": "Lorem ipsum dolor sit amet.", 
+      "title": "Lorem ipsum", 
+      "author": "monitoring_owner", 
+      "datePublished": "2018-01-03T02:05:00+02:00", 
+      "relatedParty": "f6b4660221b037c38c99ad2288e65a4e", 
+      "dateOverdue": "2018-01-10T00:00:00+02:00", 
+      "id": "c64d148770453363b9c5bb96d05a4222", 
+      "postOf": "decision"
+    }, 
+    {
+      "documents": [
+        {
+          "hash": "md5:00000000000000000000000000000000", 
+          "author": "tender_owner", 
+          "title": "dolor.doc", 
+          "url": "http://docs-sandbox.openprocurement.org/get/7905b42becf43c348806fe29b5e1c7a4?KeyID=a8968c46&Signature=X%2FYUrtb7GzP%2FthiJQqqwuFsHatMOQnZWKwaTpnNLxNy5lfp36i6ZGrAGS029tCYxDdeVX0AuishvGITC886MDQ%253D%253D", 
+          "format": "application/msword", 
+          "datePublished": "2018-01-04T02:10:00+02:00", 
+          "id": "7905b42becf43c348806fe29b5e1c7a4", 
+          "dateModified": "2018-01-04T02:10:00+02:00"
+        }
+      ], 
+      "description": "Dolor sit amet", 
+      "title": "Sit amet", 
+      "author": "tender_owner", 
+      "datePublished": "2018-01-04T02:05:00+02:00", 
+      "relatedPost": "c64d148770453363b9c5bb96d05a4222", 
+      "id": "a4b6d8ef66ae3b0d8b2e4f0918030508", 
+      "postOf": "decision"
+    }, 
+    {
+      "documents": [
+        {
+          "hash": "md5:00000000000000000000000000000000", 
+          "author": "tender_owner", 
+          "title": "ipsum.doc", 
+          "url": "http://docs-sandbox.openprocurement.org/get/cacc1c94c95130f18a157805ef015cb3?KeyID=a8968c46&Signature=KZ19WsVeBFbSuL4ufszVQX4rWt9nSQUm%2FBB7b8zLNrA6y2YmY0BcxGOT4Kblfj1YeGoQg2NWFPgAgEGoepdfAQ%253D%253D", 
+          "format": "application/msword", 
+          "datePublished": "2018-01-04T03:05:00+02:00", 
+          "id": "cacc1c94c95130f18a157805ef015cb3", 
+          "dateModified": "2018-01-04T03:05:00+02:00"
+        }
+      ], 
+      "description": "Lorem ipsum dolor sit amet.", 
+      "title": "Dolor sit amet", 
+      "author": "tender_owner", 
+      "datePublished": "2018-01-04T03:05:00+02:00", 
+      "id": "cacc1c94c95130f18a157805ef015cb3", 
+      "postOf": "decision"
+    }, 
+    {
+      "documents": [
+        {
+          "hash": "md5:00000000000000000000000000000000", 
+          "author": "monitoring_owner", 
+          "title": "ipsum.doc", 
+          "url": "http://docs-sandbox.openprocurement.org/get/da26cf82b11630738c206318a5b1d327?KeyID=a8968c46&Signature=yOyX%2Fqh%2FcfV1LxKLW%252B%2Fim1A6ETzrtm5QQkS9wJGXxA1wzv%252BKkoeEqkG0suusadn9yvtCae1n5MgtuxOO8KnwCQ%253D%253D", 
+          "format": "application/msword", 
+          "datePublished": "2018-01-04T03:15:00+02:00", 
+          "id": "da26cf82b11630738c206318a5b1d327", 
+          "dateModified": "2018-01-04T03:15:00+02:00"
+        }
+      ], 
+      "description": "Lorem ipsum dolor sit amet.", 
+      "title": "Lorem ipsum", 
+      "author": "monitoring_owner", 
+      "datePublished": "2018-01-04T03:15:00+02:00", 
+      "relatedParty": "f6b4660221b037c38c99ad2288e65a4e", 
+      "relatedPost": "cacc1c94c95130f18a157805ef015cb3", 
+      "id": "da26cf82b11630738c206318a5b1d327", 
+      "postOf": "decision"
+    }
+  ]
+}
+

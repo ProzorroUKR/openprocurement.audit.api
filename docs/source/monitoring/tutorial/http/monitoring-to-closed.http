@@ -1,0 +1,117 @@
+PATCH /api/2.5/monitorings/e04c20ad90e64cdbb7dee9a3459cf38c HTTP/1.0
+Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
+Content-Length: 30
+Content-Type: application/json
+Host: audit-api-sandbox.prozorro.gov.ua
+DATA:
+{
+  "data": {
+    "status": "closed"
+  }
+}
+
+Response: 200 OK
+Content-Type: application/json; charset=UTF-8
+{
+  "data": {
+    "status": "closed", 
+    "eliminationPeriod": {
+      "startDate": "2018-01-04T02:00:00+02:00", 
+      "endDate": "2018-01-11T00:00:00+02:00"
+    }, 
+    "endDate": "2018-01-25T00:00:00+02:00", 
+    "reasons": [
+      "public", 
+      "fiscal"
+    ], 
+    "monitoringPeriod": {
+      "startDate": "2018-01-02T02:00:00+02:00", 
+      "endDate": "2018-01-25T00:00:00+02:00"
+    }, 
+    "decision": {
+      "documents": [
+        {
+          "hash": "md5:00000000000000000000000000000000", 
+          "author": "monitoring_owner", 
+          "title": "lorem.doc", 
+          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/2f198c183caf412aa04ef9de19a8ec39?KeyID=a8968c46&Signature=P28otbfOKNosN%252Bw1QHwbUoSV%2FZt1LAxLb3NKOH9FC%252BI9zcaeB2D%2FGzSwuCManf6haIzHD1e49lbYGL2cBAanBA%253D%253D", 
+          "format": "application/msword", 
+          "datePublished": "2018-01-02T02:00:00+02:00", 
+          "id": "42a2ad16a51c41fbaa6e989145f9a73d", 
+          "dateModified": "2018-01-02T02:00:00+02:00"
+        }
+      ], 
+      "description": "text", 
+      "dateCreated": "2018-01-02T02:00:00+02:00", 
+      "relatedParty": "99bda284b4e045439d5295679bcf77ad", 
+      "date": "2018-01-02T00:00:00+02:00", 
+      "datePublished": "2018-01-02T02:00:00+02:00"
+    }, 
+    "monitoring_id": "UA-M-2018-01-01-000001", 
+    "posts": [
+      {
+        "documents": [
+          {
+            "hash": "md5:00000000000000000000000000000000", 
+            "author": "monitoring_owner", 
+            "title": "ipsum.doc", 
+            "url": "http://public-docs-sandbox.prozorro.gov.ua/get/77d34c994658438ca644694b37341127?KeyID=a8968c46&Signature=lNJHEWZwXPooizcTmuj%2F6Vp2TaxyGDSPdvYqsMIhhK%252B54H1S%252BdyDJnspRMm4fCefObG5DF6US8x14muWbcGEDA%253D%253D", 
+            "format": "application/msword", 
+            "datePublished": "2018-01-03T02:10:00+02:00", 
+            "id": "01717da1c2a14c8db413367d0da52449", 
+            "dateModified": "2018-01-03T02:10:00+02:00"
+          }
+        ], 
+        "description": "Lorem ipsum dolor sit amet.", 
+        "title": "Lorem ipsum", 
+        "author": "monitoring_owner", 
+        "datePublished": "2018-01-03T02:10:00+02:00", 
+        "relatedParty": "99bda284b4e045439d5295679bcf77ad", 
+        "dateOverdue": "2018-01-10T00:00:00+02:00", 
+        "id": "63ea2f681d024abab6003de57b1dbe38", 
+        "postOf": "decision"
+      }
+    ], 
+    "tender_id": "7e36c2af6c3c92198329808d9443eea8", 
+    "id": "e04c20ad90e64cdbb7dee9a3459cf38c", 
+    "parties": [
+      {
+        "name": "The State Audit Service of Ukraine", 
+        "roles": [
+          "sas"
+        ], 
+        "datePublished": "2018-01-01T02:00:00+02:00", 
+        "address": {
+          "postalCode": "04070", 
+          "countryName": "Ukraine", 
+          "streetAddress": "Petra Sahaidachnoho St, 4", 
+          "region": "Kyiv", 
+          "locality": "Kyiv"
+        }, 
+        "contactPoint": {
+          "name": "Oleksii Kovalenko", 
+          "telephone": "0440000000"
+        }, 
+        "identifier": {
+          "scheme": "UA-EDR", 
+          "id": "40165856", 
+          "uri": "http://www.dkrs.gov.ua"
+        }, 
+        "id": "99bda284b4e045439d5295679bcf77ad"
+      }
+    ], 
+    "dateCreated": "2018-01-01T02:00:00+02:00", 
+    "procuringStages": [
+      "awarding", 
+      "contracting"
+    ], 
+    "dateModified": "2018-01-11T02:00:00+02:00", 
+    "conclusion": {
+      "dateCreated": "2018-01-04T02:00:00+02:00", 
+      "relatedParty": "99bda284b4e045439d5295679bcf77ad", 
+      "violationOccurred": false, 
+      "datePublished": "2018-01-04T02:00:00+02:00"
+    }
+  }
+}
+

@@ -1,0 +1,33 @@
+POST /api/2.4/monitorings/f6b4660221b037c38c99ad2288e65a4e/conclusion/documents HTTP/1.0
+Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
+Content-Length: 335
+Content-Type: application/json
+Host: audit-api-sandbox.prozorro.gov.ua
+
+{
+  "data": {
+    "url": "http://docs-sandbox.openprocurement.org/get/ffe58ad3618936f3a7b04a63c6699f29?KeyID=a8968c46&Signature=gl765cPhKcEro%2Fa%2Bc9zK1mkVNGpzDzRszO%2FgZQfot19cFoV8pxgZQGyOAQeFRov%2FgJwN1USpWIkXhheMQh%2FHBg%3D%3D", 
+    "title": "sign.p7s", 
+    "hash": "md5:00000000000000000000000000000000", 
+    "format": "application/pkcs7-signature"
+  }
+}
+
+
+201 Created
+Content-Type: application/json; charset=UTF-8
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/f6b4660221b037c38c99ad2288e65a4e/conclusion/documents/ffe58ad3618936f3a7b04a63c6699f29
+
+{
+  "data": {
+    "hash": "md5:00000000000000000000000000000000", 
+    "author": "monitoring_owner", 
+    "title": "sign.p7s", 
+    "url": "http://docs-sandbox.openprocurement.org/get/ffe58ad3618936f3a7b04a63c6699f29?KeyID=a8968c46&Signature=ycY0zULP11L4mHhHMgWj72RvG5N4DWBv3oaiLfAqGeVfdG1chL4NizVLj60cb%2FiLYqBLKrRdvdAzAvTeNE9kBA%253D%253D", 
+    "format": "application/pkcs7-signature", 
+    "datePublished": "2018-01-05T02:20:00+02:00", 
+    "id": "ffe58ad3618936f3a7b04a63c6699f29", 
+    "dateModified": "2018-01-05T02:20:00+02:00"
+  }
+}
+

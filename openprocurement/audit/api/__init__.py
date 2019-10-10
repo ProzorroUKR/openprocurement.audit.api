@@ -1,24 +1,21 @@
-from pyramid.events import ContextFound
-from openprocurement.audit.api.design import add_design
-from openprocurement.audit.api.utils import monitoring_from_data, extract_monitoring, set_logging_context
-from openprocurement.audit.api.auth import AuthenticationPolicy
+# -*- coding: utf-8 -*-
 from logging import getLogger
-from pkg_resources import get_distribution
 
-PKG = get_distribution(__package__)
+from pyramid.interfaces import IRequest
 
-LOGGER = getLogger(PKG.project_name)
+from openprocurement.audit.api.adapters import ContentConfigurator
+from openprocurement.audit.api.auth import AuthenticationPolicy
+from openprocurement.audit.api.interfaces import IContentConfigurator, IOPContent
+from openprocurement.audit.api.utils import get_content_configurator, request_get_now
+
+LOGGER = getLogger(__package__)
 
 
 def includeme(config):
-    LOGGER.info('init audit plugin')
-    config.set_authentication_policy(AuthenticationPolicy(config.registry.settings['auth.file']))
-    add_design()
-    config.add_subscriber(set_logging_context, ContextFound)
-    config.add_request_method(extract_monitoring, 'monitoring', reify=True)
-    config.add_request_method(monitoring_from_data)
-    settings = config.get_settings()
-    config.registry.api_token = settings.get('api_token')
-    config.registry.api_server = settings.get('api_server')
-    config.registry.api_version = settings.get('api_version')
     config.scan("openprocurement.audit.api.views")
+    config.scan("openprocurement.audit.api.subscribers")
+    config.set_authentication_policy(AuthenticationPolicy(config.registry.settings['auth.file']))
+    config.registry.registerAdapter(ContentConfigurator, (IOPContent, IRequest), IContentConfigurator)
+    config.add_request_method(get_content_configurator, 'content_configurator', reify=True)
+    config.add_request_method(request_get_now, 'now', reify=True)
+

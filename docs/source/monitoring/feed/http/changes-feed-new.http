@@ -1,0 +1,24 @@
+GET /api/2.5/monitorings?feed=changes&limit=3&offset=c133b07e12404708498375616ef3ce2f HTTP/1.0
+Host: audit-api-sandbox.prozorro.gov.ua
+
+Response: 200 OK
+Content-Type: application/json; charset=UTF-8
+{
+  "next_page": {
+    "path": "/api/2.5/monitorings?feed=changes&limit=3&offset=049d407f73efd2b2144cda34dc61d2d8", 
+    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings?feed=changes&limit=3&offset=049d407f73efd2b2144cda34dc61d2d8", 
+    "offset": "049d407f73efd2b2144cda34dc61d2d8"
+  }, 
+  "data": [
+    {
+      "id": "9409c91316e942e199a6724e67189679", 
+      "dateModified": "2018-01-01T02:00:00+02:00"
+    }
+  ], 
+  "prev_page": {
+    "path": "/api/2.5/monitorings?feed=changes&descending=1&limit=3&offset=c133b07e12404708498375616ef3ce2f", 
+    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings?feed=changes&descending=1&limit=3&offset=c133b07e12404708498375616ef3ce2f", 
+    "offset": "c133b07e12404708498375616ef3ce2f"
+  }
+}
+

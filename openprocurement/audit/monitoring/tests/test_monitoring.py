@@ -2,7 +2,7 @@ from dateorro import calc_working_datetime, calc_datetime
 from datetime import datetime, timedelta
 from freezegun import freeze_time
 
-from openprocurement.audit.api.constants import MONITORING_TIME, TZ, SANDBOX_MODE, WORKING_DAYS
+from openprocurement.audit.api.constants import MONITORING_TIME, TZ, SANDBOX_MODE
 from openprocurement.audit.monitoring.tests.base import BaseWebTest
 from openprocurement.audit.monitoring.tests.utils import get_errors_field_names
 from openprocurement.audit.monitoring.utils import get_monitoring_accelerator

@@ -1,15 +1,14 @@
 from string import hexdigits
-from urlparse import parse_qs, urlparse
-
 from schematics.types.serializable import serializable
 from uuid import uuid4
-
 from couchdb_schematics.document import DocumentMeta, Document as SchematicsDocument
 from schematics.models import Model as SchematicsModel
 from schematics.transforms import blacklist, convert, export_loop, whitelist
 from schematics.types import BaseType, StringType, MD5Type
 from schematics.types.compound import DictType
 from zope.component import queryAdapter, getAdapters
+
+from six.moves.urllib.parse import parse_qs, urlparse
 
 from openprocurement.audit.api.interfaces import IValidator, ISerializable
 from openprocurement.audit.api.types import IsoDateTimeType, ListType, HashType

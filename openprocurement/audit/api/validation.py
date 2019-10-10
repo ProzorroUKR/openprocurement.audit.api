@@ -12,7 +12,7 @@ OPERATIONS = {"POST": "add", "PATCH": "update", "PUT": "update", "DELETE": "dele
 def validate_json_data(request):
     try:
         json = request.json_body
-    except ValueError, e:
+    except ValueError as e:
         request.errors.add('body', 'data', e.message)
         request.errors.status = 422
         raise error_handler(request.errors)
@@ -44,12 +44,12 @@ def validate_data(request, model, partial=False, data=None):
             m.validate()
             method = m.serialize
             role = 'create'
-    except (ModelValidationError, ModelConversionError), e:
+    except (ModelValidationError, ModelConversionError) as e:
         for i in e.message:
             request.errors.add('body', i, e.message[i])
         request.errors.status = 422
         raise error_handler(request.errors)
-    except ValueError, e:
+    except ValueError as e:
         request.errors.add('body', 'data', e.message)
         request.errors.status = 422
         raise error_handler(request.errors)

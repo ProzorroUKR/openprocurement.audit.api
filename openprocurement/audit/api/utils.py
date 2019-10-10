@@ -6,8 +6,6 @@ from binascii import hexlify, unhexlify
 from email.header import decode_header
 from json import dumps
 from logging import getLogger
-from urllib import quote, unquote, urlencode
-from urlparse import urlparse, urlunsplit, parse_qsl
 
 import couchdb.json
 from Crypto.Cipher import AES
@@ -22,6 +20,8 @@ from rfc6266 import build_header
 from time import time as ttime
 from uuid import uuid4
 from webob.multidict import NestedMultiDict
+
+from six.moves.urllib.parse import urlparse, urlunsplit, parse_qsl, quote, unquote, urlencode
 
 from openprocurement.audit.api.constants import (
     DOCUMENT_BLACKLISTED_FIELDS,
@@ -181,7 +181,7 @@ def upload_file(request,
                     headers={'X-Client-Request-ID': request.environ.get('REQUEST_ID', '')},
                     auth=(request.registry.docservice_username, request.registry.docservice_password))
                 json_data = r.json()
-            except Exception, e:
+            except Exception as e:
                 LOGGER.warning(
                     "Raised exception '{}' on uploading document "
                     "to document service': {}.".format(type(e), e),
@@ -378,7 +378,7 @@ def request_params(request):
         request.errors.add('body', 'data', 'could not decode params')
         request.errors.status = 422
         raise error_handler(request.errors, False)
-    except Exception, e:
+    except Exception as e:
         request.errors.add('body', str(e.__class__.__name__), str(e))
         request.errors.status = 422
         raise error_handler(request.errors, False)

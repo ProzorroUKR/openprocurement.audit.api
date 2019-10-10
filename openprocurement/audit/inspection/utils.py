@@ -33,11 +33,11 @@ def save_inspection(request, date_modified=None):
         inspection.dateModified = date_modified or get_now()
         try:
             inspection.store(request.registry.db)
-        except ModelValidationError, e:  # pragma: no cover
+        except ModelValidationError as e:  # pragma: no cover
             for i in e.message:
                 request.errors.add('body', i, e.message[i])
             request.errors.status = 422
-        except Exception, e:  # pragma: no cover
+        except Exception as e:  # pragma: no cover
             request.errors.add('body', 'data', str(e))
         else:
             LOGGER.info(

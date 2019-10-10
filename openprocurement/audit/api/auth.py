@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from ConfigParser import ConfigParser
+from six.moves.configparser import ConfigParser
 from hashlib import sha512
 
 from pyramid.authentication import BasicAuthAuthenticationPolicy

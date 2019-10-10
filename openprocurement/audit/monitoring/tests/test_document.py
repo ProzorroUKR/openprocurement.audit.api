@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import unittest
 from hashlib import sha512
 
 import mock

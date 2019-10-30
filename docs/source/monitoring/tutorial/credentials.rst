@@ -18,7 +18,7 @@ You can pass access token in the following ways:
 2) ``X-Access-Token`` HTTP request header
 3) ``access.token`` in the body of request
 
-In the ``PATCH: /contracts/{id}/credentials?acc_token={tender_token}``:
+In the ``PATCH: /monitorings/{id}/credentials?acc_token={tender_token}``:
 
 * ``id`` stands for monitoring id,
 

@@ -3,58 +3,55 @@ msgid ""
 msgstr ""
 "Project-Id-Version: openprocurement.audit.api 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-13 11:14+0300\n"
+"POT-Creation-Date: 2019-10-30 18:13+0200\n"
 "PO-Revision-Date: 2018-06-15 02:43+0300\n"
-"MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
-"Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
 "Last-Translator: \n"
 "Language-Team: \n"
-"Language: uk\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 1.3\n"
 
-#: ../../source/feed/options.rst:4
+#: ../../source/monitoring/feed/options.rst:4
 msgid "Options"
 msgstr "Опції списку"
 
-#: ../../source/feed/options.rst:6
+#: ../../source/monitoring/feed/options.rst:6
 msgid ""
-"In addition to providing fields and their values in a request, you may also "
-"specify options to control how your request is interpreted and how the "
-"response is generated."
+"In addition to providing fields and their values in a request, you may "
+"also specify options to control how your request is interpreted and how "
+"the response is generated."
 msgstr ""
-"Крім надання полів та їхніх значень у запиті ви можете ще вказати опції для "
-"контролю над тим, як буде оброблятись запит і як буде генеруватись "
+"Крім надання полів та їхніх значень у запиті ви можете ще вказати опції "
+"для контролю над тим, як буде оброблятись запит і як буде генеруватись "
 "відповідь."
 
-#: ../../source/feed/options.rst:10
+#: ../../source/monitoring/feed/options.rst:10
 msgid ""
 "For GET requests, options are specified as URL parameters prefixed with "
 "`opt_`."
-msgstr ""
-"Для GET запитів, опції вказуються як URL параметри з префіксом `opt_`."
+msgstr "Для GET запитів, опції вказуються як URL параметри з префіксом `opt_`."
 
-#: ../../source/feed/options.rst:13 ../../source/feed/options.rst:22
+#: ../../source/monitoring/feed/options.rst:13
+#: ../../source/monitoring/feed/options.rst:22
 msgid "Example:"
 msgstr "Приклад:"
 
-#: ../../source/feed/options.rst:18
+#: ../../source/monitoring/feed/options.rst:18
 msgid ""
-"For POST or PUT requests, options are specified in the body, inside the top-"
-"level options object (a sibling of the data object)."
+"For POST or PUT requests, options are specified in the body, inside the "
+"top-level options object (a sibling of the data object)."
 msgstr ""
-"Для POST чи PUT запитів опції вказуються в тілі, всередині об’єктів опцій "
-"вищого рівня (схожих на обє’кт даних)."
+"Для POST чи PUT запитів опції вказуються в тілі, всередині об’єктів опцій"
+" вищого рівня (схожих на обє’кт даних)."
 
-#: ../../source/feed/options.rst:27
+#: ../../source/monitoring/feed/options.rst:27
 msgid ""
 "The option specified in the body overrides the `opt_` one from URL "
 "parameter."
 msgstr "Опція вказана в тілі перевизначає `opt_` опцію з URL параметра."
 
-#: ../../source/feed/options.rst:30
+#: ../../source/monitoring/feed/options.rst:30
 msgid ""
 "These options can be used in different combinations in a single request, "
 "though some of them may conflict in their impact on the response."
@@ -62,48 +59,61 @@ msgstr ""
 "Ці опції можна комбінувати в одному запиті, хоча деякі з них можуть "
 "викликати конфлікт у відповіді."
 
-#: ../../source/feed/options.rst:34
+#: ../../source/monitoring/feed/options.rst:0
+msgid "pretty"
+msgstr ""
+
+#: ../../source/monitoring/feed/options.rst:34
 msgid "`?opt_pretty`"
 msgstr ""
 
-#: ../../source/feed/options.rst:36
+#: ../../source/monitoring/feed/options.rst:36
 msgid "`options: { pretty: true }`"
 msgstr ""
 
-#: ../../source/feed/options.rst:38
+#: ../../source/monitoring/feed/options.rst:38
 msgid ""
 "Provides the response in \"pretty\" output.  In case of JSON this means "
-"doing proper line breaking and indentation to make it readable.  This will "
-"take extra time and increase the response size so it is advisable to use "
-"this only during debugging."
+"doing proper line breaking and indentation to make it readable.  This "
+"will take extra time and increase the response size so it is advisable to"
+" use this only during debugging."
 msgstr ""
-"Надає відповідь у форматі \"pretty\". У випадку з JSON це означає правильне "
-"розбиття рядків і відступи для зручності читання. Це займе додатковий час і "
-"збільшить розмір відповіді, тому краще буде використовувати цю опцію тільки "
-"під час налагоджування (debugging)."
+"Надає відповідь у форматі \"pretty\". У випадку з JSON це означає "
+"правильне розбиття рядків і відступи для зручності читання. Це займе "
+"додатковий час і збільшить розмір відповіді, тому краще буде "
+"використовувати цю опцію тільки під час налагоджування (debugging)."
 
-#: ../../source/feed/options.rst:43
+#: ../../source/monitoring/feed/options.rst:0
+msgid "jsonp"
+msgstr ""
+
+#: ../../source/monitoring/feed/options.rst:43
 msgid "`?opt_jsonp=myCallback`"
 msgstr ""
 
-#: ../../source/feed/options.rst:45
+#: ../../source/monitoring/feed/options.rst:45
 msgid ""
 "Returns the output in JSON-P format instead of plain JSON. This allows "
 "requests to come from within browsers and work around the \"same origin "
-"policy.\" The function named as the value of the `opt_jsonp` parameter will "
-"be called with a single argument, a JavaScript object representing the "
-"response."
+"policy.\" The function named as the value of the `opt_jsonp` parameter "
+"will be called with a single argument, a JavaScript object representing "
+"the response."
 msgstr ""
 "Повертає відповідь у форматі JSON-P замість простого JSON, щоб дозволити "
 "запитам приходити з браузерів і працювати навколо \\\"однакової політики "
-"походження (same origin policy).\\\" Функція названа так само як значення "
-"параметра `opt_jsonp` буде викликана з одним аргументом - JavaScript "
+"походження (same origin policy).\\\" Функція названа так само як значення"
+" параметра `opt_jsonp` буде викликана з одним аргументом - JavaScript "
 "об’єктом, що представляє відповідь."
 
-#: ../../source/feed/options.rst:52
+#: ../../source/monitoring/feed/options.rst:0
+msgid "fields"
+msgstr ""
+
+#: ../../source/monitoring/feed/options.rst:52
 msgid "`?opt_fields=comma,separated,field,list`"
 msgstr ""
 
-#: ../../source/feed/options.rst:54
+#: ../../source/monitoring/feed/options.rst:54
 msgid "List of extra fields to include in response."
 msgstr "Список додаткових полів, що міститимуться у відповіді."
+

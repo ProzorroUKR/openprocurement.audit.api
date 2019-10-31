@@ -14,7 +14,7 @@ Schema
 :violationType:
     string, required if violationOccurred is True
 
-    https://github.com/ProzorroUKR/standards/tree/master/monitoring/violation_type
+    https://prozorroukr.github.io/standards/monitoring/violation_type.json
 
     Possible values are:
 

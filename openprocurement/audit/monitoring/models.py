@@ -186,12 +186,6 @@ class EliminationReport(Report):
             'view': schematics_default_role,
         }
 
-    def __acl__(self):
-        return [
-            (Allow, '{}_{}'.format(self.__parent__.tender_owner, self.__parent__.tender_owner_token),
-             'edit_elimination_report'),
-        ]
-
 
 class Appeal(Report):
     class Options:

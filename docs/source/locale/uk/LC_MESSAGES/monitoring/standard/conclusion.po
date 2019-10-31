@@ -1,176 +1,138 @@
-# SOME DESCRIPTIVE TITLE.
-# Copyright (C) 2018, Raccoongang
-# This file is distributed under the same license as the
-# openprocurement.audit.api package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2019.
 #
-#, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: openprocurement.audit.api 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-10-30 18:13+0200\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
+"POT-Creation-Date: 2018-06-13 11:14+0300\n"
+"PO-Revision-Date: 2018-07-02 16:22+0300\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: uk\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=utf-8\n"
+"Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 1.3\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
+"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"X-Generator: Poedit 1.8.7.1\n"
 
-#: ../../source/monitoring/standard/conclusion.rst:4
+#: ../../source/standard/conclusion.rst:4
 msgid "Conclusion"
 msgstr ""
 
-#: ../../source/monitoring/standard/conclusion.rst:7
+#: ../../source/standard/conclusion.rst:7
 msgid "Schema"
 msgstr ""
 
-#: ../../source/monitoring/standard/conclusion.rst:0
-msgid "violationOccurred"
-msgstr ""
-
-#: ../../source/monitoring/standard/conclusion.rst:10
+#: ../../source/standard/conclusion.rst:10
 msgid "boolean, required"
-msgstr ""
+msgstr "логічний (true/false), обов’язково"
 
-#: ../../source/monitoring/standard/conclusion.rst:12
+#: ../../source/standard/conclusion.rst:12
 msgid "any violations are found/not found"
-msgstr ""
+msgstr "порушення знайдено/не знайдено"
 
-#: ../../source/monitoring/standard/conclusion.rst:0
-msgid "violationType"
-msgstr ""
-
-#: ../../source/monitoring/standard/conclusion.rst:15
+#: ../../source/standard/conclusion.rst:15
 msgid "string, required if violationOccurred is True"
-msgstr ""
+msgstr "рядок обов’язково якщо violationOccurred встановлено у True"
 
-#: ../../source/monitoring/standard/conclusion.rst:17
-msgid "https://github.com/ProzorroUKR/standards/tree/master/monitoring/violation_type"
-msgstr ""
-
-#: ../../source/monitoring/standard/conclusion.rst:19
+#: ../../source/standard/conclusion.rst:19
 msgid "Possible values are:"
-msgstr ""
+msgstr "Можливі значення:"
 
-#: ../../source/monitoring/standard/conclusion.rst:21
+#: ../../source/standard/conclusion.rst:21
 msgid "corruptionDescription"
 msgstr ""
 
-#: ../../source/monitoring/standard/conclusion.rst:22
+#: ../../source/standard/conclusion.rst:22
 msgid "corruptionProcurementMethodType"
 msgstr ""
 
-#: ../../source/monitoring/standard/conclusion.rst:23
+#: ../../source/standard/conclusion.rst:23
 msgid "corruptionPublicDisclosure"
 msgstr ""
 
-#: ../../source/monitoring/standard/conclusion.rst:24
+#: ../../source/standard/conclusion.rst:24
 msgid "corruptionBiddingDocuments"
 msgstr ""
 
-#: ../../source/monitoring/standard/conclusion.rst:25
+#: ../../source/standard/conclusion.rst:25
 msgid "documentsForm"
 msgstr ""
 
-#: ../../source/monitoring/standard/conclusion.rst:26
+#: ../../source/standard/conclusion.rst:26
 msgid "corruptionAwarded"
 msgstr ""
 
-#: ../../source/monitoring/standard/conclusion.rst:27
+#: ../../source/standard/conclusion.rst:27
 msgid "corruptionCancelled"
 msgstr ""
 
-#: ../../source/monitoring/standard/conclusion.rst:28
+#: ../../source/standard/conclusion.rst:28
 msgid "corruptionContracting"
 msgstr ""
 
-#: ../../source/monitoring/standard/conclusion.rst:29
+#: ../../source/standard/conclusion.rst:29
 msgid "corruptionChanges"
 msgstr ""
 
-#: ../../source/monitoring/standard/conclusion.rst:30
+#: ../../source/standard/conclusion.rst:30
 msgid "other"
 msgstr ""
 
-#: ../../source/monitoring/standard/conclusion.rst:32
+#: ../../source/standard/conclusion.rst:32
 msgid "a type of the violation"
-msgstr ""
+msgstr "тип порушення"
 
-#: ../../source/monitoring/standard/conclusion.rst:0
-msgid "auditFinding"
-msgstr ""
-
-#: ../../source/monitoring/standard/conclusion.rst:35
-#: ../../source/monitoring/standard/conclusion.rst:40
-#: ../../source/monitoring/standard/conclusion.rst:45
-#: ../../source/monitoring/standard/conclusion.rst:64
+#: ../../source/standard/conclusion.rst:35
+#: ../../source/standard/conclusion.rst:40
+#: ../../source/standard/conclusion.rst:45
+#: ../../source/standard/conclusion.rst:64
 msgid "string"
-msgstr ""
+msgstr "рядок"
 
-#: ../../source/monitoring/standard/conclusion.rst:37
+#: ../../source/standard/conclusion.rst:37
 msgid ""
-"information about the results of monitoring in terms of the stages of the"
-" procurement procedure"
+"information about the results of monitoring in terms of the stages of the "
+"procurement procedure"
 msgstr ""
+"Інформація про результати моніторингу закупівлі у розрізі стадій проведення "
+"процедури закупівлі"
 
-#: ../../source/monitoring/standard/conclusion.rst:0
-msgid "stringsAttached"
-msgstr ""
-
-#: ../../source/monitoring/standard/conclusion.rst:42
+#: ../../source/standard/conclusion.rst:42
 msgid ""
-"obligation to eliminate violations (violations) of legislation in the "
-"field of public procurement"
+"obligation to eliminate violations (violations) of legislation in the field "
+"of public procurement"
 msgstr ""
+"Зобов’язанння щодо усунення порушення (порушень) законодавства у сфері "
+"публічних закупівель"
 
-#: ../../source/monitoring/standard/conclusion.rst:0
-msgid "description"
-msgstr ""
-
-#: ../../source/monitoring/standard/conclusion.rst:47
+#: ../../source/standard/conclusion.rst:47
 msgid "conclusion on the presence or absence of violations of the law"
-msgstr ""
+msgstr "Висновок про наявність або відсутність порушень законодавства"
 
-#: ../../source/monitoring/standard/conclusion.rst:0
-msgid "date"
-msgstr ""
-
-#: ../../source/monitoring/standard/conclusion.rst:50
-msgid "string, :ref:`date`"
-msgstr ""
-
-#: ../../source/monitoring/standard/conclusion.rst:52
-msgid "Actual (offline) conclusion date."
-msgstr ""
-
-#: ../../source/monitoring/standard/conclusion.rst:0
-msgid "documents"
-msgstr ""
-
-#: ../../source/monitoring/standard/conclusion.rst:55
+#: ../../source/standard/conclusion.rst:55
 msgid "List of :ref:`document` objects"
-msgstr ""
+msgstr "Список об’єктів :ref:`document`"
 
-#: ../../source/monitoring/standard/conclusion.rst:0
-msgid "dateCreated"
-msgstr ""
-
-#: ../../source/monitoring/standard/conclusion.rst:58
-#: ../../source/monitoring/standard/conclusion.rst:61
+#: ../../source/standard/conclusion.rst:58
+#: ../../source/standard/conclusion.rst:61
 msgid "string, :ref:`date`, autogenerated"
+msgstr "рядок, :ref:`date`, генерується автоматично"
+
+#: ../../source/standard/conclusion.rst:17
+msgid ""
+"https://github.com/ProzorroUKR/standards/tree/master/monitoring/"
+"violation_type"
 msgstr ""
 
-#: ../../source/monitoring/standard/conclusion.rst:0
-msgid "datePublished"
-msgstr ""
+#: ../../source/standard/conclusion.rst:50
+msgid "string, :ref:`date`"
+msgstr "рядок, :ref:`date`"
 
-#: ../../source/monitoring/standard/conclusion.rst:0
-msgid "relatedParty"
-msgstr ""
+#: ../../source/standard/conclusion.rst:52
+msgid "Actual (offline) conclusion date."
+msgstr "Фактична дата прийняття рішення про висновок."
 
-#: ../../source/monitoring/standard/conclusion.rst:66
+#: ../../source/standard/conclusion.rst:66
 msgid "Id of related :ref:`party`."
-msgstr ""
-
+msgstr "Id відповідного :ref:`party`."

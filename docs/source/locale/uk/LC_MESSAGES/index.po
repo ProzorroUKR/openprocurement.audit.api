@@ -14,20 +14,8 @@ msgstr ""
 
 #: ../../source/index.rst:6
 msgid "Contents:"
-msgstr ""
+msgstr "Зміст:"
 
 #: ../../source/index.rst:2
 msgid "Welcome to openprocurement.audit.api documentation!"
 msgstr "Вітаємо на сайті документації по openprocurement.audit.api!"
-
-#~ msgid ""
-#~ "API includes also  `openprocurement.audit.inspection"
-#~ " <https://prozorro-monitoring-"
-#~ "inspection.readthedocs.io/en/latest>`_ module. Follow "
-#~ "the link to see its documentation "
-#~ "section."
-#~ msgstr ""
-#~ "API також включає  модуль "
-#~ "`openprocurement.audit.inspection <https://prozorro-"
-#~ "monitoring-inspection.readthedocs.io/en/latest>`_"
-

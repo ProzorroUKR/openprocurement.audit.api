@@ -1,16 +1,16 @@
-POST /api/2.4/monitorings HTTP/1.0
+POST /api/2.5/monitorings HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
 Content-Length: 526
 Content-Type: application/json
 Host: audit-api-sandbox.prozorro.gov.ua
-
+DATA:
 {
   "data": {
     "reasons": [
       "public", 
       "fiscal"
     ], 
-    "tender_id": "f6b4660221b037c38c99ad2288e65a4e", 
+    "tender_id": "f71067ac30733261df884de0391debf6", 
     "procuringStages": [
       "awarding", 
       "contracting"
@@ -42,11 +42,9 @@ Host: audit-api-sandbox.prozorro.gov.ua
   }
 }
 
-
-201 Created
+Response: 201 Created
 Content-Type: application/json; charset=UTF-8
-Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/f6b4660221b037c38c99ad2288e65a4e
-
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/c715421038304838a046654fa8c1e9aa
 {
   "data": {
     "status": "draft", 
@@ -83,12 +81,12 @@ Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/f6b466022
           "id": "40165856", 
           "uri": "http://www.dkrs.gov.ua"
         }, 
-        "id": "f6b4660221b037c38c99ad2288e65a4e"
+        "id": "6ecc4ca22c014c30a27e286a6c4b6dec"
       }
     ], 
     "dateCreated": "2018-01-01T02:00:00+02:00", 
-    "id": "f6b4660221b037c38c99ad2288e65a4e", 
-    "tender_id": "f6b4660221b037c38c99ad2288e65a4e"
+    "id": "c715421038304838a046654fa8c1e9aa", 
+    "tender_id": "f71067ac30733261df884de0391debf6"
   }
 }
 

@@ -50,7 +50,7 @@ Schema
 :reasons:
    list of strings
 
-   https://github.com/ProzorroUKR/standards/tree/master/monitoring/reasons
+   https://prozorroukr.github.io/standards/monitoring/reasons.json
 
    :`indicator`:
       Automatic risks indicators
@@ -66,7 +66,7 @@ Schema
 :procuringStages:
    list of strings
 
-   https://github.com/ProzorroUKR/standards/tree/master/monitoring/procuring_stages
+   https://prozorroukr.github.io/standards/monitoring/procuring_stages.json
 
    :`planning`:
       Planning of tender and publication of information on its conduct

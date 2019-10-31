@@ -20,7 +20,7 @@ msgstr ""
 
 #: ../../source/monitoring/index.rst:6
 msgid "Contents:"
-msgstr ""
+msgstr "Зміст:"
 
 #: ../../source/monitoring/index.rst:2
 msgid "Monitoring"

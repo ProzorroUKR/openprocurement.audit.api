@@ -1,14 +1,14 @@
-PUT /api/2.4/monitorings/f6b4660221b037c38c99ad2288e65a4e/appeal?acc_token=1609784ffe59301f8cf84fce86d9342d HTTP/1.0
+PUT /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/appeal?acc_token=ab906ad83e9c4acd9b9c06215f87bfe6 HTTP/1.0
 Authorization: Basic YnJva2VyOmJyb2tlcg==
-Content-Length: 402
+Content-Length: 403
 Content-Type: application/json
 Host: audit-api-sandbox.prozorro.gov.ua
-
+DATA:
 {
   "data": {
     "documents": [
       {
-        "url": "http://docs-sandbox.openprocurement.org/get/f6b4660221b037c38c99ad2288e65a4e?KeyID=a8968c46&Signature=8ZN3Ia1j%2B5a30eXGcctmvWYNzNc1z6YQiwUGn5Ep3Soy%2FHsi2Z1pYnVK9zA3CchdcvlNQZzVF%2Bn5t91qXuEUCw%3D%3D", 
+        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/59ec68b1b09a425a8fca371a3b12b4cf?KeyID=a8968c46&Signature=3bdJ0S3cDcYJVl1Yu5HDEXfJAVs5wdIjpCkKUEVyZUmUgOov1EUQK23Q%2BT0PteDUjIEkkGeX%2FRUEeh0GOqIBBg%3D%3D", 
         "title": "another-letter.doc", 
         "hash": "md5:00000000000000000000000000000000", 
         "format": "application/msword"
@@ -18,10 +18,8 @@ Host: audit-api-sandbox.prozorro.gov.ua
   }
 }
 
-
-403 Forbidden
+Response: 403 Forbidden
 Content-Type: application/json; charset=UTF-8
-
 {
   "status": "error", 
   "errors": [

@@ -1,11 +1,9 @@
-GET /api/2.4/monitorings/f6b4660221b037c38c99ad2288e65a4e/posts HTTP/1.0
+GET /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/posts HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
 Host: audit-api-sandbox.prozorro.gov.ua
 
-
-200 OK
+Response: 200 OK
 Content-Type: application/json; charset=UTF-8
-
 {
   "data": [
     {
@@ -14,20 +12,20 @@ Content-Type: application/json; charset=UTF-8
           "hash": "md5:00000000000000000000000000000000", 
           "author": "monitoring_owner", 
           "title": "ipsum.doc", 
-          "url": "http://docs-sandbox.openprocurement.org/get/c64d148770453363b9c5bb96d05a4222?KeyID=a8968c46&Signature=ogAx5k%252B6W7pS6fCBx3Vtx2G%252BhmmbT1ldJjrmkPrKMfmUlmAeBX6%252BXfof2PseQyjD2tJTia9JXRU069eo9soVCw%253D%253D", 
+          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/2cd40a17af5841bba79a442e11f795ce?KeyID=a8968c46&Signature=OZIGjb5iadULQ8WLskGvxx95vKWAZlty2qiwy4KtaRAXTWx%2F3lUo6FjwLwZ4juaEjnyRq3y953ReosiUYw6ODA%253D%253D", 
           "format": "application/msword", 
           "datePublished": "2018-01-03T02:05:00+02:00", 
-          "id": "c64d148770453363b9c5bb96d05a4222", 
+          "id": "51013265fd914fa6b01a6334b95ee70c", 
           "dateModified": "2018-01-03T02:05:00+02:00"
         }, 
         {
           "hash": "md5:00000000000000000000000000000000", 
           "author": "monitoring_owner", 
           "title": "dolor.doc", 
-          "url": "http://docs-sandbox.openprocurement.org/get/7c15c91cda27332f959d002adf747412?KeyID=a8968c46&Signature=wHmcsSyT70A9OnRdEHDapUj01vtD8FVPrmiAMdoXCQ3c3ab2OYBhpwtyZPMhtUGf7O%252BQAuvvVeS7SFPGT%2FsWBg%253D%253D", 
+          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/e3e475499f57496f9eaa0c4208ea09fa?KeyID=a8968c46&Signature=ALKprZk49GxoDAKeh6uMrNr4typhugl4A%252BuGNe6o8k4hExglSDziU6nSHNFdD6rL4yxABp3zCFkTjcTs9c3EAQ%253D%253D", 
           "format": "application/msword", 
           "datePublished": "2018-01-03T02:10:00+02:00", 
-          "id": "7c15c91cda27332f959d002adf747412", 
+          "id": "547bc5cf5f4a48d5b4443cefb9a62802", 
           "dateModified": "2018-01-03T02:10:00+02:00"
         }
       ], 
@@ -35,9 +33,9 @@ Content-Type: application/json; charset=UTF-8
       "title": "Lorem ipsum", 
       "author": "monitoring_owner", 
       "datePublished": "2018-01-03T02:05:00+02:00", 
-      "relatedParty": "f6b4660221b037c38c99ad2288e65a4e", 
+      "relatedParty": "6ecc4ca22c014c30a27e286a6c4b6dec", 
       "dateOverdue": "2018-01-10T00:00:00+02:00", 
-      "id": "c64d148770453363b9c5bb96d05a4222", 
+      "id": "ca85c88b657b4bba974b037e532e581c", 
       "postOf": "decision"
     }, 
     {
@@ -46,10 +44,10 @@ Content-Type: application/json; charset=UTF-8
           "hash": "md5:00000000000000000000000000000000", 
           "author": "tender_owner", 
           "title": "dolor.doc", 
-          "url": "http://docs-sandbox.openprocurement.org/get/7905b42becf43c348806fe29b5e1c7a4?KeyID=a8968c46&Signature=X%2FYUrtb7GzP%2FthiJQqqwuFsHatMOQnZWKwaTpnNLxNy5lfp36i6ZGrAGS029tCYxDdeVX0AuishvGITC886MDQ%253D%253D", 
+          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/83faf0d5f4004f01b2e562679199c1b8?KeyID=a8968c46&Signature=59snop57nhF26jElfWMW%2FCauRC0ehCgb0Dn6uheF7CTVZuTT9NQjcUwf%252BLgahIQvq3fA8mej78djaJviZjf9Bg%253D%253D", 
           "format": "application/msword", 
           "datePublished": "2018-01-04T02:10:00+02:00", 
-          "id": "7905b42becf43c348806fe29b5e1c7a4", 
+          "id": "74ebb22006f044fa80ab4f0199904b51", 
           "dateModified": "2018-01-04T02:10:00+02:00"
         }
       ], 
@@ -57,8 +55,8 @@ Content-Type: application/json; charset=UTF-8
       "title": "Sit amet", 
       "author": "tender_owner", 
       "datePublished": "2018-01-04T02:05:00+02:00", 
-      "relatedPost": "c64d148770453363b9c5bb96d05a4222", 
-      "id": "a4b6d8ef66ae3b0d8b2e4f0918030508", 
+      "relatedPost": "ca85c88b657b4bba974b037e532e581c", 
+      "id": "0dd18f852fcf43e28a7fd7fc2c0dc2a1", 
       "postOf": "decision"
     }, 
     {
@@ -67,10 +65,10 @@ Content-Type: application/json; charset=UTF-8
           "hash": "md5:00000000000000000000000000000000", 
           "author": "tender_owner", 
           "title": "ipsum.doc", 
-          "url": "http://docs-sandbox.openprocurement.org/get/cacc1c94c95130f18a157805ef015cb3?KeyID=a8968c46&Signature=KZ19WsVeBFbSuL4ufszVQX4rWt9nSQUm%2FBB7b8zLNrA6y2YmY0BcxGOT4Kblfj1YeGoQg2NWFPgAgEGoepdfAQ%253D%253D", 
+          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/4d9dfc2c426b456286be167a967fbd6a?KeyID=a8968c46&Signature=wE5QGkk2ZlD%252BDfZp29sUm45hXL%2FPd3%252B11xiGtqLeecvKhDCRbLPmSE%2FoIfxbVsDWzX2VyI5PiXtzJdpqZoggDQ%253D%253D", 
           "format": "application/msword", 
           "datePublished": "2018-01-04T03:05:00+02:00", 
-          "id": "cacc1c94c95130f18a157805ef015cb3", 
+          "id": "748a11ca06fc4d468c610ee8fae035d0", 
           "dateModified": "2018-01-04T03:05:00+02:00"
         }
       ], 
@@ -78,7 +76,7 @@ Content-Type: application/json; charset=UTF-8
       "title": "Dolor sit amet", 
       "author": "tender_owner", 
       "datePublished": "2018-01-04T03:05:00+02:00", 
-      "id": "cacc1c94c95130f18a157805ef015cb3", 
+      "id": "886a5cdd71dc416faaf90c28eedbf742", 
       "postOf": "decision"
     }, 
     {
@@ -87,10 +85,10 @@ Content-Type: application/json; charset=UTF-8
           "hash": "md5:00000000000000000000000000000000", 
           "author": "monitoring_owner", 
           "title": "ipsum.doc", 
-          "url": "http://docs-sandbox.openprocurement.org/get/da26cf82b11630738c206318a5b1d327?KeyID=a8968c46&Signature=yOyX%2Fqh%2FcfV1LxKLW%252B%2Fim1A6ETzrtm5QQkS9wJGXxA1wzv%252BKkoeEqkG0suusadn9yvtCae1n5MgtuxOO8KnwCQ%253D%253D", 
+          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/36416c318acb45dbba01c97799721ede?KeyID=a8968c46&Signature=TUXCWgdzOCex4VH1d%252Bbo0VpteFDidQoRb0E2wi3q3N1I1Ro1Jx711%252Bm1ekCRDK39VwH3qUQO3ABIL0NhojNVBA%253D%253D", 
           "format": "application/msword", 
           "datePublished": "2018-01-04T03:15:00+02:00", 
-          "id": "da26cf82b11630738c206318a5b1d327", 
+          "id": "8247f603a3114154a55a3350993c126a", 
           "dateModified": "2018-01-04T03:15:00+02:00"
         }
       ], 
@@ -98,9 +96,9 @@ Content-Type: application/json; charset=UTF-8
       "title": "Lorem ipsum", 
       "author": "monitoring_owner", 
       "datePublished": "2018-01-04T03:15:00+02:00", 
-      "relatedParty": "f6b4660221b037c38c99ad2288e65a4e", 
-      "relatedPost": "cacc1c94c95130f18a157805ef015cb3", 
-      "id": "da26cf82b11630738c206318a5b1d327", 
+      "relatedParty": "6ecc4ca22c014c30a27e286a6c4b6dec", 
+      "relatedPost": "886a5cdd71dc416faaf90c28eedbf742", 
+      "id": "75c8163ecd55417ea04507ed1071bed5", 
       "postOf": "decision"
     }
   ]

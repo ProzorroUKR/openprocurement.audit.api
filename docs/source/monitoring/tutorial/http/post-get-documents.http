@@ -1,31 +1,29 @@
-GET /api/2.4/monitorings/f6b4660221b037c38c99ad2288e65a4e/posts/c64d148770453363b9c5bb96d05a4222/documents HTTP/1.0
+GET /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/posts/ca85c88b657b4bba974b037e532e581c/documents HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
 Host: audit-api-sandbox.prozorro.gov.ua
 
-
-200 OK
+Response: 200 OK
 Content-Type: application/json; charset=UTF-8
-
 {
   "data": [
     {
       "hash": "md5:00000000000000000000000000000000", 
       "author": "monitoring_owner", 
       "title": "ipsum.doc", 
-      "url": "http://docs-sandbox.openprocurement.org/get/c64d148770453363b9c5bb96d05a4222?KeyID=a8968c46&Signature=ogAx5k%252B6W7pS6fCBx3Vtx2G%252BhmmbT1ldJjrmkPrKMfmUlmAeBX6%252BXfof2PseQyjD2tJTia9JXRU069eo9soVCw%253D%253D", 
+      "url": "http://public-docs-sandbox.prozorro.gov.ua/get/2cd40a17af5841bba79a442e11f795ce?KeyID=a8968c46&Signature=OZIGjb5iadULQ8WLskGvxx95vKWAZlty2qiwy4KtaRAXTWx%2F3lUo6FjwLwZ4juaEjnyRq3y953ReosiUYw6ODA%253D%253D", 
       "format": "application/msword", 
       "datePublished": "2018-01-03T02:05:00+02:00", 
-      "id": "c64d148770453363b9c5bb96d05a4222", 
+      "id": "51013265fd914fa6b01a6334b95ee70c", 
       "dateModified": "2018-01-03T02:05:00+02:00"
     }, 
     {
       "hash": "md5:00000000000000000000000000000000", 
       "author": "monitoring_owner", 
       "title": "dolor.doc", 
-      "url": "http://docs-sandbox.openprocurement.org/get/7c15c91cda27332f959d002adf747412?KeyID=a8968c46&Signature=wHmcsSyT70A9OnRdEHDapUj01vtD8FVPrmiAMdoXCQ3c3ab2OYBhpwtyZPMhtUGf7O%252BQAuvvVeS7SFPGT%2FsWBg%253D%253D", 
+      "url": "http://public-docs-sandbox.prozorro.gov.ua/get/e3e475499f57496f9eaa0c4208ea09fa?KeyID=a8968c46&Signature=ALKprZk49GxoDAKeh6uMrNr4typhugl4A%252BuGNe6o8k4hExglSDziU6nSHNFdD6rL4yxABp3zCFkTjcTs9c3EAQ%253D%253D", 
       "format": "application/msword", 
       "datePublished": "2018-01-03T02:10:00+02:00", 
-      "id": "7c15c91cda27332f959d002adf747412", 
+      "id": "547bc5cf5f4a48d5b4443cefb9a62802", 
       "dateModified": "2018-01-03T02:10:00+02:00"
     }
   ]

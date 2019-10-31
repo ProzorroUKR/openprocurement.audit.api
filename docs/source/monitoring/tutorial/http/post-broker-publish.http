@@ -1,14 +1,14 @@
-POST /api/2.4/monitorings/f6b4660221b037c38c99ad2288e65a4e/posts?acc_token=1609784ffe59301f8cf84fce86d9342d HTTP/1.0
+POST /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/posts?acc_token=ab906ad83e9c4acd9b9c06215f87bfe6 HTTP/1.0
 Authorization: Basic YnJva2VyOmJyb2tlcg==
-Content-Length: 411
+Content-Length: 416
 Content-Type: application/json
 Host: audit-api-sandbox.prozorro.gov.ua
-
+DATA:
 {
   "data": {
     "documents": [
       {
-        "url": "http://docs-sandbox.openprocurement.org/get/cacc1c94c95130f18a157805ef015cb3?KeyID=a8968c46&Signature=Zn7Mlzyps6zqyAXf3gAWWEDk4rAExZ8ABDzw4oi7zfkqPdzLIe%2BlneDfMmfQrpEeLS%2BBXY6ASFk2kAXOfzHNDQ%3D%3D", 
+        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/4d9dfc2c426b456286be167a967fbd6a?KeyID=a8968c46&Signature=ybVQMi2kvldsPRz%2FLw0GS2IoGUOVQvRtjdxl8kaQUEpuj0Ll1MbM5q%2BpzW0CBuNKS2gH%2BfxeWb61Tboa6tWXBw%3D%3D", 
         "title": "ipsum.doc", 
         "hash": "md5:00000000000000000000000000000000", 
         "format": "application/msword"
@@ -19,11 +19,9 @@ Host: audit-api-sandbox.prozorro.gov.ua
   }
 }
 
-
-201 Created
+Response: 201 Created
 Content-Type: application/json; charset=UTF-8
-Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/f6b4660221b037c38c99ad2288e65a4e/posts/cacc1c94c95130f18a157805ef015cb3
-
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/posts/886a5cdd71dc416faaf90c28eedbf742
 {
   "data": {
     "documents": [
@@ -31,10 +29,10 @@ Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/f6b466022
         "hash": "md5:00000000000000000000000000000000", 
         "author": "tender_owner", 
         "title": "ipsum.doc", 
-        "url": "http://docs-sandbox.openprocurement.org/get/cacc1c94c95130f18a157805ef015cb3?KeyID=a8968c46&Signature=KZ19WsVeBFbSuL4ufszVQX4rWt9nSQUm%2FBB7b8zLNrA6y2YmY0BcxGOT4Kblfj1YeGoQg2NWFPgAgEGoepdfAQ%253D%253D", 
+        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/4d9dfc2c426b456286be167a967fbd6a?KeyID=a8968c46&Signature=wE5QGkk2ZlD%252BDfZp29sUm45hXL%2FPd3%252B11xiGtqLeecvKhDCRbLPmSE%2FoIfxbVsDWzX2VyI5PiXtzJdpqZoggDQ%253D%253D", 
         "format": "application/msword", 
         "datePublished": "2018-01-04T03:05:00+02:00", 
-        "id": "cacc1c94c95130f18a157805ef015cb3", 
+        "id": "748a11ca06fc4d468c610ee8fae035d0", 
         "dateModified": "2018-01-04T03:05:00+02:00"
       }
     ], 
@@ -42,7 +40,7 @@ Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/f6b466022
     "title": "Dolor sit amet", 
     "author": "tender_owner", 
     "datePublished": "2018-01-04T03:05:00+02:00", 
-    "id": "cacc1c94c95130f18a157805ef015cb3", 
+    "id": "886a5cdd71dc416faaf90c28eedbf742", 
     "postOf": "decision"
   }
 }

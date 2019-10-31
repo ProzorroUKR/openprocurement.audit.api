@@ -1,32 +1,30 @@
-POST /api/2.4/monitorings/f6b4660221b037c38c99ad2288e65a4e/posts/c64d148770453363b9c5bb96d05a4222/documents HTTP/1.0
+POST /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/posts/ca85c88b657b4bba974b037e532e581c/documents HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
-Content-Length: 321
+Content-Length: 330
 Content-Type: application/json
 Host: audit-api-sandbox.prozorro.gov.ua
-
+DATA:
 {
   "data": {
-    "url": "http://docs-sandbox.openprocurement.org/get/7c15c91cda27332f959d002adf747412?KeyID=a8968c46&Signature=sHWKzxHc1VBq%2BQNAxYY3N3Wg4KoS3EYwba5h9HtkzmjaxXHmQO8R9UONBdKPgUEz%2BVIykBF5yzCSHqnUZGaxAQ%3D%3D", 
+    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/e3e475499f57496f9eaa0c4208ea09fa?KeyID=a8968c46&Signature=ZVS5G2ePRyanLiWuNx1WX50vJ3JVyw%2BnRxZ27%2BabDXOLTuE5C0UmWk%2B0xcf97HRS%2F2LGynO3iQdzz8aQr2D%2BAw%3D%3D", 
     "title": "dolor.doc", 
     "hash": "md5:00000000000000000000000000000000", 
     "format": "application/msword"
   }
 }
 
-
-201 Created
+Response: 201 Created
 Content-Type: application/json; charset=UTF-8
-Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.4/monitorings/f6b4660221b037c38c99ad2288e65a4e/posts/c64d148770453363b9c5bb96d05a4222/documents/7c15c91cda27332f959d002adf747412
-
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/posts/ca85c88b657b4bba974b037e532e581c/documents/547bc5cf5f4a48d5b4443cefb9a62802
 {
   "data": {
     "hash": "md5:00000000000000000000000000000000", 
     "author": "monitoring_owner", 
     "title": "dolor.doc", 
-    "url": "http://docs-sandbox.openprocurement.org/get/7c15c91cda27332f959d002adf747412?KeyID=a8968c46&Signature=wHmcsSyT70A9OnRdEHDapUj01vtD8FVPrmiAMdoXCQ3c3ab2OYBhpwtyZPMhtUGf7O%252BQAuvvVeS7SFPGT%2FsWBg%253D%253D", 
+    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/e3e475499f57496f9eaa0c4208ea09fa?KeyID=a8968c46&Signature=ALKprZk49GxoDAKeh6uMrNr4typhugl4A%252BuGNe6o8k4hExglSDziU6nSHNFdD6rL4yxABp3zCFkTjcTs9c3EAQ%253D%253D", 
     "format": "application/msword", 
     "datePublished": "2018-01-03T02:10:00+02:00", 
-    "id": "7c15c91cda27332f959d002adf747412", 
+    "id": "547bc5cf5f4a48d5b4443cefb9a62802", 
     "dateModified": "2018-01-03T02:10:00+02:00"
   }
 }

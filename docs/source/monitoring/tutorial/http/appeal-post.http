@@ -1,14 +1,14 @@
-PUT /api/2.4/monitorings/f6b4660221b037c38c99ad2288e65a4e/appeal?acc_token=1609784ffe59301f8cf84fce86d9342d HTTP/1.0
+PUT /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/appeal?acc_token=ab906ad83e9c4acd9b9c06215f87bfe6 HTTP/1.0
 Authorization: Basic YnJva2VyOmJyb2tlcg==
-Content-Length: 378
+Content-Length: 381
 Content-Type: application/json
 Host: audit-api-sandbox.prozorro.gov.ua
-
+DATA:
 {
   "data": {
     "documents": [
       {
-        "url": "http://docs-sandbox.openprocurement.org/get/5856f5f3590235e4a6930df212c34c0c?KeyID=a8968c46&Signature=uvdJzTtmZSq1hVosCtCGIARjufg%2F67voNEHMr%2BCC7SQ8egX8pBygcZlX8NscaWnORtVFV4wh25uqjzVA4%2BrpDw%3D%3D", 
+        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/37df4b6da2c24b6a97a6c35bb69fcccf?KeyID=a8968c46&Signature=p00JBLkUFLMh9NVj1Gb07X4O6hsoqfRY89d4oG0gmHTm77S5zAV0pAZ%2BeMG%2BPe78bccrBkp%2FCymfzh31eHVyCQ%3D%3D", 
         "title": "letter.doc", 
         "hash": "md5:00000000000000000000000000000000", 
         "format": "application/msword"
@@ -18,10 +18,8 @@ Host: audit-api-sandbox.prozorro.gov.ua
   }
 }
 
-
-200 OK
+Response: 200 OK
 Content-Type: application/json; charset=UTF-8
-
 {
   "data": {
     "dateCreated": "2018-01-06T09:00:00+02:00", 
@@ -30,10 +28,10 @@ Content-Type: application/json; charset=UTF-8
         "hash": "md5:00000000000000000000000000000000", 
         "author": "tender_owner", 
         "title": "letter.doc", 
-        "url": "http://docs-sandbox.openprocurement.org/get/5856f5f3590235e4a6930df212c34c0c?KeyID=a8968c46&Signature=ZUI9ffQoVv1LzVz4NP6ROyfy1s9WTt0GFZnPBGsPhg1VUvK6Zy7fiMb2v96GNa1KuUnii7AljKTdDf2HRW%2FhDQ%253D%253D", 
+        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/37df4b6da2c24b6a97a6c35bb69fcccf?KeyID=a8968c46&Signature=X%2Ff0ajCeap0OHcwyz1XO0dLSTED0fK3VUByfMLazlN6qfuMigrYsbcVTMH645ldiGRT%2FFULQP5SUs6m%252BP%2FT1Dg%253D%253D", 
         "format": "application/msword", 
         "datePublished": "2018-01-06T09:00:00+02:00", 
-        "id": "5856f5f3590235e4a6930df212c34c0c", 
+        "id": "249ca4ca1499416a8e276260b4b27f69", 
         "dateModified": "2018-01-06T09:00:00+02:00"
       }
     ], 

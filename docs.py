@@ -723,7 +723,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                 )
 
         with freeze_time("2018.01.25 01:35"):
-            with open('docs/source/tutorial/http/monitoring-documents-patch.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/monitoring-documents-patch.http', 'w') as self.app.file_obj:
                 self.app.patch_json(
                     '/monitorings/{}/documents/{}'.format(monitoring_id, doc_id),
                     {"data": {
@@ -736,7 +736,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                 )
 
         with freeze_time("2018.01.25 01:40"):
-            with open('docs/source/tutorial/http/monitoring-documents-get-collection.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/monitoring-documents-get-collection.http', 'w') as self.app.file_obj:
                 self.app.get(
                     '/monitorings/{}/documents'.format(monitoring_id),
                     status=200

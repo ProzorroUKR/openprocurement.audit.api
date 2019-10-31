@@ -1,31 +1,29 @@
-PATCH /api/2.4/monitorings/f6b4660221b037c38c99ad2288e65a4e/appeal/documents/5856f5f3590235e4a6930df212c34c0c?acc_token=1609784ffe59301f8cf84fce86d9342d HTTP/1.0
+PATCH /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/appeal/documents/249ca4ca1499416a8e276260b4b27f69?acc_token=ab906ad83e9c4acd9b9c06215f87bfe6 HTTP/1.0
 Authorization: Basic YnJva2VyOmJyb2tlcg==
-Content-Length: 327
+Content-Length: 328
 Content-Type: application/json
 Host: audit-api-sandbox.prozorro.gov.ua
-
+DATA:
 {
   "data": {
-    "url": "http://docs-sandbox.openprocurement.org/get/8606039a66723931a80666d4880878f6?KeyID=a8968c46&Signature=K9TaC5M4CeHtXXdYnbvihkUOShGnhggQNY8O2aZTO2QpsdtL9tKmr3TJ6Dszvp%2Fk9hV4E%2FiLw%2Fudv%2Fn9Fp4tDw%3D%3D", 
+    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/1842e75552a144b08452dd7d823c5c0c?KeyID=a8968c46&Signature=NXlgITOzT4%2FzZe2Kmyw%2B1w78bwzsziyV5VKmD3MRhj81VWEpEw0wGROZEBaVP93St8e1%2FhXoipsO1sats2JpAA%3D%3D", 
     "title": "letter(0).doc", 
     "hash": "md5:00000000000000000000000000000000", 
     "format": "application/json"
   }
 }
 
-
-200 OK
+Response: 200 OK
 Content-Type: application/json; charset=UTF-8
-
 {
   "data": {
     "hash": "md5:00000000000000000000000000000000", 
     "author": "tender_owner", 
     "title": "letter(0).doc", 
-    "url": "http://docs-sandbox.openprocurement.org/get/5856f5f3590235e4a6930df212c34c0c?KeyID=a8968c46&Signature=ZUI9ffQoVv1LzVz4NP6ROyfy1s9WTt0GFZnPBGsPhg1VUvK6Zy7fiMb2v96GNa1KuUnii7AljKTdDf2HRW%2FhDQ%253D%253D", 
+    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/37df4b6da2c24b6a97a6c35bb69fcccf?KeyID=a8968c46&Signature=X%2Ff0ajCeap0OHcwyz1XO0dLSTED0fK3VUByfMLazlN6qfuMigrYsbcVTMH645ldiGRT%2FFULQP5SUs6m%252BP%2FT1Dg%253D%253D", 
     "format": "application/json", 
     "datePublished": "2018-01-06T09:00:00+02:00", 
-    "id": "5856f5f3590235e4a6930df212c34c0c", 
+    "id": "249ca4ca1499416a8e276260b4b27f69", 
     "dateModified": "2018-01-06T09:00:00+02:00"
   }
 }

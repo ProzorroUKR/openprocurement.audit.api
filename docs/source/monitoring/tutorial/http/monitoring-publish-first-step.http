@@ -1,17 +1,17 @@
-PATCH /api/2.4/monitorings/f6b4660221b037c38c99ad2288e65a4e HTTP/1.0
+PATCH /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
-Content-Length: 460
+Content-Length: 467
 Content-Type: application/json
 Host: audit-api-sandbox.prozorro.gov.ua
-
+DATA:
 {
   "data": {
     "decision": {
       "date": "2018-01-02T01:05:00", 
-      "relatedParty": "f6b4660221b037c38c99ad2288e65a4e", 
+      "relatedParty": "6ecc4ca22c014c30a27e286a6c4b6dec", 
       "documents": [
         {
-          "url": "http://docs-sandbox.openprocurement.org/get/02f38863f8b4312ebe8bc1e363e6c335?KeyID=a8968c46&Signature=5tMtLsoVBFlt%2B7BCx308mZHKZQBOltx7pZdlnRZoeMnY%2FRTTjglyA6%2FqnE4LTaJzuo9y0y2cjuQ8uO3cDJviCQ%3D%3D", 
+          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/7e583b38af244dd6a004ebcd88004caf?KeyID=a8968c46&Signature=75tLjc4W308YCvDvFjEkUGnpRSqf%2FpyXBE7PPSgXrDw93TssMikA7%2Fq%2BG6vMyJD6%2BQ1uft7V%2BxG7MXKxS70TBw%3D%3D", 
           "title": "lorem.doc", 
           "hash": "md5:00000000000000000000000000000000", 
           "format": "application/msword"
@@ -22,10 +22,8 @@ Host: audit-api-sandbox.prozorro.gov.ua
   }
 }
 
-
-200 OK
+Response: 200 OK
 Content-Type: application/json; charset=UTF-8
-
 {
   "data": {
     "status": "draft", 
@@ -40,22 +38,22 @@ Content-Type: application/json; charset=UTF-8
     "decision": {
       "date": "2018-01-02T01:05:00+02:00", 
       "dateCreated": "2018-01-02T03:05:00+02:00", 
-      "relatedParty": "f6b4660221b037c38c99ad2288e65a4e", 
+      "relatedParty": "6ecc4ca22c014c30a27e286a6c4b6dec", 
       "documents": [
         {
           "hash": "md5:00000000000000000000000000000000", 
           "title": "lorem.doc", 
-          "url": "http://docs-sandbox.openprocurement.org/get/02f38863f8b4312ebe8bc1e363e6c335?KeyID=a8968c46&Signature=7ei1kpoXzpSQgLM2NRbX6mCK4AJ5jZvQEvaWKKYuv4Qx%2FwlVntHMgTHCKV6jyQDskx2HXo5VCy6US5TPcclICg%253D%253D", 
+          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/7e583b38af244dd6a004ebcd88004caf?KeyID=a8968c46&Signature=oYbDaU7J2132KqM%252BG5mEpVMdEQlMlc28ZCuTCvI17LE8G7ikN0ZgDT50VTIU6vBkMrUYSSO%252BgHVIbQO3Xr79CQ%253D%253D", 
           "format": "application/msword", 
           "datePublished": "2018-01-02T03:05:00+02:00", 
-          "id": "02f38863f8b4312ebe8bc1e363e6c335", 
+          "id": "98bc0622515644cab1364b94516a560d", 
           "dateModified": "2018-01-02T03:05:00+02:00"
         }
       ], 
       "description": "text"
     }, 
     "monitoring_id": "UA-M-2018-01-01-000001", 
-    "id": "f6b4660221b037c38c99ad2288e65a4e", 
+    "id": "c715421038304838a046654fa8c1e9aa", 
     "parties": [
       {
         "name": "The State Audit Service of Ukraine", 
@@ -79,12 +77,12 @@ Content-Type: application/json; charset=UTF-8
           "id": "40165856", 
           "uri": "http://www.dkrs.gov.ua"
         }, 
-        "id": "f6b4660221b037c38c99ad2288e65a4e"
+        "id": "6ecc4ca22c014c30a27e286a6c4b6dec"
       }
     ], 
     "dateCreated": "2018-01-01T02:00:00+02:00", 
     "dateModified": "2018-01-02T03:05:00+02:00", 
-    "tender_id": "f6b4660221b037c38c99ad2288e65a4e"
+    "tender_id": "f71067ac30733261df884de0391debf6"
   }
 }
 

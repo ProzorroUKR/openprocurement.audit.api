@@ -795,12 +795,37 @@ class MonitoringEliminationResolutionDocumentResourceTest(MonitoringEliminationB
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.content_type, 'application/json')
 
+    def test_patch_document(self):
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        request_data = {
+            'title': 'another.txt',
+            'url': self.generate_docservice_url(),
+            'hash': 'md5:' + '1' * 32,
+            'format': 'application/msword',
+        }
+        response = self.app.get('/monitorings/{}/eliminationResolution/documents'.format(self.monitoring_id))
+        doc_to_update = response.json['data'][0]
+
+        response = self.app.patch_json(
+            '/monitorings/{}/eliminationResolution/documents/{}'.format(
+                self.monitoring_id, doc_to_update["id"]
+            ),
+            {"data": request_data}
+        )
+        self.assertEqual(response.json["data"]["title"], request_data["title"])
+        self.assertEqual(response.json["data"]["format"], request_data["format"])
+        self.assertNotEqual(
+            response.json["data"]["url"].split("Signature")[0],
+            request_data["url"].split("Signature")[0],
+        )
+        self.assertNotEqual(response.json["data"]["hash"], request_data["hash"])
+
     def test_patch_document_forbidden(self):
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         document = {
             'title': 'another.txt',
             'url': self.generate_docservice_url(),
-            'hash': 'md5:' + '0' * 32,
+            'hash': 'md5:' + '1' * 32,
             'format': 'application/msword',
         }
         response = self.app.get('/monitorings/{}/eliminationResolution/documents'.format(self.monitoring_id))
@@ -813,6 +838,31 @@ class MonitoringEliminationResolutionDocumentResourceTest(MonitoringEliminationB
             {"data": document},
             status=403
         )
+
+    def test_put_document(self):
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        request_data = {
+            'title': 'my_new_file.txt',
+            'url': self.generate_docservice_url(),
+            'hash': 'md5:' + '0' * 32,
+            'format': 'text/css',
+        }
+        response = self.app.get('/monitorings/{}/eliminationResolution/documents'.format(self.monitoring_id))
+        doc_to_update = response.json['data'][0]
+
+        response = self.app.put_json(
+            '/monitorings/{}/eliminationResolution/documents/{}'.format(
+                self.monitoring_id, doc_to_update["id"]
+            ),
+            {"data": request_data}
+        )
+        self.assertEqual(response.json["data"]["title"], request_data["title"])
+        self.assertEqual(
+            response.json["data"]["url"].split("Signature")[0],
+            request_data["url"].split("Signature")[0],
+        )
+        self.assertEqual(response.json["data"]["format"], request_data["format"])
+        self.assertEqual(response.json["data"]["hash"], request_data["hash"])
 
     def test_put_document_forbidden(self):
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))

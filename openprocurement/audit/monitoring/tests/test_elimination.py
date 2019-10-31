@@ -343,7 +343,7 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         self.assertEqual(data["dateModified"], post_time)
 
     def test_patch_document_forbidden(self):
-        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+        self.app.authorization = ('Basic', (self.sas_pass, self.sas_pass))
         document = {
             'title': 'another.txt',
             'url': self.generate_docservice_url(),
@@ -353,15 +353,38 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         doc_to_update = self.elimination["documents"][0]
 
         self.app.patch_json(
-            '/monitorings/{}/eliminationReport/documents/{}?acc_token={}'.format(
-                self.monitoring_id, doc_to_update["id"], self.tender_owner_token
+            '/monitorings/{}/eliminationReport/documents/{}'.format(
+                self.monitoring_id, doc_to_update["id"]
             ),
             {"data": document},
             status=403
         )
 
-    def test_put_document_forbidden(self):
+    def test_patch_document(self):
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+        request_data = {
+            'title': 'sign-2.p7s',
+            'url': self.generate_docservice_url(),
+            'format': 'application/pkcs7-signature',
+            'hash': 'md5:' + '1' * 32,
+        }
+        doc_to_update = self.elimination["documents"][0]
+        response = self.app.patch_json(
+            '/monitorings/{}/eliminationReport/documents/{}?acc_token={}'.format(
+                self.monitoring_id, doc_to_update["id"],  self.tender_owner_token
+            ),
+            {'data': request_data},
+        )
+        self.assertEqual(response.json["data"]["title"], request_data["title"])
+        self.assertEqual(response.json["data"]["format"], request_data["format"])
+        self.assertNotEqual(
+            response.json["data"]["url"].split("Signature")[0],
+            request_data["url"].split("Signature")[0],
+        )
+        self.assertNotEqual(response.json["data"]["hash"], request_data["hash"])
+
+    def test_put_document_forbidden(self):
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         document = {
             'title': 'my_new_file.txt',
             'url': self.generate_docservice_url(),
@@ -371,12 +394,35 @@ class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
         doc_to_update = self.elimination["documents"][0]
 
         self.app.put_json(
-            '/monitorings/{}/eliminationReport/documents/{}?acc_token={}'.format(
-                self.monitoring_id, doc_to_update["id"], self.tender_owner_token
+            '/monitorings/{}/eliminationReport/documents/{}'.format(
+                self.monitoring_id, doc_to_update["id"]
             ),
             {"data": document},
             status=403
         )
+
+    def test_put_document(self):
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+        request_data = {
+            'title': 'sign-1.p7s',
+            'url': self.generate_docservice_url(),
+            'format': 'application/json',
+            'hash': 'md5:' + '0' * 32,
+        }
+        doc_to_update = self.elimination["documents"][0]
+        response = self.app.put_json(
+            '/monitorings/{}/eliminationReport/documents/{}?acc_token={}'.format(
+                self.monitoring_id, doc_to_update["id"],  self.tender_owner_token
+            ),
+            {'data': request_data},
+        )
+        self.assertEqual(response.json["data"]["title"], request_data["title"])
+        self.assertEqual(
+            response.json["data"]["url"].split("Signature")[0],
+            request_data["url"].split("Signature")[0],
+        )
+        self.assertEqual(response.json["data"]["format"], request_data["format"])
+        self.assertEqual(response.json["data"]["hash"], request_data["hash"])
 
     def test_fail_update_resolution_wo_result_by_type(self):
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))

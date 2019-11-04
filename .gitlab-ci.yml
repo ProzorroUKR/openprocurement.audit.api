@@ -1,42 +1,53 @@
 image: docker:stable
 stages:
   - build
-  - setup
   - test
-  - docs
+  - cleanup
 
 variables:
   COUCHDB_USER: op
   COUCHDB_PASSWORD: op
   GIT_STRATEGY: none
 
-Build:
+.build:
   stage: build
-  script:
+  before_script:
     - type multiwerf && source <(multiwerf use 1.0 beta)
     - type werf && source <(werf ci-env gitlab --tagging-strategy tag-or-branch --verbose)
     - unset WERF_TAG_GIT_BRANCH
-    - werf build-and-publish --stages-storage :local --tag-custom $TAG
-  only:
-    - branches
-  tags:
-    - shell
+  script:
+    - werf build-and-publish --stages-storage :local
   except:
     - schedules
-  variables:
-    GIT_STRATEGY: fetch
-    TAG: ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
+  tags:
+    - shell
 
-BuildTag:
-  extends: Build
+build:
+  extends: .build
   only:
-  - tags
+    - branches
   variables:
     GIT_STRATEGY: fetch
-    TAG: $CI_COMMIT_REF_SLUG
+    WERF_TAG_GIT_COMMIT: ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
+
+build_master:
+  extends: .build
+  only:
+    - master
+  variables:
+    GIT_STRATEGY: fetch
+    WERF_TAG_GIT_BRANCH: $CI_COMMIT_REF_SLUG
+
+build_tag:
+  extends: .build
+  only:
+    - tags
+  variables:
+    GIT_STRATEGY: fetch
+    WERF_TAG_GIT_TAG: $CI_COMMIT_TAG
 
 .test:
-  image: $CI_REGISTRY_IMAGE:ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
+  image: $CI_REGISTRY_IMAGE:$TAG
   stage: test
   services:
     - couchdb:1.6
@@ -44,8 +55,15 @@ BuildTag:
     - kube
   only:
     - branches
+  except:
+    - schedules
   dependencies:
-    - Build
+    - build
+  variables:
+    TAG: ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
+
+.test_main:
+  extends: .test
   script:
     - cd /app
     - pip install -e .[test]
@@ -56,44 +74,52 @@ BuildTag:
   coverage: '/TOTAL\s+\d+\s+\d+\s+(\d+%)/'
 
 test_api:
-  extends: .test
+  extends: .test_main
   variables:
     TESTS_PATH: openprocurement/audit/api/tests
     COV_PATH: openprocurement/audit/api
     COV_FILE: .coveragerc
 
 test_monitoring:
-  extends: .test
+  extends: .test_main
   variables:
     TESTS_PATH: openprocurement/audit/monitoring/tests
     COV_PATH: openprocurement/audit/monitoring
     COV_FILE: .coveragerc
 
 test_inspection:
-  extends: .test
+  extends: .test_main
   variables:
     TESTS_PATH: openprocurement/audit/inspection/tests
     COV_PATH: openprocurement/audit/inspection
     COV_FILE: .coveragerc
+
+cleanup:
+  stage: cleanup
+  before_script:
+    - type multiwerf && source <(multiwerf use 1.0 beta)
+    - type werf && source <(werf ci-env gitlab --tagging-strategy tag-or-branch --verbose)
+    - docker login -u $WERF_IMAGES_CLEANUP_USERNAME -p $WERF_IMAGES_CLEANUP_PASSWORD $WERF_IMAGES_REPO
+  script:
+    - werf cleanup --stages-storage :local
+  only:
+    - schedules
+  tags:
+    - shell
 
 test_docs:
   extends: .test
-  stage: docs
-  dependencies:
-    - test_api
-  script:
+  before_script:
     - cd /app
     - pip install -e .[test]
     - echo '127.0.0.1  couchdb' >> /etc/hosts
+  script:
     - py.test docs.py
-  variables:
-    TESTS_PATH: openprocurement/audit/inspection/tests
-    COV_PATH: openprocurement/audit/inspection
-    COV_FILE: .coveragerc
+  when: manual
 
 test_setup_py:
   image: python:2.7
-  stage: setup
+  stage: test
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
@@ -103,7 +129,7 @@ test_setup_py:
   only:
     - branches
   dependencies:
-    - Build
+    - build
   when: manual
   before_script:
     - apt-get update
@@ -111,4 +137,3 @@ test_setup_py:
     - echo '127.0.0.1  couchdb' >> /etc/hosts
   script:
     - python setup.py test
-

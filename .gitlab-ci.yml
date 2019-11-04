@@ -14,20 +14,21 @@ variables:
   before_script:
     - type multiwerf && source <(multiwerf use 1.0 beta)
     - type werf && source <(werf ci-env gitlab --tagging-strategy tag-or-branch --verbose)
-    - unset WERF_TAG_GIT_BRANCH
   script:
-    - werf build-and-publish --stages-storage :local
+    - werf build-and-publish
   except:
     - schedules
   tags:
     - shell
+  variables:
+    GIT_STRATEGY: fetch
+    WERF_STAGES_STORAGE: ":local"
 
 build:
   extends: .build
   only:
     - branches
   variables:
-    GIT_STRATEGY: fetch
     WERF_TAG_GIT_COMMIT: ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
 
 build_master:
@@ -35,7 +36,6 @@ build_master:
   only:
     - master
   variables:
-    GIT_STRATEGY: fetch
     WERF_TAG_GIT_BRANCH: $CI_COMMIT_REF_SLUG
 
 build_tag:
@@ -43,7 +43,6 @@ build_tag:
   only:
     - tags
   variables:
-    GIT_STRATEGY: fetch
     WERF_TAG_GIT_TAG: $CI_COMMIT_TAG
 
 .test:

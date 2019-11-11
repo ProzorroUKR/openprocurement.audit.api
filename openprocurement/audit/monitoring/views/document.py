@@ -202,16 +202,20 @@ class MonitoringsDocumentPostResource(MonitoringsDocumentBaseResource):
 class MonitoringsDocumentEliminationResource(MonitoringsDocumentBaseResource):
     document_type = ELIMINATION_REPORT_OBJECT_TYPE
 
-    @json_view(permission='edit_elimination_report',
+    @json_view(permission='create_elimination_report',
                validators=(validate_file_upload,))
     def collection_post(self):
         return super(MonitoringsDocumentEliminationResource, self).collection_post()
 
+    @json_view(permission='create_elimination_report',
+               validators=(validate_patch_document_data,))
     def patch(self):
-        raise forbidden(self.request)
+        return super(MonitoringsDocumentEliminationResource, self).patch()
 
+    @json_view(permission='create_elimination_report',
+               validators=(validate_file_update,))
     def put(self):
-        raise forbidden(self.request)
+        return super(MonitoringsDocumentEliminationResource, self).put()
 
 @op_resource(name='Monitoring Elimination Resolution Documents',
              collection_path='/monitorings/{monitoring_id}/eliminationResolution/documents',
@@ -219,12 +223,6 @@ class MonitoringsDocumentEliminationResource(MonitoringsDocumentBaseResource):
              description='Monitoring Elimination Resolution related binary files (PDFs, etc.)')
 class MonitoringsDocumentEliminationResolutionResource(MonitoringsDocumentBaseResource):
     document_type = ELIMINATION_RESOLUTION_OBJECT_TYPE
-
-    def patch(self):
-        raise forbidden(self.request)
-
-    def put(self):
-        raise forbidden(self.request)
 
 
 @op_resource(name='Monitoring Appeal Documents',

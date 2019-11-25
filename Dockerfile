@@ -1,6 +1,6 @@
-FROM python:2.7-slim-jessie
+FROM python:2.7-slim-stretch
 
-RUN apt-get update && apt-get install -y libsodium-dev git libevent-dev libzmq-dev libffi-dev libssl-dev gcc
+RUN apt-get update && apt-get install -y libsodium-dev git libevent-dev libzmq3-dev libffi-dev libssl-dev gcc
 
 WORKDIR /app
 

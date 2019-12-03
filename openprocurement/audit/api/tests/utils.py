@@ -18,6 +18,15 @@ class ItemsListing(APIResourceListing):
                     "title": "title#%d" % k,
                     "description": "description#%d" % k,
                     "bids": [1, k]
+                },
+                doc={
+                    "id": k,
+                    "dateModified": "yesterday",
+                    "status": "active",
+                    "title": "title#%d" % k,
+                    "description": "description#%d" % k,
+                    "bids": [1, k],
+                    "secret": "pass",
                 }
             ) for k in range(5)
         )
@@ -41,7 +50,7 @@ class ItemsListing(APIResourceListing):
         self.FIELDS = ('id', 'status', 'title', 'description')
 
         def item_serialize(_, data, fields):
-            return {i: j for i, j in data.items() if i in fields}
+            return {i: j for i, j in data.items() if i in fields and i != "secret"}
 
         self.serialize_func = item_serialize
         self.object_name_for_listing = 'health'
@@ -107,3 +116,15 @@ class ResourceListingTestCase(BaseWebTest):
         )
         self.assertEqual(len(data["data"]), 5)
         self.assertEqual(set(data["data"][0].keys()), {"id", "status", "title", "description", "dateModified"})
+
+    def test_get_listing_opt_fields_not_subset_disable_filter(self):
+        self.listing.disable_opt_fields_filter = True
+        self.request.params = {"opt_fields": "id,status,title,description,bids,secret"}
+        data = self.get_listing()
+        self.listing.view_mock.assert_called_once_with(
+            self.db, include_docs=True,
+            startkey='', stale='update_after', descending=False, limit=100
+        )
+        self.assertEqual(len(data["data"]), 5)
+        self.assertEqual(set(data["data"][0].keys()),
+                         {"id", "status", "title", "description", "dateModified", "bids"})

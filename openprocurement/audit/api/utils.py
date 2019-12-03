@@ -408,6 +408,7 @@ class APIResourceListing(APIResource):
         super(APIResourceListing, self).__init__(request, context)
         self.server = request.registry.couchdb_server
         self.update_after = request.registry.update_after
+        self.disable_opt_fields_filter = request.registry.disable_opt_fields_filter
 
     @json_view(permission='view_listing')
     def get(self):
@@ -415,7 +416,9 @@ class APIResourceListing(APIResource):
         pparams = {}
         fields = self.request.params.get('opt_fields', '')
         if fields:
-            fields = set(fields.split(self.LIST_SEP)) & set(self.FIELDS)
+            fields = set(fields.split(self.LIST_SEP))
+            if not self.disable_opt_fields_filter:
+                fields &= set(self.FIELDS)
 
         limit = self.request.params.get('limit', '')
         if limit:
@@ -463,16 +466,22 @@ class APIResourceListing(APIResource):
         if fields:
             params['opt_fields'] = pparams['opt_fields'] = self.LIST_SEP.join(fields)
             view_fields = fields | {'dateModified', 'id'}
-            if changes:
-                results = [
-                    (dict([(i, j) for i, j in x.value.items() + [('id', x.id)] if i in view_fields]), x.key)
-                    for x in view()
-                ]
+            if fields.issubset(set(self.FIELDS)):
+                if changes:
+                    results = [
+                        (dict([(i, j) for i, j in x.value.items() + [('id', x.id)] if i in view_fields]), x.key)
+                        for x in view()
+                    ]
+                else:
+                    results = [
+                        (dict([(i, j) for i, j in x.value.items() + [('id', x.id), ('dateModified', x.key)] if
+                               i in view_fields]), x.key)
+                        for x in view()
+                    ]
             else:
                 results = [
-                    (dict([(i, j) for i, j in x.value.items() + [('id', x.id), ('dateModified', x.key)] if
-                           i in view_fields]), x.key)
-                    for x in view()
+                    (self.serialize_func(self.request, x.doc, view_fields), x.key)
+                    for x in view(include_docs=True)
                 ]
         else:
             results = [(

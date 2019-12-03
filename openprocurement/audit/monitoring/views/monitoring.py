@@ -14,7 +14,7 @@ from openprocurement.audit.api.constants import (
     CANCELLED_STATUS,
 )
 from openprocurement.audit.api.utils import (
-    context_unpack, APIResource, APIResourceListing, json_view, forbidden
+    context_unpack, APIResource, APIResourceListing, json_view, forbidden,
 )
 from openprocurement.audit.api.utils import (
     generate_id,
@@ -51,7 +51,8 @@ from openprocurement.audit.monitoring.utils import (
 from openprocurement.audit.monitoring.validation import (
     validate_monitoring_data,
     validate_patch_monitoring_data,
-    validate_credentials_generate
+    validate_credentials_generate,
+    validate_posting_elimination_resolution,
 )
 
 LOGGER = getLogger(__name__)
@@ -131,6 +132,7 @@ class MonitoringResource(APIResource):
     def patch(self):
         monitoring = self.request.validated['monitoring']
         monitoring_old_status = monitoring.status
+        elimination_resolution = monitoring.eliminationResolution
 
         apply_patch(self.request, save=False, src=self.request.validated['monitoring_src'])
 
@@ -159,7 +161,8 @@ class MonitoringResource(APIResource):
             set_author(monitoring.cancellation.documents, self.request, 'author')
             monitoring.cancellation.datePublished = now
 
-        if monitoring.eliminationResolution:
+        if not elimination_resolution and monitoring.eliminationResolution:
+            validate_posting_elimination_resolution(self.request)
             monitoring.eliminationResolution.datePublished = monitoring.eliminationResolution.dateCreated
 
         # download (change urls of) documents for Decision, Conclusion, etc.

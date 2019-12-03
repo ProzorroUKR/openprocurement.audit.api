@@ -35,6 +35,7 @@ MONITORING_TIME = timedelta(days=15)
 ELIMINATION_PERIOD_TIME = timedelta(days=10)
 ELIMINATION_PERIOD_NO_VIOLATIONS_TIME = timedelta(days=3)
 POST_OVERDUE_TIME = timedelta(days=3)
+RESOLUTION_WAIT_PERIOD = timedelta(days=5)
 
 # Object type strings
 MONITORING_OBJECT_TYPE = 'monitoring'

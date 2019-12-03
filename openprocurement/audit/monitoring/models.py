@@ -330,10 +330,6 @@ class Monitoring(BaseModel):
         if self.cancellation and self.cancellation.datePublished or role == 'sas':
             return self.cancellation
 
-    def validate_eliminationResolution(self, data, value):
-        if value is not None and data['eliminationReport'] is None:
-            raise ValidationError(u"Elimination report hasn't been provided.")
-
     def get_role(self):
         role = super(Monitoring, self).get_role()
         status = self.__parent__.request.context.status

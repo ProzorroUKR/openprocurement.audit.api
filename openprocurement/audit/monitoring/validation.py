@@ -11,6 +11,7 @@ from openprocurement.audit.api.constants import (
     ACTIVE_STATUS,
     ADDRESSED_STATUS,
     DECLINED_STATUS,
+    RESOLUTION_WAIT_PERIOD,
 )
 from openprocurement.audit.api.utils import (
     update_logging_context,
@@ -21,7 +22,12 @@ from openprocurement.audit.api.utils import (
 )
 from openprocurement.audit.api.validation import validate_data
 from openprocurement.audit.monitoring.models import Monitoring, EliminationReport, Party, Appeal, Post
-from openprocurement.audit.monitoring.utils import get_access_token, get_monitoring_role
+from openprocurement.audit.monitoring.utils import (
+    get_access_token,
+    get_monitoring_role,
+    calculate_normalized_business_date,
+    get_monitoring_accelerator,
+)
 
 
 def validate_monitoring_data(request):
@@ -272,3 +278,21 @@ def _validate_document_status(request, status):
     statuses = status if isinstance(status, tuple) else (status,)
     if status_current not in statuses:
         raise_operation_error(request, 'Can\'t add document in current {} monitoring status.'.format(status_current))
+
+
+def validate_posting_elimination_resolution(request):
+    monitoring = request.validated['monitoring']
+    monitoring.eliminationResolution.datePublished = monitoring.eliminationResolution.dateCreated
+    if not monitoring.eliminationReport:
+        accelerator = get_monitoring_accelerator(request.context)
+        allow_post_since = calculate_normalized_business_date(
+            monitoring.conclusion.datePublished,
+            RESOLUTION_WAIT_PERIOD,
+            accelerator
+        )
+        if get_now() < allow_post_since:
+            raise_operation_error(
+                request,
+                "Can't post eliminationResolution without eliminationReport "
+                "earlier than {} business days since conclusion.datePublished".format(RESOLUTION_WAIT_PERIOD.days)
+            )

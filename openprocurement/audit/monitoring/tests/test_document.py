@@ -20,6 +20,8 @@ class MonitoringDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
             'url': self.generate_docservice_url(),
             'hash': 'md5:' + '0' * 32,
             'format': 'application/msword',
+            'documentType': 'notice',
+            'id': '0' * 32
         }
         self.test_monitoring_activation_data = {
             "status": "active",
@@ -50,6 +52,7 @@ class MonitoringDecisionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertIn('Signature=', document_data["url"])
         self.assertIn('KeyID=', document_data["url"])
         self.assertNotIn('Expires=', document_data["url"])
+        self.assertEqual(document_data["documentType"], "notice")
 
     def test_document_get_list(self):
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))

@@ -181,6 +181,40 @@ class Document(Model):
     language = StringType()
     relatedItem = MD5Type()
     author = StringType()
+    documentType = StringType(
+        choices=[
+            "tenderNotice",
+            "awardNotice",
+            "contractNotice",
+            "notice",
+            "biddingDocuments",
+            "technicalSpecifications",
+            "evaluationCriteria",
+            "clarifications",
+            "shortlistedFirms",
+            "riskProvisions",
+            "billOfQuantity",
+            "bidders",
+            "conflictOfInterest",
+            "debarments",
+            "evaluationReports",
+            "winningBid",
+            "complaints",
+            "contractSigned",
+            "contractArrangements",
+            "contractSchedule",
+            "contractAnnexe",
+            "contractGuarantees",
+            "subContract",
+            "eligibilityCriteria",
+            "contractProforma",
+            "commercialProposal",
+            "qualificationDocuments",
+            "eligibilityDocuments",
+            "registerExtract",
+            "registerFiscal",
+        ]
+    )
 
     @serializable(serialized_name="url")
     def download_url(self):

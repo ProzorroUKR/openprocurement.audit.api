@@ -4,13 +4,34 @@ from hashlib import sha512
 import mock
 from datetime import datetime
 from freezegun import freeze_time
-
+from iso8601 import parse_date
 from openprocurement.audit.monitoring.tests.base import BaseWebTest, DSWebTestMixin
 from openprocurement.audit.monitoring.tests.utils import get_errors_field_names
+from openprocurement.audit.api.constants import RESOLUTION_WAIT_PERIOD
+from openprocurement.audit.monitoring.utils import calculate_normalized_business_date
 
 
 @freeze_time('2018-01-01T11:00:00+02:00')
 class MonitoringEliminationBaseTest(BaseWebTest, DSWebTestMixin):
+
+    def get_elimination_resolution(self):
+        data = {
+            "result": "partly",
+            "resultByType": {
+                "corruptionProcurementMethodType": "eliminated",
+                "corruptionAwarded": "not_eliminated",
+            },
+            "description": "Do you have spare crutches?",
+            "documents": [
+                {
+                    'title': 'sign.p7s',
+                    'url': self.generate_docservice_url(),
+                    'hash': 'md5:' + '0' * 32,
+                    'format': 'application/pkcs7-signature',
+                }
+            ]
+        }
+        return data
 
     def setUp(self):
         super(MonitoringEliminationBaseTest, self).setUp()
@@ -124,6 +145,19 @@ class MonitoringActiveEliminationResourceTest(MonitoringEliminationBaseTest):
             ('body', 'eliminationReport'),
             next(get_errors_field_names(response, 'Can\'t update in current active monitoring status.')))
 
+    def test_fail_post_elimination_resolution_without_conclusion(self):
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "eliminationResolution": self.get_elimination_resolution(),
+            }},
+            status=422
+        )
+        assert response.json == {"status": "error", "errors": [
+            {"location": "body", "name": "eliminationResolution",
+             "description": "This field cannot be updated in the active status."}]}
+
 
 @freeze_time('2018-01-01T11:00:00+02:00')
 class MonitoringEliminationResourceTest(MonitoringEliminationBaseTest):
@@ -187,29 +221,44 @@ class MonitoringEliminationResourceTest(MonitoringEliminationBaseTest):
 
     def test_fail_update_resolution(self):
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
-        request_data = {
-            "result": "partly",
-            "resultByType": {
-                "corruptionProcurementMethodType": "eliminated",
-                "corruptionAwarded": "not_eliminated",
-            },
-            "description": "Do you have spare crutches?",
-            "documents": [
-                {
-                    'title': 'sign.p7s',
-                    'url': self.generate_docservice_url(),
-                    'hash': 'md5:' + '0' * 32,
-                    'format': 'application/pkcs7-signature',
-                }
-            ]
-        }
-        self.app.patch_json(
+
+        response = self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
-                "eliminationResolution": request_data,
+                "eliminationResolution": self.get_elimination_resolution(),
             }},
-            status=422
+            status=403
         )
+
+        assert response.json == {u'status': u'error', u'errors': [
+            {u'description': u"Can't post eliminationResolution without eliminationReport "
+                             u"earlier than 5 business days since conclusion.datePublished",
+             u'location': u'body', u'name': u'data'}]}
+
+
+    def test_success_post_resolution_without_report(self):
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
+        conclusion_published = response.json["data"]["conclusion"]["datePublished"]
+        allow_post_since = calculate_normalized_business_date(
+            parse_date(conclusion_published),
+            RESOLUTION_WAIT_PERIOD
+        )
+        request_data = self.get_elimination_resolution()
+        with freeze_time(allow_post_since):
+            response = self.app.patch_json(
+                '/monitorings/{}'.format(self.monitoring_id),
+                {"data": {
+                    "eliminationResolution": request_data,
+                }},
+            )
+
+        resolution = response.json["data"]["eliminationResolution"]
+        self.assertEqual(resolution["result"], request_data["result"])
+        self.assertEqual(resolution["resultByType"], request_data["resultByType"])
+        self.assertEqual(resolution["description"], request_data["description"])
+        self.assertEqual(resolution["dateCreated"], allow_post_since.isoformat())
+        self.assertEqual(len(resolution["documents"]), len(request_data["documents"]))
 
 
 class MonitoringEliminationResolutionResourceTest(MonitoringEliminationBaseTest):

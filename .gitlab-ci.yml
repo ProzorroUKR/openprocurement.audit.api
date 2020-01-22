@@ -1,6 +1,7 @@
 image: docker:stable
 stages:
   - build
+  - deploy
   - test
   - cleanup
 
@@ -47,6 +48,60 @@ build_tag:
     - tags
   variables:
     WERF_TAG_GIT_TAG: $CI_COMMIT_TAG
+
+.base_deploy: &base_deploy
+  stage: deploy
+  script:
+    - helm repo add prozorro $REPO_URL
+    - helm repo update
+    - helm upgrade $CI_COMMIT_REF_SLUG --install prozorro/$HELM_CHART --namespace $HELM_NAMESPACE --set $HELM_TAG_PARAMETER=$TAG --wait --debug
+  tags:
+    - shell
+  variables:
+    TAG: ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
+
+review:
+  <<: *base_deploy
+  environment:
+    name: review/${CI_COMMIT_REF_SLUG}
+    action: start
+    url: http://audit-api.${CI_COMMIT_REF_SLUG}.${K8S_DOMAIN}/api/2.5/monitorings
+    on_stop: stop_review
+  dependencies:
+    - build
+  only:
+    - branches
+  except:
+    - master
+    - schedules
+
+deploy_master:
+  <<: *base_deploy
+  environment:
+    name: review/${CI_COMMIT_REF_SLUG}
+    url: http://audit-api.${CI_COMMIT_REF_SLUG}.${K8S_DOMAIN}/api/2.5/monitorings
+  dependencies:
+    - build_master
+  only:
+    - master
+  except:
+    - schedules
+
+stop_review:
+  stage: deploy
+  script:
+    - helm delete $CI_COMMIT_REF_SLUG --purge
+  environment:
+    name: review/${CI_COMMIT_REF_SLUG}
+    action: stop
+  tags:
+    - shell
+  only:
+    - branches
+  except:
+    - master
+    - schedules
+  when: manual
 
 .test:
   image: $CI_REGISTRY_IMAGE:$TAG

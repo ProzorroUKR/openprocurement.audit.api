@@ -54,10 +54,11 @@ build_tag:
   script:
     - helm repo add prozorro $REPO_URL
     - helm repo update
-    - helm upgrade $CI_COMMIT_REF_SLUG --install prozorro/$HELM_CHART --namespace $HELM_NAMESPACE --set $HELM_TAG_PARAMETER=$TAG --wait --debug
+    - helm upgrade $APP_NAME-$CI_COMMIT_REF_SLUG --install prozorro/$HELM_CHART --namespace $HELM_NAMESPACE --set $HELM_TAG_PARAMETER=$TAG --wait --debug
   tags:
     - shell
   variables:
+    APP_NAME: audit-api
     TAG: ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
 
 review:
@@ -65,7 +66,7 @@ review:
   environment:
     name: review/${CI_COMMIT_REF_SLUG}
     action: start
-    url: http://audit-api.${CI_COMMIT_REF_SLUG}.${K8S_DOMAIN}/api/2.5/monitorings
+    url: http://$APP_NAME-${CI_COMMIT_REF_SLUG}.${K8S_DOMAIN}/api/2.5/monitorings
     on_stop: stop_review
   dependencies:
     - build
@@ -79,7 +80,7 @@ deploy_master:
   <<: *base_deploy
   environment:
     name: review/${CI_COMMIT_REF_SLUG}
-    url: http://audit-api.${CI_COMMIT_REF_SLUG}.${K8S_DOMAIN}/api/2.5/monitorings
+    url: http://$APP_NAME-${CI_COMMIT_REF_SLUG}.${K8S_DOMAIN}/api/2.5/monitorings
   dependencies:
     - build_master
   only:

@@ -1,13 +1,12 @@
 from setuptools import setup, find_packages
 
-version = '1.1.3'
+version = '1.1.4'
 
 requires = [
     'pyramid<1.10.0',
     'schematics<2.0.0',
     'cornice==1.2.0.dev0',
     'restkit>=0.27.2',
-    'couchdb-schematics',
     'barbecue',
     'chaussette',
     'cornice',
@@ -26,7 +25,8 @@ requires = [
     'pyramid_exclog',
     'jsonpatch==1.13',
     'rfc6266==0.0.6',
-    'openprocurement_client==1.0b3'
+    'openprocurement_client==1.0b3',
+    'CouchDB==1.2-bad-status-line',
 ]
 test_requires = requires + [
     'pytest',
@@ -51,6 +51,7 @@ dependency_links = [
     "https://github.com/ProzorroUKR/cornice/tarball/1.2.0.dev0#egg=cornice-1.2.0.dev0",
     "https://github.com/ProzorroUKR/rfc6266/tarball/0.0.6#egg=rfc6266-0.0.6",
     "https://github.com/ProzorroUKR/python-json-patch/tarball/1.13-jsondiff.unicode.replacefix.0#egg=jsonpatch-1.13",
+    "https://github.com/ProzorroUKR/couchdb-python/tarball/1.2-bad-status-line#egg=CouchDB-1.2-bad-status-line",
 ]
 
 

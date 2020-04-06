@@ -18,16 +18,26 @@ Schema
 
     Possible values are:
 
-        * corruptionDescription
-        * corruptionProcurementMethodType
-        * corruptionPublicDisclosure
-        * corruptionBiddingDocuments
-        * documentsForm
+        * administrativePenalties
+        * contractsWithoutProcurement
         * corruptionAwarded
-        * corruptionCancelled
-        * corruptionContracting
+        * corruptionBidSecurity
+        * corruptionBiddingDocuments
         * corruptionChanges
+        * corruptionConsideration
+        * corruptionContracting
+        * corruptionDescription
+        * corruptionFailureDocuments
+        * corruptionPublicDisclosure
+        * corruptionUntimely
+        * deadlineForThePublicationDocumentation
+        * inaccuratePersonalData
+        * notComplyDecisionACU
+        * rejectionOfBidsNotByLaw
+        * servicesWithoutProcurementProcedure
+        * useProceduresNotByLaw
         * other
+
 
     a type of the violation
 

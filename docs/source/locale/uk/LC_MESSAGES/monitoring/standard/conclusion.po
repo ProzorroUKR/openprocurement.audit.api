@@ -3,14 +3,14 @@ msgid ""
 msgstr ""
 "Project-Id-Version: openprocurement.audit.api 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2019-11-01 00:30+0200\n"
+"POT-Creation-Date: 2020-04-04 00:03+0300\n"
 "PO-Revision-Date: 2018-07-02 16:22+0300\n"
 "Last-Translator: \n"
 "Language-Team: \n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 1.3\n"
+"Generated-By: Babel 2.8.0\n"
 
 #: ../../source/monitoring/standard/conclusion.rst:4
 msgid "Conclusion"
@@ -20,7 +20,7 @@ msgstr ""
 msgid "Schema"
 msgstr ""
 
-#: ../../source/monitoring/standard/conclusion.rst:0
+#: ../../source/monitoring/standard/conclusion.rst
 msgid "violationOccurred"
 msgstr ""
 
@@ -32,7 +32,7 @@ msgstr "логічний (true/false), обов’язково"
 msgid "any violations are found/not found"
 msgstr "порушення знайдено/не знайдено"
 
-#: ../../source/monitoring/standard/conclusion.rst:0
+#: ../../source/monitoring/standard/conclusion.rst
 msgid "violationType"
 msgstr ""
 
@@ -49,31 +49,31 @@ msgid "Possible values are:"
 msgstr "Можливі значення:"
 
 #: ../../source/monitoring/standard/conclusion.rst:21
-msgid "corruptionDescription"
+msgid "administrativePenalties"
 msgstr ""
 
 #: ../../source/monitoring/standard/conclusion.rst:22
-msgid "corruptionProcurementMethodType"
+msgid "contractsWithoutProcurement"
 msgstr ""
 
 #: ../../source/monitoring/standard/conclusion.rst:23
-msgid "corruptionPublicDisclosure"
-msgstr ""
-
-#: ../../source/monitoring/standard/conclusion.rst:24
-msgid "corruptionBiddingDocuments"
-msgstr ""
-
-#: ../../source/monitoring/standard/conclusion.rst:25
-msgid "documentsForm"
-msgstr ""
-
-#: ../../source/monitoring/standard/conclusion.rst:26
 msgid "corruptionAwarded"
 msgstr ""
 
+#: ../../source/monitoring/standard/conclusion.rst:24
+msgid "corruptionBidSecurity"
+msgstr ""
+
+#: ../../source/monitoring/standard/conclusion.rst:25
+msgid "corruptionBiddingDocuments"
+msgstr ""
+
+#: ../../source/monitoring/standard/conclusion.rst:26
+msgid "corruptionChanges"
+msgstr ""
+
 #: ../../source/monitoring/standard/conclusion.rst:27
-msgid "corruptionCancelled"
+msgid "corruptionConsideration"
 msgstr ""
 
 #: ../../source/monitoring/standard/conclusion.rst:28
@@ -81,94 +81,132 @@ msgid "corruptionContracting"
 msgstr ""
 
 #: ../../source/monitoring/standard/conclusion.rst:29
-msgid "corruptionChanges"
+msgid "corruptionDescription"
 msgstr ""
 
 #: ../../source/monitoring/standard/conclusion.rst:30
-msgid "other"
+msgid "corruptionFailureDocuments"
+msgstr ""
+
+#: ../../source/monitoring/standard/conclusion.rst:31
+msgid "corruptionPublicDisclosure"
 msgstr ""
 
 #: ../../source/monitoring/standard/conclusion.rst:32
-msgid "a type of the violation"
-msgstr "тип порушення"
+msgid "corruptionUntimely"
+msgstr ""
 
-#: ../../source/monitoring/standard/conclusion.rst:0
-msgid "auditFinding"
+#: ../../source/monitoring/standard/conclusion.rst:33
+msgid "deadlineForThePublicationDocumentation"
+msgstr ""
+
+#: ../../source/monitoring/standard/conclusion.rst:34
+msgid "inaccuratePersonalData"
 msgstr ""
 
 #: ../../source/monitoring/standard/conclusion.rst:35
-#: ../../source/monitoring/standard/conclusion.rst:40
-#: ../../source/monitoring/standard/conclusion.rst:45
-#: ../../source/monitoring/standard/conclusion.rst:64
+msgid "notComplyDecisionACU"
+msgstr ""
+
+#: ../../source/monitoring/standard/conclusion.rst:36
+msgid "rejectionOfBidsNotByLaw"
+msgstr ""
+
+#: ../../source/monitoring/standard/conclusion.rst:37
+msgid "servicesWithoutProcurementProcedure"
+msgstr ""
+
+#: ../../source/monitoring/standard/conclusion.rst:38
+msgid "useProceduresNotByLaw"
+msgstr ""
+
+#: ../../source/monitoring/standard/conclusion.rst:39
+msgid "other"
+msgstr ""
+
+#: ../../source/monitoring/standard/conclusion.rst:41
+msgid "a type of the violation"
+msgstr "тип порушення"
+
+#: ../../source/monitoring/standard/conclusion.rst
+msgid "auditFinding"
+msgstr ""
+
+#: ../../source/monitoring/standard/conclusion.rst:44
+#: ../../source/monitoring/standard/conclusion.rst:49
+#: ../../source/monitoring/standard/conclusion.rst:54
+#: ../../source/monitoring/standard/conclusion.rst:73
 msgid "string"
 msgstr "рядок"
 
-#: ../../source/monitoring/standard/conclusion.rst:37
-msgid ""
-"information about the results of monitoring in terms of the stages of the"
-" procurement procedure"
-msgstr ""
-"Інформація про результати моніторингу закупівлі у розрізі стадій "
-"проведення процедури закупівлі"
+#: ../../source/monitoring/standard/conclusion.rst:46
+msgid "information about the results of monitoring in terms of the stages of the procurement procedure"
+msgstr "Інформація про результати моніторингу закупівлі у розрізі стадій проведення процедури закупівлі"
 
-#: ../../source/monitoring/standard/conclusion.rst:0
+#: ../../source/monitoring/standard/conclusion.rst
 msgid "stringsAttached"
 msgstr ""
 
-#: ../../source/monitoring/standard/conclusion.rst:42
-msgid ""
-"obligation to eliminate violations (violations) of legislation in the "
-"field of public procurement"
-msgstr ""
-"Зобов’язанння щодо усунення порушення (порушень) законодавства у сфері "
-"публічних закупівель"
+#: ../../source/monitoring/standard/conclusion.rst:51
+msgid "obligation to eliminate violations (violations) of legislation in the field of public procurement"
+msgstr "Зобов’язанння щодо усунення порушення (порушень) законодавства у сфері публічних закупівель"
 
-#: ../../source/monitoring/standard/conclusion.rst:0
+#: ../../source/monitoring/standard/conclusion.rst
 msgid "description"
 msgstr ""
 
-#: ../../source/monitoring/standard/conclusion.rst:47
+#: ../../source/monitoring/standard/conclusion.rst:56
 msgid "conclusion on the presence or absence of violations of the law"
 msgstr "Висновок про наявність або відсутність порушень законодавства"
 
-#: ../../source/monitoring/standard/conclusion.rst:0
+#: ../../source/monitoring/standard/conclusion.rst
 msgid "date"
 msgstr ""
 
-#: ../../source/monitoring/standard/conclusion.rst:50
+#: ../../source/monitoring/standard/conclusion.rst:59
 msgid "string, :ref:`date`"
 msgstr "рядок, :ref:`date`"
 
-#: ../../source/monitoring/standard/conclusion.rst:52
+#: ../../source/monitoring/standard/conclusion.rst:61
 msgid "Actual (offline) conclusion date."
 msgstr "Фактична дата прийняття рішення про висновок."
 
-#: ../../source/monitoring/standard/conclusion.rst:0
+#: ../../source/monitoring/standard/conclusion.rst
 msgid "documents"
 msgstr ""
 
-#: ../../source/monitoring/standard/conclusion.rst:55
+#: ../../source/monitoring/standard/conclusion.rst:64
 msgid "List of :ref:`document` objects"
 msgstr "Список об’єктів :ref:`document`"
 
-#: ../../source/monitoring/standard/conclusion.rst:0
+#: ../../source/monitoring/standard/conclusion.rst
 msgid "dateCreated"
 msgstr ""
 
-#: ../../source/monitoring/standard/conclusion.rst:58
-#: ../../source/monitoring/standard/conclusion.rst:61
+#: ../../source/monitoring/standard/conclusion.rst:67
+#: ../../source/monitoring/standard/conclusion.rst:70
 msgid "string, :ref:`date`, autogenerated"
 msgstr "рядок, :ref:`date`, генерується автоматично"
 
-#: ../../source/monitoring/standard/conclusion.rst:0
+#: ../../source/monitoring/standard/conclusion.rst
 msgid "datePublished"
 msgstr ""
 
-#: ../../source/monitoring/standard/conclusion.rst:0
+#: ../../source/monitoring/standard/conclusion.rst
 #, fuzzy
 msgid "relatedParty"
 msgstr "Id відповідного :ref:`party`."
 
-#: ../../source/monitoring/standard/conclusion.rst:66
+#: ../../source/monitoring/standard/conclusion.rst:75
 msgid "Id of related :ref:`party`."
 msgstr "Id відповідного :ref:`party`."
+
+#~ msgid "corruptionProcurementMethodType"
+#~ msgstr ""
+
+#~ msgid "documentsForm"
+#~ msgstr ""
+
+#~ msgid "corruptionCancelled"
+#~ msgstr ""
+

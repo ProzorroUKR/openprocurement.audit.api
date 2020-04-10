@@ -28,7 +28,7 @@ SANDBOX_MODE = os.environ.get('SANDBOX_MODE', False)
 DOCUMENT_BLACKLISTED_FIELDS = ('title', 'format', 'url', 'dateModified', 'hash')
 DOCUMENT_WHITELISTED_FIELDS = ('id', 'datePublished', 'author', '__parent__')
 WORKING_DAYS = read_json('working_days.json')
-ORA_CODES = [i['code'] for i in read_json('OrganisationRegistrationAgency.json')['data']]
+ORA_CODES = [i['code'] for i in read_json('organization_identifier_scheme.json')['data']]
 
 # Time restrictions
 MONITORING_TIME = timedelta(days=15)

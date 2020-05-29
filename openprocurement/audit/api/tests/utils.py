@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from mock import Mock
+from unittest.mock import Mock
 from pyramid.testing import DummyRequest
 
 from openprocurement.audit.api.tests.base import BaseWebTest

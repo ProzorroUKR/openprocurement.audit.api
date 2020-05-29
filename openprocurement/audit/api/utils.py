@@ -6,9 +6,10 @@ from binascii import hexlify, unhexlify
 from email.header import decode_header
 from json import dumps
 from logging import getLogger
-from urllib import quote, unquote, urlencode
-from urlparse import urlparse, urlunsplit, parse_qsl
-
+from urllib.parse import quote, unquote, urlencode
+from urllib.parse import urlparse, urlunsplit, parse_qsl
+from nacl.exceptions import BadSignatureError
+from nacl.encoding import HexEncoder
 import couchdb.json
 from Crypto.Cipher import AES
 from cornice.resource import resource, view
@@ -93,8 +94,9 @@ def generate_docservice_url(request, doc_id, temporary=True, prefix=None):
     if prefix:
         mess = '{}/{}'.format(prefix, mess)
         query['Prefix'] = prefix
-    query['Signature'] = quote(b64encode(docservice_key.signature(mess.encode("utf-8"))))
-    query['KeyID'] = docservice_key.hex_vk()[:8]
+    signature = docservice_key.sign(mess.encode()).signature
+    query['Signature'] = quote(b64encode(signature))
+    query['KeyID'] = docservice_key.verify_key.encode(encoder=HexEncoder)[:8].decode()
     return urlunsplit((parsed_url.scheme, parsed_url.netloc, '/get/{}'.format(doc_id), urlencode(query), ''))
 
 
@@ -181,7 +183,7 @@ def upload_file(request,
                     headers={'X-Client-Request-ID': request.environ.get('REQUEST_ID', '')},
                     auth=(request.registry.docservice_username, request.registry.docservice_password))
                 json_data = r.json()
-            except Exception, e:
+            except Exception as e:
                 LOGGER.warning(
                     "Raised exception '{}' on uploading document "
                     "to document service': {}.".format(type(e), e),
@@ -248,9 +250,10 @@ def get_file(request):
                 url = generate_docservice_url(request, key, prefix='{}/{}'.format(db_doc_id, document.id))
             else:
                 url = generate_docservice_url(request, key)
-        request.response.content_type = document.format.encode('utf-8')
+        request.response.content_type = document.format
         request.response.content_disposition = build_header(
-            document.title, filename_compat=quote(document.title.encode('utf-8')))
+            document.title, filename_compat=quote(document.title)
+        ).decode("utf-8")
         request.response.status = '302 Moved Temporarily'
         request.response.location = url
         return url
@@ -336,9 +339,8 @@ def check_document(request, document, document_container):
         raise error_handler(request.errors)
     mess = "{}\0{}".format(key, document.hash.split(':', 1)[-1])
     try:
-        if mess != dockey.verify(signature + mess.encode("utf-8")):
-            raise ValueError
-    except ValueError:
+        dockey.verify(mess.encode("utf-8"), signature)
+    except BadSignatureError:
         request.errors.add(document_container, 'url', "Document url invalid.")
         request.errors.status = 422
         raise error_handler(request.errors)
@@ -378,7 +380,7 @@ def request_params(request):
         request.errors.add('body', 'data', 'could not decode params')
         request.errors.status = 422
         raise error_handler(request.errors, False)
-    except Exception, e:
+    except Exception as e:
         request.errors.add('body', str(e.__class__.__name__), str(e))
         request.errors.status = 422
         raise error_handler(request.errors, False)
@@ -469,13 +471,26 @@ class APIResourceListing(APIResource):
             if fields.issubset(set(self.FIELDS)):
                 if changes:
                     results = [
-                        (dict([(i, j) for i, j in x.value.items() + [('id', x.id)] if i in view_fields]), x.key)
+                        (
+                            dict(
+                                (i, j)
+                                for i, j in list(x.value.items()) + [('id', x.id)]
+                                if i in view_fields
+                            ),
+                            x.key
+                        )
                         for x in view()
                     ]
                 else:
                     results = [
-                        (dict([(i, j) for i, j in x.value.items() + [('id', x.id), ('dateModified', x.key)] if
-                               i in view_fields]), x.key)
+                        (
+                            dict(
+                                (i, j)
+                                for i, j in list(x.value.items()) + [('id', x.id), ('dateModified', x.key)]
+                                if i in view_fields
+                            ),
+                            x.key
+                        )
                         for x in view()
                     ]
             else:
@@ -497,8 +512,8 @@ class APIResourceListing(APIResource):
                 params['offset'], pparams['offset'] = results[-1][1], view_offset
             results = [i[0] for i in results]
             if changes:
-                params['offset'] = encrypt(self.server.uuid, self.db.name, params['offset'])
-                pparams['offset'] = encrypt(self.server.uuid, self.db.name, pparams['offset'])
+                params['offset'] = encrypt(self.server.uuid, self.db.name, params['offset']).decode()
+                pparams['offset'] = encrypt(self.server.uuid, self.db.name, pparams['offset']).decode()
         else:
             params['offset'] = offset
             pparams['offset'] = offset

@@ -6,87 +6,87 @@ Host: audit-api-sandbox.prozorro.gov.ua
 DATA:
 {
   "data": {
+    "tender_id": "f71067ac30733261df884de0391debf6",
     "reasons": [
-      "public", 
+      "public",
       "fiscal"
-    ], 
-    "tender_id": "f71067ac30733261df884de0391debf6", 
+    ],
     "procuringStages": [
-      "awarding", 
+      "awarding",
       "contracting"
-    ], 
+    ],
     "parties": [
       {
+        "name": "The State Audit Service of Ukraine",
         "contactPoint": {
-          "name": "Oleksii Kovalenko", 
+          "name": "Oleksii Kovalenko",
           "telephone": "0440000000"
-        }, 
+        },
         "identifier": {
-          "scheme": "UA-EDR", 
-          "id": "40165856", 
+          "scheme": "UA-EDR",
+          "id": "40165856",
           "uri": "http://www.dkrs.gov.ua"
-        }, 
-        "name": "The State Audit Service of Ukraine", 
+        },
+        "address": {
+          "countryName": "Ukraine",
+          "postalCode": "04070",
+          "region": "Kyiv",
+          "streetAddress": "Petra Sahaidachnoho St, 4",
+          "locality": "Kyiv"
+        },
         "roles": [
           "sas"
-        ], 
-        "address": {
-          "countryName": "Ukraine", 
-          "postalCode": "04070", 
-          "region": "Kyiv", 
-          "streetAddress": "Petra Sahaidachnoho St, 4", 
-          "locality": "Kyiv"
-        }
+        ]
       }
     ]
   }
 }
 
 Response: 201 Created
-Content-Type: application/json; charset=UTF-8
+Content-Type: application/json
 Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/c715421038304838a046654fa8c1e9aa
 {
   "data": {
-    "status": "draft", 
-    "procuringStages": [
-      "awarding", 
-      "contracting"
-    ], 
+    "tender_id": "f71067ac30733261df884de0391debf6",
+    "monitoring_id": "UA-M-2018-01-01-000001",
+    "status": "draft",
     "reasons": [
-      "public", 
+      "public",
       "fiscal"
-    ], 
-    "monitoring_id": "UA-M-2018-01-01-000001", 
-    "dateModified": "2018-01-01T02:00:00+02:00", 
+    ],
+    "procuringStages": [
+      "awarding",
+      "contracting"
+    ],
     "parties": [
       {
-        "name": "The State Audit Service of Ukraine", 
+        "id": "6ecc4ca22c014c30a27e286a6c4b6dec",
+        "name": "The State Audit Service of Ukraine",
+        "identifier": {
+          "scheme": "UA-EDR",
+          "id": "40165856",
+          "uri": "http://www.dkrs.gov.ua"
+        },
+        "address": {
+          "streetAddress": "Petra Sahaidachnoho St, 4",
+          "locality": "Kyiv",
+          "region": "Kyiv",
+          "postalCode": "04070",
+          "countryName": "Ukraine"
+        },
+        "contactPoint": {
+          "name": "Oleksii Kovalenko",
+          "telephone": "0440000000"
+        },
         "roles": [
           "sas"
-        ], 
-        "datePublished": "2018-01-01T02:00:00+02:00", 
-        "address": {
-          "postalCode": "04070", 
-          "countryName": "Ukraine", 
-          "streetAddress": "Petra Sahaidachnoho St, 4", 
-          "region": "Kyiv", 
-          "locality": "Kyiv"
-        }, 
-        "contactPoint": {
-          "name": "Oleksii Kovalenko", 
-          "telephone": "0440000000"
-        }, 
-        "identifier": {
-          "scheme": "UA-EDR", 
-          "id": "40165856", 
-          "uri": "http://www.dkrs.gov.ua"
-        }, 
-        "id": "6ecc4ca22c014c30a27e286a6c4b6dec"
+        ],
+        "datePublished": "2018-01-01T02:00:00+02:00"
       }
-    ], 
-    "dateCreated": "2018-01-01T02:00:00+02:00", 
-    "id": "c715421038304838a046654fa8c1e9aa", 
-    "tender_id": "f71067ac30733261df884de0391debf6"
+    ],
+    "dateModified": "2018-01-01T02:00:00+02:00",
+    "dateCreated": "2018-01-01T02:00:00+02:00",
+    "id": "c715421038304838a046654fa8c1e9aa"
   }
 }
 

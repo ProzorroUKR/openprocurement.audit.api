@@ -6,36 +6,36 @@ Host: audit-api-sandbox.prozorro.gov.ua
 DATA:
 {
   "data": {
+    "description": "Appeal description",
     "documents": [
       {
-        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/37df4b6da2c24b6a97a6c35bb69fcccf?KeyID=a8968c46&Signature=p00JBLkUFLMh9NVj1Gb07X4O6hsoqfRY89d4oG0gmHTm77S5zAV0pAZ%2BeMG%2BPe78bccrBkp%2FCymfzh31eHVyCQ%3D%3D", 
-        "title": "letter.doc", 
-        "hash": "md5:00000000000000000000000000000000", 
+        "title": "letter.doc",
+        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/37df4b6da2c24b6a97a6c35bb69fcccf?Signature=p00JBLkUFLMh9NVj1Gb07X4O6hsoqfRY89d4oG0gmHTm77S5zAV0pAZ%2BeMG%2BPe78bccrBkp%2FCymfzh31eHVyCQ%3D%3D&KeyID=a8968c46",
+        "hash": "md5:00000000000000000000000000000000",
         "format": "application/msword"
       }
-    ], 
-    "description": "Appeal description"
+    ]
   }
 }
 
 Response: 200 OK
-Content-Type: application/json; charset=UTF-8
+Content-Type: application/json
 {
   "data": {
-    "dateCreated": "2018-01-06T09:00:00+02:00", 
+    "description": "Appeal description",
     "documents": [
       {
-        "hash": "md5:00000000000000000000000000000000", 
-        "author": "tender_owner", 
-        "title": "letter.doc", 
-        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/37df4b6da2c24b6a97a6c35bb69fcccf?KeyID=a8968c46&Signature=X%2Ff0ajCeap0OHcwyz1XO0dLSTED0fK3VUByfMLazlN6qfuMigrYsbcVTMH645ldiGRT%2FFULQP5SUs6m%252BP%2FT1Dg%253D%253D", 
-        "format": "application/msword", 
-        "datePublished": "2018-01-06T09:00:00+02:00", 
-        "id": "249ca4ca1499416a8e276260b4b27f69", 
-        "dateModified": "2018-01-06T09:00:00+02:00"
+        "id": "249ca4ca1499416a8e276260b4b27f69",
+        "hash": "md5:00000000000000000000000000000000",
+        "title": "letter.doc",
+        "format": "application/msword",
+        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/37df4b6da2c24b6a97a6c35bb69fcccf?Signature=X%2Ff0ajCeap0OHcwyz1XO0dLSTED0fK3VUByfMLazlN6qfuMigrYsbcVTMH645ldiGRT%2FFULQP5SUs6m%252BP%2FT1Dg%253D%253D&KeyID=a8968c46",
+        "datePublished": "2018-01-06T09:00:00+02:00",
+        "dateModified": "2018-01-06T09:00:00+02:00",
+        "author": "tender_owner"
       }
-    ], 
-    "description": "Appeal description", 
+    ],
+    "dateCreated": "2018-01-06T09:00:00+02:00",
     "datePublished": "2018-01-06T09:00:00+02:00"
   }
 }

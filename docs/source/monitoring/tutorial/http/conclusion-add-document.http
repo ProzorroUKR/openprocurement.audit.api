@@ -6,26 +6,26 @@ Host: audit-api-sandbox.prozorro.gov.ua
 DATA:
 {
   "data": {
-    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/22c38d4f6dab44b1bfab5d9255524d81?KeyID=a8968c46&Signature=vU3qfvBM3dNFvt9AVUeYfAKai%2FuUPpfYf642WbVy4VZrNiJP%2F3MfpI5sgbcD9WW1XaA1NXF9cCFEnTBx4EBfAw%3D%3D", 
-    "title": "sign.p7s", 
-    "hash": "md5:00000000000000000000000000000000", 
+    "title": "sign.p7s",
+    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/22c38d4f6dab44b1bfab5d9255524d81?Signature=vU3qfvBM3dNFvt9AVUeYfAKai%2FuUPpfYf642WbVy4VZrNiJP%2F3MfpI5sgbcD9WW1XaA1NXF9cCFEnTBx4EBfAw%3D%3D&KeyID=a8968c46",
+    "hash": "md5:00000000000000000000000000000000",
     "format": "application/pkcs7-signature"
   }
 }
 
 Response: 201 Created
-Content-Type: application/json; charset=UTF-8
+Content-Type: application/json
 Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/conclusion/documents/a34e3f49ae1c4f03bb35d5d1d47f36e9
 {
   "data": {
-    "hash": "md5:00000000000000000000000000000000", 
-    "author": "monitoring_owner", 
-    "title": "sign.p7s", 
-    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/22c38d4f6dab44b1bfab5d9255524d81?KeyID=a8968c46&Signature=xdYx0wKZ7i%252BaC%2Fp4wGnxXQfUqLk0jIkeVF4Z%252BUMor1QJNZRmDe9JKrnuK8K7Kbfo%252BfStECq2gETkaCWepo7dAw%253D%253D", 
-    "format": "application/pkcs7-signature", 
-    "datePublished": "2018-01-05T02:20:00+02:00", 
-    "id": "a34e3f49ae1c4f03bb35d5d1d47f36e9", 
-    "dateModified": "2018-01-05T02:20:00+02:00"
+    "id": "a34e3f49ae1c4f03bb35d5d1d47f36e9",
+    "hash": "md5:00000000000000000000000000000000",
+    "title": "sign.p7s",
+    "format": "application/pkcs7-signature",
+    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/22c38d4f6dab44b1bfab5d9255524d81?Signature=xdYx0wKZ7i%252BaC%2Fp4wGnxXQfUqLk0jIkeVF4Z%252BUMor1QJNZRmDe9JKrnuK8K7Kbfo%252BfStECq2gETkaCWepo7dAw%253D%253D&KeyID=a8968c46",
+    "datePublished": "2018-01-05T02:20:00+02:00",
+    "dateModified": "2018-01-05T02:20:00+02:00",
+    "author": "monitoring_owner"
   }
 }
 

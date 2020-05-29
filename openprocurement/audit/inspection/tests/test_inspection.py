@@ -113,17 +113,18 @@ class InspectionResourceTest(BaseWebTest):
             [
                 {
                     "location": "body",
+                    "name": "monitoring_ids",
+                    "description": [
+                        "Hash value is wrong length."
+                    ]
+                },
+                {
+                    "location": "body",
                     "name": "description",
                     "description": [
                         "Couldn't interpret '12.5' as string."
                     ]
                 },
-                {
-                    "location": "body",
-                    "name": "monitoring_ids",
-                    "description": [
-                        "Hash value is wrong length."
-                    ]
-                }
+
             ]
         )

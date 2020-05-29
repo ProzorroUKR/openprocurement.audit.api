@@ -6,45 +6,45 @@ Host: audit-api-sandbox.prozorro.gov.ua
 DATA:
 {
   "data": {
-    "title": "Lorem ipsum", 
-    "relatedParty": "6ecc4ca22c014c30a27e286a6c4b6dec", 
+    "title": "Lorem ipsum",
+    "description": "Lorem ipsum dolor sit amet.",
     "documents": [
       {
-        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/2cd40a17af5841bba79a442e11f795ce?KeyID=a8968c46&Signature=dZf7AvbLlFWM%2B4eTpQKSd4%2B6s5A7z3xNxxLAY%2BrbKoNpMhPJ3HAPriDM5QQLlXcJtmvDbEOZr1tyzLfak1FbCw%3D%3D", 
-        "title": "ipsum.doc", 
-        "hash": "md5:00000000000000000000000000000000", 
+        "title": "ipsum.doc",
+        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/2cd40a17af5841bba79a442e11f795ce?Signature=dZf7AvbLlFWM%2B4eTpQKSd4%2B6s5A7z3xNxxLAY%2BrbKoNpMhPJ3HAPriDM5QQLlXcJtmvDbEOZr1tyzLfak1FbCw%3D%3D&KeyID=a8968c46",
+        "hash": "md5:00000000000000000000000000000000",
         "format": "application/msword"
       }
-    ], 
-    "description": "Lorem ipsum dolor sit amet."
+    ],
+    "relatedParty": "6ecc4ca22c014c30a27e286a6c4b6dec"
   }
 }
 
 Response: 201 Created
-Content-Type: application/json; charset=UTF-8
+Content-Type: application/json
 Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/posts/ca85c88b657b4bba974b037e532e581c
 {
   "data": {
+    "id": "ca85c88b657b4bba974b037e532e581c",
+    "title": "Lorem ipsum",
+    "description": "Lorem ipsum dolor sit amet.",
     "documents": [
       {
-        "hash": "md5:00000000000000000000000000000000", 
-        "author": "monitoring_owner", 
-        "title": "ipsum.doc", 
-        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/2cd40a17af5841bba79a442e11f795ce?KeyID=a8968c46&Signature=OZIGjb5iadULQ8WLskGvxx95vKWAZlty2qiwy4KtaRAXTWx%2F3lUo6FjwLwZ4juaEjnyRq3y953ReosiUYw6ODA%253D%253D", 
-        "format": "application/msword", 
-        "datePublished": "2018-01-03T02:05:00+02:00", 
-        "id": "51013265fd914fa6b01a6334b95ee70c", 
-        "dateModified": "2018-01-03T02:05:00+02:00"
+        "id": "51013265fd914fa6b01a6334b95ee70c",
+        "hash": "md5:00000000000000000000000000000000",
+        "title": "ipsum.doc",
+        "format": "application/msword",
+        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/2cd40a17af5841bba79a442e11f795ce?Signature=OZIGjb5iadULQ8WLskGvxx95vKWAZlty2qiwy4KtaRAXTWx%2F3lUo6FjwLwZ4juaEjnyRq3y953ReosiUYw6ODA%253D%253D&KeyID=a8968c46",
+        "datePublished": "2018-01-03T02:05:00+02:00",
+        "dateModified": "2018-01-03T02:05:00+02:00",
+        "author": "monitoring_owner"
       }
-    ], 
-    "description": "Lorem ipsum dolor sit amet.", 
-    "title": "Lorem ipsum", 
-    "author": "monitoring_owner", 
-    "datePublished": "2018-01-03T02:05:00+02:00", 
-    "relatedParty": "6ecc4ca22c014c30a27e286a6c4b6dec", 
-    "dateOverdue": "2018-01-10T00:00:00+02:00", 
-    "id": "ca85c88b657b4bba974b037e532e581c", 
-    "postOf": "decision"
+    ],
+    "author": "monitoring_owner",
+    "postOf": "decision",
+    "datePublished": "2018-01-03T02:05:00+02:00",
+    "dateOverdue": "2018-01-10T00:00:00+02:00",
+    "relatedParty": "6ecc4ca22c014c30a27e286a6c4b6dec"
   }
 }
 

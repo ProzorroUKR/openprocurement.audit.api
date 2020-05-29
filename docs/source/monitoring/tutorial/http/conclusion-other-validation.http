@@ -8,8 +8,8 @@ DATA:
   "data": {
     "conclusion": {
       "violationType": [
-        "documentsForm", 
-        "corruptionAwarded", 
+        "documentsForm",
+        "corruptionAwarded",
         "other"
       ]
     }
@@ -17,18 +17,18 @@ DATA:
 }
 
 Response: 422 Unprocessable Entity
-Content-Type: application/json; charset=UTF-8
+Content-Type: application/json
 {
-  "status": "error", 
+  "status": "error",
   "errors": [
     {
+      "location": "body",
+      "name": "conclusion",
       "description": {
         "otherViolationType": [
           "This field is required."
         ]
-      }, 
-      "location": "body", 
-      "name": "conclusion"
+      }
     }
   ]
 }

@@ -2,7 +2,7 @@ import json
 import traceback
 from hashlib import sha512, md5
 
-import mock
+from unittest import mock
 import uuid
 from datetime import datetime
 from freezegun import freeze_time
@@ -29,7 +29,7 @@ class DumpsWebTestApp(BaseTestApp):
 
     def write_request(self, req):
         if hasattr(self, 'file_obj') and not self.file_obj.closed:
-            self.file_obj.write(req.as_bytes(True))
+            self.file_obj.write(req.as_bytes(True).decode("utf-8"))
             self.file_obj.write("\n")
             if req.body:
                 try:
@@ -39,7 +39,7 @@ class DumpsWebTestApp(BaseTestApp):
                 else:
                     self.file_obj.write('DATA:\n' + json.dumps(
                         obj, indent=self.indent, ensure_ascii=self.ensure_ascii
-                    ).encode('utf8'))
+                    ))
                 self.file_obj.write("\n")
             self.file_obj.write("\n")
 
@@ -63,7 +63,7 @@ class DumpsWebTestApp(BaseTestApp):
                 else:
                     self.file_obj.write(json.dumps(
                         obj, indent=self.indent, ensure_ascii=self.ensure_ascii
-                    ).encode('utf8'))
+                    ))
                     self.file_obj.write("\n")
             self.file_obj.write("\n")
 
@@ -88,9 +88,9 @@ class MockWebTestMixin(object):
 
     def uuid(self, version=None, **kwargs):
         stack = self.stack()
-        hex = md5(str(stack)).hexdigest()
+        hex = md5(str(stack).encode("utf-8")).hexdigest()
         count = self.count(hex)
-        hash = md5(hex + str(count)).digest()
+        hash = md5((hex + str(count)).encode("utf-8")).digest()
         self.uuid_patch.stop()
         test_uuid = uuid.UUID(bytes=hash[:16], version=version)
         self.uuid_patch.start()
@@ -147,7 +147,7 @@ class BaseInspectionWebTest(InspectionWebTest, MockWebTestMixin):
 class OptionsResourceTest(BaseMonitoringWebTest):
 
     def test_monitoring_list_options_query_params(self):
-        with open('docs/source/monitoring/feed/http/monitorings-with-options.http', 'w') as self.app.file_obj:
+        with open('docs/source/monitoring/feed/http/monitorings-with-options.http', 'wt') as self.app.file_obj:
             self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
             response = self.app.post_json(
                 '/monitorings',
@@ -163,7 +163,7 @@ class OptionsResourceTest(BaseMonitoringWebTest):
             )
         self.assertEqual(response.status, '201 Created')
 
-        with open('docs/source/monitoring/feed/http/monitorings-with-options-query-params.http', 'w') as self.app.file_obj:
+        with open('docs/source/monitoring/feed/http/monitorings-with-options-query-params.http', 'wt') as self.app.file_obj:
             response = self.app.get('/monitorings?mode=real_draft&opt_fields=status')
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(len(response.json['data']), 1)
@@ -203,20 +203,20 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
     def test_monitoring_life_cycle_with_violations(self, mock_api_client):
         tender_token = self.uuid().hex
         mock_api_client.return_value.extract_credentials.return_value = {
-            'data': {'tender_token': sha512(tender_token).hexdigest()}
+            'data': {'tender_token': sha512(tender_token.encode()).hexdigest()}
         }
 
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
-        with open('docs/source/monitoring/tutorial/http/monitorings-empty.http', 'w') as self.app.file_obj:
+        with open('docs/source/monitoring/tutorial/http/monitorings-empty.http', 'wt') as self.app.file_obj:
             response = self.app.get('/monitorings', status=200)
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.json['data'], [])
 
-        with open('docs/source/monitoring/tutorial/http/monitoring-post-empty-body.http', 'w') as self.app.file_obj:
+        with open('docs/source/monitoring/tutorial/http/monitoring-post-empty-body.http', 'wt') as self.app.file_obj:
             self.app.post_json('/monitorings', {"data": {}}, status=422)
 
-        with open('docs/source/monitoring/tutorial/http/monitoring-post.http', 'w') as self.app.file_obj:
+        with open('docs/source/monitoring/tutorial/http/monitoring-post.http', 'wt') as self.app.file_obj:
             response = self.app.post_json(
                 '/monitorings',
                 {"data": {
@@ -231,13 +231,13 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
             monitoring_id = response.json["data"]["id"]
             party_id = response.json["data"]["parties"][0]["id"]
 
-        with open('docs/source/monitoring/tutorial/http/monitorings-with-object.http', 'w') as self.app.file_obj:
+        with open('docs/source/monitoring/tutorial/http/monitorings-with-object.http', 'wt') as self.app.file_obj:
             response = self.app.get('/monitorings?mode=real_draft')
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(len(response.json['data']), 1)
 
         with freeze_time("2018.01.02 00:00"):
-            with open('docs/source/monitoring/tutorial/http/monitoring-publish-wo-decision.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/monitoring-publish-wo-decision.http', 'wt') as self.app.file_obj:
                 self.app.patch_json(
                     '/monitorings/{}'.format(monitoring_id),
                     {"data": {"status": "active"}},
@@ -247,7 +247,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
         # PUBLISH
 
         with freeze_time("2018.01.02 01:05"):
-            with open('docs/source/monitoring/tutorial/http/monitoring-publish-first-step.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/monitoring-publish-first-step.http', 'wt') as self.app.file_obj:
                 self.app.patch_json(
                     '/monitorings/{}'.format(monitoring_id),
                     {"data": {
@@ -267,7 +267,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                 )
 
         with freeze_time("2018.01.02 01:10"):
-            with open('docs/source/monitoring/tutorial/http/monitoring-publish-add-document.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/monitoring-publish-add-document.http', 'wt') as self.app.file_obj:
                 self.app.post_json(
                     '/monitorings/{}/decision/documents'.format(monitoring_id),
                     {"data": {
@@ -280,7 +280,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                 )
 
         with freeze_time("2018.01.02 01:15"):
-            with open('docs/source/monitoring/tutorial/http/monitoring-publish-second-step.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/monitoring-publish-second-step.http', 'wt') as self.app.file_obj:
                 self.app.patch_json(
                     '/monitorings/{}'.format(monitoring_id),
                     {"data": {
@@ -290,7 +290,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                 )
 
         with freeze_time("2018.01.02 01:20"):
-            with open('docs/source/monitoring/tutorial/http/monitoring-publish-change.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/monitoring-publish-change.http', 'wt') as self.app.file_obj:
                 self.app.patch_json(
                     '/monitorings/{}'.format(monitoring_id),
                     {"data": {
@@ -306,7 +306,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
 
         with freeze_time("2018.01.04 00:00"):
-            with open('docs/source/monitoring/tutorial/http/dialogue-get-credentials.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/dialogue-get-credentials.http', 'wt') as self.app.file_obj:
                 response = self.app.patch_json(
                     '/monitorings/{}/credentials?acc_token={}'.format(monitoring_id, tender_token),
                     status=200
@@ -318,7 +318,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         with freeze_time("2018.01.03 00:05"):
-            with open('docs/source/monitoring/tutorial/http/post-publish.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/post-publish.http', 'wt') as self.app.file_obj:
                 response = self.app.post_json(
                     '/monitorings/{}/posts'.format(monitoring_id),
                     {"data": {
@@ -338,7 +338,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
         post_id = response.json['data']['id']
 
         with freeze_time("2018.01.03 00:10"):
-            with open('docs/source/monitoring/tutorial/http/post-publish-add-document.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/post-publish-add-document.http', 'wt') as self.app.file_obj:
                 self.app.post_json(
                     '/monitorings/{}/posts/{}/documents'.format(monitoring_id, post_id),
                     {"data": {
@@ -350,7 +350,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                     status=201
                 )
 
-        with open('docs/source/monitoring/tutorial/http/post-get-documents.http', 'w') as self.app.file_obj:
+        with open('docs/source/monitoring/tutorial/http/post-get-documents.http', 'wt') as self.app.file_obj:
             self.app.get(
                 '/monitorings/{}/posts/{}/documents'.format(monitoring_id, post_id),
                 status=200
@@ -359,7 +359,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
 
         with freeze_time("2018.01.04 00:05"):
-            with open('docs/source/monitoring/tutorial/http/post-answer.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/post-answer.http', 'wt') as self.app.file_obj:
                 response = self.app.post_json(
                     '/monitorings/{}/posts?acc_token={}'.format(monitoring_id, tender_owner_token),
                     {"data": {
@@ -373,7 +373,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
         answer_id = response.json['data']['id']
 
         with freeze_time("2018.01.04 00:10"):
-            with open('docs/source/monitoring/tutorial/http/post-answer-docs.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/post-answer-docs.http', 'wt') as self.app.file_obj:
                 self.app.post_json(
                     '/monitorings/{}/posts/{}/documents?acc_token={}'.format(
                         monitoring_id, answer_id, tender_owner_token
@@ -390,7 +390,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
 
         with freeze_time("2018.01.04 01:05"):
-            with open('docs/source/monitoring/tutorial/http/post-broker-publish.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/post-broker-publish.http', 'wt') as self.app.file_obj:
                 response = self.app.post_json(
                     '/monitorings/{}/posts?acc_token={}'.format(monitoring_id, tender_owner_token),
                     {"data": {
@@ -411,7 +411,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         with freeze_time("2018.01.04 01:15"):
-            with open('docs/source/monitoring/tutorial/http/post-broker-sas-answer.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/post-broker-sas-answer.http', 'wt') as self.app.file_obj:
                 self.app.post_json(
                     '/monitorings/{}/posts'.format(monitoring_id),
                     {"data": {
@@ -429,7 +429,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                     status=201
                 )
 
-        with open('docs/source/monitoring/tutorial/http/posts-get.http', 'w') as self.app.file_obj:
+        with open('docs/source/monitoring/tutorial/http/posts-get.http', 'wt') as self.app.file_obj:
             self.app.get(
                 '/monitorings/{}/posts'.format(monitoring_id),
                 status=200
@@ -439,7 +439,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         with freeze_time("2018.01.05 00:00"):
-            with open('docs/source/monitoring/tutorial/http/conclusion-wo-violations.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/conclusion-wo-violations.http', 'wt') as self.app.file_obj:
                 response = self.app.patch_json(
                     '/monitorings/{}'.format(monitoring_id),
                     {"data": {
@@ -454,7 +454,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
         self.assertIs(response.json["data"]["conclusion"]["violationOccurred"], False)
 
         with freeze_time("2018.01.05 00:10"):
-            with open('docs/source/monitoring/tutorial/http/conclusion-failed-required.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/conclusion-failed-required.http', 'wt') as self.app.file_obj:
                 response = self.app.patch_json(
                     '/monitorings/{}'.format(monitoring_id),
                     {"data": {
@@ -468,7 +468,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
         self.assertEqual(len(response.json["errors"]), 1)
 
         with freeze_time("2018.01.05 00:15"):
-            with open('docs/source/monitoring/tutorial/http/conclusion-full.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/conclusion-full.http', 'wt') as self.app.file_obj:
                 response = self.app.patch_json(
                     '/monitorings/{}'.format(monitoring_id),
                     {"data": {
@@ -492,7 +492,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
             self.assertEqual(response.status_code, 200)
 
         with freeze_time("2018.01.05 00:17"):
-            with open('docs/source/monitoring/tutorial/http/conclusion-other-validation.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/conclusion-other-validation.http', 'wt') as self.app.file_obj:
                 response = self.app.patch_json(
                     '/monitorings/{}'.format(monitoring_id),
                     {"data": {
@@ -508,7 +508,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                       u'location': u'body', u'name': u'conclusion'}])
 
         with freeze_time("2018.01.05 00:20"):
-            with open('docs/source/monitoring/tutorial/http/conclusion-add-document.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/conclusion-add-document.http', 'wt') as self.app.file_obj:
                 self.app.post_json(
                     '/monitorings/{}/conclusion/documents'.format(monitoring_id),
                     {"data": {
@@ -521,7 +521,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                 )
 
         with freeze_time("2018.01.05 00:25"):
-            with open('docs/source/monitoring/tutorial/http/conclusion-addressed.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/conclusion-addressed.http', 'wt') as self.app.file_obj:
                 response = self.app.patch_json(
                     '/monitorings/{}'.format(monitoring_id),
                     {"data": {
@@ -535,7 +535,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
 
         with freeze_time("2018.01.06 00:00"):
-            with open('docs/source/monitoring/tutorial/http/conclusion-post.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/conclusion-post.http', 'wt') as self.app.file_obj:
                 response = self.app.post_json(
                     '/monitorings/{}/posts?acc_token={}'.format(monitoring_id, tender_owner_token),
                     {"data": {
@@ -554,7 +554,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
         post_conclusion_id = response.json['data']['id']
 
         with freeze_time("2018.01.03 00:10"):
-            with open('docs/source/monitoring/tutorial/http/post-conclusion-add-document.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/post-conclusion-add-document.http', 'wt') as self.app.file_obj:
                 self.app.post_json(
                     '/monitorings/{}/posts/{}/documents?acc_token={}'.format(
                         monitoring_id, post_conclusion_id, tender_owner_token),
@@ -571,7 +571,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
 
         with freeze_time("2018.01.06 07:00"):
-            with open('docs/source/monitoring/tutorial/http/appeal-post.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/appeal-post.http', 'wt') as self.app.file_obj:
                 response = self.app.put_json(
                     '/monitorings/{}/appeal?acc_token={}'.format(monitoring_id, tender_owner_token),
                     {"data": {
@@ -594,7 +594,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
         }
 
         with freeze_time("2018.01.06 07:30"):
-            with open('docs/source/monitoring/tutorial/http/appeal-post-again.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/appeal-post-again.http', 'wt') as self.app.file_obj:
                 self.app.put_json(
                     '/monitorings/{}/appeal?acc_token={}'.format(monitoring_id, tender_owner_token),
                     {"data": {
@@ -605,14 +605,14 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                 )
 
         with freeze_time("2018.01.06 08:00"):
-            with open('docs/source/monitoring/tutorial/http/appeal-post-doc.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/appeal-post-doc.http', 'wt') as self.app.file_obj:
                 self.app.post_json(
                     '/monitorings/{}/appeal/documents?acc_token={}'.format(monitoring_id, tender_owner_token),
                     {"data": another_document},
                 )
 
         with freeze_time("2018.01.06 08:15"):
-            with open('docs/source/monitoring/tutorial/http/appeal-patch-doc.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/appeal-patch-doc.http', 'wt') as self.app.file_obj:
                 self.app.patch_json(
                     '/monitorings/{}/appeal/documents/{}?acc_token={}'.format(
                         monitoring_id,
@@ -631,7 +631,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
 
         with freeze_time("2018.01.07 00:00"):
-            with open('docs/source/monitoring/tutorial/http/elimination-report-post.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/elimination-report-post.http', 'wt') as self.app.file_obj:
                 response = self.app.put_json(
                     '/monitorings/{}/eliminationReport?acc_token={}'.format(monitoring_id, tender_owner_token),
                     {"data": {
@@ -653,7 +653,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         with freeze_time("2018.01.09 00:00"):
-            with open('docs/source/monitoring/tutorial/http/elimination-resolution-post.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/elimination-resolution-post.http', 'wt') as self.app.file_obj:
                 self.app.patch_json(
                     '/monitorings/{}'.format(monitoring_id),
                     {"data": {
@@ -678,7 +678,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                 )
 
         with freeze_time("2018.01.25 00:00"):
-            with open('docs/source/monitoring/tutorial/http/monitoring-to-completed.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/monitoring-to-completed.http', 'wt') as self.app.file_obj:
                 self.app.patch_json(
                     '/monitorings/{}'.format(monitoring_id),
                     {"data": {
@@ -688,7 +688,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                 )
 
         with freeze_time("2018.01.25 01:00"):
-            with open('docs/source/monitoring/tutorial/http/monitoring-documents.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/monitoring-documents.http', 'wt') as self.app.file_obj:
                 response = self.app.post_json(
                     '/monitorings/{}/documents'.format(monitoring_id),
                     {"data": {
@@ -702,7 +702,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
 
         doc_id = response.json["data"]["id"]
         with freeze_time("2018.01.25 01:30"):
-            with open('docs/source/monitoring/tutorial/http/monitoring-documents-put.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/monitoring-documents-put.http', 'wt') as self.app.file_obj:
                 doc_hash = "1" * 32
                 self.app.put_json(
                     '/monitorings/{}/documents/{}'.format(monitoring_id, doc_id),
@@ -716,14 +716,14 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                 )
 
         with freeze_time("2018.01.25 01:32"):
-            with open('docs/source/monitoring/tutorial/http/monitoring-documents-get.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/monitoring-documents-get.http', 'wt') as self.app.file_obj:
                 self.app.get(
                     '/monitorings/{}/documents/{}'.format(monitoring_id, doc_id),
                     status=200
                 )
 
         with freeze_time("2018.01.25 01:35"):
-            with open('docs/source/monitoring/tutorial/http/monitoring-documents-patch.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/monitoring-documents-patch.http', 'wt') as self.app.file_obj:
                 self.app.patch_json(
                     '/monitorings/{}/documents/{}'.format(monitoring_id, doc_id),
                     {"data": {
@@ -736,7 +736,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                 )
 
         with freeze_time("2018.01.25 01:40"):
-            with open('docs/source/monitoring/tutorial/http/monitoring-documents-get-collection.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/monitoring-documents-get-collection.http', 'wt') as self.app.file_obj:
                 self.app.get(
                     '/monitorings/{}/documents'.format(monitoring_id),
                     status=200
@@ -761,7 +761,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
         party_id = response.json["data"]["parties"][0]["id"]
 
         with freeze_time("2018.01.02 00:00"):
-            with open('docs/source/monitoring/tutorial/http/monitoring-publish.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/monitoring-publish.http', 'wt') as self.app.file_obj:
                 self.app.patch_json(
                     '/monitorings/{}'.format(monitoring_id),
                     {"data": {
@@ -811,7 +811,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
             )
 
         with freeze_time("2018.01.11 00:00"):
-            with open('docs/source/monitoring/tutorial/http/monitoring-to-closed.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/monitoring-to-closed.http', 'wt') as self.app.file_obj:
                 self.app.patch_json(
                     '/monitorings/{}'.format(monitoring_id),
                     {"data": {
@@ -858,7 +858,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
             )
 
         with freeze_time("2018.01.03 00:00"):
-            with open('docs/source/monitoring/tutorial/http/monitoring-to-stopped.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/monitoring-to-stopped.http', 'wt') as self.app.file_obj:
                 self.app.patch_json(
                     '/monitorings/{}'.format(monitoring_id),
                     {"data": {
@@ -889,7 +889,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
         party_id = response.json["data"]["parties"][0]["id"]
 
         with freeze_time("2018.01.03 00:00"):
-            with open('docs/source/monitoring/tutorial/http/monitoring-to-cancelled.http', 'w') as self.app.file_obj:
+            with open('docs/source/monitoring/tutorial/http/monitoring-to-cancelled.http', 'wt') as self.app.file_obj:
                 self.app.patch_json(
                     '/monitorings/{}'.format(monitoring_id),
                     {"data": {
@@ -912,19 +912,19 @@ class FeedDocsTest(BaseMonitoringWebTest):
             self.create_active_monitoring()
 
     def test_changes_feed(self):
-        with open('docs/source/monitoring/feed/http/changes-feed.http', 'w') as self.app.file_obj:
+        with open('docs/source/monitoring/feed/http/changes-feed.http', 'wt') as self.app.file_obj:
             response = self.app.get('/monitorings?feed=changes&limit=3&opt_fields=reasons')
 
             self.assertEqual(len(response.json["data"]), 3)
             self.assertIn("next_page", response.json)
 
-        with open('docs/source/monitoring/feed/http/changes-feed-next.http', 'w') as self.app.file_obj:
+        with open('docs/source/monitoring/feed/http/changes-feed-next.http', 'wt') as self.app.file_obj:
             response = self.app.get(response.json["next_page"]["path"])
 
             self.assertEqual(len(response.json["data"]), 2)
             self.assertIn("next_page", response.json)
 
-        with open('docs/source/monitoring/feed/http/changes-feed-last.http', 'w') as self.app.file_obj:
+        with open('docs/source/monitoring/feed/http/changes-feed-last.http', 'wt') as self.app.file_obj:
             response = self.app.get(response.json["next_page"]["path"])
 
             self.assertEqual(len(response.json["data"]), 0)
@@ -932,7 +932,7 @@ class FeedDocsTest(BaseMonitoringWebTest):
 
         self.create_active_monitoring()
 
-        with open('docs/source/monitoring/feed/http/changes-feed-new.http', 'w') as self.app.file_obj:
+        with open('docs/source/monitoring/feed/http/changes-feed-new.http', 'wt') as self.app.file_obj:
             response = self.app.get(response.json["next_page"]["path"])
 
             self.assertEqual(len(response.json["data"]), 1)
@@ -940,14 +940,14 @@ class FeedDocsTest(BaseMonitoringWebTest):
 
         next_url = response.json["next_page"]["path"]
 
-        with open('docs/source/monitoring/feed/http/changes-feed-new-next.http', 'w') as self.app.file_obj:
+        with open('docs/source/monitoring/feed/http/changes-feed-new-next.http', 'wt') as self.app.file_obj:
             response = self.app.get(next_url)
             self.assertEqual(len(response.json["data"]), 0)
             self.assertIn("next_page", response.json)
 
         self.create_active_monitoring()
 
-        with open('docs/source/monitoring/feed/http/changes-feed-new-last.http', 'w') as self.app.file_obj:
+        with open('docs/source/monitoring/feed/http/changes-feed-new-last.http', 'wt') as self.app.file_obj:
             response = self.app.get(next_url)
             self.assertEqual(len(response.json["data"]), 1)
             self.assertIn("next_page", response.json)
@@ -979,18 +979,18 @@ class PrivateFeedDocsTest(BaseMonitoringWebTest):
     def test_feed_public(self):
         self.create_items()
 
-        with open('docs/source/monitoring/feed/http/public-changes-feed.http', 'w') as self.app.file_obj:
+        with open('docs/source/monitoring/feed/http/public-changes-feed.http', 'wt') as self.app.file_obj:
             response = self.app.get('/monitorings?feed=changes&opt_fields=status')
 
             self.assertEqual(len(response.json["data"]), 1)
 
-        with open('docs/source/monitoring/feed/http/public-date-modified-feed.http', 'w') as self.app.file_obj:
+        with open('docs/source/monitoring/feed/http/public-date-modified-feed.http', 'wt') as self.app.file_obj:
             response = self.app.get('/monitorings?opt_fields=status')
 
             self.assertEqual(len(response.json["data"]), 1)
 
 
-        with open('docs/source/monitoring/feed/http/public-tender-monitorings.http', 'w') as self.app.file_obj:
+        with open('docs/source/monitoring/feed/http/public-tender-monitorings.http', 'wt') as self.app.file_obj:
             response = self.app.get('/tenders/{}/monitorings'.format(self.tender_id))
 
             self.assertEqual(len(response.json["data"]), 1)
@@ -998,18 +998,18 @@ class PrivateFeedDocsTest(BaseMonitoringWebTest):
     def test_feed_public_test(self):
         self.create_items(mode="test")
 
-        with open('docs/source/monitoring/feed/http/public-test-changes-feed.http', 'w') as self.app.file_obj:
+        with open('docs/source/monitoring/feed/http/public-test-changes-feed.http', 'wt') as self.app.file_obj:
             response = self.app.get('/monitorings?mode=test&feed=changes&opt_fields=status%2Cmode')
 
             self.assertEqual(len(response.json["data"]), 1)
 
-        with open('docs/source/monitoring/feed/http/public-test-date-modified-feed.http', 'w') as self.app.file_obj:
+        with open('docs/source/monitoring/feed/http/public-test-date-modified-feed.http', 'wt') as self.app.file_obj:
             response = self.app.get('/monitorings?mode=test&opt_fields=status%2Cmode')
 
             self.assertEqual(len(response.json["data"]), 1)
 
 
-        with open('docs/source/monitoring/feed/http/public-test-tender-monitorings.http', 'w') as self.app.file_obj:
+        with open('docs/source/monitoring/feed/http/public-test-tender-monitorings.http', 'wt') as self.app.file_obj:
             response = self.app.get('/tenders/{}/monitorings?mode=test&opt_fields=mode'.format(self.tender_id))
 
             self.assertEqual(len(response.json["data"]), 1)
@@ -1017,23 +1017,23 @@ class PrivateFeedDocsTest(BaseMonitoringWebTest):
     def test_feed_private(self):
         self.create_items()
 
-        with open('docs/source/monitoring/feed/http/private-changes-feed-forbidden.http', 'w') as self.app.file_obj:
+        with open('docs/source/monitoring/feed/http/private-changes-feed-forbidden.http', 'wt') as self.app.file_obj:
             self.app.get('/monitorings?feed=changes&mode=real_draft&opt_fields=status', status=403)
 
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
-        with open('docs/source/monitoring/feed/http/private-changes-feed.http', 'w') as self.app.file_obj:
+        with open('docs/source/monitoring/feed/http/private-changes-feed.http', 'wt') as self.app.file_obj:
             response = self.app.get('/monitorings?feed=changes&mode=real_draft&opt_fields=status')
 
             self.assertEqual(len(response.json["data"]), 3)
 
-        with open('docs/source/monitoring/feed/http/private-date-modified-feed.http', 'w') as self.app.file_obj:
+        with open('docs/source/monitoring/feed/http/private-date-modified-feed.http', 'wt') as self.app.file_obj:
             response = self.app.get('/monitorings?mode=real_draft&opt_fields=status')
 
             self.assertEqual(len(response.json["data"]), 3)
 
 
-        with open('docs/source/monitoring/feed/http/private-tender-monitorings.http', 'w') as self.app.file_obj:
+        with open('docs/source/monitoring/feed/http/private-tender-monitorings.http', 'wt') as self.app.file_obj:
             response = self.app.get('/tenders/{}/monitorings?mode=draft'.format(self.tender_id))
 
             self.assertEqual(len(response.json["data"]), 3)
@@ -1044,12 +1044,12 @@ class PrivateFeedDocsTest(BaseMonitoringWebTest):
 
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
-        with open('docs/source/monitoring/feed/http/private-test-changes-feed.http', 'w') as self.app.file_obj:
+        with open('docs/source/monitoring/feed/http/private-test-changes-feed.http', 'wt') as self.app.file_obj:
             response = self.app.get('/monitorings?feed=changes&mode=all_draft&opt_fields=status%2Cmode')
 
             self.assertEqual(len(response.json["data"]), 3)
 
-        with open('docs/source/monitoring/feed/http/private-test-date-modified-feed.http', 'w') as self.app.file_obj:
+        with open('docs/source/monitoring/feed/http/private-test-date-modified-feed.http', 'wt') as self.app.file_obj:
             response = self.app.get('/monitorings?mode=all_draft&opt_fields=status%2Cmode')
 
             self.assertEqual(len(response.json["data"]), 3)
@@ -1066,13 +1066,13 @@ class InspectionResourceTest(BaseInspectionWebTest):
 
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
-        with open('docs/source/inspection/tutorial/http/inspection-list-empty.http', 'w') as self.app.file_obj:
+        with open('docs/source/inspection/tutorial/http/inspection-list-empty.http', 'wt') as self.app.file_obj:
             response = self.app.get('/inspections', status=200)
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(response.json['data'], [])
 
         with freeze_time("2018.01.01 00:00"):
-            with open('docs/source/inspection/tutorial/http/inspection-post.http', 'w') as self.app.file_obj:
+            with open('docs/source/inspection/tutorial/http/inspection-post.http', 'wt') as self.app.file_obj:
                 response = self.app.post_json(
                     '/inspections',
                     {
@@ -1092,7 +1092,7 @@ class InspectionResourceTest(BaseInspectionWebTest):
         self.assertEqual(response.status, '201 Created')
 
         with freeze_time("2018.01.01 00:01"):
-            with open('docs/source/inspection/tutorial/http/inspection-document-post.http', 'w') as self.app.file_obj:
+            with open('docs/source/inspection/tutorial/http/inspection-document-post.http', 'wt') as self.app.file_obj:
                 response = self.app.post_json(
                     '/inspections/{}/documents'.format(inspection_id),
                     {
@@ -1108,7 +1108,7 @@ class InspectionResourceTest(BaseInspectionWebTest):
         self.assertEqual(response.status, '201 Created')
 
         with freeze_time("2018.01.01 00:02"):
-            with open('docs/source/inspection/tutorial/http/inspection-document-put.http', 'w') as self.app.file_obj:
+            with open('docs/source/inspection/tutorial/http/inspection-document-put.http', 'wt') as self.app.file_obj:
                 response = self.app.put_json(
                     '/inspections/{}/documents/{}'.format(inspection_id, document_id),
                     {
@@ -1123,7 +1123,7 @@ class InspectionResourceTest(BaseInspectionWebTest):
         self.assertEqual(response.status, '200 OK')
 
         with freeze_time("2018.01.01 00:03"):
-            with open('docs/source/inspection/tutorial/http/inspection-patch.http', 'w') as self.app.file_obj:
+            with open('docs/source/inspection/tutorial/http/inspection-patch.http', 'wt') as self.app.file_obj:
                 response = self.app.patch_json(
                     '/inspections/{}'.format(inspection_id),
                     {
@@ -1177,14 +1177,14 @@ class InspectionsByMonitoringResourceTest(BaseInspectionWebTest):
         self.assertEqual(response.status, '201 Created')
 
         with freeze_time("2018.01.01 00:02"):
-            with open('docs/source/inspection/inspections_by_monitoring/http/inspections-by-monitoring_id.http', 'w') \
+            with open('docs/source/inspection/inspections_by_monitoring/http/inspections-by-monitoring_id.http', 'wt') \
                       as self.app.file_obj:
                 response = self.app.get('/monitorings/{}/inspections'.format(monitoring_id))
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(len(response.json["data"]), 2)
 
         with freeze_time("2018.01.01 00:03"):
-            with open('docs/source/inspection/inspections_by_monitoring/http/inspections-by-monitoring_id-opt_fields.http', 'w') \
+            with open('docs/source/inspection/inspections_by_monitoring/http/inspections-by-monitoring_id-opt_fields.http', 'wt') \
                       as self.app.file_obj:
                 response = self.app.get('/monitorings/{}/inspections?opt_fields=description'.format(monitoring_id))
         self.assertEqual(response.status, '200 OK')

@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from hashlib import sha512
 
-from openprocurement_client.client import TendersClient
-from restkit import ResourceNotFound
+from openprocurement_client.resources.tenders import TendersClient
+from openprocurement_client.exceptions import ResourceError
 
 from openprocurement.audit.api.constants import (
     CONCLUSION_OBJECT_TYPE,
@@ -133,17 +133,19 @@ def validate_credentials_generate(request):
         token = get_access_token(request)
     except ValueError:
         raise_operation_error(request, 'No access token was provided.')
-
     try:
         response = TendersClient(
             request.registry.api_token,
             host_url=request.registry.api_server,
             api_version=request.registry.api_version,
         ).extract_credentials(request.validated['monitoring'].tender_id)
-    except ResourceNotFound:
-        raise_operation_error(request, 'Tender {} not found'.format(request.validated['monitoring'].tender_id))
+    except ResourceError as e:
+        if e.status_code == 404:
+            raise_operation_error(request, 'Tender {} not found'.format(request.validated['monitoring'].tender_id))
+        else:
+            raise_operation_error(request, 'Unsuccessful tender request', status=e.status_code)
     else:
-        if sha512(token).hexdigest() != response['data']['tender_token']:
+        if sha512(token.encode("utf-8")).hexdigest() != response['data']['tender_token']:
             raise forbidden(request)
 
 

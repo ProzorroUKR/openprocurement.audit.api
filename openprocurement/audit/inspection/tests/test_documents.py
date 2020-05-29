@@ -67,7 +67,6 @@ class InspectionDocumentsResourceTest(BaseWebTest):
         ))
         self.assertIn('Content-Disposition', response.headers)
         self.assertIn('Location', response.headers)
-        print(response.headers)
 
     def test_post_forbidden(self):
         self.create_inspection()

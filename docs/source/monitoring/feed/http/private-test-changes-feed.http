@@ -3,26 +3,26 @@ Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
 Host: audit-api-sandbox.prozorro.gov.ua
 
 Response: 200 OK
-Content-Type: application/json; charset=UTF-8
+Content-Type: application/json
 {
-  "next_page": {
-    "path": "/api/2.5/monitorings?feed=changes&mode=all_draft&offset=be5bf6c22f01ed5b874b1f36f59397db", 
-    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings?feed=changes&mode=all_draft&offset=be5bf6c22f01ed5b874b1f36f59397db", 
-    "offset": "be5bf6c22f01ed5b874b1f36f59397db"
-  }, 
   "data": [
     {
-      "id": "c020ffb21f0f4bb6a13a9361703248a3", 
+      "id": "c020ffb21f0f4bb6a13a9361703248a3",
       "dateModified": "2018-01-01T02:00:00+02:00"
-    }, 
+    },
     {
-      "id": "332a8e01a9984872904f402637ecfdd0", 
+      "id": "332a8e01a9984872904f402637ecfdd0",
       "dateModified": "2018-01-01T02:00:00+02:00"
-    }, 
+    },
     {
-      "id": "67eac76d1462480ea6cfcb6a870a2ecf", 
+      "id": "67eac76d1462480ea6cfcb6a870a2ecf",
       "dateModified": "2018-01-01T02:00:00+02:00"
     }
-  ]
+  ],
+  "next_page": {
+    "offset": "90dcb231cfd9398100d54677b7bf13c2",
+    "path": "/api/2.5/monitorings?feed=changes&mode=all_draft&offset=90dcb231cfd9398100d54677b7bf13c2",
+    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings?feed=changes&mode=all_draft&offset=90dcb231cfd9398100d54677b7bf13c2"
+  }
 }
 

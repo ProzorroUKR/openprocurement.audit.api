@@ -6,48 +6,48 @@ Host: audit-api-sandbox.prozorro.gov.ua
 DATA:
 {
   "data": {
-    "description": "I regretted my decision", 
+    "description": "I regretted my decision",
     "monitoring_ids": [
-      "a6b2b18977f24277b238c7b7a5342b1d", 
+      "a6b2b18977f24277b238c7b7a5342b1d",
       "580997bb06674235801d75f2f6e6c6c6"
     ]
   }
 }
 
 Response: 200 OK
-Content-Type: application/json; charset=UTF-8
+Content-Type: application/json
 {
   "data": {
+    "monitoring_ids": [
+      "a6b2b18977f24277b238c7b7a5342b1d",
+      "580997bb06674235801d75f2f6e6c6c6"
+    ],
+    "description": "I regretted my decision",
     "documents": [
       {
-        "hash": "md5:00000000000000000000000000000000", 
-        "author": "monitoring_owner", 
-        "title": "doc.txt", 
-        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/cb24ad29b9a2463eacf26ea75a1dcec7?KeyID=a8968c46&Signature=j1Cv5NxBsfB3dV27nkGHdIEMnjg5V%2FuSAvWqNcSGgENCwOQR%2FFToKwGvmhDm4uSct3rGJwDQg5%2FMGpcIS2iCAQ%253D%253D", 
-        "format": "plain/text", 
-        "datePublished": "2018-01-01T02:01:00+02:00", 
-        "id": "47ef0c56853149ab851d792cd97b4508", 
-        "dateModified": "2018-01-01T02:01:00+02:00"
-      }, 
+        "id": "47ef0c56853149ab851d792cd97b4508",
+        "hash": "md5:00000000000000000000000000000000",
+        "title": "doc.txt",
+        "format": "plain/text",
+        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/cb24ad29b9a2463eacf26ea75a1dcec7?Signature=j1Cv5NxBsfB3dV27nkGHdIEMnjg5V%2FuSAvWqNcSGgENCwOQR%2FFToKwGvmhDm4uSct3rGJwDQg5%2FMGpcIS2iCAQ%253D%253D&KeyID=a8968c46",
+        "datePublished": "2018-01-01T02:01:00+02:00",
+        "dateModified": "2018-01-01T02:01:00+02:00",
+        "author": "monitoring_owner"
+      },
       {
-        "hash": "md5:00000000000000000000000000000000", 
-        "author": "monitoring_owner", 
-        "title": "doc(1).json", 
-        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/b3305743561740678519d95d24bffbd2?KeyID=a8968c46&Signature=0k6hFG1yXQaRPGuG%252BHkqNX7cwClU9%2F6qDvOSfFqqyWQjtX1S476zNcFCxvC8LwS65sU7PdPYnI1cySaf8iB3AQ%253D%253D", 
-        "format": "application/json", 
-        "datePublished": "2018-01-01T02:01:00+02:00", 
-        "id": "47ef0c56853149ab851d792cd97b4508", 
-        "dateModified": "2018-01-01T02:02:00+02:00"
+        "id": "47ef0c56853149ab851d792cd97b4508",
+        "hash": "md5:00000000000000000000000000000000",
+        "title": "doc(1).json",
+        "format": "application/json",
+        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/b3305743561740678519d95d24bffbd2?Signature=0k6hFG1yXQaRPGuG%252BHkqNX7cwClU9%2F6qDvOSfFqqyWQjtX1S476zNcFCxvC8LwS65sU7PdPYnI1cySaf8iB3AQ%253D%253D&KeyID=a8968c46",
+        "datePublished": "2018-01-01T02:01:00+02:00",
+        "dateModified": "2018-01-01T02:02:00+02:00",
+        "author": "monitoring_owner"
       }
-    ], 
-    "description": "I regretted my decision", 
-    "monitoring_ids": [
-      "a6b2b18977f24277b238c7b7a5342b1d", 
-      "580997bb06674235801d75f2f6e6c6c6"
-    ], 
-    "inspection_id": "UA-I-2018-01-01-000001", 
-    "dateModified": "2018-01-01T02:03:00+02:00", 
-    "dateCreated": "2018-01-01T02:00:00+02:00", 
+    ],
+    "inspection_id": "UA-I-2018-01-01-000001",
+    "dateModified": "2018-01-01T02:03:00+02:00",
+    "dateCreated": "2018-01-01T02:00:00+02:00",
     "id": "d0863edd3aaf4c6393480afae0679c2d"
   }
 }

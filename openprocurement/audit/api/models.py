@@ -1,5 +1,5 @@
 from string import hexdigits
-from urlparse import parse_qs, urlparse
+from urllib.parse import parse_qs, urlparse
 
 from schematics.types.serializable import serializable
 from uuid import uuid4
@@ -33,7 +33,6 @@ class AdaptiveDict(dict):
         return item in self.keys()
 
     def __getitem__(self, key):
-        adapter = None
         if key in self.adaptive_items:
             return self.adaptive_items[key]
         if self.prefix and key.startswith(self.prefix):
@@ -60,13 +59,13 @@ class AdaptiveDict(dict):
             yield item[0]
 
     def iteritems(self):
-        for i in super(AdaptiveDict, self).iteritems():
+        for i in super(AdaptiveDict, self).items():
             yield i
         for k, v in getAdapters((self.context,), self.interface):
             if self.prefix:
                 k = self.prefix + k
             self.adaptive_items[k] = v
-        for i in self.adaptive_items.iteritems():
+        for i in self.adaptive_items.items():
             yield i
 
 
@@ -86,8 +85,7 @@ class OpenprocurementCouchdbDocumentMeta(DocumentMeta):
         return klass
 
 
-class Model(SchematicsModel):
-    __metaclass__ = OpenprocurementCouchdbDocumentMeta
+class Model(SchematicsModel, metaclass=OpenprocurementCouchdbDocumentMeta):
 
     default_role = 'edit'
 
@@ -111,7 +109,7 @@ class Model(SchematicsModel):
         try:
             return getattr(self, name)
         except AttributeError as e:
-            raise KeyError(e.message)
+            raise KeyError(e.args[0])
 
     def __eq__(self, other):
         if isinstance(other, self.__class__):

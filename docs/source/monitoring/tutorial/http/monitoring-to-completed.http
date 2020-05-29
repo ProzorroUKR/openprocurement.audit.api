@@ -11,315 +11,315 @@ DATA:
 }
 
 Response: 200 OK
-Content-Type: application/json; charset=UTF-8
+Content-Type: application/json
 {
   "data": {
-    "status": "completed", 
-    "eliminationPeriod": {
-      "startDate": "2018-01-05T02:25:00+02:00", 
-      "endDate": "2018-01-23T00:00:00+02:00"
-    }, 
-    "appeal": {
-      "dateCreated": "2018-01-06T09:00:00+02:00", 
-      "documents": [
-        {
-          "hash": "md5:00000000000000000000000000000000", 
-          "author": "tender_owner", 
-          "title": "letter(0).doc", 
-          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/37df4b6da2c24b6a97a6c35bb69fcccf?KeyID=a8968c46&Signature=X%2Ff0ajCeap0OHcwyz1XO0dLSTED0fK3VUByfMLazlN6qfuMigrYsbcVTMH645ldiGRT%2FFULQP5SUs6m%252BP%2FT1Dg%253D%253D", 
-          "format": "application/json", 
-          "datePublished": "2018-01-06T09:00:00+02:00", 
-          "id": "249ca4ca1499416a8e276260b4b27f69", 
-          "dateModified": "2018-01-06T09:00:00+02:00"
-        }, 
-        {
-          "hash": "md5:00000000000000000000000000000000", 
-          "author": "tender_owner", 
-          "title": "another-letter.doc", 
-          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/59ec68b1b09a425a8fca371a3b12b4cf?KeyID=a8968c46&Signature=sRNJw%2FbCYENI%2F9xBkCK67MwDV2sFmjLJYR%2FrD04uxg81W8gJDneA%252B%2FxUhcqQOBfErBhS7JFK1VpTVlRgV6tUAQ%253D%253D", 
-          "format": "application/msword", 
-          "datePublished": "2018-01-06T10:00:00+02:00", 
-          "id": "d46bbc42014541cea0d2753454b7a076", 
-          "dateModified": "2018-01-06T10:00:00+02:00"
-        }
-      ], 
-      "description": "Appeal description", 
-      "datePublished": "2018-01-06T09:00:00+02:00"
-    }, 
-    "endDate": "2018-01-25T00:00:00+02:00", 
+    "tender_id": "f71067ac30733261df884de0391debf6",
+    "monitoring_id": "UA-M-2018-01-01-000001",
+    "status": "completed",
     "reasons": [
-      "public", 
+      "public",
       "fiscal"
-    ], 
+    ],
+    "procuringStages": [
+      "awarding",
+      "contracting"
+    ],
     "monitoringPeriod": {
-      "startDate": "2018-01-02T03:15:00+02:00", 
+      "startDate": "2018-01-02T03:15:00+02:00",
       "endDate": "2018-01-25T00:00:00+02:00"
-    }, 
-    "decision": {
-      "documents": [
-        {
-          "hash": "md5:00000000000000000000000000000000", 
-          "author": "monitoring_owner", 
-          "title": "lorem.doc", 
-          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/7e583b38af244dd6a004ebcd88004caf?KeyID=a8968c46&Signature=oYbDaU7J2132KqM%252BG5mEpVMdEQlMlc28ZCuTCvI17LE8G7ikN0ZgDT50VTIU6vBkMrUYSSO%252BgHVIbQO3Xr79CQ%253D%253D", 
-          "format": "application/msword", 
-          "datePublished": "2018-01-02T03:05:00+02:00", 
-          "id": "98bc0622515644cab1364b94516a560d", 
-          "dateModified": "2018-01-02T03:05:00+02:00"
-        }, 
-        {
-          "hash": "md5:00000000000000000000000000000000", 
-          "author": "monitoring_owner", 
-          "title": "dolor.doc", 
-          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/b6e25be2b0b24fe7a614a8a8f7bc7120?KeyID=a8968c46&Signature=4rxzAuYPqxTCts%252BkCZMPkm3P15TXJStZ6KdUNc9y%2FCxX8Jc4DAC4nq3bCk7mIaHE7piVcD%2FlxVcCVTXPkEqRBg%253D%253D", 
-          "format": "application/msword", 
-          "datePublished": "2018-01-02T03:10:00+02:00", 
-          "id": "6eb0b671cbe641bbb97ecef5a87d6ce6", 
-          "dateModified": "2018-01-02T03:10:00+02:00"
-        }
-      ], 
-      "description": "text", 
-      "dateCreated": "2018-01-02T03:05:00+02:00", 
-      "relatedParty": "6ecc4ca22c014c30a27e286a6c4b6dec", 
-      "date": "2018-01-02T01:05:00+02:00", 
-      "datePublished": "2018-01-02T03:15:00+02:00"
-    }, 
-    "monitoring_id": "UA-M-2018-01-01-000001", 
+    },
     "eliminationReport": {
-      "dateCreated": "2018-01-07T02:00:00+02:00", 
+      "description": "The procurement requirements have been fixed and the changes are attached.",
       "documents": [
         {
-          "hash": "md5:00000000000000000000000000000000", 
-          "author": "tender_owner", 
-          "title": "requirements.doc", 
-          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/8156e7122c6e497cb271478f924cc846?KeyID=a8968c46&Signature=gxWcVkXilNhJisonuLONqVW4S%252BEQiFNyNTuPtwTQQbmRdEinhKXYHO7BAZlzGCKtTS3aZvIimRSq%252B2AO3tpxCQ%253D%253D", 
-          "format": "application/msword", 
-          "datePublished": "2018-01-07T02:00:00+02:00", 
-          "id": "0ee71b931a2e4ad8a470d0b8c0ceb0d9", 
-          "dateModified": "2018-01-07T02:00:00+02:00"
+          "id": "0ee71b931a2e4ad8a470d0b8c0ceb0d9",
+          "hash": "md5:00000000000000000000000000000000",
+          "title": "requirements.doc",
+          "format": "application/msword",
+          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/8156e7122c6e497cb271478f924cc846?Signature=gxWcVkXilNhJisonuLONqVW4S%252BEQiFNyNTuPtwTQQbmRdEinhKXYHO7BAZlzGCKtTS3aZvIimRSq%252B2AO3tpxCQ%253D%253D&KeyID=a8968c46",
+          "datePublished": "2018-01-07T02:00:00+02:00",
+          "dateModified": "2018-01-07T02:00:00+02:00",
+          "author": "tender_owner"
         }
-      ], 
-      "description": "The procurement requirements have been fixed and the changes are attached.", 
+      ],
+      "dateCreated": "2018-01-07T02:00:00+02:00",
       "datePublished": "2018-01-07T02:00:00+02:00"
-    }, 
-    "tender_id": "f71067ac30733261df884de0391debf6", 
-    "id": "c715421038304838a046654fa8c1e9aa", 
-    "posts": [
-      {
-        "documents": [
-          {
-            "hash": "md5:00000000000000000000000000000000", 
-            "author": "monitoring_owner", 
-            "title": "ipsum.doc", 
-            "url": "http://public-docs-sandbox.prozorro.gov.ua/get/2cd40a17af5841bba79a442e11f795ce?KeyID=a8968c46&Signature=OZIGjb5iadULQ8WLskGvxx95vKWAZlty2qiwy4KtaRAXTWx%2F3lUo6FjwLwZ4juaEjnyRq3y953ReosiUYw6ODA%253D%253D", 
-            "format": "application/msword", 
-            "datePublished": "2018-01-03T02:05:00+02:00", 
-            "id": "51013265fd914fa6b01a6334b95ee70c", 
-            "dateModified": "2018-01-03T02:05:00+02:00"
-          }, 
-          {
-            "hash": "md5:00000000000000000000000000000000", 
-            "author": "monitoring_owner", 
-            "title": "dolor.doc", 
-            "url": "http://public-docs-sandbox.prozorro.gov.ua/get/e3e475499f57496f9eaa0c4208ea09fa?KeyID=a8968c46&Signature=ALKprZk49GxoDAKeh6uMrNr4typhugl4A%252BuGNe6o8k4hExglSDziU6nSHNFdD6rL4yxABp3zCFkTjcTs9c3EAQ%253D%253D", 
-            "format": "application/msword", 
-            "datePublished": "2018-01-03T02:10:00+02:00", 
-            "id": "547bc5cf5f4a48d5b4443cefb9a62802", 
-            "dateModified": "2018-01-03T02:10:00+02:00"
-          }
-        ], 
-        "description": "Lorem ipsum dolor sit amet.", 
-        "title": "Lorem ipsum", 
-        "author": "monitoring_owner", 
-        "datePublished": "2018-01-03T02:05:00+02:00", 
-        "relatedParty": "6ecc4ca22c014c30a27e286a6c4b6dec", 
-        "dateOverdue": "2018-01-10T00:00:00+02:00", 
-        "id": "ca85c88b657b4bba974b037e532e581c", 
-        "postOf": "decision"
-      }, 
-      {
-        "documents": [
-          {
-            "hash": "md5:00000000000000000000000000000000", 
-            "author": "tender_owner", 
-            "title": "dolor.doc", 
-            "url": "http://public-docs-sandbox.prozorro.gov.ua/get/83faf0d5f4004f01b2e562679199c1b8?KeyID=a8968c46&Signature=59snop57nhF26jElfWMW%2FCauRC0ehCgb0Dn6uheF7CTVZuTT9NQjcUwf%252BLgahIQvq3fA8mej78djaJviZjf9Bg%253D%253D", 
-            "format": "application/msword", 
-            "datePublished": "2018-01-04T02:10:00+02:00", 
-            "id": "74ebb22006f044fa80ab4f0199904b51", 
-            "dateModified": "2018-01-04T02:10:00+02:00"
-          }
-        ], 
-        "description": "Dolor sit amet", 
-        "title": "Sit amet", 
-        "author": "tender_owner", 
-        "datePublished": "2018-01-04T02:05:00+02:00", 
-        "relatedPost": "ca85c88b657b4bba974b037e532e581c", 
-        "id": "0dd18f852fcf43e28a7fd7fc2c0dc2a1", 
-        "postOf": "decision"
-      }, 
-      {
-        "documents": [
-          {
-            "hash": "md5:00000000000000000000000000000000", 
-            "author": "tender_owner", 
-            "title": "ipsum.doc", 
-            "url": "http://public-docs-sandbox.prozorro.gov.ua/get/4d9dfc2c426b456286be167a967fbd6a?KeyID=a8968c46&Signature=wE5QGkk2ZlD%252BDfZp29sUm45hXL%2FPd3%252B11xiGtqLeecvKhDCRbLPmSE%2FoIfxbVsDWzX2VyI5PiXtzJdpqZoggDQ%253D%253D", 
-            "format": "application/msword", 
-            "datePublished": "2018-01-04T03:05:00+02:00", 
-            "id": "748a11ca06fc4d468c610ee8fae035d0", 
-            "dateModified": "2018-01-04T03:05:00+02:00"
-          }
-        ], 
-        "description": "Lorem ipsum dolor sit amet.", 
-        "title": "Dolor sit amet", 
-        "author": "tender_owner", 
-        "datePublished": "2018-01-04T03:05:00+02:00", 
-        "id": "886a5cdd71dc416faaf90c28eedbf742", 
-        "postOf": "decision"
-      }, 
-      {
-        "documents": [
-          {
-            "hash": "md5:00000000000000000000000000000000", 
-            "author": "monitoring_owner", 
-            "title": "ipsum.doc", 
-            "url": "http://public-docs-sandbox.prozorro.gov.ua/get/36416c318acb45dbba01c97799721ede?KeyID=a8968c46&Signature=TUXCWgdzOCex4VH1d%252Bbo0VpteFDidQoRb0E2wi3q3N1I1Ro1Jx711%252Bm1ekCRDK39VwH3qUQO3ABIL0NhojNVBA%253D%253D", 
-            "format": "application/msword", 
-            "datePublished": "2018-01-04T03:15:00+02:00", 
-            "id": "8247f603a3114154a55a3350993c126a", 
-            "dateModified": "2018-01-04T03:15:00+02:00"
-          }
-        ], 
-        "description": "Lorem ipsum dolor sit amet.", 
-        "title": "Lorem ipsum", 
-        "author": "monitoring_owner", 
-        "datePublished": "2018-01-04T03:15:00+02:00", 
-        "relatedParty": "6ecc4ca22c014c30a27e286a6c4b6dec", 
-        "relatedPost": "886a5cdd71dc416faaf90c28eedbf742", 
-        "id": "75c8163ecd55417ea04507ed1071bed5", 
-        "postOf": "decision"
-      }, 
-      {
-        "documents": [
-          {
-            "hash": "md5:00000000000000000000000000000000", 
-            "author": "tender_owner", 
-            "title": "dolor.doc", 
-            "url": "http://public-docs-sandbox.prozorro.gov.ua/get/c0fb6531fc8548bf8e7b9085fc18e7d5?KeyID=a8968c46&Signature=UXmKY48jGgIqQ%2Fh%252BpyZJDAM8Y4eHwY2TSVruWKxQne4pKL2XTajI1rjiWvNuB8PQqIn%252BaMp6a5LiOZ0TImYZAQ%253D%253D", 
-            "format": "application/msword", 
-            "datePublished": "2018-01-06T02:00:00+02:00", 
-            "id": "79251caf27fe413d9aa98717620b71cc", 
-            "dateModified": "2018-01-06T02:00:00+02:00"
-          }, 
-          {
-            "hash": "md5:00000000000000000000000000000000", 
-            "author": "tender_owner", 
-            "title": "dolor.doc", 
-            "url": "http://public-docs-sandbox.prozorro.gov.ua/get/b6da38c8e8cc4cc894a2882cfe482fcc?KeyID=a8968c46&Signature=jd7PVESBiLjYpiL8judBOsXYvIEaIcLxJK5DrppDMeyyZHxSttu78J9dc6zKHw5fLSiyYUHYGS%252B9J3%252B6TUmUBg%253D%253D", 
-            "format": "application/msword", 
-            "datePublished": "2018-01-03T02:10:00+02:00", 
-            "id": "1f1d318e37214cea882d41b38181e249", 
-            "dateModified": "2018-01-03T02:10:00+02:00"
-          }
-        ], 
-        "description": "Sit amet lorem ipsum dolor.", 
-        "title": "Sit amet", 
-        "author": "tender_owner", 
-        "datePublished": "2018-01-06T02:00:00+02:00", 
-        "id": "7b3cbba723734b3b8a1a49fdefee7164", 
-        "postOf": "conclusion"
-      }
-    ], 
-    "tender_owner": "broker", 
+    },
     "eliminationResolution": {
       "documents": [
         {
-          "hash": "md5:00000000000000000000000000000000", 
-          "title": "sign.p7s", 
-          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/c58a40771f0a41d0880fa3397981d0f7?KeyID=a8968c46&Signature=4coRPCRhZJJYXMLoxQp%2FfVCpbJ3Jyemnu8GiBz90%252Bfaa03hZxCQc9LUMKa7KER0%252BPE01PtDqAyj%2FGb9EQRVSAA%253D%253D", 
-          "format": "application/pkcs7-signature", 
-          "datePublished": "2018-01-09T02:00:00+02:00", 
-          "id": "546ff6ab1cec47dfa01c98c9002c1724", 
+          "id": "546ff6ab1cec47dfa01c98c9002c1724",
+          "hash": "md5:00000000000000000000000000000000",
+          "title": "sign.p7s",
+          "format": "application/pkcs7-signature",
+          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/c58a40771f0a41d0880fa3397981d0f7?Signature=4coRPCRhZJJYXMLoxQp%2FfVCpbJ3Jyemnu8GiBz90%252Bfaa03hZxCQc9LUMKa7KER0%252BPE01PtDqAyj%2FGb9EQRVSAA%253D%253D&KeyID=a8968c46",
+          "datePublished": "2018-01-09T02:00:00+02:00",
           "dateModified": "2018-01-09T02:00:00+02:00"
         }
-      ], 
-      "description": "The award hasn't been fixed.", 
-      "dateCreated": "2018-01-09T02:00:00+02:00", 
-      "relatedParty": "6ecc4ca22c014c30a27e286a6c4b6dec", 
-      "result": "partly", 
-      "datePublished": "2018-01-09T02:00:00+02:00", 
+      ],
+      "dateCreated": "2018-01-09T02:00:00+02:00",
+      "datePublished": "2018-01-09T02:00:00+02:00",
+      "result": "partly",
       "resultByType": {
-        "corruptionAwarded": "not_eliminated", 
-        "documentsForm": "eliminated"
+        "documentsForm": "eliminated",
+        "corruptionAwarded": "not_eliminated"
+      },
+      "description": "The award hasn't been fixed.",
+      "relatedParty": "6ecc4ca22c014c30a27e286a6c4b6dec"
+    },
+    "eliminationPeriod": {
+      "startDate": "2018-01-05T02:25:00+02:00",
+      "endDate": "2018-01-23T00:00:00+02:00"
+    },
+    "posts": [
+      {
+        "id": "ca85c88b657b4bba974b037e532e581c",
+        "title": "Lorem ipsum",
+        "description": "Lorem ipsum dolor sit amet.",
+        "documents": [
+          {
+            "id": "51013265fd914fa6b01a6334b95ee70c",
+            "hash": "md5:00000000000000000000000000000000",
+            "title": "ipsum.doc",
+            "format": "application/msword",
+            "url": "http://public-docs-sandbox.prozorro.gov.ua/get/2cd40a17af5841bba79a442e11f795ce?Signature=OZIGjb5iadULQ8WLskGvxx95vKWAZlty2qiwy4KtaRAXTWx%2F3lUo6FjwLwZ4juaEjnyRq3y953ReosiUYw6ODA%253D%253D&KeyID=a8968c46",
+            "datePublished": "2018-01-03T02:05:00+02:00",
+            "dateModified": "2018-01-03T02:05:00+02:00",
+            "author": "monitoring_owner"
+          },
+          {
+            "id": "547bc5cf5f4a48d5b4443cefb9a62802",
+            "hash": "md5:00000000000000000000000000000000",
+            "title": "dolor.doc",
+            "format": "application/msword",
+            "url": "http://public-docs-sandbox.prozorro.gov.ua/get/e3e475499f57496f9eaa0c4208ea09fa?Signature=ALKprZk49GxoDAKeh6uMrNr4typhugl4A%252BuGNe6o8k4hExglSDziU6nSHNFdD6rL4yxABp3zCFkTjcTs9c3EAQ%253D%253D&KeyID=a8968c46",
+            "datePublished": "2018-01-03T02:10:00+02:00",
+            "dateModified": "2018-01-03T02:10:00+02:00",
+            "author": "monitoring_owner"
+          }
+        ],
+        "author": "monitoring_owner",
+        "postOf": "decision",
+        "datePublished": "2018-01-03T02:05:00+02:00",
+        "dateOverdue": "2018-01-10T00:00:00+02:00",
+        "relatedParty": "6ecc4ca22c014c30a27e286a6c4b6dec"
+      },
+      {
+        "id": "0dd18f852fcf43e28a7fd7fc2c0dc2a1",
+        "title": "Sit amet",
+        "description": "Dolor sit amet",
+        "documents": [
+          {
+            "id": "74ebb22006f044fa80ab4f0199904b51",
+            "hash": "md5:00000000000000000000000000000000",
+            "title": "dolor.doc",
+            "format": "application/msword",
+            "url": "http://public-docs-sandbox.prozorro.gov.ua/get/83faf0d5f4004f01b2e562679199c1b8?Signature=59snop57nhF26jElfWMW%2FCauRC0ehCgb0Dn6uheF7CTVZuTT9NQjcUwf%252BLgahIQvq3fA8mej78djaJviZjf9Bg%253D%253D&KeyID=a8968c46",
+            "datePublished": "2018-01-04T02:10:00+02:00",
+            "dateModified": "2018-01-04T02:10:00+02:00",
+            "author": "tender_owner"
+          }
+        ],
+        "author": "tender_owner",
+        "postOf": "decision",
+        "datePublished": "2018-01-04T02:05:00+02:00",
+        "relatedPost": "ca85c88b657b4bba974b037e532e581c"
+      },
+      {
+        "id": "886a5cdd71dc416faaf90c28eedbf742",
+        "title": "Dolor sit amet",
+        "description": "Lorem ipsum dolor sit amet.",
+        "documents": [
+          {
+            "id": "748a11ca06fc4d468c610ee8fae035d0",
+            "hash": "md5:00000000000000000000000000000000",
+            "title": "ipsum.doc",
+            "format": "application/msword",
+            "url": "http://public-docs-sandbox.prozorro.gov.ua/get/4d9dfc2c426b456286be167a967fbd6a?Signature=wE5QGkk2ZlD%252BDfZp29sUm45hXL%2FPd3%252B11xiGtqLeecvKhDCRbLPmSE%2FoIfxbVsDWzX2VyI5PiXtzJdpqZoggDQ%253D%253D&KeyID=a8968c46",
+            "datePublished": "2018-01-04T03:05:00+02:00",
+            "dateModified": "2018-01-04T03:05:00+02:00",
+            "author": "tender_owner"
+          }
+        ],
+        "author": "tender_owner",
+        "postOf": "decision",
+        "datePublished": "2018-01-04T03:05:00+02:00"
+      },
+      {
+        "id": "75c8163ecd55417ea04507ed1071bed5",
+        "title": "Lorem ipsum",
+        "description": "Lorem ipsum dolor sit amet.",
+        "documents": [
+          {
+            "id": "8247f603a3114154a55a3350993c126a",
+            "hash": "md5:00000000000000000000000000000000",
+            "title": "ipsum.doc",
+            "format": "application/msword",
+            "url": "http://public-docs-sandbox.prozorro.gov.ua/get/36416c318acb45dbba01c97799721ede?Signature=TUXCWgdzOCex4VH1d%252Bbo0VpteFDidQoRb0E2wi3q3N1I1Ro1Jx711%252Bm1ekCRDK39VwH3qUQO3ABIL0NhojNVBA%253D%253D&KeyID=a8968c46",
+            "datePublished": "2018-01-04T03:15:00+02:00",
+            "dateModified": "2018-01-04T03:15:00+02:00",
+            "author": "monitoring_owner"
+          }
+        ],
+        "author": "monitoring_owner",
+        "postOf": "decision",
+        "datePublished": "2018-01-04T03:15:00+02:00",
+        "relatedPost": "886a5cdd71dc416faaf90c28eedbf742",
+        "relatedParty": "6ecc4ca22c014c30a27e286a6c4b6dec"
+      },
+      {
+        "id": "7b3cbba723734b3b8a1a49fdefee7164",
+        "title": "Sit amet",
+        "description": "Sit amet lorem ipsum dolor.",
+        "documents": [
+          {
+            "id": "79251caf27fe413d9aa98717620b71cc",
+            "hash": "md5:00000000000000000000000000000000",
+            "title": "dolor.doc",
+            "format": "application/msword",
+            "url": "http://public-docs-sandbox.prozorro.gov.ua/get/c0fb6531fc8548bf8e7b9085fc18e7d5?Signature=UXmKY48jGgIqQ%2Fh%252BpyZJDAM8Y4eHwY2TSVruWKxQne4pKL2XTajI1rjiWvNuB8PQqIn%252BaMp6a5LiOZ0TImYZAQ%253D%253D&KeyID=a8968c46",
+            "datePublished": "2018-01-06T02:00:00+02:00",
+            "dateModified": "2018-01-06T02:00:00+02:00",
+            "author": "tender_owner"
+          },
+          {
+            "id": "1f1d318e37214cea882d41b38181e249",
+            "hash": "md5:00000000000000000000000000000000",
+            "title": "dolor.doc",
+            "format": "application/msword",
+            "url": "http://public-docs-sandbox.prozorro.gov.ua/get/b6da38c8e8cc4cc894a2882cfe482fcc?Signature=jd7PVESBiLjYpiL8judBOsXYvIEaIcLxJK5DrppDMeyyZHxSttu78J9dc6zKHw5fLSiyYUHYGS%252B9J3%252B6TUmUBg%253D%253D&KeyID=a8968c46",
+            "datePublished": "2018-01-03T02:10:00+02:00",
+            "dateModified": "2018-01-03T02:10:00+02:00",
+            "author": "tender_owner"
+          }
+        ],
+        "author": "tender_owner",
+        "postOf": "conclusion",
+        "datePublished": "2018-01-06T02:00:00+02:00"
       }
-    }, 
+    ],
+    "appeal": {
+      "description": "Appeal description",
+      "documents": [
+        {
+          "id": "249ca4ca1499416a8e276260b4b27f69",
+          "hash": "md5:00000000000000000000000000000000",
+          "title": "letter(0).doc",
+          "format": "application/json",
+          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/37df4b6da2c24b6a97a6c35bb69fcccf?Signature=X%2Ff0ajCeap0OHcwyz1XO0dLSTED0fK3VUByfMLazlN6qfuMigrYsbcVTMH645ldiGRT%2FFULQP5SUs6m%252BP%2FT1Dg%253D%253D&KeyID=a8968c46",
+          "datePublished": "2018-01-06T09:00:00+02:00",
+          "dateModified": "2018-01-06T09:00:00+02:00",
+          "author": "tender_owner"
+        },
+        {
+          "id": "d46bbc42014541cea0d2753454b7a076",
+          "hash": "md5:00000000000000000000000000000000",
+          "title": "another-letter.doc",
+          "format": "application/msword",
+          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/59ec68b1b09a425a8fca371a3b12b4cf?Signature=sRNJw%2FbCYENI%2F9xBkCK67MwDV2sFmjLJYR%2FrD04uxg81W8gJDneA%252B%2FxUhcqQOBfErBhS7JFK1VpTVlRgV6tUAQ%253D%253D&KeyID=a8968c46",
+          "datePublished": "2018-01-06T10:00:00+02:00",
+          "dateModified": "2018-01-06T10:00:00+02:00",
+          "author": "tender_owner"
+        }
+      ],
+      "dateCreated": "2018-01-06T09:00:00+02:00",
+      "datePublished": "2018-01-06T09:00:00+02:00"
+    },
     "parties": [
       {
-        "name": "The State Audit Service of Ukraine", 
+        "id": "6ecc4ca22c014c30a27e286a6c4b6dec",
+        "name": "The State Audit Service of Ukraine",
+        "identifier": {
+          "scheme": "UA-EDR",
+          "id": "40165856",
+          "uri": "http://www.dkrs.gov.ua"
+        },
+        "address": {
+          "streetAddress": "Petra Sahaidachnoho St, 4",
+          "locality": "Kyiv",
+          "region": "Kyiv",
+          "postalCode": "04070",
+          "countryName": "Ukraine"
+        },
+        "contactPoint": {
+          "name": "Oleksii Kovalenko",
+          "telephone": "0440000000"
+        },
         "roles": [
           "sas"
-        ], 
-        "datePublished": "2018-01-01T02:00:00+02:00", 
-        "address": {
-          "postalCode": "04070", 
-          "countryName": "Ukraine", 
-          "streetAddress": "Petra Sahaidachnoho St, 4", 
-          "region": "Kyiv", 
-          "locality": "Kyiv"
-        }, 
-        "contactPoint": {
-          "name": "Oleksii Kovalenko", 
-          "telephone": "0440000000"
-        }, 
-        "identifier": {
-          "scheme": "UA-EDR", 
-          "id": "40165856", 
-          "uri": "http://www.dkrs.gov.ua"
-        }, 
-        "id": "6ecc4ca22c014c30a27e286a6c4b6dec"
+        ],
+        "datePublished": "2018-01-01T02:00:00+02:00"
       }
-    ], 
-    "dateCreated": "2018-01-01T02:00:00+02:00", 
-    "procuringStages": [
-      "awarding", 
-      "contracting"
-    ], 
-    "dateModified": "2018-01-25T02:00:00+02:00", 
+    ],
+    "dateModified": "2018-01-25T02:00:00+02:00",
+    "endDate": "2018-01-25T00:00:00+02:00",
+    "dateCreated": "2018-01-01T02:00:00+02:00",
+    "tender_owner": "broker",
+    "id": "c715421038304838a046654fa8c1e9aa",
+    "decision": {
+      "description": "text",
+      "documents": [
+        {
+          "id": "98bc0622515644cab1364b94516a560d",
+          "hash": "md5:00000000000000000000000000000000",
+          "title": "lorem.doc",
+          "format": "application/msword",
+          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/7e583b38af244dd6a004ebcd88004caf?Signature=oYbDaU7J2132KqM%252BG5mEpVMdEQlMlc28ZCuTCvI17LE8G7ikN0ZgDT50VTIU6vBkMrUYSSO%252BgHVIbQO3Xr79CQ%253D%253D&KeyID=a8968c46",
+          "datePublished": "2018-01-02T03:05:00+02:00",
+          "dateModified": "2018-01-02T03:05:00+02:00",
+          "author": "monitoring_owner"
+        },
+        {
+          "id": "6eb0b671cbe641bbb97ecef5a87d6ce6",
+          "hash": "md5:00000000000000000000000000000000",
+          "title": "dolor.doc",
+          "format": "application/msword",
+          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/b6e25be2b0b24fe7a614a8a8f7bc7120?Signature=4rxzAuYPqxTCts%252BkCZMPkm3P15TXJStZ6KdUNc9y%2FCxX8Jc4DAC4nq3bCk7mIaHE7piVcD%2FlxVcCVTXPkEqRBg%253D%253D&KeyID=a8968c46",
+          "datePublished": "2018-01-02T03:10:00+02:00",
+          "dateModified": "2018-01-02T03:10:00+02:00",
+          "author": "monitoring_owner"
+        }
+      ],
+      "dateCreated": "2018-01-02T03:05:00+02:00",
+      "datePublished": "2018-01-02T03:15:00+02:00",
+      "date": "2018-01-02T01:05:00+02:00",
+      "relatedParty": "6ecc4ca22c014c30a27e286a6c4b6dec"
+    },
     "conclusion": {
       "documents": [
         {
-          "hash": "md5:00000000000000000000000000000000", 
-          "author": "monitoring_owner", 
-          "title": "New document(2).doc", 
-          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/f0f6cafa273240ffba4925159f39d3a1?KeyID=a8968c46&Signature=UGwAMNb8IRhNB7DCRnmiaZtcuKtrWYoylBN%252Bdd3rear%252BRZyus7XFAAP3MKlqN30Lt9jCXtZyTtxULH4gVwejDw%253D%253D", 
-          "format": "application/msword", 
-          "datePublished": "2018-01-05T02:15:00+02:00", 
-          "id": "1185cb589b6f4db6bf71d9dc7ad3d42f", 
-          "dateModified": "2018-01-05T02:15:00+02:00"
-        }, 
+          "id": "1185cb589b6f4db6bf71d9dc7ad3d42f",
+          "hash": "md5:00000000000000000000000000000000",
+          "title": "New document(2).doc",
+          "format": "application/msword",
+          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/f0f6cafa273240ffba4925159f39d3a1?Signature=UGwAMNb8IRhNB7DCRnmiaZtcuKtrWYoylBN%252Bdd3rear%252BRZyus7XFAAP3MKlqN30Lt9jCXtZyTtxULH4gVwejDw%253D%253D&KeyID=a8968c46",
+          "datePublished": "2018-01-05T02:15:00+02:00",
+          "dateModified": "2018-01-05T02:15:00+02:00",
+          "author": "monitoring_owner"
+        },
         {
-          "hash": "md5:00000000000000000000000000000000", 
-          "author": "monitoring_owner", 
-          "title": "sign.p7s", 
-          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/22c38d4f6dab44b1bfab5d9255524d81?KeyID=a8968c46&Signature=xdYx0wKZ7i%252BaC%2Fp4wGnxXQfUqLk0jIkeVF4Z%252BUMor1QJNZRmDe9JKrnuK8K7Kbfo%252BfStECq2gETkaCWepo7dAw%253D%253D", 
-          "format": "application/pkcs7-signature", 
-          "datePublished": "2018-01-05T02:20:00+02:00", 
-          "id": "a34e3f49ae1c4f03bb35d5d1d47f36e9", 
-          "dateModified": "2018-01-05T02:20:00+02:00"
+          "id": "a34e3f49ae1c4f03bb35d5d1d47f36e9",
+          "hash": "md5:00000000000000000000000000000000",
+          "title": "sign.p7s",
+          "format": "application/pkcs7-signature",
+          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/22c38d4f6dab44b1bfab5d9255524d81?Signature=xdYx0wKZ7i%252BaC%2Fp4wGnxXQfUqLk0jIkeVF4Z%252BUMor1QJNZRmDe9JKrnuK8K7Kbfo%252BfStECq2gETkaCWepo7dAw%253D%253D&KeyID=a8968c46",
+          "datePublished": "2018-01-05T02:20:00+02:00",
+          "dateModified": "2018-01-05T02:20:00+02:00",
+          "author": "monitoring_owner"
         }
-      ], 
+      ],
+      "dateCreated": "2018-01-05T02:00:00+02:00",
+      "datePublished": "2018-01-05T02:25:00+02:00",
+      "violationOccurred": true,
       "violationType": [
-        "documentsForm", 
+        "documentsForm",
         "corruptionAwarded"
-      ], 
-      "description": "Ashes, ashes, we all fall down", 
-      "stringsAttached": "Pocket full of posies", 
-      "datePublished": "2018-01-05T02:25:00+02:00", 
-      "auditFinding": "Ring around the rosies", 
-      "relatedParty": "6ecc4ca22c014c30a27e286a6c4b6dec", 
-      "violationOccurred": true, 
-      "dateCreated": "2018-01-05T02:00:00+02:00"
+      ],
+      "auditFinding": "Ring around the rosies",
+      "stringsAttached": "Pocket full of posies",
+      "description": "Ashes, ashes, we all fall down",
+      "relatedParty": "6ecc4ca22c014c30a27e286a6c4b6dec"
     }
   }
 }

@@ -2,7 +2,7 @@
 from copy import copy
 
 from couchdb import Server as CouchdbServer
-from mock import Mock, MagicMock
+from unittest.mock import Mock, MagicMock
 
 from openprocurement.audit.api.tests.base import BaseWebTest
 

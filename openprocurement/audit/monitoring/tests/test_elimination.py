@@ -1,7 +1,7 @@
 import unittest
 from hashlib import sha512
 
-import mock
+from unittest import mock
 from datetime import datetime
 from freezegun import freeze_time
 from iso8601 import parse_date
@@ -56,7 +56,7 @@ class MonitoringEliminationBaseTest(BaseWebTest, DSWebTestMixin):
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         with mock.patch('openprocurement.audit.monitoring.validation.TendersClient') as mock_api_client:
             mock_api_client.return_value.extract_credentials.return_value = {
-                'data': {'tender_token': sha512('tender_token').hexdigest()}
+                'data': {'tender_token': sha512(b'tender_token').hexdigest()}
             }
             response = self.app.patch_json(
                 '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token')

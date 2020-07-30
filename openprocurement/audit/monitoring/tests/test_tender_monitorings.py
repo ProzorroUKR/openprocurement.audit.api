@@ -29,7 +29,7 @@ class TenderMonitoringsResourceTest(BaseWebTest):
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual([e["id"] for e in response.json['data']], ids)
         self.assertEqual(set(response.json['data'][0].keys()),
-                         {"id", "dateCreated", "status"})
+                         {"id", "dateCreated", "status", "dateModified"})
 
     def test_get_without_draft(self):
         tender_id = "f" * 32
@@ -64,7 +64,7 @@ class TenderMonitoringsResourceTest(BaseWebTest):
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual([e["id"] for e in response.json['data']], [active_id])
         self.assertEqual(set(response.json['data'][0].keys()),
-                         {"id", "dateCreated", "status"})
+                         {"id", "dateCreated", "dateModified", "status"})
 
     def test_get_with_draft(self):
         tender_id = "f" * 32
@@ -99,7 +99,7 @@ class TenderMonitoringsResourceTest(BaseWebTest):
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual({e["id"] for e in response.json['data']}, {active_id, draft_id, cancelled_id})
         self.assertEqual(set(response.json['data'][0].keys()),
-                         {"id", "dateCreated", "status"})
+                         {"id", "dateCreated", "dateModified", "status"})
 
     def test_get_with_draft_forbidden(self):
         tender_id = "f" * 32

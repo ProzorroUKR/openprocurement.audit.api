@@ -4,7 +4,7 @@ from hashlib import sha512, md5
 
 from unittest import mock
 import uuid
-from datetime import datetime
+from datetime import datetime, timedelta
 from freezegun import freeze_time
 
 from openprocurement.audit.monitoring.tests.base import BaseWebTest as MonitoringWebTest, DSWebTestMixin
@@ -908,8 +908,11 @@ class FeedDocsTest(BaseMonitoringWebTest):
     def setUp(self):
         super(FeedDocsTest, self).setUp()
 
+        self.now = datetime(2018, 1, 1)
         for i in range(5):
-            self.create_active_monitoring()
+            self.now += timedelta(seconds=1)
+            with freeze_time(self.now):
+                self.create_active_monitoring()
 
     def test_changes_feed(self):
         with open('docs/source/monitoring/feed/http/changes-feed.http', 'wt') as self.app.file_obj:
@@ -930,7 +933,9 @@ class FeedDocsTest(BaseMonitoringWebTest):
             self.assertEqual(len(response.json["data"]), 0)
             self.assertIn("next_page", response.json)
 
-        self.create_active_monitoring()
+        self.now += timedelta(seconds=1)
+        with freeze_time(self.now):
+            self.create_active_monitoring()
 
         with open('docs/source/monitoring/feed/http/changes-feed-new.http', 'wt') as self.app.file_obj:
             response = self.app.get(response.json["next_page"]["path"])
@@ -945,7 +950,9 @@ class FeedDocsTest(BaseMonitoringWebTest):
             self.assertEqual(len(response.json["data"]), 0)
             self.assertIn("next_page", response.json)
 
-        self.create_active_monitoring()
+        self.now += timedelta(seconds=1)
+        with freeze_time(self.now):
+            self.create_active_monitoring()
 
         with open('docs/source/monitoring/feed/http/changes-feed-new-last.http', 'wt') as self.app.file_obj:
             response = self.app.get(next_url)

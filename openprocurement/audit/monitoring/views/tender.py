@@ -1,77 +1,24 @@
 from logging import getLogger
-
 from pyramid.security import ACLAllowed
-
-from openprocurement.audit.api.utils import (
-    APIResource,
-    context_unpack,
-    forbidden,
-    op_resource,
-    json_view
-)
-from openprocurement.audit.monitoring.design import (
-    monitorings_by_tender_id_view,
-    test_monitorings_by_tender_id_view,
-    draft_monitorings_by_tender_id_view,
-    MONITORINGS_BY_TENDER_FIELDS,
-)
-from openprocurement.audit.monitoring.utils import monitoring_serialize, op_resource
+from openprocurement.audit.api.utils import forbidden, json_view
+from openprocurement.audit.monitoring.utils import op_resource
+from openprocurement.audit.monitoring.views.monitoring import MonitoringsResource
 
 LOGGER = getLogger(__name__)
 
 
 @op_resource(name='Tender Monitorings', path='/tenders/{tender_id}/monitorings')
-class TenderMonitoringResource(APIResource):
-
-    def __init__(self, request, context):
-        super(TenderMonitoringResource, self).__init__(request, context)
-        self.views = {
-            "": monitorings_by_tender_id_view,
-            "test": test_monitorings_by_tender_id_view,
-            "draft": draft_monitorings_by_tender_id_view,
-        }
-        self.default_fields = set(MONITORINGS_BY_TENDER_FIELDS) | {"id", "dateCreated"}
+class TenderMonitoringResource(MonitoringsResource):
+    listing_default_fields = {"id", "status", "dateCreated"}
+    listing_safe_fields = {"id", "status", "dateCreated"}
 
     @json_view(permission='view_listing')
     def get(self):
-        if self.request.params.get('mode') == 'draft':
+        if 'draft' in self.request.params.get('mode', ''):
             perm = self.request.has_permission('view_draft_monitoring')
             if not isinstance(perm, ACLAllowed):
                 return forbidden(self.request)
+
         tender_id = self.request.matchdict["tender_id"]
-
-        opt_fields = self.request.params.get('opt_fields', '')
-        opt_fields = set(e for e in opt_fields.split(',') if e)
-
-        mode = self.request.params.get('mode', '')
-        list_view = self.views.get(mode, "")
-
-        view_kwargs = dict(
-            limit=500,  # TODO: pagination
-            startkey=[tender_id, None],
-            endkey=[tender_id, {}],
-        )
-
-        if opt_fields - self.default_fields:
-            self.LOGGER.info(
-                'Used custom fields for monitoring list: {}'.format(','.join(sorted(opt_fields))),
-                extra=context_unpack(self.request, {'MESSAGE_ID': "CUSTOM_MONITORING_LIST"}))
-
-            results = [
-                monitoring_serialize(self.request, i[u'doc'], opt_fields | self.default_fields)
-                for i in list_view(self.db, include_docs=True, **view_kwargs)
-            ]
-        else:
-            results = [
-                dict(
-                    id=e.id,
-                    dateCreated=e.key[1],
-                    **e.value
-                )
-                for e in list_view(self.db, **view_kwargs)
-            ]
-
-        data = {
-            'data': results,
-        }
-        return data
+        self.listing_filters = {"tender_id": tender_id}
+        return super(TenderMonitoringResource, self).get()

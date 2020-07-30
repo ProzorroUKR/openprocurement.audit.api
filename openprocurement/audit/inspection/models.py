@@ -6,6 +6,7 @@ from openprocurement.audit.api.models import Revision, Document, BaseModel
 from openprocurement.audit.api.models import schematics_default_role, schematics_embedded_role
 from openprocurement.audit.api.types import IsoDateTimeType, ListType
 from openprocurement.audit.api.utils import get_now
+from openprocurement.audit.inspection.database import save_inspection
 
 
 class Inspection(BaseModel):
@@ -24,6 +25,7 @@ class Inspection(BaseModel):
             'listing': whitelist('dateModified', 'doc_id'),
             'default': schematics_default_role,
         }
+        _store_to_db = save_inspection
 
     monitoring_ids = ListType(MD5Type, required=True, min_size=1)
     description = StringType(required=True)
@@ -35,6 +37,7 @@ class Inspection(BaseModel):
 
     revisions = ListType(ModelType(Revision), default=list())
     _attachments = DictType(DictType(BaseType), default=dict())
+    doc_type = StringType(default="Inspection")
 
     def __repr__(self):
         return '<%s:%r-%r@%r>' % (type(self).__name__, self.inspection_id, self.id, self.rev)

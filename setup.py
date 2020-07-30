@@ -6,10 +6,10 @@ requires = [
     'pyramid<1.10.0',
     'schematics<2.0.0',
     'cornice==1.2.0.dev0',
+    'pymongo>=3.10.1<4',
     'barbecue',
     'chaussette',
     'cornice',
-    'couchdb-schematics',
     'gevent',
     'iso8601',
     'isodate',
@@ -26,7 +26,6 @@ requires = [
     'jsonpatch==1.14-dp',
     'rfc6266==0.0.6',
     'openprocurement_client==2.1.1dp',
-    'CouchDB==1.2-bad-status-line',
 ]
 test_requires = requires + [
     'pytest',
@@ -50,7 +49,6 @@ dependency_links = [
     "https://github.com/ProzorroUKR/cornice/tarball/1.2.0.dev0#egg=cornice-1.2.0.dev0",
     "https://github.com/ProzorroUKR/rfc6266/tarball/0.0.6#egg=rfc6266-0.0.6",
     "https://github.com/ProzorroUKR/python-json-patch/tarball/1.14-dp#egg=jsonpatch-1.14-dp",
-    "https://github.com/ProzorroUKR/couchdb-python/tarball/1.2-bad-status-line#egg=CouchDB-1.2-bad-status-line",
 ]
 
 

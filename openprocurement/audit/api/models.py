@@ -4,20 +4,18 @@ from urllib.parse import parse_qs, urlparse
 from schematics.types.serializable import serializable
 from uuid import uuid4
 
-from couchdb_schematics.document import DocumentMeta, Document as SchematicsDocument
 from schematics.models import Model as SchematicsModel
 from schematics.transforms import blacklist, convert, export_loop, whitelist
-from schematics.types import BaseType, StringType, MD5Type
+from schematics.types import BaseType, StringType, MD5Type, IntType
 from schematics.types.compound import DictType
 from zope.component import queryAdapter, getAdapters
 
-from openprocurement.audit.api.interfaces import IValidator, ISerializable
 from openprocurement.audit.api.types import IsoDateTimeType, ListType, HashType
 from openprocurement.audit.api.utils import set_parent, get_now
 
 
-schematics_default_role = SchematicsDocument.Options.roles['default'] + blacklist("__parent__")
-schematics_embedded_role = SchematicsDocument.Options.roles['embedded'] + blacklist("__parent__")
+schematics_default_role = blacklist("__parent__")
+schematics_embedded_role = blacklist("__parent__", "_id", "_rev", "doc_type")
 
 
 class AdaptiveDict(dict):
@@ -69,23 +67,7 @@ class AdaptiveDict(dict):
             yield i
 
 
-class OpenprocurementCouchdbDocumentMeta(DocumentMeta):
-
-    def __new__(mcs, name, bases, attrs):
-        klass = DocumentMeta.__new__(mcs, name, bases, attrs)
-        klass._validator_functions = AdaptiveDict(
-            klass,
-            IValidator,
-            klass._validator_functions
-        )
-        klass._serializables = AdaptiveDict(
-            klass, ISerializable,
-            klass._serializables,
-        )
-        return klass
-
-
-class Model(SchematicsModel, metaclass=OpenprocurementCouchdbDocumentMeta):
+class Model(SchematicsModel):
 
     default_role = 'edit'
 
@@ -98,12 +80,6 @@ class Model(SchematicsModel, metaclass=OpenprocurementCouchdbDocumentMeta):
         }
 
     __parent__ = BaseType()
-
-    def __getattribute__(self, name):
-        serializables = super(Model, self).__getattribute__('_serializables')
-        if name in serializables.adaptive_items:
-            return serializables[name](self)
-        return super(Model, self).__getattribute__(name)
 
     def __getitem__(self, name):
         try:
@@ -261,7 +237,20 @@ class Document(Model):
         return self
 
 
-class BaseModel(SchematicsDocument, Model):
+class BaseModel(Model):
+    _id = StringType(deserialize_from=['id', 'doc_id'])
+    _rev = StringType()
+
+    def _get_id(self):
+        """id property getter."""
+        return self._id
+
+    def _set_id(self, value):
+        """id property setter."""
+        if self.id is not None:
+            raise AttributeError('id can only be set on new documents')
+        self._id = value
+    id = property(_get_id, _set_id, doc='The document ID')
 
     @serializable(serialized_name='id')
     def doc_id(self):
@@ -269,6 +258,11 @@ class BaseModel(SchematicsDocument, Model):
         A property that is serialized by schematics exports.
         """
         return self._id
+
+    @property
+    def rev(self):
+        """A property for self._rev"""
+        return self._rev
 
     def import_data(self, raw_data, **kw):
         """
@@ -287,4 +281,36 @@ class BaseModel(SchematicsDocument, Model):
             del data[k]
 
         self._data.update(data)
+        return self
+
+    class Options(object):
+        """Export options for Document."""
+        serialize_when_none = False
+        roles = {
+            "default": blacklist("doc_id"),
+            "embedded": blacklist("_id", "_rev", "doc_type"),
+        }
+
+        @staticmethod
+        def _store_to_db(data, insert=False):
+            raise NotImplementedError
+
+    def store(self, validate=True, role=None, insert=False):
+        """Store the document in the given database.
+        :param database: the `Database` object source for storing the document.
+        :return: an updated instance of `Document` / self.
+        """
+        if validate:
+            self.validate()
+
+        result = self.Options._store_to_db(
+            self.to_primitive(role=role),
+            insert=insert,
+        )
+        if not result:
+            request = self.__parent__.request
+            request.errors.add("body", "data", "Concurrency update error")
+            request.errors.status = 409
+        else:
+            self._id, self._rev = result["_id"], result["_rev"]
         return self

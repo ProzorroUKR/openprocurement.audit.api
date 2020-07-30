@@ -6,8 +6,6 @@ stages:
   - cleanup
 
 variables:
-  COUCHDB_USER: op
-  COUCHDB_PASSWORD: op
   GIT_STRATEGY: none
 
 .werf:
@@ -108,7 +106,7 @@ stop_review:
   image: $CI_REGISTRY_IMAGE:$TAG
   stage: test
   services:
-    - couchdb:1.6
+    - mongo:latest
   tags:
     - kube
   only:
@@ -125,31 +123,16 @@ stop_review:
   script:
     - cd /app
     - pip install -e .[test]
-    - echo '127.0.0.1  couchdb' >> /etc/hosts
     - py.test $TESTS_PATH --cov=$COV_PATH --cov-config=$COV_FILE -v --maxfail=1 --color=yes --dist=each
-      --tx=popen//id=sand//env:DB_NAME=test_sandbox//env:SANDBOX_MODE=1
-      --tx=popen//id=prod//env:DB_NAME=test_prod//env:SANDBOX_MODE=
+      --tx=popen//id=sand//env:MONGODB_DATABASE=test_sandbox//env:SANDBOX_MODE=1
+      --tx=popen//id=prod//env:MONGODB_DATABASE=test_prod//env:SANDBOX_MODE=
   coverage: '/TOTAL\s+\d+\s+\d+\s+(\d+%)/'
 
 test_api:
   extends: .test_main
   variables:
-    TESTS_PATH: openprocurement/audit/api/tests
-    COV_PATH: openprocurement/audit/api
-    COV_FILE: .coveragerc
-
-test_monitoring:
-  extends: .test_main
-  variables:
-    TESTS_PATH: openprocurement/audit/monitoring/tests
-    COV_PATH: openprocurement/audit/monitoring
-    COV_FILE: .coveragerc
-
-test_inspection:
-  extends: .test_main
-  variables:
-    TESTS_PATH: openprocurement/audit/inspection/tests
-    COV_PATH: openprocurement/audit/inspection
+    TESTS_PATH: openprocurement/audit
+    COV_PATH: openprocurement/audit
     COV_FILE: .coveragerc
 
 cleanup:
@@ -168,7 +151,6 @@ test_docs:
   before_script:
     - cd /app
     - pip install -e .[test]
-    - echo '127.0.0.1  couchdb' >> /etc/hosts
   script:
     - py.test docs.py
   when: manual
@@ -177,7 +159,7 @@ test_setup_py:
   image: python:3.6-slim-jessie
   stage: test
   services:
-    - couchdb:1.6
+    - mongo
   cache:
     key: ${CI_COMMIT_REF_SLUG}
     paths:
@@ -192,7 +174,6 @@ test_setup_py:
   before_script:
     - apt-get update
     - apt-get install -y git libzmq-dev libssl-dev gcc
-    - echo '127.0.0.1  couchdb' >> /etc/hosts
     - pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
   script:
     - python setup.py test

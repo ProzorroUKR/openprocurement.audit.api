@@ -16,6 +16,7 @@ from openprocurement.audit.api.models import Model, Revision, Document, BaseMode
 from openprocurement.audit.api.models import schematics_default_role, schematics_embedded_role
 from openprocurement.audit.api.types import ListType, IsoDateTimeType
 from openprocurement.audit.api.utils import get_now
+from openprocurement.audit.monitoring.database import save_monitoring
 from openprocurement.audit.monitoring.choices import (
     DIALOGUE_TYPE_CHOICES,
     PARTY_ROLES_CHOICES,
@@ -275,6 +276,8 @@ class Monitoring(BaseModel):
             'default': schematics_default_role,
         }
 
+        _store_to_db = save_monitoring
+
     tender_id = MD5Type(required=True)
     monitoring_id = StringType()
     status = StringType(choices=MONITORING_STATUS_CHOICES, default=DRAFT_STATUS)
@@ -307,6 +310,7 @@ class Monitoring(BaseModel):
     tender_owner_token = StringType()
     revisions = ListType(ModelType(Revision), default=[])
     _attachments = DictType(DictType(BaseType), default=dict())
+    doc_type = StringType(default="Monitoring")
 
     mode = StringType(choices=['test'])
     if SANDBOX_MODE:

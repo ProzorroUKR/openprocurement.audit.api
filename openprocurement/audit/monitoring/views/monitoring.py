@@ -1,7 +1,7 @@
 from logging import getLogger
 
 from pyramid.security import ACLAllowed
-
+from functools import partial
 from openprocurement.audit.api.constants import (
     MONITORING_TIME,
     ELIMINATION_PERIOD_TIME,
@@ -19,21 +19,6 @@ from openprocurement.audit.api.utils import (
 from openprocurement.audit.api.utils import (
     generate_id,
 )
-from openprocurement.audit.monitoring.design import FIELDS
-from openprocurement.audit.monitoring.design import (
-    monitorings_real_by_dateModified_view,
-    monitorings_test_by_dateModified_view,
-    monitorings_by_dateModified_view,
-    monitorings_real_by_local_seq_view,
-    monitorings_test_by_local_seq_view,
-    monitorings_by_local_seq_view,
-    monitorings_real_draft_by_local_seq_view,
-    monitorings_all_draft_by_local_seq_view,
-    monitorings_real_draft_by_dateModified_view,
-    monitorings_all_draft_by_dateModified_view,
-    monitorings_real_count_view,
-    monitorings_test_count_view,
-)
 from openprocurement.audit.monitoring.utils import (
     get_now, calculate_normalized_business_date, upload_objects_documents
 )
@@ -48,6 +33,10 @@ from openprocurement.audit.monitoring.utils import (
     get_monitoring_accelerator,
     op_resource
 )
+from openprocurement.audit.monitoring.database import (
+    list_monitoring,
+    count_monitoring,
+)
 from openprocurement.audit.monitoring.validation import (
     validate_monitoring_data,
     validate_patch_monitoring_data,
@@ -57,40 +46,19 @@ from openprocurement.audit.monitoring.validation import (
 
 LOGGER = getLogger(__name__)
 
-VIEW_MAP = {
-    u'': monitorings_real_by_dateModified_view,
-    u'test': monitorings_test_by_dateModified_view,
-    u'real_draft': monitorings_real_draft_by_dateModified_view,
-    u'all_draft': monitorings_all_draft_by_dateModified_view,
-    u'_all_': monitorings_by_dateModified_view,
-}
-CHANGES_VIEW_MAP = {
-    u'': monitorings_real_by_local_seq_view,
-    u'test': monitorings_test_by_local_seq_view,
-    u'real_draft': monitorings_real_draft_by_local_seq_view,
-    u'all_draft': monitorings_all_draft_by_local_seq_view,
-    u'_all_': monitorings_by_local_seq_view,
-}
-FEED = {
-    u'dateModified': VIEW_MAP,
-    u'changes': CHANGES_VIEW_MAP,
-}
-
 
 @op_resource(name='Monitorings', path='/monitorings')
 class MonitoringsResource(APIResourceListing):
 
-    def __init__(self, request, context):
-        super(MonitoringsResource, self).__init__(request, context)
+    db_listing_method = list_monitoring
+    listing_default_fields = {"id", "dateModified"}
+    listing_safe_fields = {"id", "dateModified", "tender_id", "status"}
 
-        self.VIEW_MAP = VIEW_MAP
-        self.CHANGES_VIEW_MAP = CHANGES_VIEW_MAP
-        self.FEED = FEED
-        self.FIELDS = FIELDS
-        self.serialize_func = monitoring_serialize
-        self.object_name_for_listing = 'Monitorings'
-        self.log_message_id = 'monitoring_list_custom'
+    def get_listing_serialize(self):
+        serialize = partial(monitoring_serialize, request=self.request)
+        return serialize
 
+    @json_view(permission='view_listing')
     def get(self):
         if self.request.params.get('mode') in ('real_draft', 'all_draft'):
             perm = self.request.has_permission('view_draft_monitoring')
@@ -104,11 +72,15 @@ class MonitoringsResource(APIResourceListing):
     def post(self):
         monitoring = self.request.validated['monitoring']
         monitoring.id = generate_id()
-        monitoring.monitoring_id = generate_monitoring_id(get_now(), self.db, self.server_id)
+        monitoring.monitoring_id = generate_monitoring_id(get_now())
         if monitoring.decision:
             upload_objects_documents(self.request, monitoring.decision, key="decision")
             set_author(monitoring.decision.documents, self.request, 'author')
-        save_monitoring(self.request, date_modified=monitoring.dateCreated)
+        save_monitoring(
+            self.request,
+            date_modified=monitoring.dateCreated,
+            insert=True
+        )
         LOGGER.info('Created monitoring {}'.format(monitoring.id),
                     extra=context_unpack(self.request,
                                          {'MESSAGE_ID': 'monitoring_create'},
@@ -200,19 +172,10 @@ class MonitoringCredentialsResource(APIResource):
 @op_resource(name='Monitoring count', path='/monitorings/count')
 class MonitoringCountResource(APIResource):
 
-    def __init__(self, request, context):
-        super(MonitoringCountResource, self).__init__(request, context)
-        self.views = {
-            "": monitorings_real_count_view,
-            "test": monitorings_test_count_view,
-        }
-
     @json_view(permission='view_listing')
     def get(self):
         mode = self.request.params.get('mode', '')
-        eval_view = self.views.get(mode, monitorings_real_count_view)
-        result = list(eval_view(self.db))
         data = {
-            'data': result[0].value if len(result) else 0,
+            'data': count_monitoring(mode=mode),
         }
         return data

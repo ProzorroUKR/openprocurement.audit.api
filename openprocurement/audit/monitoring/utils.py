@@ -3,10 +3,8 @@ from functools import partial
 from logging import getLogger
 from re import compile
 
-from couchdb import ResourceConflict
 from dateorro import calc_datetime, calc_normalized_datetime, calc_working_datetime
-from datetime import timedelta, datetime, time
-from gevent import sleep
+from datetime import timedelta
 from schematics.exceptions import ModelValidationError
 
 from openprocurement.audit.api.constants import TZ, WORKING_DAYS
@@ -17,6 +15,8 @@ from openprocurement.audit.api.utils import (
 )
 from openprocurement.audit.monitoring.models import Period, Monitoring
 from openprocurement.audit.api.models import Revision
+from openprocurement.audit.monitoring.database import get_monitoring
+from openprocurement.audit.api.database import get_next_sequence_value
 from openprocurement.audit.monitoring.traversal import factory
 
 LOGGER = getLogger(__package__)
@@ -25,13 +25,14 @@ ACCELERATOR_RE = compile(r'accelerator=(?P<accelerator>\d+)')
 op_resource = partial(resource, error_handler=error_handler, factory=factory)
 
 
-def monitoring_serialize(request, monitoring_data, fields):
-    monitoring = request.monitoring_from_data(monitoring_data)
+def monitoring_serialize(request, data, fields):
+    monitoring = request.monitoring_from_data(data)
     monitoring.__parent__ = request.context
-    return {i: j for i, j in monitoring.serialize('view').items() if i in fields}
+    return {i: j for i, j in monitoring.serialize('view').items()
+            if i in fields}
 
 
-def save_monitoring(request, date_modified=None):
+def save_monitoring(request, date_modified=None, insert=False):
     monitoring = request.validated['monitoring']
     patch = get_revision_changes(request.validated['monitoring_src'], monitoring.serialize('plain'))
     if patch:
@@ -40,7 +41,7 @@ def save_monitoring(request, date_modified=None):
         old_date_modified = monitoring.dateModified
         monitoring.dateModified = date_modified or get_now()
         try:
-            monitoring.store(request.registry.db)
+            monitoring.store(insert=insert)
         except ModelValidationError as e:  # pragma: no cover
             for i in e.messages:
                 request.errors.add('body', i, e.messages[i])
@@ -91,14 +92,12 @@ def monitoring_from_data(request, data):
 
 
 def extract_monitoring_adapter(request, monitoring_id):
-    db = request.registry.db
-    doc = db.get(monitoring_id)
-    if doc is None or doc.get('doc_type') != 'Monitoring':
+    data = get_monitoring(monitoring_id)
+    if data is None:
         request.errors.add('url', 'monitoring_id', 'Not Found')
         request.errors.status = 404
         raise error_handler(request.errors)
-
-    return request.monitoring_from_data(doc)
+    return request.monitoring_from_data(data)
 
 
 def extract_monitoring(request):
@@ -106,32 +105,18 @@ def extract_monitoring(request):
     return extract_monitoring_adapter(request, monitoring_id) if monitoring_id else None
 
 
-def generate_monitoring_id(ctime, db, server_id=''):
+def generate_monitoring_id(ctime):
     """ Generate ID for new monitoring in format "UA-M-YYYY-MM-DD-NNNNNN" + ["-server_id"]
         YYYY - year, MM - month (start with 1), DD - day, NNNNNN - sequence number per 1 day
         and save monitorings count per day in database document with _id = "monitoringID"
         as { key, value } = { "2015-12-03": 2 }
     :param ctime: system date-time
-    :param db: couchdb database object
-    :param server_id: server mark (for claster mode)
     :return: planID in "UA-M-2015-05-08-000005"
     """
-    key = ctime.date().isoformat()
-    monitoring_id_doc = 'monitoringID_' + server_id if server_id else 'monitoringID'
-    while True:
-        try:
-            monitoring_id = db.get(monitoring_id_doc, {'_id': monitoring_id_doc})
-            index = monitoring_id.get(key, 1)
-            monitoring_id[key] = index + 1
-            db.save(monitoring_id)
-        except ResourceConflict:  # pragma: no cover
-            pass
-        except Exception:  # pragma: no cover
-            sleep(1)
-        else:
-            break
-    return 'UA-M-{:04}-{:02}-{:02}-{:06}{}'.format(
-        ctime.year, ctime.month, ctime.day, index, server_id and '-' + server_id)
+    index_key = "monitoring_{}".format(ctime.date().isoformat())
+    index = get_next_sequence_value(index_key)
+    return 'UA-M-{:04}-{:02}-{:02}-{:06}'.format(ctime.year, ctime.month,
+                                                 ctime.day, index)
 
 
 def generate_period(date, delta, accelerator=None):

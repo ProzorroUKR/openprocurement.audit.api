@@ -4,6 +4,7 @@ import unittest
 from freezegun import freeze_time
 
 from openprocurement.audit.monitoring.tests.base import BaseWebTest, DSWebTestMixin
+from openprocurement.audit.monitoring.database import get_monitoring, save_monitoring
 
 
 @freeze_time('2018-01-01T11:00:00+02:00')
@@ -15,9 +16,12 @@ class BaseAppealTest(BaseWebTest, DSWebTestMixin):
         self.create_monitoring()
 
         self.tender_owner_token = "1234qwerty"
-        monitoring = self.db.get(self.monitoring_id)
-        monitoring.update(tender_owner="broker", tender_owner_token=self.tender_owner_token)
-        self.db.save(monitoring)
+        monitoring = get_monitoring(self.monitoring_id)
+        monitoring.update(
+            tender_owner="broker",
+            tender_owner_token=self.tender_owner_token
+        )
+        save_monitoring(monitoring)
 
     def post_conclusion(self, publish=True):
         authorization = self.app.authorization

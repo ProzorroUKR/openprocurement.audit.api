@@ -10,12 +10,9 @@ from urllib.parse import quote, unquote, urlencode
 from urllib.parse import urlparse, urlunsplit, parse_qsl
 from nacl.exceptions import BadSignatureError
 from nacl.encoding import HexEncoder
-import couchdb.json
 from Crypto.Cipher import AES
 from cornice.resource import resource, view
 from cornice.util import json_error
-from couchdb import util
-from couchdb_schematics.document import SchematicsDocument
 from datetime import datetime
 from functools import partial
 from jsonpatch import make_patch, apply_patch as _apply_patch
@@ -34,6 +31,7 @@ from openprocurement.audit.api.events import ErrorDesctiptorEvent
 from openprocurement.audit.api.interfaces import IContentConfigurator
 from openprocurement.audit.api.interfaces import IOPContent
 from openprocurement.audit.api.traversal import factory
+from openprocurement.audit.api.database import rename_id
 
 
 def get_now():
@@ -73,12 +71,6 @@ def get_filename(data):
         return header[0].decode(header[1])
     else:
         return header[0]
-
-
-def get_schematics_document(model):
-    while not isinstance(model, SchematicsDocument):
-        model = model.__parent__
-    return model
 
 
 def generate_docservice_url(request, doc_id, temporary=True, prefix=None):
@@ -258,15 +250,7 @@ def get_file(request):
         request.response.location = url
         return url
     else:
-        data = request.registry.db.get_attachment(db_doc_id, filename)
-        if data:
-            request.response.content_type = document.format.encode('utf-8')
-            request.response.content_disposition = build_header(
-                document.title, filename_compat=quote(document.title.encode('utf-8')))
-            request.response.body_file = data
-            return request.response
-        request.errors.add('url', 'download', 'Not Found')
-        request.errors.status = 404
+        raise NotImplementedError
 
 
 def prepare_patch(changes, orig, patch, basepath=''):
@@ -395,142 +379,93 @@ class APIResource(object):
     def __init__(self, request, context):
         self.context = context
         self.request = request
-        self.db = request.registry.db
-        self.server_id = request.registry.server_id
-        self.server = request.registry.couchdb_server
-        self.update_after = request.registry.update_after
         self.LOGGER = getLogger(type(self).__module__)
 
 
 class APIResourceListing(APIResource):
 
-    LIST_SEP = ","
+    listing_name = "Monitorings"
+    listing_default_fields = {"id", "dateModified"}
+    listing_safe_fields = {"id", "dateModified", "dateCreated"}
+    # safe fields can be returned directly from db without serialization of
+    # the whole object, this is the preferred way to return listing
+    listing_filters = None
 
-    def __init__(self, request, context):
-        super(APIResourceListing, self).__init__(request, context)
-        self.server = request.registry.couchdb_server
-        self.update_after = request.registry.update_after
-        self.disable_opt_fields_filter = request.registry.disable_opt_fields_filter
+    @staticmethod
+    def db_listing_method(**kwargs):
+        raise NotImplementedError
+
+    def get_listing_serialize(self):
+        raise NotImplementedError
 
     @json_view(permission='view_listing')
     def get(self):
-        params = {}
-        pparams = {}
-        fields = self.request.params.get('opt_fields', '')
-        if fields:
-            fields = set(fields.split(self.LIST_SEP))
-            if not self.disable_opt_fields_filter:
-                fields &= set(self.FIELDS)
+        # parse params
+        descending = self.request.params.get('descending')
+        params = dict(
+            fields=self.request.params.get('opt_fields', ''),
+            limit=int(self.request.params.get('limit', 1000)),
+            descending=1 if descending else "",
+            offset=self.request.params.get('offset', ''),
+            mode=self.request.params.get('mode', ''),
+        )
+        prev_params = dict(**params)
+        prev_params["descending"] = "" if params["descending"] else 1
+        offset_field = "dateModified"
+        filter_fields = None
 
-        limit = self.request.params.get('limit', '')
-        if limit:
-            params['limit'] = limit
-            pparams['limit'] = limit
-        limit = int(limit) if limit.isdigit() and (100 if fields else 1000) >= int(limit) > 0 else 100
-        descending = bool(self.request.params.get('descending'))
-        offset = self.request.params.get('offset', '')
-        if descending:
-            params['descending'] = 1
-        else:
-            pparams['descending'] = 1
-        feed = self.request.params.get('feed', '')
-        view_map = self.FEED.get(feed, self.VIEW_MAP)
-        changes = view_map is self.CHANGES_VIEW_MAP
-        if feed and feed in self.FEED:
-            params['feed'] = feed
-            pparams['feed'] = feed
-        mode = self.request.params.get('mode', '')
-        if mode and mode in view_map:
-            params['mode'] = mode
-            pparams['mode'] = mode
-        view_limit = limit + 1 if offset else limit
-        if changes:
-            if offset:
-                view_offset = decrypt(self.server.uuid, self.db.name, offset)
-                if view_offset and view_offset.isdigit():
-                    view_offset = int(view_offset)
-                else:
-                    self.request.errors.add('params', 'offset', 'Offset expired/invalid')
-                    self.request.errors.status = 404
-                    raise error_handler(self.request.errors)
-            if not offset:
-                view_offset = 'now' if descending else 0
-        else:
-            if offset:
-                view_offset = offset
+        if params["fields"]:
+            passed_fields = set(params["fields"].split(","))
+
+            if passed_fields - self.listing_safe_fields:
+                projection = None  # get all fields
+                filter_fields = passed_fields | self.listing_default_fields
             else:
-                view_offset = '9' if descending else ''
-        list_view = view_map.get(mode, view_map[u''])
-        view_kwargs = dict(limit=view_limit, startkey=view_offset, descending=descending)
-        if self.update_after:
-            view_kwargs.update({'stale': 'update_after'})
-        view = partial(list_view, self.db, **view_kwargs)
-        if fields:
-            params['opt_fields'] = pparams['opt_fields'] = self.LIST_SEP.join(fields)
-            view_fields = fields | {'dateModified', 'id'}
-            if fields.issubset(set(self.FIELDS)):
-                if changes:
-                    results = [
-                        (
-                            dict(
-                                (i, j)
-                                for i, j in list(x.value.items()) + [('id', x.id)]
-                                if i in view_fields
-                            ),
-                            x.key
-                        )
-                        for x in view()
-                    ]
-                else:
-                    results = [
-                        (
-                            dict(
-                                (i, j)
-                                for i, j in list(x.value.items()) + [('id', x.id), ('dateModified', x.key)]
-                                if i in view_fields
-                            ),
-                            x.key
-                        )
-                        for x in view()
-                    ]
-            else:
-                results = [
-                    (self.serialize_func(self.request, x.doc, view_fields), x.key)
-                    for x in view(include_docs=True)
-                ]
+                projection = passed_fields | self.listing_default_fields
         else:
-            results = [(
-                {'id': i.id, 'dateModified': i.value['dateModified']}
-                if changes else {'id': i.id, 'dateModified': i.key}, i.key
-            ) for i in view()]
+            projection = self.listing_default_fields
+
+        # call db method
+        kwargs = dict(
+            offset_field=offset_field,
+            projection=projection,
+            filters=self.listing_filters,
+            **params
+        )
+        del kwargs["fields"]
+        results = self.db_listing_method(**kwargs)
+        # finalize list
+        if projection is None:
+            serialize = self.get_listing_serialize()
+            results = [
+                serialize(data=i, fields=filter_fields)
+                for i in results
+            ]
+        else:
+            results = [rename_id(i) for i in results]
         if results:
-            params['offset'], pparams['offset'] = results[-1][1], results[0][1]
-            if offset and view_offset == results[0][1]:
-                results = results[1:]
-            elif offset and view_offset != results[0][1]:
-                results = results[:limit]
-                params['offset'], pparams['offset'] = results[-1][1], view_offset
-            results = [i[0] for i in results]
-            if changes:
-                params['offset'] = encrypt(self.server.uuid, self.db.name, params['offset']).decode()
-                pparams['offset'] = encrypt(self.server.uuid, self.db.name, pparams['offset']).decode()
-        else:
-            params['offset'] = offset
-            pparams['offset'] = offset
+            params['offset'] = results[-1][offset_field]
+            prev_params['offset'] = results[0][offset_field]
+
         data = {
             'data': results,
             'next_page': {
                 "offset": params['offset'],
-                "path": self.request.route_path(self.object_name_for_listing, _query=params),
-                "uri": self.request.route_url(self.object_name_for_listing, _query=params)
+                "path": self.request.route_path(self.listing_name,
+                                                _query=params),
+                "uri": self.request.route_url(self.listing_name,
+                                              _query=params)
             }
         }
-        if descending or offset:
+        if params["descending"] or params["offset"]:
             data['prev_page'] = {
-                "offset": pparams['offset'],
-                "path": self.request.route_path(self.object_name_for_listing, _query=pparams),
-                "uri": self.request.route_url(self.object_name_for_listing, _query=pparams)
+                "offset": prev_params['offset'],
+                "path": self.request.route_path(self.listing_name,
+                                                _query=prev_params),
+                "uri": self.request.route_url(self.listing_name,
+                                              _query=prev_params)
             }
+
         return data
 
 
@@ -612,17 +547,6 @@ class DecimalEncoder(json.JSONEncoder):
         if isinstance(obj, decimal.Decimal):
             return str(obj)
         return super(DecimalEncoder, self).default(obj)
-
-
-def couchdb_json_decode():
-    my_encode = lambda obj, dumps=dumps: dumps(obj, cls=DecimalEncoder)
-
-    def my_decode(string_):
-        if isinstance(string_, util.btype):
-            string_ = string_.decode("utf-8")
-        return json.loads(string_, parse_float=decimal.Decimal)
-
-    couchdb.json.use(decode=my_decode, encode=my_encode)
 
 
 def get_first_revision_date(schematics_document, default=None):

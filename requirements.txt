@@ -1,3 +1,4 @@
+pymongo>=3.10.1<4
 gunicorn<20
 funcsigs==0.4
 gevent==1.1.1
@@ -18,7 +19,6 @@ wrapt==1.10.8
 zope.deprecation==4.1.1
 zope.interface==4.1.1
 schematics==1.1.1
-couchdb-schematics==1.1.1
 zope.configuration==4.0.3
 zope.component==4.1.0
 zope.schema==4.4.2
@@ -53,4 +53,3 @@ git+git://github.com/ProzorroUKR/python-json-patch.git@1.14-dp
 git+git://github.com/ProzorroUKR/cornice.git@1.2.0.dev0
 git+git://github.com/ProzorroUKR/barbecue.git@0.2
 git+git://github.com/ProzorroUKR/server_cookie_middleware.git@0.2
-git+git://github.com/ProzorroUKR/couchdb-python.git@1.2-bad-status-line

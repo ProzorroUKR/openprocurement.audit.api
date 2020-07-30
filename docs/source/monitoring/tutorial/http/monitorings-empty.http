@@ -8,8 +8,8 @@ Content-Type: application/json
   "data": [],
   "next_page": {
     "offset": "",
-    "path": "/api/2.5/monitorings?offset=",
-    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings?offset="
+    "path": "/api/2.5/monitorings?fields=&limit=1000&descending=&offset=&mode=",
+    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings?fields=&limit=1000&descending=&offset=&mode="
   }
 }
 

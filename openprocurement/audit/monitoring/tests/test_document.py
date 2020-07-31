@@ -1,8 +1,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 from hashlib import sha512
-
-import mock
+from unittest import mock
 
 from openprocurement.audit.monitoring.tests.base import BaseWebTest, DSWebTestMixin
 from openprocurement.audit.monitoring.tests.test_elimination import MonitoringEliminationBaseTest
@@ -324,7 +323,7 @@ class MonitoringPostAddressedDocumentResourceTest(BaseWebTest, DSWebTestMixin):
     @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_document_get_single(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
-            'data': {'tender_token': sha512('tender_token').hexdigest()}
+            'data': {'tender_token': sha512(b'tender_token').hexdigest()}
         }
 
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
@@ -356,7 +355,7 @@ class MonitoringPostAddressedDocumentResourceTest(BaseWebTest, DSWebTestMixin):
     @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_document_get_list(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
-            'data': {'tender_token': sha512('tender_token').hexdigest()}
+            'data': {'tender_token': sha512(b'tender_token').hexdigest()}
         }
 
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
@@ -385,7 +384,7 @@ class MonitoringPostAddressedDocumentResourceTest(BaseWebTest, DSWebTestMixin):
     @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_document_download(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
-            'data': {'tender_token': sha512('tender_token').hexdigest()}
+            'data': {'tender_token': sha512(b'tender_token').hexdigest()}
         }
 
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
@@ -425,7 +424,7 @@ class MonitoringPostAddressedDocumentResourceTest(BaseWebTest, DSWebTestMixin):
     @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_document_upload_no_token(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
-            'data': {'tender_token': sha512('tender_token').hexdigest()}
+            'data': {'tender_token': sha512(b'tender_token').hexdigest()}
         }
 
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
@@ -451,7 +450,7 @@ class MonitoringPostAddressedDocumentResourceTest(BaseWebTest, DSWebTestMixin):
     @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_document_upload(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
-            'data': {'tender_token': sha512('tender_token').hexdigest()}
+            'data': {'tender_token': sha512(b'tender_token').hexdigest()}
         }
 
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
@@ -477,7 +476,7 @@ class MonitoringPostAddressedDocumentResourceTest(BaseWebTest, DSWebTestMixin):
     @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_document_upload_author_forbidden(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
-            'data': {'tender_token': sha512('tender_token').hexdigest()}
+            'data': {'tender_token': sha512(b'tender_token').hexdigest()}
         }
 
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))

@@ -14,7 +14,7 @@ def get_spore(request):
     output = {task['replication_id']: task['progress'] for task in tasks if 'type' in task and task['type'] == 'replication'}
     try:
         health_threshold = float(request.params.get('health_threshold', request.registry.health_threshold))
-    except ValueError, e:
+    except ValueError as e:
         health_threshold = request.registry.health_threshold
     health_threshold_func_name = request.params.get('health_threshold_func', request.registry.health_threshold_func)
     health_threshold_func = HEALTH_THRESHOLD_FUNCTIONS.get(health_threshold_func_name, all)

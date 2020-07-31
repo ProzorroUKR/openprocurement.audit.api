@@ -2,8 +2,8 @@
 import os
 from base64 import b64encode
 from copy import deepcopy
-from urllib import urlencode
-
+from urllib.parse import urlencode
+from nacl.encoding import HexEncoder
 from openprocurement.audit.api.tests.base import BaseWebTest as BaseApiWebTest
 from datetime import datetime
 from uuid import uuid4
@@ -103,8 +103,10 @@ class DSWebTestMixin(object):
     def generate_docservice_url(self, doc_hash=None):
         uuid = uuid4().hex
         doc_hash = doc_hash or '0' * 32
-        key = self.app.app.registry.docservice_key
-        keyid = key.hex_vk()[:8]
-        signature = b64encode(key.signature("{}\0{}".format(uuid, doc_hash)))
+        registry = self.app.app.registry
+        signer = registry.docservice_key
+        keyid = signer.verify_key.encode(encoder=HexEncoder)[:8].decode()
+        msg = "{}\0{}".format(uuid, doc_hash).encode()
+        signature = b64encode(signer.sign(msg).signature)
         query = {'Signature': signature, 'KeyID': keyid}
-        return '{}/get/{}?{}'.format(self.app.app.registry.docservice_url, uuid, urlencode(query))
+        return '{}/get/{}?{}'.format(registry.docservice_url, uuid, urlencode(query))

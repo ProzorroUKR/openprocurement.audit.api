@@ -6,27 +6,27 @@ Host: audit-api-sandbox.prozorro.gov.ua
 DATA:
 {
   "data": {
+    "description": "Addition to the appeal description",
     "documents": [
       {
-        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/59ec68b1b09a425a8fca371a3b12b4cf?KeyID=a8968c46&Signature=3bdJ0S3cDcYJVl1Yu5HDEXfJAVs5wdIjpCkKUEVyZUmUgOov1EUQK23Q%2BT0PteDUjIEkkGeX%2FRUEeh0GOqIBBg%3D%3D", 
-        "title": "another-letter.doc", 
-        "hash": "md5:00000000000000000000000000000000", 
+        "title": "another-letter.doc",
+        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/59ec68b1b09a425a8fca371a3b12b4cf?Signature=3bdJ0S3cDcYJVl1Yu5HDEXfJAVs5wdIjpCkKUEVyZUmUgOov1EUQK23Q%2BT0PteDUjIEkkGeX%2FRUEeh0GOqIBBg%3D%3D&KeyID=a8968c46",
+        "hash": "md5:00000000000000000000000000000000",
         "format": "application/msword"
       }
-    ], 
-    "description": "Addition to the appeal description"
+    ]
   }
 }
 
 Response: 403 Forbidden
-Content-Type: application/json; charset=UTF-8
+Content-Type: application/json
 {
-  "status": "error", 
+  "status": "error",
   "errors": [
     {
-      "description": "Can't post another appeal.", 
-      "location": "body", 
-      "name": "data"
+      "location": "body",
+      "name": "data",
+      "description": "Can't post another appeal."
     }
   ]
 }

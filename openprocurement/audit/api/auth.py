@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 from hashlib import sha512
 
 from pyramid.authentication import BasicAuthAuthenticationPolicy
@@ -28,7 +28,7 @@ class AuthenticationPolicy(BasicAuthAuthenticationPolicy):
                 token = self._get_access_token(request)
                 if token:
                     auth_groups.append('{}_{}'.format(username, token))
-                    auth_groups.append('{}_{}'.format(username, sha512(token).hexdigest()))
+                    auth_groups.append('{}_{}'.format(username, sha512(token.encode('utf8')).hexdigest()))
                 return auth_groups
 
     def _get_user_auth_groups(self, user):

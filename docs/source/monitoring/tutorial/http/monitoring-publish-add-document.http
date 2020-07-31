@@ -6,26 +6,26 @@ Host: audit-api-sandbox.prozorro.gov.ua
 DATA:
 {
   "data": {
-    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/b6e25be2b0b24fe7a614a8a8f7bc7120?KeyID=a8968c46&Signature=lJcbLhgnmkZ2a%2FKN6qiADevs6BA%2BLS1W1XH1KoeBeoqHRJnKCJtw8my8flu2S4cv4kBwEF7q4LDBolORB2z0Dg%3D%3D", 
-    "title": "dolor.doc", 
-    "hash": "md5:00000000000000000000000000000000", 
+    "title": "dolor.doc",
+    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/b6e25be2b0b24fe7a614a8a8f7bc7120?Signature=lJcbLhgnmkZ2a%2FKN6qiADevs6BA%2BLS1W1XH1KoeBeoqHRJnKCJtw8my8flu2S4cv4kBwEF7q4LDBolORB2z0Dg%3D%3D&KeyID=a8968c46",
+    "hash": "md5:00000000000000000000000000000000",
     "format": "application/msword"
   }
 }
 
 Response: 201 Created
-Content-Type: application/json; charset=UTF-8
+Content-Type: application/json
 Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/decision/documents/6eb0b671cbe641bbb97ecef5a87d6ce6
 {
   "data": {
-    "hash": "md5:00000000000000000000000000000000", 
-    "author": "monitoring_owner", 
-    "title": "dolor.doc", 
-    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/b6e25be2b0b24fe7a614a8a8f7bc7120?KeyID=a8968c46&Signature=4rxzAuYPqxTCts%252BkCZMPkm3P15TXJStZ6KdUNc9y%2FCxX8Jc4DAC4nq3bCk7mIaHE7piVcD%2FlxVcCVTXPkEqRBg%253D%253D", 
-    "format": "application/msword", 
-    "datePublished": "2018-01-02T03:10:00+02:00", 
-    "id": "6eb0b671cbe641bbb97ecef5a87d6ce6", 
-    "dateModified": "2018-01-02T03:10:00+02:00"
+    "id": "6eb0b671cbe641bbb97ecef5a87d6ce6",
+    "hash": "md5:00000000000000000000000000000000",
+    "title": "dolor.doc",
+    "format": "application/msword",
+    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/b6e25be2b0b24fe7a614a8a8f7bc7120?Signature=4rxzAuYPqxTCts%252BkCZMPkm3P15TXJStZ6KdUNc9y%2FCxX8Jc4DAC4nq3bCk7mIaHE7piVcD%2FlxVcCVTXPkEqRBg%253D%253D&KeyID=a8968c46",
+    "datePublished": "2018-01-02T03:10:00+02:00",
+    "dateModified": "2018-01-02T03:10:00+02:00",
+    "author": "monitoring_owner"
   }
 }
 

@@ -6,6 +6,11 @@ services:
       dockerfile: Dockerfile
     depends_on:
       - couchdb
+    volumes:
+      - "./openprocurement:/app/openprocurement:delegated"
+      - "./docs.py:/app/docs.py:delegated"
+      - "./docs:/app/docs:delegated"
+      - "./etc:/app/etc:delegated"
     ports:
     - "80:80"
   couchdb:
@@ -13,3 +18,5 @@ services:
     environment:
       COUCHDB_USER: op
       COUCHDB_PASSWORD: op
+    ports:
+      - "5984:5984"

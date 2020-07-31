@@ -6,26 +6,26 @@ Host: audit-api-sandbox.prozorro.gov.ua
 DATA:
 {
   "data": {
-    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/7ca7eaa8120b4565b5fb18fc3723360a?KeyID=a8968c46&Signature=XlqVmNJopju7PaG%2FCXYe5I1OKjzsAY18X225YLvlGGyvamdfar%2F2F3WvrkaR42Tj3PX9AR1Y%2FbnsIs3ueLaoAg%3D%3D", 
-    "title": "sign.p7s", 
-    "hash": "md5:00000000000000000000000000000000", 
+    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/7ca7eaa8120b4565b5fb18fc3723360a?Signature=XlqVmNJopju7PaG%2FCXYe5I1OKjzsAY18X225YLvlGGyvamdfar%2F2F3WvrkaR42Tj3PX9AR1Y%2FbnsIs3ueLaoAg%3D%3D&KeyID=a8968c46",
+    "title": "sign.p7s",
+    "hash": "md5:00000000000000000000000000000000",
     "format": "application/ms-word"
   }
 }
 
 Response: 201 Created
-Content-Type: application/json; charset=UTF-8
+Content-Type: application/json
 Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/documents/634d8e673bb64f0d92953593c533b511
 {
   "data": {
-    "hash": "md5:00000000000000000000000000000000", 
-    "author": "monitoring_owner", 
-    "title": "sign.p7s", 
-    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/7ca7eaa8120b4565b5fb18fc3723360a?KeyID=a8968c46&Signature=ItSN6qARVCCIsysWBirpuB56O9t3oGMjsPyVtIZzJpryEbvdx99IKeEYZd84JBMDcsUJcAHhUZA2xo7tRGDaAg%253D%253D", 
-    "format": "application/ms-word", 
-    "datePublished": "2018-01-25T03:00:00+02:00", 
-    "id": "634d8e673bb64f0d92953593c533b511", 
-    "dateModified": "2018-01-25T03:00:00+02:00"
+    "id": "634d8e673bb64f0d92953593c533b511",
+    "hash": "md5:00000000000000000000000000000000",
+    "title": "sign.p7s",
+    "format": "application/ms-word",
+    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/7ca7eaa8120b4565b5fb18fc3723360a?Signature=ItSN6qARVCCIsysWBirpuB56O9t3oGMjsPyVtIZzJpryEbvdx99IKeEYZd84JBMDcsUJcAHhUZA2xo7tRGDaAg%253D%253D&KeyID=a8968c46",
+    "datePublished": "2018-01-25T03:00:00+02:00",
+    "dateModified": "2018-01-25T03:00:00+02:00",
+    "author": "monitoring_owner"
   }
 }
 

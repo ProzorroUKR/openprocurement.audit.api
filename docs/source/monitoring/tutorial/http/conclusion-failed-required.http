@@ -13,18 +13,18 @@ DATA:
 }
 
 Response: 422 Unprocessable Entity
-Content-Type: application/json; charset=UTF-8
+Content-Type: application/json
 {
-  "status": "error", 
+  "status": "error",
   "errors": [
     {
+      "location": "body",
+      "name": "conclusion",
       "description": {
         "violationType": [
           "This field is required."
         ]
-      }, 
-      "location": "body", 
-      "name": "conclusion"
+      }
     }
   ]
 }

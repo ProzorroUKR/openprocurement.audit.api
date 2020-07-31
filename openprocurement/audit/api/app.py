@@ -12,8 +12,8 @@ if not is_test():
 import os
 
 import simplejson
-from libnacl.public import SecretKey, PublicKey
-from libnacl.sign import Signer, Verifier
+from nacl.encoding import HexEncoder
+from nacl.signing import SigningKey, VerifyKey
 from pkg_resources import iter_entry_points
 from pyramid.authorization import ACLAuthorizationPolicy as AuthorizationPolicy
 from pyramid.config import Configurator
@@ -67,15 +67,24 @@ def main(global_config, **settings):
     config.registry.docservice_username = settings.get('docservice_username')
     config.registry.docservice_password = settings.get('docservice_password')
     config.registry.docservice_upload_url = settings.get('docservice_upload_url')
-    config.registry.docservice_key = dockey = Signer(settings.get('dockey', '').decode('hex'))
-    config.registry.keyring = keyring = {}
-    dockeys = settings.get('dockeys') if 'dockeys' in settings else dockey.hex_vk()
-    for key in dockeys.split('\0'):
-        keyring[key[:8]] = Verifier(key)
+    # config.registry.docservice_key = dockey = Signer(settings.get('dockey', '').decode('hex'))
+    # config.registry.keyring = keyring = {}
+    # dockeys = settings.get('dockeys') if 'dockeys' in settings else dockey.hex_vk()
+    # for key in dockeys.split('\0'):
+    #     keyring[key[:8]] = Verifier(key)
 
-    # Archive keys
-    arch_pubkey = settings.get('arch_pubkey', None)
-    config.registry.arch_pubkey = PublicKey(arch_pubkey.decode('hex') if arch_pubkey else SecretKey().pk)
+    signing_key = settings.get('dockey', '')
+    signer = SigningKey(signing_key, encoder=HexEncoder) if signing_key else SigningKey.generate()
+    config.registry.docservice_key = signer
+    verifier = signer.verify_key
+
+    config.registry.keyring = {
+        verifier.encode(encoder=HexEncoder)[:8].decode(): verifier
+    }
+    dockeys = settings.get('dockeys', '')
+    for key in dockeys.split('\0'):
+        if key:
+            config.registry.keyring[key[:8]] = VerifyKey(key, encoder=HexEncoder)
 
     # migrate data
     if not os.environ.get('MIGRATION_SKIP'):

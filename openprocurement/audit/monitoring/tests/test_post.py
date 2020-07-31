@@ -2,8 +2,7 @@
 import json
 import unittest
 from hashlib import sha512
-
-import mock
+from unittest import mock
 from freezegun import freeze_time
 
 from openprocurement.audit.monitoring.tests.base import BaseWebTest, DSWebTestMixin
@@ -154,7 +153,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
     @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_post_create_by_tender_owner(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
-            'data': {'tender_token': sha512('tender_token').hexdigest()}
+            'data': {'tender_token': sha512(b'tender_token').hexdigest()}
         }
 
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
@@ -204,12 +203,11 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
             ('body', 'posts', 'relatedPost'),
             next(get_errors_field_names(response, 'relatedPost can\'t have the same author.')))
 
-    @mock.patch('restkit.Resource.request')
-    def test_monitoring_credentials_tender_owner(self, mock_request):
-        mock_request.return_value = mock.MagicMock(
-            status_int=200,
-            body_string=lambda: json.dumps({'data': {'tender_token': sha512('tender_token').hexdigest()}})
-        )
+    @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
+    def test_monitoring_credentials_tender_owner(self, client_class_mock):
+        client_class_mock.return_value.extract_credentials.return_value = {
+            'data': {'tender_token': sha512(b'tender_token').hexdigest()}
+        }
 
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.patch_json(
@@ -218,12 +216,13 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertIn("access", response.json)
         self.assertIn("token", response.json["access"])
 
-        self.assertIs(mock_request.called, True)
-        args, kwargs = mock_request.call_args
-        self.assertEqual(
-            kwargs["path"],
-            '/api/2.0/tenders/{}/extract_credentials'.format(self.initial_data["tender_id"])
+        registry = self.app.app.registry
+        client_class_mock.assert_called_once_with(
+            registry.api_token,
+            host_url=registry.api_server,
+            api_version=registry.api_version,
         )
+        client_class_mock.return_value.extract_credentials.assert_called_once_with(self.initial_data["tender_id"])
 
         self.app.patch_json(
             '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'another_token'),
@@ -233,7 +232,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
     @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_monitoring_owner_answer_post_by_tender_owner(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
-            'data': {'tender_token': sha512('tender_token').hexdigest()}
+            'data': {'tender_token': sha512(b'tender_token').hexdigest()}
         }
 
         response = self.app.post_json(
@@ -279,7 +278,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
     @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_monitoring_owner_answer_post_by_tender_owner_multiple(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
-            'data': {'tender_token': sha512('tender_token').hexdigest()}
+            'data': {'tender_token': sha512(b'tender_token').hexdigest()}
         }
 
         response = self.app.post_json(
@@ -327,7 +326,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
     @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_monitoring_owner_answer_post_for_not_unique_id(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
-            'data': {'tender_token': sha512('tender_token').hexdigest()}
+            'data': {'tender_token': sha512(b'tender_token').hexdigest()}
         }
         with mock.patch('openprocurement.audit.monitoring.models.uuid4', mock.Mock(return_value=mock.Mock(hex='f'*32))):
             self.app.post_json(
@@ -378,7 +377,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
     @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_tender_owner_answer_post_by_monitoring_owner(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
-            'data': {'tender_token': sha512('tender_token').hexdigest()}
+            'data': {'tender_token': sha512(b'tender_token').hexdigest()}
         }
 
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
@@ -417,7 +416,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
     @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_tender_owner_answer_post_by_tender_owner(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
-            'data': {'tender_token': sha512('tender_token').hexdigest()}
+            'data': {'tender_token': sha512(b'tender_token').hexdigest()}
         }
 
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
@@ -462,7 +461,7 @@ class MonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
     @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_two_answers_in_a_row(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
-            'data': {'tender_token': sha512('tender_token').hexdigest()}
+            'data': {'tender_token': sha512(b'tender_token').hexdigest()}
         }
 
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
@@ -610,7 +609,7 @@ class DeclinedMonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
     @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_post_create_by_tender_owner(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
-            'data': {'tender_token': sha512('tender_token').hexdigest()}
+            'data': {'tender_token': sha512(b'tender_token').hexdigest()}
         }
 
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
@@ -631,7 +630,7 @@ class DeclinedMonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
     @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_post_answer_by_monitoring_owner(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
-            'data': {'tender_token': sha512('tender_token').hexdigest()}
+            'data': {'tender_token': sha512(b'tender_token').hexdigest()}
         }
 
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
@@ -666,7 +665,7 @@ class DeclinedMonitoringPostResourceTest(BaseWebTest, DSWebTestMixin):
     @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     def test_post_create_by_tender_owner_multiple(self, mock_api_client):
         mock_api_client.return_value.extract_credentials.return_value = {
-            'data': {'tender_token': sha512('tender_token').hexdigest()}
+            'data': {'tender_token': sha512(b'tender_token').hexdigest()}
         }
 
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))

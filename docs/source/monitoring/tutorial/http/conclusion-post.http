@@ -6,42 +6,42 @@ Host: audit-api-sandbox.prozorro.gov.ua
 DATA:
 {
   "data": {
+    "title": "Sit amet",
+    "description": "Sit amet lorem ipsum dolor.",
     "documents": [
       {
-        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/c0fb6531fc8548bf8e7b9085fc18e7d5?KeyID=a8968c46&Signature=4G%2F5tdESbFqqiB7%2FVeyiz33WKNqKEtwUoqrR2K3GK%2FNpUCmLS5N9kTILwAk2vUNtzMiVKMja99V65lptQpZPBA%3D%3D", 
-        "title": "dolor.doc", 
-        "hash": "md5:00000000000000000000000000000000", 
+        "title": "dolor.doc",
+        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/c0fb6531fc8548bf8e7b9085fc18e7d5?Signature=4G%2F5tdESbFqqiB7%2FVeyiz33WKNqKEtwUoqrR2K3GK%2FNpUCmLS5N9kTILwAk2vUNtzMiVKMja99V65lptQpZPBA%3D%3D&KeyID=a8968c46",
+        "hash": "md5:00000000000000000000000000000000",
         "format": "application/msword"
       }
-    ], 
-    "description": "Sit amet lorem ipsum dolor.", 
-    "title": "Sit amet"
+    ]
   }
 }
 
 Response: 201 Created
-Content-Type: application/json; charset=UTF-8
+Content-Type: application/json
 Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/posts/7b3cbba723734b3b8a1a49fdefee7164
 {
   "data": {
+    "id": "7b3cbba723734b3b8a1a49fdefee7164",
+    "title": "Sit amet",
+    "description": "Sit amet lorem ipsum dolor.",
     "documents": [
       {
-        "hash": "md5:00000000000000000000000000000000", 
-        "author": "tender_owner", 
-        "title": "dolor.doc", 
-        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/c0fb6531fc8548bf8e7b9085fc18e7d5?KeyID=a8968c46&Signature=UXmKY48jGgIqQ%2Fh%252BpyZJDAM8Y4eHwY2TSVruWKxQne4pKL2XTajI1rjiWvNuB8PQqIn%252BaMp6a5LiOZ0TImYZAQ%253D%253D", 
-        "format": "application/msword", 
-        "datePublished": "2018-01-06T02:00:00+02:00", 
-        "id": "79251caf27fe413d9aa98717620b71cc", 
-        "dateModified": "2018-01-06T02:00:00+02:00"
+        "id": "79251caf27fe413d9aa98717620b71cc",
+        "hash": "md5:00000000000000000000000000000000",
+        "title": "dolor.doc",
+        "format": "application/msword",
+        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/c0fb6531fc8548bf8e7b9085fc18e7d5?Signature=UXmKY48jGgIqQ%2Fh%252BpyZJDAM8Y4eHwY2TSVruWKxQne4pKL2XTajI1rjiWvNuB8PQqIn%252BaMp6a5LiOZ0TImYZAQ%253D%253D&KeyID=a8968c46",
+        "datePublished": "2018-01-06T02:00:00+02:00",
+        "dateModified": "2018-01-06T02:00:00+02:00",
+        "author": "tender_owner"
       }
-    ], 
-    "description": "Sit amet lorem ipsum dolor.", 
-    "title": "Sit amet", 
-    "author": "tender_owner", 
-    "datePublished": "2018-01-06T02:00:00+02:00", 
-    "id": "7b3cbba723734b3b8a1a49fdefee7164", 
-    "postOf": "conclusion"
+    ],
+    "author": "tender_owner",
+    "postOf": "conclusion",
+    "datePublished": "2018-01-06T02:00:00+02:00"
   }
 }
 

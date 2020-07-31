@@ -6,36 +6,36 @@ Host: audit-api-sandbox.prozorro.gov.ua
 DATA:
 {
   "data": {
+    "description": "The procurement requirements have been fixed and the changes are attached.",
     "documents": [
       {
-        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/8156e7122c6e497cb271478f924cc846?KeyID=a8968c46&Signature=WDKZ%2BOn40wFfeTsbfAT%2FjE7E1SAR5XQKJNK%2FjciHJyhCRFTHDKHuhf4FPL6pIKvEIcujg%2BgKIHtOacjuDIKrCA%3D%3D", 
-        "title": "requirements.doc", 
-        "hash": "md5:00000000000000000000000000000000", 
+        "title": "requirements.doc",
+        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/8156e7122c6e497cb271478f924cc846?Signature=WDKZ%2BOn40wFfeTsbfAT%2FjE7E1SAR5XQKJNK%2FjciHJyhCRFTHDKHuhf4FPL6pIKvEIcujg%2BgKIHtOacjuDIKrCA%3D%3D&KeyID=a8968c46",
+        "hash": "md5:00000000000000000000000000000000",
         "format": "application/msword"
       }
-    ], 
-    "description": "The procurement requirements have been fixed and the changes are attached."
+    ]
   }
 }
 
 Response: 200 OK
-Content-Type: application/json; charset=UTF-8
+Content-Type: application/json
 {
   "data": {
-    "dateCreated": "2018-01-07T02:00:00+02:00", 
+    "description": "The procurement requirements have been fixed and the changes are attached.",
     "documents": [
       {
-        "hash": "md5:00000000000000000000000000000000", 
-        "author": "tender_owner", 
-        "title": "requirements.doc", 
-        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/8156e7122c6e497cb271478f924cc846?KeyID=a8968c46&Signature=gxWcVkXilNhJisonuLONqVW4S%252BEQiFNyNTuPtwTQQbmRdEinhKXYHO7BAZlzGCKtTS3aZvIimRSq%252B2AO3tpxCQ%253D%253D", 
-        "format": "application/msword", 
-        "datePublished": "2018-01-07T02:00:00+02:00", 
-        "id": "0ee71b931a2e4ad8a470d0b8c0ceb0d9", 
-        "dateModified": "2018-01-07T02:00:00+02:00"
+        "id": "0ee71b931a2e4ad8a470d0b8c0ceb0d9",
+        "hash": "md5:00000000000000000000000000000000",
+        "title": "requirements.doc",
+        "format": "application/msword",
+        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/8156e7122c6e497cb271478f924cc846?Signature=gxWcVkXilNhJisonuLONqVW4S%252BEQiFNyNTuPtwTQQbmRdEinhKXYHO7BAZlzGCKtTS3aZvIimRSq%252B2AO3tpxCQ%253D%253D&KeyID=a8968c46",
+        "datePublished": "2018-01-07T02:00:00+02:00",
+        "dateModified": "2018-01-07T02:00:00+02:00",
+        "author": "tender_owner"
       }
-    ], 
-    "description": "The procurement requirements have been fixed and the changes are attached.", 
+    ],
+    "dateCreated": "2018-01-07T02:00:00+02:00",
     "datePublished": "2018-01-07T02:00:00+02:00"
   }
 }

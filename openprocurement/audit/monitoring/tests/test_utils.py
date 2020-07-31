@@ -1,6 +1,6 @@
 import unittest
 
-import mock
+from unittest import mock
 from datetime import datetime, timedelta
 
 from openprocurement.audit.api.constants import TZ

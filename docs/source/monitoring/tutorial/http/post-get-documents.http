@@ -3,28 +3,28 @@ Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
 Host: audit-api-sandbox.prozorro.gov.ua
 
 Response: 200 OK
-Content-Type: application/json; charset=UTF-8
+Content-Type: application/json
 {
   "data": [
     {
-      "hash": "md5:00000000000000000000000000000000", 
-      "author": "monitoring_owner", 
-      "title": "ipsum.doc", 
-      "url": "http://public-docs-sandbox.prozorro.gov.ua/get/2cd40a17af5841bba79a442e11f795ce?KeyID=a8968c46&Signature=OZIGjb5iadULQ8WLskGvxx95vKWAZlty2qiwy4KtaRAXTWx%2F3lUo6FjwLwZ4juaEjnyRq3y953ReosiUYw6ODA%253D%253D", 
-      "format": "application/msword", 
-      "datePublished": "2018-01-03T02:05:00+02:00", 
-      "id": "51013265fd914fa6b01a6334b95ee70c", 
-      "dateModified": "2018-01-03T02:05:00+02:00"
-    }, 
+      "id": "51013265fd914fa6b01a6334b95ee70c",
+      "hash": "md5:00000000000000000000000000000000",
+      "title": "ipsum.doc",
+      "format": "application/msword",
+      "url": "http://public-docs-sandbox.prozorro.gov.ua/get/2cd40a17af5841bba79a442e11f795ce?Signature=OZIGjb5iadULQ8WLskGvxx95vKWAZlty2qiwy4KtaRAXTWx%2F3lUo6FjwLwZ4juaEjnyRq3y953ReosiUYw6ODA%253D%253D&KeyID=a8968c46",
+      "datePublished": "2018-01-03T02:05:00+02:00",
+      "dateModified": "2018-01-03T02:05:00+02:00",
+      "author": "monitoring_owner"
+    },
     {
-      "hash": "md5:00000000000000000000000000000000", 
-      "author": "monitoring_owner", 
-      "title": "dolor.doc", 
-      "url": "http://public-docs-sandbox.prozorro.gov.ua/get/e3e475499f57496f9eaa0c4208ea09fa?KeyID=a8968c46&Signature=ALKprZk49GxoDAKeh6uMrNr4typhugl4A%252BuGNe6o8k4hExglSDziU6nSHNFdD6rL4yxABp3zCFkTjcTs9c3EAQ%253D%253D", 
-      "format": "application/msword", 
-      "datePublished": "2018-01-03T02:10:00+02:00", 
-      "id": "547bc5cf5f4a48d5b4443cefb9a62802", 
-      "dateModified": "2018-01-03T02:10:00+02:00"
+      "id": "547bc5cf5f4a48d5b4443cefb9a62802",
+      "hash": "md5:00000000000000000000000000000000",
+      "title": "dolor.doc",
+      "format": "application/msword",
+      "url": "http://public-docs-sandbox.prozorro.gov.ua/get/e3e475499f57496f9eaa0c4208ea09fa?Signature=ALKprZk49GxoDAKeh6uMrNr4typhugl4A%252BuGNe6o8k4hExglSDziU6nSHNFdD6rL4yxABp3zCFkTjcTs9c3EAQ%253D%253D&KeyID=a8968c46",
+      "datePublished": "2018-01-03T02:10:00+02:00",
+      "dateModified": "2018-01-03T02:10:00+02:00",
+      "author": "monitoring_owner"
     }
   ]
 }

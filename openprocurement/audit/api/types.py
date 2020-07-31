@@ -1,4 +1,4 @@
-from hashlib import algorithms, new as hash_new
+from hashlib import algorithms_guaranteed, new as hash_new
 
 from datetime import datetime
 from iso8601 import parse_date, ParseError
@@ -25,7 +25,7 @@ class HashType(StringType):
 
         hash_type, hash_value = value.split(':', 1)
 
-        if hash_type not in algorithms:
+        if hash_type not in algorithms_guaranteed:
             raise ValidationError(self.messages['hash_invalid'])
 
         if len(hash_value) != hash_new(hash_type).digest_size * 2:

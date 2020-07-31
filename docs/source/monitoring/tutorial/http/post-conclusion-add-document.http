@@ -6,26 +6,26 @@ Host: audit-api-sandbox.prozorro.gov.ua
 DATA:
 {
   "data": {
-    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/b6da38c8e8cc4cc894a2882cfe482fcc?KeyID=a8968c46&Signature=eNB2%2BR7G0sqG%2FDcJHZrL6WAxgjwtam494MhbaSFmos%2FmIqiGE2OBk3P%2FRR7P4QyUcxiNygIcltzH0SLX9GxtBA%3D%3D", 
-    "title": "dolor.doc", 
-    "hash": "md5:00000000000000000000000000000000", 
+    "title": "dolor.doc",
+    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/b6da38c8e8cc4cc894a2882cfe482fcc?Signature=eNB2%2BR7G0sqG%2FDcJHZrL6WAxgjwtam494MhbaSFmos%2FmIqiGE2OBk3P%2FRR7P4QyUcxiNygIcltzH0SLX9GxtBA%3D%3D&KeyID=a8968c46",
+    "hash": "md5:00000000000000000000000000000000",
     "format": "application/msword"
   }
 }
 
 Response: 201 Created
-Content-Type: application/json; charset=UTF-8
+Content-Type: application/json
 Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/posts/7b3cbba723734b3b8a1a49fdefee7164/documents/1f1d318e37214cea882d41b38181e249
 {
   "data": {
-    "hash": "md5:00000000000000000000000000000000", 
-    "author": "tender_owner", 
-    "title": "dolor.doc", 
-    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/b6da38c8e8cc4cc894a2882cfe482fcc?KeyID=a8968c46&Signature=jd7PVESBiLjYpiL8judBOsXYvIEaIcLxJK5DrppDMeyyZHxSttu78J9dc6zKHw5fLSiyYUHYGS%252B9J3%252B6TUmUBg%253D%253D", 
-    "format": "application/msword", 
-    "datePublished": "2018-01-03T02:10:00+02:00", 
-    "id": "1f1d318e37214cea882d41b38181e249", 
-    "dateModified": "2018-01-03T02:10:00+02:00"
+    "id": "1f1d318e37214cea882d41b38181e249",
+    "hash": "md5:00000000000000000000000000000000",
+    "title": "dolor.doc",
+    "format": "application/msword",
+    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/b6da38c8e8cc4cc894a2882cfe482fcc?Signature=jd7PVESBiLjYpiL8judBOsXYvIEaIcLxJK5DrppDMeyyZHxSttu78J9dc6zKHw5fLSiyYUHYGS%252B9J3%252B6TUmUBg%253D%253D&KeyID=a8968c46",
+    "datePublished": "2018-01-03T02:10:00+02:00",
+    "dateModified": "2018-01-03T02:10:00+02:00",
+    "author": "tender_owner"
   }
 }
 

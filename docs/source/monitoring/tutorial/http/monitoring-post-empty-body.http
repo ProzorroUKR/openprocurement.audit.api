@@ -9,30 +9,30 @@ DATA:
 }
 
 Response: 422 Unprocessable Entity
-Content-Type: application/json; charset=UTF-8
+Content-Type: application/json
 {
-  "status": "error", 
+  "status": "error",
   "errors": [
     {
+      "location": "body",
+      "name": "tender_id",
       "description": [
         "This field is required."
-      ], 
-      "location": "body", 
-      "name": "reasons"
-    }, 
+      ]
+    },
     {
+      "location": "body",
+      "name": "reasons",
       "description": [
         "This field is required."
-      ], 
-      "location": "body", 
-      "name": "procuringStages"
-    }, 
+      ]
+    },
     {
+      "location": "body",
+      "name": "procuringStages",
       "description": [
         "This field is required."
-      ], 
-      "location": "body", 
-      "name": "tender_id"
+      ]
     }
   ]
 }

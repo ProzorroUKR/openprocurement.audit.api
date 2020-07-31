@@ -1,20 +1,20 @@
 # -*- coding: utf-8 -*-
 import os
 from logging import getLogger
-
 from datetime import timedelta
 from pytz import timezone
 from requests import Session
+from json import load
+import os.path
 
 
 def read_json(name):
-    import os.path
-    from json import loads
     curr_dir = os.path.dirname(os.path.realpath(__file__))
     file_path = os.path.join(curr_dir, 'data', name)
-    with open(file_path) as lang_file:
-        data = lang_file.read()
-    return loads(data)
+    with open(file_path, encoding='utf-8') as f:
+        data = load(f)
+    return data
+
 
 LOGGER = getLogger('openprocurement.audit.api')
 VERSION = '2.5'

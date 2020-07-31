@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 import os
-from ConfigParser import ConfigParser
+from configparser import ConfigParser
 from logging import getLogger
 
 import argparse

@@ -53,4 +53,4 @@ git+git://github.com/ProzorroUKR/python-json-patch.git@1.14-dp
 git+git://github.com/ProzorroUKR/cornice.git@1.2.0.dev0
 git+git://github.com/ProzorroUKR/barbecue.git@0.2
 git+git://github.com/ProzorroUKR/server_cookie_middleware.git@0.2
-git+git://github.com/ProzorroUKR/couchdb-python.git@1.2-bad-status-line
+git+git://github.com/ProzorroUKR/couchdb-python.git@1.2-bad-status-line#egg=couchdb

@@ -231,7 +231,8 @@ def update_file_content_type(request):  # XXX TODO
 
 
 def get_file(request):
-    db_doc_id = request.validated['db_doc'].id
+    db_doc = request.validated['db_doc']
+    db_doc_id = db_doc.id
     document = request.validated['document']
     key = request.params.get('download')
     if not any([key in i.url for i in request.validated['documents']]):
@@ -239,7 +240,9 @@ def get_file(request):
         request.errors.status = 404
         return
     filename = "{}_{}".format(document.id, key)
-    if request.registry.docservice_url and filename not in request.validated['db_doc']['_attachments']:
+    if request.registry.docservice_url and (
+        '_attachments' not in db_doc or filename not in db_doc['_attachments']
+    ):
         document = [i for i in request.validated['documents'] if key in i.url][-1]
         if 'Signature=' in document.url and 'KeyID' in document.url:
             url = document.url

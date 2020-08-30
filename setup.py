@@ -62,6 +62,7 @@ entry_points = {
         'api = openprocurement.audit.api:includeme',
         'monitoring = openprocurement.audit.monitoring:includeme',
         'inspection = openprocurement.audit.inspection:includeme',
+        'request = openprocurement.audit.request:includeme',
     ]
 }
 

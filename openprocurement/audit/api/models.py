@@ -7,14 +7,14 @@ from uuid import uuid4
 from couchdb_schematics.document import DocumentMeta, Document as SchematicsDocument
 from schematics.models import Model as SchematicsModel
 from schematics.transforms import blacklist, convert, export_loop, whitelist
-from schematics.types import BaseType, StringType, MD5Type
-from schematics.types.compound import DictType
+from schematics.types import BaseType, StringType, MD5Type, URLType, EmailType
+from schematics.types.compound import DictType, ModelType
 from zope.component import queryAdapter, getAdapters
 
+from openprocurement.audit.api.constants import ORA_CODES
 from openprocurement.audit.api.interfaces import IValidator, ISerializable
 from openprocurement.audit.api.types import IsoDateTimeType, ListType, HashType
 from openprocurement.audit.api.utils import set_parent, get_now
-
 
 schematics_default_role = SchematicsDocument.Options.roles['default'] + blacklist("__parent__")
 schematics_embedded_role = SchematicsDocument.Options.roles['embedded'] + blacklist("__parent__")
@@ -288,3 +288,43 @@ class BaseModel(SchematicsDocument, Model):
 
         self._data.update(data)
         return self
+
+
+class Identifier(Model):
+    scheme = StringType(required=True, choices=ORA_CODES)
+    id = BaseType(required=True)
+    legalName = StringType()
+    legalName_en = StringType()
+    legalName_ru = StringType()
+    uri = URLType()
+
+
+class Address(Model):
+    streetAddress = StringType()
+    locality = StringType()
+    region = StringType()
+    postalCode = StringType()
+    countryName = StringType()
+    countryName_en = StringType()
+    countryName_ru = StringType()
+
+
+class ContactPoint(Model):
+    name = StringType()
+    name_en = StringType()
+    name_ru = StringType()
+    email = EmailType()
+    telephone = StringType()
+    faxNumber = StringType()
+    url = URLType()
+
+
+class Party(Model):
+    id = MD5Type(required=True, default=lambda: uuid4().hex)
+    name = StringType(required=True)
+    identifier = ModelType(Identifier)
+    additionalIdentifiers = ListType(ModelType(Identifier))
+    address = ModelType(Address)
+    contactPoint = ModelType(ContactPoint)
+    roles = ListType(StringType(choices=[]), default=[])
+    datePublished = IsoDateTimeType(default=get_now)

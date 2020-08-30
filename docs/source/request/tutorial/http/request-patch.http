@@ -1,0 +1,81 @@
+PATCH /api/2.5/requests/8d7a6c6c6fa3461fa18fa05d2d14b8e7 HTTP/1.0
+Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
+Content-Length: 42
+Content-Type: application/json
+Host: audit-api-sandbox.prozorro.gov.ua
+DATA:
+{
+  "data": {
+    "answer": "There is my answer"
+  }
+}
+
+Response: 200 OK
+Content-Type: application/json
+{
+  "data": {
+    "description": "Yo-ho-ho",
+    "violationTypes": [
+      "corruptionDescription",
+      "corruptionProcurementMethodType",
+      "corruptionPublicDisclosure",
+      "corruptionBiddingDocuments",
+      "documentsForm",
+      "corruptionAwarded",
+      "corruptionCancelled",
+      "corruptionContracting",
+      "corruptionChanges",
+      "other"
+    ],
+    "answer": "There is my answer",
+    "dateAnswered": "2018-01-01T02:03:00+02:00",
+    "dateModified": "2018-01-01T02:03:00+02:00",
+    "dateCreated": "2018-01-01T02:00:00+02:00",
+    "requestId": "UA-R-2018-01-01-000001",
+    "tenderId": "ffffffffffffffffffffffffffffffff",
+    "documents": [
+      {
+        "id": "56e7ce6e16634a9b8d74aeaefd3d6522",
+        "hash": "md5:00000000000000000000000000000000",
+        "title": "doc.txt",
+        "format": "plain/text",
+        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/c936e9d7b493458bbd9af7c6e42928bd?Signature=n2hTmNGHA7HI6spJSRQIBV0ezIVAHDJw9qDsARbsm4RXRNaH2U%2Bp4KcJ8To77g8OS9NAiz2xGv23AJcPF27tAA%3D%3D&KeyID=a8968c46",
+        "datePublished": "2018-01-01T02:00:00+02:00",
+        "dateModified": "2018-01-01T02:00:00+02:00",
+        "author": "tender_owner"
+      },
+      {
+        "id": "47ef0c56853149ab851d792cd97b4508",
+        "hash": "md5:00000000000000000000000000000000",
+        "title": "doc(1).txt",
+        "format": "plain/text",
+        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/2de435b71e294adc995b652c507f6807?Signature=4bsFN%2FngPhcfYRYrsIq1r6KHoxHOsOBa5xKCBLgtW2LPe1sPa%252B5fO17DbFbDgMZl%252BNhdkAnz3QvPN8KHjjwlDQ%253D%253D&KeyID=a8968c46",
+        "datePublished": "2018-01-01T02:01:00+02:00",
+        "dateModified": "2018-01-01T02:01:00+02:00",
+        "author": "tender_owner"
+      },
+      {
+        "id": "47ef0c56853149ab851d792cd97b4508",
+        "hash": "md5:00000000000000000000000000000000",
+        "title": "doc(2).json",
+        "format": "application/json",
+        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/ba981afb553b4c0ea0d7322f8cfa36a2?Signature=JS80qTHROCuAyurFLyJtduradxUqQqxkUaTEC5qQVl4Cw40NeL3vvgSr8cyugfb%252BRB%252BAWpB%2FS3i%2FYiDwoEiHDQ%253D%253D&KeyID=a8968c46",
+        "datePublished": "2018-01-01T02:01:00+02:00",
+        "dateModified": "2018-01-01T02:02:00+02:00",
+        "author": "tender_owner"
+      }
+    ],
+    "parties": [
+      {
+        "id": "002f2a23d89b4b0daa69ded9305c872e",
+        "name": "party name",
+        "datePublished": "2018-01-01T02:00:00+02:00",
+        "roles": [
+          "public"
+        ]
+      }
+    ],
+    "id": "8d7a6c6c6fa3461fa18fa05d2d14b8e7"
+  }
+}
+

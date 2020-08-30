@@ -1,0 +1,25 @@
+PATCH /api/2.5/requests/8d7a6c6c6fa3461fa18fa05d2d14b8e7 HTTP/1.0
+Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
+Content-Length: 50
+Content-Type: application/json
+Host: audit-api-sandbox.prozorro.gov.ua
+DATA:
+{
+  "data": {
+    "answer": "There is my another answer"
+  }
+}
+
+Response: 403 Forbidden
+Content-Type: application/json
+{
+  "status": "error",
+  "errors": [
+    {
+      "location": "url",
+      "name": "permission",
+      "description": "Forbidden"
+    }
+  ]
+}
+

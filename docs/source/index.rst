@@ -10,4 +10,5 @@ Welcome to openprocurement.audit.api documentation!
 
    monitoring/index
    inspection/index
+   request/index
    acceleration

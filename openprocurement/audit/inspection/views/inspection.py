@@ -89,6 +89,6 @@ class InspectionResource(APIResource):
     def patch(self):
         inspection = self.request.validated['inspection']
         apply_patch(self.request, src=self.request.validated['inspection_src'])
-        LOGGER.info('Updated monitoring {}'.format(inspection.id),
+        LOGGER.info('Updated inspection {}'.format(inspection.id),
                     extra=context_unpack(self.request, {'MESSAGE_ID': 'inspection_patch'}))
         return {'data': inspection.serialize('view')}

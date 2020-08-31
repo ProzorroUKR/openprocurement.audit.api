@@ -35,7 +35,6 @@ Documents can be changed:
 .. include:: http/request-document-put.http
     :code:
 
-
 And the object itself can be changed by patching `answer` field only:
 
 
@@ -46,13 +45,21 @@ And the object itself can be changed by patching `answer` field only:
 .. include:: http/request-patch.http
     :code:
 
-Lets take a look at request. Notice that `address` field is not visible in public api:
+Once answer has been provided it can no longer be changed, lets make an attempt:
+
+.. note::
+    Next action allowed to users that belongs to next auth group:
+    ``sas``
+
+.. include:: http/request-patch-forbidden.http
+    :code:
+
+Lets take a look at request. Notice that part of `parties` fields is not visible in public api:
 
 .. include:: http/request-get-no-auth.http
     :code:
 
-But `address` field would be visible for reviewer and you'll need an access token to see it:
-
+But hidden `parties` fields would be visible for reviewer and you'll need an access token to see it:
 
 .. note::
     Next action allowed to users that belongs to next auth group:

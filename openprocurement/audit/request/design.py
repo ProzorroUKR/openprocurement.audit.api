@@ -15,55 +15,13 @@ CHANGES_FIELDS = FIELDS + ["dateModified"]
 
 # REQUESTS
 # the view below is used for an internal system monitoring
-requests_all_view = ViewDefinition(
-    "requests",
-    "all",
-    """function(doc) {
+requests_all_view = ViewDefinition("requests", "all", """function(doc) {
     if(doc.doc_type == 'Request') {
         emit(doc.requestId, null);
     }
-}""",
-)
+}""")
 
-
-requests_real_by_dateModified_view = ViewDefinition(
-    "requests",
-    "real_by_dateModified",
-    """function(doc) {
-    if(doc.doc_type == 'Request' && !doc.mode) {
-        var fields=%s, data={};
-        for (var i in fields) {
-            if (doc[fields[i]]) {
-                data[fields[i]] = doc[fields[i]]
-            }
-        }
-        emit(doc.dateModified, data);
-    }
-}"""
-    % FIELDS,
-)
-
-requests_test_by_dateModified_view = ViewDefinition(
-    "requests",
-    "test_by_dateModified",
-    """function(doc) {
-    if(doc.doc_type == 'Request' && doc.mode == 'test') {
-        var fields=%s, data={};
-        for (var i in fields) {
-            if (doc[fields[i]]) {
-                data[fields[i]] = doc[fields[i]]
-            }
-        }
-        emit(doc.dateModified, data);
-    }
-}"""
-    % FIELDS,
-)
-
-requests_by_dateModified_view = ViewDefinition(
-    "requests",
-    "by_dateModified",
-    """function(doc) {
+requests_by_dateModified_view = ViewDefinition("requests", "by_dateModified", """function(doc) {
     if(doc.doc_type == 'Request') {
         var fields=%s, data={};
         for (var i in fields) {
@@ -73,14 +31,9 @@ requests_by_dateModified_view = ViewDefinition(
         }
         emit(doc.dateModified, data);
     }
-}"""
-    % FIELDS,
-)
+}""" % FIELDS)
 
-requests_real_by_local_seq_view = ViewDefinition(
-    "requests",
-    "real_by_local_seq",
-    """function(doc) {
+requests_real_by_dateModified_view = ViewDefinition("requests", "real_by_dateModified", """function(doc) {
     if(doc.doc_type == 'Request' && !doc.mode) {
         var fields=%s, data={};
         for (var i in fields) {
@@ -88,16 +41,11 @@ requests_real_by_local_seq_view = ViewDefinition(
                 data[fields[i]] = doc[fields[i]]
             }
         }
-        emit(doc._local_seq, data);
+        emit(doc.dateModified, data);
     }
-}"""
-    % CHANGES_FIELDS,
-)
+}""" % FIELDS)
 
-requests_test_by_local_seq_view = ViewDefinition(
-    "requests",
-    "test_by_local_seq",
-    """function(doc) {
+requests_test_by_dateModified_view = ViewDefinition("requests", "test_by_dateModified", """function(doc) {
     if(doc.doc_type == 'Request' && doc.mode == 'test') {
         var fields=%s, data={};
         for (var i in fields) {
@@ -105,16 +53,11 @@ requests_test_by_local_seq_view = ViewDefinition(
                 data[fields[i]] = doc[fields[i]]
             }
         }
-        emit(doc._local_seq, data);
+        emit(doc.dateModified, data);
     }
-}"""
-    % CHANGES_FIELDS,
-)
+}""" % FIELDS)
 
-requests_by_local_seq_view = ViewDefinition(
-    "requests",
-    "by_local_seq",
-    """function(doc) {
+requests_by_local_seq_view = ViewDefinition("requests", "by_local_seq", """function(doc) {
     if(doc.doc_type == 'Request') {
         var fields=%s, data={};
         for (var i in fields) {
@@ -124,6 +67,64 @@ requests_by_local_seq_view = ViewDefinition(
         }
         emit(doc._local_seq, data);
     }
-}"""
-    % CHANGES_FIELDS,
-)
+}""" % CHANGES_FIELDS)
+
+requests_real_by_local_seq_view = ViewDefinition("requests", "real_by_local_seq", """function(doc) {
+    if(doc.doc_type == 'Request' && !doc.mode) {
+        var fields=%s, data={};
+        for (var i in fields) {
+            if (doc[fields[i]]) {
+                data[fields[i]] = doc[fields[i]]
+            }
+        }
+        emit(doc._local_seq, data);
+    }
+}"""% CHANGES_FIELDS)
+
+requests_test_by_local_seq_view = ViewDefinition("requests", "test_by_local_seq", """function(doc) {
+    if(doc.doc_type == 'Request' && doc.mode == 'test') {
+        var fields=%s, data={};
+        for (var i in fields) {
+            if (doc[fields[i]]) {
+                data[fields[i]] = doc[fields[i]]
+            }
+        }
+        emit(doc._local_seq, data);
+    }
+}""" % CHANGES_FIELDS)
+
+requests_by_tender_id_view = ViewDefinition('requests', 'by_tender_id', '''function(doc) {
+    if(doc.doc_type == 'Request') {
+        var fields=%s, data={};
+        for (var i in fields) {
+            if (doc[fields[i]]) {
+                data[fields[i]] = doc[fields[i]]
+            }
+        }
+        emit([doc.tender_id, doc.dateCreated], data);
+    }
+}''' % CHANGES_FIELDS)
+
+requests_real_by_tender_id_view = ViewDefinition('requests', 'real_by_tender_id', '''function(doc) {
+    if(doc.doc_type == 'Request' && !doc.mode) {
+        var fields=%s, data={};
+        for (var i in fields) {
+            if (doc[fields[i]]) {
+                data[fields[i]] = doc[fields[i]]
+            }
+        }
+        emit([doc.tenderId, doc.dateCreated], data);
+    }
+}''' % CHANGES_FIELDS)
+
+requests_test_by_tender_id_view = ViewDefinition('requests', 'test_by_tender_id', '''function(doc) {
+    if(doc.doc_type == 'Request' && doc.mode == 'test') {
+        var fields=%s, data={};
+        for (var i in fields) {
+            if (doc[fields[i]]) {
+                data[fields[i]] = doc[fields[i]]
+            }
+        }
+        emit([doc.tenderId, doc.dateCreated], data);
+    }
+}''' % CHANGES_FIELDS)

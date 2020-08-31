@@ -1416,3 +1416,36 @@ class RequestResourceTest(BaseRequestWebTest):
                 response = self.app.get("/requests/{}".format(request_id))
         self.assertIn("address", response.json["data"]["parties"][0])
         self.assertEqual(response.status, "200 OK")
+
+
+
+class RequestByTenderResourceTest(BaseRequestWebTest):
+
+    def setUp(self):
+        super(RequestByTenderResourceTest, self).setUp()
+        self.app.app.registry.docservice_url = 'http://public-docs-sandbox.prozorro.gov.ua'
+
+    def test_tutorial(self):
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+
+        tender_id = "580997bb06674235801d75f2f6e6c6c6"
+
+        with freeze_time("2018.01.01 00:00"):
+            self.create_request(tenderId=tender_id, description="First request")
+
+        with freeze_time("2018.01.01 00:01"):
+            self.create_request(tenderId=tender_id, description="Second request")
+
+        with freeze_time("2018.01.01 00:02"):
+            file = 'docs/source/request/requests_by_tender/http/requests-by-tender-id.http'
+            with open(file, 'wt') as self.app.file_obj:
+                response = self.app.get('/tenders/{}/requests'.format(tender_id))
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(len(response.json["data"]), 2)
+
+        with freeze_time("2018.01.01 00:03"):
+            file = 'docs/source/request/requests_by_tender/http/requests-by-tender-id-opt-fields.http'
+            with open(file, 'wt') as self.app.file_obj:
+                response = self.app.get('/tenders/{}/requests?opt_fields=description'.format(tender_id))
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(len(response.json["data"]), 2)

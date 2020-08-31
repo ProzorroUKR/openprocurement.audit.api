@@ -36,7 +36,7 @@ Content-Type: application/json
       "postOf": "decision",
       "datePublished": "2018-01-03T02:05:00+02:00",
       "dateOverdue": "2018-01-10T00:00:00+02:00",
-      "relatedParty": "6ecc4ca22c014c30a27e286a6c4b6dec"
+      "relatedParty": "f745206183964f70a17622acdead1015"
     },
     {
       "id": "0dd18f852fcf43e28a7fd7fc2c0dc2a1",
@@ -99,7 +99,7 @@ Content-Type: application/json
       "postOf": "decision",
       "datePublished": "2018-01-04T03:15:00+02:00",
       "relatedPost": "886a5cdd71dc416faaf90c28eedbf742",
-      "relatedParty": "6ecc4ca22c014c30a27e286a6c4b6dec"
+      "relatedParty": "f745206183964f70a17622acdead1015"
     }
   ]
 }

@@ -68,7 +68,7 @@ class Request(BaseModel):
             "plain": blacklist("revisions") + schematics_embedded_role,
             "revision": whitelist("revisions"),
             "create": whitelist(
-                "description", "violationTypes", "documents", "parties", "tenderId"
+                "description", "violationTypes", "documents", "parties", "tenderId", "mode"
             ),
             "edit": whitelist("answer"),
             "view": blacklist("revisions") + schematics_embedded_role,
@@ -87,6 +87,7 @@ class Request(BaseModel):
     tenderId = MD5Type(required=True)
     documents = ListType(ModelType(Document, required=True), default=list())
     parties = ListType(ModelType(RequestParty, required=True), required=True)
+    mode = StringType(choices=['test'])
     revisions = ListType(ModelType(Revision), default=list())
 
     def __repr__(self):

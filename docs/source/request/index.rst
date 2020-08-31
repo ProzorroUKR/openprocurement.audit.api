@@ -10,3 +10,4 @@ Request
 
    tutorial/index
    standard/index
+   requests_by_tender/index

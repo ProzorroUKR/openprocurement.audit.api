@@ -153,7 +153,7 @@ class RequestsListingResourceTest(BaseWebTest):
         self.assertEqual(
             {
                 ("body", "description"),
-                ("body", "violationTypes"),
+                ("body", "violationType"),
                 ("body", "parties"),
                 ("body", "tenderId"),
             },
@@ -168,7 +168,7 @@ class RequestsListingResourceTest(BaseWebTest):
                 "data": {
                     "tenderId": "f" * 32,
                     "description": "Yo-ho-ho",
-                    "violationTypes": VIOLATION_TYPE_CHOICES,
+                    "violationType": VIOLATION_TYPE_CHOICES,
                     "parties": [{}],
                 }
             },
@@ -191,7 +191,7 @@ class RequestsListingResourceTest(BaseWebTest):
                 "data": {
                     "tenderId": "f" * 32,
                     "description": "Yo-ho-ho",
-                    "violationTypes": VIOLATION_TYPE_CHOICES,
+                    "violationType": VIOLATION_TYPE_CHOICES,
                     "parties": [{
                         "name": "party name",
                         "address": {},
@@ -222,7 +222,7 @@ class RequestsListingResourceTest(BaseWebTest):
                 "data": {
                     "tenderId": "f" * 32,
                     "description": "Yo-ho-ho",
-                    "violationTypes": VIOLATION_TYPE_CHOICES,
+                    "violationType": VIOLATION_TYPE_CHOICES,
                     "parties": [{
                         "name": "party name",
                         "address": {
@@ -253,7 +253,7 @@ class RequestsListingResourceTest(BaseWebTest):
                 "data": {
                     "tenderId": "f" * 32,
                     "description": "Yo-ho-ho",
-                    "violationTypes": VIOLATION_TYPE_CHOICES,
+                    "violationType": VIOLATION_TYPE_CHOICES,
                     "parties": [
                         {
                             "name": "party name",
@@ -283,7 +283,7 @@ class RequestsListingResourceTest(BaseWebTest):
                 "dateModified",
                 "dateCreated",
                 "description",
-                "violationTypes",
+                "violationType",
                 "parties",
                 "tenderId",
             },

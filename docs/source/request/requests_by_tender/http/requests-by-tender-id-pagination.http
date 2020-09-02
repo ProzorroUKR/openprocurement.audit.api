@@ -8,7 +8,7 @@ Content-Type: application/json
     {
       "requestId": "UA-R-2018-01-01-000001",
       "description": "First request",
-      "violationTypes": [
+      "violationType": [
         "corruptionDescription",
         "corruptionProcurementMethodType",
         "corruptionPublicDisclosure",

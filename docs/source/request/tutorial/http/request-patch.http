@@ -15,7 +15,7 @@ Content-Type: application/json
 {
   "data": {
     "description": "Yo-ho-ho",
-    "violationTypes": [
+    "violationType": [
       "corruptionDescription",
       "corruptionProcurementMethodType",
       "corruptionPublicDisclosure",

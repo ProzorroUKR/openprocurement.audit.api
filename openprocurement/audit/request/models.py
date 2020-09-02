@@ -68,7 +68,7 @@ class Request(BaseModel):
             "plain": blacklist("revisions") + schematics_embedded_role,
             "revision": whitelist("revisions"),
             "create": whitelist(
-                "description", "violationTypes", "documents", "parties", "tenderId", "mode"
+                "description", "violationType", "documents", "parties", "tenderId", "mode"
             ),
             "edit": whitelist("answer"),
             "view": blacklist("revisions") + schematics_embedded_role,
@@ -78,7 +78,7 @@ class Request(BaseModel):
         }
 
     description = StringType(required=True)
-    violationTypes = ListType(StringType(choices=VIOLATION_TYPE_CHOICES), required=True)
+    violationType = ListType(StringType(choices=VIOLATION_TYPE_CHOICES), required=True)
     answer = StringType()
     dateAnswered = IsoDateTimeType()
     dateModified = IsoDateTimeType()

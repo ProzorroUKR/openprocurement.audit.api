@@ -1,6 +1,6 @@
 POST /api/2.5/requests HTTP/1.0
 Authorization: Basic cHVibGljOnB1YmxpYw==
-Content-Length: 915
+Content-Length: 914
 Content-Type: application/json
 Host: audit-api-sandbox.prozorro.gov.ua
 DATA:
@@ -8,7 +8,7 @@ DATA:
   "data": {
     "tenderId": "ffffffffffffffffffffffffffffffff",
     "description": "Yo-ho-ho",
-    "violationTypes": [
+    "violationType": [
       "corruptionDescription",
       "corruptionProcurementMethodType",
       "corruptionPublicDisclosure",
@@ -52,7 +52,7 @@ Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/requests/627049149703
 {
   "data": {
     "description": "Yo-ho-ho",
-    "violationTypes": [
+    "violationType": [
       "corruptionDescription",
       "corruptionProcurementMethodType",
       "corruptionPublicDisclosure",

@@ -1372,7 +1372,7 @@ class RequestResourceTest(BaseRequestWebTest):
                         "data": {
                             "tenderId": "f" * 32,
                             "description": "Yo-ho-ho",
-                            "violationTypes": VIOLATION_TYPE_CHOICES,
+                            "violationType": VIOLATION_TYPE_CHOICES,
                             "parties": [
                                 {
                                     "name": "party name",
@@ -1483,7 +1483,7 @@ class RequestResourceTest(BaseRequestWebTest):
                         "data": {
                             "tenderId": "f" * 32,
                             "description": "Yo-ho-ho",
-                            "violationTypes": VIOLATION_TYPE_CHOICES,
+                            "violationType": VIOLATION_TYPE_CHOICES,
                             "parties": [
                                 {
                                     "name": "party name",

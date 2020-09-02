@@ -13,7 +13,7 @@ def add_design():
 FIELDS = [
     "requestId",
     "description",
-    "violationTypes",
+    "violationType",
     "answer",
     "dateAnswered",
     "dateCreated",

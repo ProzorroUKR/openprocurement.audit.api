@@ -70,6 +70,16 @@ Content-Type: application/json
         "id": "133e7ada35564da3bd5da0c54d57f212",
         "name": "party name",
         "datePublished": "2018-01-01T02:00:00+02:00",
+        "address": {
+          "streetAddress": "test street address",
+          "locality": "test locality",
+          "region": "test region",
+          "postalCode": "test postalCode",
+          "countryName": "test country"
+        },
+        "contactPoint": {
+          "email": "test@example.com"
+        },
         "roles": [
           "public"
         ]

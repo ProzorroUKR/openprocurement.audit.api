@@ -73,6 +73,7 @@ class Request(BaseModel):
             "edit": whitelist("answer"),
             "view": blacklist("revisions") + schematics_embedded_role,
             "view_%s" % SAS_ROLE: blacklist("revisions") + schematics_embedded_role,
+            "view_%s" % PUBLIC_ROLE: blacklist("revisions") + schematics_embedded_role,
             "listing": whitelist("dateModified", "doc_id"),
             "default": schematics_default_role,
         }

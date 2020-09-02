@@ -78,6 +78,7 @@ But hidden `parties` fields would be visible for reviewer and you'll need an acc
 .. note::
     Next action allowed to users that belongs to next auth group:
     ``sas``
+    ``public``
 
 .. include:: http/request-get-sas.http
     :code:
@@ -94,9 +95,9 @@ Here are all available requests:
 
 Feed modes available:
 
-* by default - all real requests
-* ``mode=answered`` - real requests that have an answer
-* ``mode=not_answered`` - real requests that dont't have an answer
+* by default - all requests
+* ``mode=answered`` - requests that have an answer
+* ``mode=not_answered`` - requests that dont't have an answer
 
 For example:
 

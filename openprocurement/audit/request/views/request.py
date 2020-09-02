@@ -1,6 +1,6 @@
 from logging import getLogger
 
-from openprocurement.audit.api.constants import SAS_ROLE
+from openprocurement.audit.api.constants import SAS_ROLE, PUBLIC_ROLE
 from openprocurement.audit.api.utils import (
     APIResource,
     APIResourceListing,
@@ -87,7 +87,11 @@ class RequestsResource(APIResourceListing):
         self.request.response.headers["Location"] = self.request.route_url(
             "Request", request_id=obj.id
         )
-        return {"data": obj.serialize("view")}
+        if self.request.authenticated_role in (SAS_ROLE, PUBLIC_ROLE) :
+            data = obj.serialize("view_%s" % self.request.authenticated_role)
+        else:
+            data = obj.serialize("view")
+        return {"data": data}
 
 
 @op_resource(name="Request", path="/requests/{request_id}")
@@ -95,8 +99,8 @@ class RequestResource(APIResource):
     @json_view(permission="view_request")
     def get(self):
         obj = self.request.validated["request"]
-        if self.request.authenticated_role == SAS_ROLE:
-            data = obj.serialize("view_%s" % SAS_ROLE)
+        if self.request.authenticated_role in (SAS_ROLE, PUBLIC_ROLE) :
+            data = obj.serialize("view_%s" % self.request.authenticated_role)
         else:
             data = obj.serialize("view")
         return {"data": data}
@@ -119,4 +123,8 @@ class RequestResource(APIResource):
             "Updated request {}".format(obj.id),
             extra=context_unpack(self.request, {"MESSAGE_ID": "request_patch"}),
         )
-        return {"data": obj.serialize("view")}
+        if self.request.authenticated_role in (SAS_ROLE, PUBLIC_ROLE) :
+            data = obj.serialize("view_%s" % self.request.authenticated_role)
+        else:
+            data = obj.serialize("view")
+        return {"data": data}

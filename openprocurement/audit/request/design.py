@@ -105,6 +105,13 @@ requests_by_tender_id_view = ViewDefinition('requests', 'by_tender_id', '''funct
     }
 }''' % CHANGES_FIELDS)
 
+requests_by_tender_id_total_view = ViewDefinition(
+    requests_by_tender_id_view.design,
+    requests_by_tender_id_view.name + "_total",
+    requests_by_tender_id_view.map_fun,
+    "_count"
+)
+
 requests_real_by_tender_id_view = ViewDefinition('requests', 'real_by_tender_id', '''function(doc) {
     if(doc.doc_type == 'Request' && !doc.mode) {
         var fields=%s, data={};
@@ -117,6 +124,14 @@ requests_real_by_tender_id_view = ViewDefinition('requests', 'real_by_tender_id'
     }
 }''' % CHANGES_FIELDS)
 
+requests_real_by_tender_id_total_view = ViewDefinition(
+    requests_real_by_tender_id_view.design,
+    requests_real_by_tender_id_view.name + "_total",
+    requests_real_by_tender_id_view.map_fun,
+    "_count"
+)
+
+
 requests_test_by_tender_id_view = ViewDefinition('requests', 'test_by_tender_id', '''function(doc) {
     if(doc.doc_type == 'Request' && doc.mode == 'test') {
         var fields=%s, data={};
@@ -128,3 +143,10 @@ requests_test_by_tender_id_view = ViewDefinition('requests', 'test_by_tender_id'
         emit([doc.tenderId, doc.dateCreated], data);
     }
 }''' % CHANGES_FIELDS)
+
+requests_test_by_tender_id_total_view = ViewDefinition(
+    requests_test_by_tender_id_view.design,
+    requests_test_by_tender_id_view.name + "_total",
+    requests_test_by_tender_id_view.map_fun,
+    "_count"
+)

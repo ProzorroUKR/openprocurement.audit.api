@@ -18,6 +18,10 @@ Content-Type: application/json
       "inspection_id": "UA-I-2018-01-01-000002",
       "dateModified": "2018-01-01T02:01:00+02:00"
     }
-  ]
+  ],
+  "count": 2,
+  "page": 1,
+  "limit": 500,
+  "total": 2
 }
 

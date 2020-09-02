@@ -95,7 +95,7 @@ inspections_by_local_seq_view = ViewDefinition('inspections', 'by_local_seq', ''
 }''' % CHANGES_FIELDS)
 
 
-inspections_by_monitoring_id_view = ViewDefinition('monitorings', 'by_monitoring_id', '''function(doc) {
+inspections_real_by_monitoring_id_view = ViewDefinition('monitorings', 'by_monitoring_id', '''function(doc) {
     if(doc.doc_type == 'Inspection' && !doc.mode) {
         var fields=%s, data={};
         for (var i in fields) {
@@ -109,7 +109,15 @@ inspections_by_monitoring_id_view = ViewDefinition('monitorings', 'by_monitoring
     }
 }''' % CHANGES_FIELDS)
 
-test_inspections_by_monitoring_id_view = ViewDefinition('monitorings', 'test_by_monitoring_id', '''function(doc) {
+
+inspections_real_by_monitoring_id_total_view = ViewDefinition(
+    inspections_real_by_monitoring_id_view.design,
+    inspections_real_by_monitoring_id_view.name + "_total",
+    inspections_real_by_monitoring_id_view.map_fun,
+    "_count"
+)
+
+inspections_test_by_monitoring_id_view = ViewDefinition('monitorings', 'test_by_monitoring_id', '''function(doc) {
     if(doc.doc_type == 'Inspection' && doc.mode == 'test') {
         var fields=%s, data={};
         for (var i in fields) {
@@ -122,3 +130,11 @@ test_inspections_by_monitoring_id_view = ViewDefinition('monitorings', 'test_by_
         }
     }
 }''' % CHANGES_FIELDS)
+
+
+inspections_test_by_monitoring_id_total_view = ViewDefinition(
+    inspections_test_by_monitoring_id_view.design,
+    inspections_real_by_monitoring_id_view.name + "_total",
+    inspections_real_by_monitoring_id_view.map_fun,
+    "_count"
+)

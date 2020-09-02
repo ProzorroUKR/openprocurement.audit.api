@@ -537,6 +537,83 @@ class APIResourceListing(APIResource):
         return data
 
 
+class APIResourcePaginatedListing(APIResource):
+    obj_id_key = None
+    serialize_method = None
+    default_fields = None
+    views = None
+    views_total = None
+
+    @classmethod
+    def serialize(cls, *args, **kwargs):
+        if not cls.serialize_method:
+            raise NotImplemented
+        return cls.serialize_method(*args, **kwargs)
+
+    @json_view(permission='view_listing')
+    def get(self):
+        if not all([
+            self.default_fields,
+            self.views,
+            self.obj_id_key
+        ]):
+            raise NotImplemented
+
+        obj_id = self.request.matchdict[self.obj_id_key]
+
+        opt_fields = self.request.params.get('opt_fields', '')
+        opt_fields = set(e for e in opt_fields.split(',') if e)
+
+        mode = self.request.params.get('mode', '')
+        list_view = self.views.get(mode, "")
+
+        limit = int(self.request.params.get('limit', 500))
+        page = int(self.request.params.get('page', 1))
+        skip = page * limit - limit
+
+        pagination_kwargs = dict(
+            limit=limit,
+            skip=skip,
+        )
+
+        view_kwargs = dict(
+            startkey=[obj_id, None],
+            endkey=[obj_id, {}],
+        )
+
+        if opt_fields - self.default_fields:
+            self.LOGGER.info(
+                'Used custom fields list: {}'.format(','.join(sorted(opt_fields))),
+                extra=context_unpack(self.request, {'MESSAGE_ID': "CUSTOM_LIST"}))
+
+            results = [
+                self.serialize(self.request, i[u'doc'], opt_fields | self.default_fields)
+                for i in list_view(self.db, include_docs=True, **view_kwargs, **pagination_kwargs)
+            ]
+        else:
+            results = [
+                dict(id=e.id, dateCreated=e.key[1], **e.value)
+                for e in list_view(self.db, **view_kwargs, **pagination_kwargs)
+            ]
+
+        count = len(results)
+
+        data = {
+            'data': results,
+            'count': count,
+            'page': page,
+            'limit': limit
+        }
+
+        if self.views_total:
+            total_view = self.views_total.get(mode, "")
+            total_results = total_view(self.db, **view_kwargs)
+            total = [e.value for e in total_results][0] if total_results else 0
+            data["total"] = total
+
+        return data
+
+
 def forbidden(request):
     request.errors.add('url', 'permission', 'Forbidden')
     request.errors.status = 403

@@ -19,6 +19,10 @@ Content-Type: application/json
       "requestId": "UA-R-2018-01-01-000002",
       "id": "6c4b2f344c4545f3a5df4b88a5e2de7e"
     }
-  ]
+  ],
+  "count": 2,
+  "page": 1,
+  "limit": 500,
+  "total": 2
 }
 

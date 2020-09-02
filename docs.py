@@ -1157,6 +1157,60 @@ class PrivateFeedDocsTest(BaseMonitoringWebTest):
             self.assertEqual(len(response.json["data"]), 3)
 
 
+class MonitoringByTenderResourceTest(BaseMonitoringWebTest):
+
+    def setUp(self):
+        super(MonitoringByTenderResourceTest, self).setUp()
+        self.app.app.registry.docservice_url = 'http://public-docs-sandbox.prozorro.gov.ua'
+
+    def test_tutorial(self):
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+
+        tender_id = "580997bb06674235801d75f2f6e6c6c6"
+
+        with freeze_time("2018.01.01 00:00"):
+            self.create_monitoring(tender_id=tender_id)
+            self.app.patch_json(
+                '/monitorings/{}'.format(self.monitoring_id),
+                {"data": {
+                    "decision": {"description": "text"},
+                    "status": "active",
+                }}
+            )
+
+        with freeze_time("2018.01.01 00:01"):
+            self.create_monitoring(tender_id=tender_id)
+            self.app.patch_json(
+                '/monitorings/{}'.format(self.monitoring_id),
+                {"data": {
+                    "decision": {"description": "text"},
+                    "status": "active",
+                }}
+            )
+
+        with freeze_time("2018.01.01 00:02"):
+            file = 'docs/source/monitoring/monitorings_by_tender/http/monitorings-by-tender-id.http'
+            with open(file, 'wt') as self.app.file_obj:
+                response = self.app.get('/tenders/{}/monitorings'.format(tender_id))
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(len(response.json["data"]), 2)
+
+        with freeze_time("2018.01.01 00:03"):
+            file = 'docs/source/monitoring/monitorings_by_tender/http/monitorings-by-tender-id-opt-fields.http'
+            with open(file, 'wt') as self.app.file_obj:
+                response = self.app.get('/tenders/{}/monitorings?opt_fields=status'.format(tender_id))
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(len(response.json["data"]), 2)
+
+        with freeze_time("2018.01.01 00:03"):
+            file = 'docs/source/monitoring/monitorings_by_tender/http/monitorings-by-tender-id-pagination.http'
+            with open(file, 'wt') as self.app.file_obj:
+                response = self.app.get('/tenders/{}/monitorings?limit=1&page2'.format(tender_id))
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(len(response.json["data"]), 1)
+
+
+
 class InspectionResourceTest(BaseInspectionWebTest):
 
     def setUp(self):
@@ -1276,20 +1330,25 @@ class InspectionsByMonitoringResourceTest(BaseInspectionWebTest):
         self.assertEqual(response.status, '201 Created')
 
         with freeze_time("2018.01.01 00:02"):
-            with open('docs/source/inspection/inspections_by_monitoring/http/inspections-by-monitoring_id.http', 'wt') \
-                as self.app.file_obj:
+            file = 'docs/source/inspection/inspections_by_monitoring/http/inspections-by-monitoring_id.http'
+            with open(file, 'wt') as self.app.file_obj:
                 response = self.app.get('/monitorings/{}/inspections'.format(monitoring_id))
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(len(response.json["data"]), 2)
 
         with freeze_time("2018.01.01 00:03"):
-            with open(
-                'docs/source/inspection/inspections_by_monitoring/http/inspections-by-monitoring_id-opt_fields.http',
-                'wt') \
-                as self.app.file_obj:
+            file = 'docs/source/inspection/inspections_by_monitoring/http/inspections-by-monitoring_id-opt_fields.http'
+            with open(file, 'wt') as self.app.file_obj:
                 response = self.app.get('/monitorings/{}/inspections?opt_fields=description'.format(monitoring_id))
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(len(response.json["data"]), 2)
+
+        with freeze_time("2018.01.01 00:03"):
+            file = 'docs/source/inspection/inspections_by_monitoring/http/inspections-by-monitoring_id-pagination.http'
+            with open(file, 'wt') as self.app.file_obj:
+                response = self.app.get('/monitorings/{}/inspections?limit=1&page=2'.format(monitoring_id))
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(len(response.json["data"]), 1)
 
 
 class RequestResourceTest(BaseRequestWebTest):
@@ -1418,7 +1477,6 @@ class RequestResourceTest(BaseRequestWebTest):
         self.assertEqual(response.status, "200 OK")
 
 
-
 class RequestByTenderResourceTest(BaseRequestWebTest):
 
     def setUp(self):
@@ -1449,3 +1507,10 @@ class RequestByTenderResourceTest(BaseRequestWebTest):
                 response = self.app.get('/tenders/{}/requests?opt_fields=description'.format(tender_id))
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(len(response.json["data"]), 2)
+
+        with freeze_time("2018.01.01 00:03"):
+            file = 'docs/source/request/requests_by_tender/http/requests-by-tender-id-pagination.http'
+            with open(file, 'wt') as self.app.file_obj:
+                response = self.app.get('/tenders/{}/requests?limit=1&page2'.format(tender_id))
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(len(response.json["data"]), 1)

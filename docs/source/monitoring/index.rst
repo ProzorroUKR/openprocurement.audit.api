@@ -9,5 +9,6 @@ Monitoring
 
 
    tutorial/index
-   feed/index
    standard/index
+   feed/index
+   monitorings_by_tender/index

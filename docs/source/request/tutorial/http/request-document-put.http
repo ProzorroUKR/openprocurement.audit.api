@@ -24,7 +24,7 @@ Content-Type: application/json
     "url": "http://public-docs-sandbox.prozorro.gov.ua/get/4d52c0946e8a4999929db0c4e72b2fee?Signature=aDGWSUzxCNw8%252BsEj4h77bkcZS5K8C9jN%252BHnei3NRNrtWzu0nUFqxO%2FO%2FGws8v%2F%252BS9rTXWhsww%252Bs9eqx0gcTmBg%253D%253D&KeyID=a8968c46",
     "datePublished": "2018-01-01T02:01:00+02:00",
     "dateModified": "2018-01-01T02:02:00+02:00",
-    "author": "tender_owner"
+    "author": "request_owner"
   }
 }
 

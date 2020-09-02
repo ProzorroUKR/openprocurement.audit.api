@@ -45,6 +45,20 @@ And the object itself can be changed by patching `answer` field only:
 .. include:: http/request-patch.http
     :code:
 
+Documents related to answer also can be added to the object with separate request:
+
+.. note::
+    Next action allowed to users that belongs to next auth group:
+    ``sas``
+
+.. include:: http/request-document-sas-post.http
+    :code:
+
+Lets get all request documents:
+
+.. include:: http/request-documents-get.http
+    :code:
+
 Once answer has been provided it can no longer be changed, lets make an attempt:
 
 .. note::

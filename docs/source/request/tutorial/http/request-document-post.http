@@ -25,7 +25,7 @@ Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/requests/627049149703
     "url": "http://public-docs-sandbox.prozorro.gov.ua/get/6e4e052020524377a5d5c66c08000ba1?Signature=YFNaTNWcITSPPBImzR%252BfDMHgtJSaLVWbxJKrS8VFTR%252BSqd4L63e1rEySYJr5k%252BfNYqiLWi4NAZW%2FO1JT1LHsDg%253D%253D&KeyID=a8968c46",
     "datePublished": "2018-01-01T02:01:00+02:00",
     "dateModified": "2018-01-01T02:01:00+02:00",
-    "author": "tender_owner"
+    "author": "request_owner"
   }
 }
 

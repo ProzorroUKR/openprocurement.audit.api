@@ -1462,6 +1462,31 @@ class RequestResourceTest(BaseRequestWebTest):
                 )
         self.assertEqual(response.status, "403 Forbidden")
 
+        self.app.authorization = ("Basic", (self.sas_name, self.sas_pass))
+        with freeze_time("2018.01.01 00:01"):
+            with open("docs/source/request/tutorial/http/request-document-sas-post.http", "wt") as self.app.file_obj:
+                response = self.app.post_json(
+                    "/requests/{}/documents".format(request_id),
+                    {
+                        "data": {
+                            "title": "doc(3).txt",
+                            "url": self.generate_docservice_url(),
+                            "hash": "md5:" + "0" * 32,
+                            "format": "plain/text",
+                        }
+                    }
+                )
+        document_id = response.json["data"]["id"]
+        self.assertEqual(response.status, "201 Created")
+
+        self.app.authorization = None
+        with freeze_time("2018.01.01 00:01"):
+            with open("docs/source/request/tutorial/http/request-documents-get.http", "wt") as self.app.file_obj:
+                response = self.app.get(
+                    "/requests/{}/documents".format(request_id)
+                )
+        self.assertEqual(response.status, "200 OK")
+
         self.app.authorization = None
         with open("docs/source/request/tutorial/http/request-get-no-auth.http", "wt") as self.app.file_obj:
             response = self.app.get("/requests/{}".format(request_id))

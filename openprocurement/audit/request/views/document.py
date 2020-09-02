@@ -11,8 +11,7 @@ from openprocurement.audit.api.validation import (
     validate_file_upload,
     validate_patch_document_data,
 )
-from openprocurement.audit.request.utils import save_request, apply_patch, op_resource
-from openprocurement.audit.monitoring.utils import set_author
+from openprocurement.audit.request.utils import save_request, apply_patch, op_resource, set_author
 
 
 @op_resource(
@@ -32,7 +31,7 @@ class RequestsDocumentBaseResource(APIResource):
             documents = sorted(documents_top, key=lambda i: i["dateModified"])
         return {"data": [document.serialize("view") for document in documents]}
 
-    @json_view(permission="create_request", validators=(validate_file_upload,))
+    @json_view(permission="create_request_document", validators=(validate_file_upload,))
     def collection_post(self):
         document = upload_file(self.request)
         set_author(document, self.request, "author")
@@ -68,7 +67,7 @@ class RequestsDocumentBaseResource(APIResource):
         document_data["previousVersions"] = versions_data
         return {"data": document_data}
 
-    @json_view(permission="create_request", validators=(validate_file_update,))
+    @json_view(permission="create_request_document", validators=(validate_file_update,))
     def put(self):
         parent = self.request.context.__parent__
         document = upload_file(self.request)
@@ -87,7 +86,7 @@ class RequestsDocumentBaseResource(APIResource):
 
     @json_view(
         content_type="application/json",
-        permission="create_request",
+        permission="create_request_document",
         validators=(validate_patch_document_data,),
     )
     def patch(self):

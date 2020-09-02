@@ -15,7 +15,9 @@ class Root(object):
         (Allow, Everyone, "view_listing"),
         (Allow, Everyone, "view_request"),
         (Allow, "g:%s" % PUBLIC_ROLE, "create_request"),
+        (Allow, "g:%s" % PUBLIC_ROLE, "create_request_document"),
         (Allow, "g:%s" % SAS_ROLE, "edit_request"),
+        (Allow, "g:%s" % SAS_ROLE, "create_request_document"),
     ]
 
     def __init__(self, request):

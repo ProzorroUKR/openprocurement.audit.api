@@ -33,12 +33,12 @@ from openprocurement.audit.request.utils import (
     generate_request_id,
     request_serialize,
     op_resource,
+    set_author,
 )
 from openprocurement.audit.request.validation import (
     validate_request_data,
     validate_patch_request_data,
 )
-from openprocurement.audit.monitoring.utils import set_author
 
 LOGGER = getLogger(__name__)
 VIEW_MAP = {

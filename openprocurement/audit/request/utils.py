@@ -120,3 +120,12 @@ def request_serialize(request, data, fields):
 
 def request_from_data(request, data, **_):
     return Request(data)
+
+
+def set_author(data, request, fieldname='author'):
+    for item in data if isinstance(data, list) else [data]:
+        setattr(item, fieldname, get_request_role(request.authenticated_role))
+
+
+def get_request_role(role):
+    return 'monitoring_owner' if role == 'sas' else 'request_owner'

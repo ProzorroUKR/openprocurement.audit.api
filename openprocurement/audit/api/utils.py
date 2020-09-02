@@ -36,6 +36,10 @@ from openprocurement.audit.api.interfaces import IOPContent
 from openprocurement.audit.api.traversal import factory
 
 
+DEFAULT_PAGE = 1
+DEFAULT_LIMIT = 500
+
+
 def get_now():
     return datetime.now(TZ)
 
@@ -567,8 +571,8 @@ class APIResourcePaginatedListing(APIResource):
         mode = self.request.params.get('mode', '')
         list_view = self.views.get(mode, "")
 
-        limit = int(self.request.params.get('limit', 500))
-        page = int(self.request.params.get('page', 1))
+        limit = int(self.request.params.get('limit', DEFAULT_LIMIT))
+        page = int(self.request.params.get('page', DEFAULT_PAGE))
         skip = page * limit - limit
 
         pagination_kwargs = dict(

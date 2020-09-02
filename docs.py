@@ -1549,7 +1549,7 @@ class RequestByTenderResourceTest(BaseRequestWebTest):
         with freeze_time("2018.01.01 00:03"):
             file = 'docs/source/request/requests_by_tender/http/requests-by-tender-id-opt-fields.http'
             with open(file, 'wt') as self.app.file_obj:
-                response = self.app.get('/tenders/{}/requests?opt_fields=description'.format(tender_id))
+                response = self.app.get('/tenders/{}/requests?opt_fields=parties'.format(tender_id))
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(len(response.json["data"]), 2)
 

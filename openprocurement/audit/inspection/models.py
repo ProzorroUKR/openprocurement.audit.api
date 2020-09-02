@@ -34,7 +34,6 @@ class Inspection(BaseModel):
     dateCreated = IsoDateTimeType(default=get_now)
 
     revisions = ListType(ModelType(Revision), default=list())
-    mode = StringType(choices=['test'])
     _attachments = DictType(DictType(BaseType), default=dict())
 
     def __repr__(self):

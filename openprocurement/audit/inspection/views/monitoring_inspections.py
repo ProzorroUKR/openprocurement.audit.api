@@ -4,9 +4,7 @@ from openprocurement.audit.api.utils import APIResourcePaginatedListing
 from openprocurement.audit.inspection.design import (
     CHANGES_FIELDS,
     inspections_real_by_monitoring_id_view,
-    inspections_test_by_monitoring_id_view,
     inspections_real_by_monitoring_id_total_view,
-    inspections_test_by_monitoring_id_total_view,
 )
 from openprocurement.audit.inspection.utils import (
     inspection_serialize,
@@ -23,9 +21,7 @@ class MonitoringInspectionsResource(APIResourcePaginatedListing):
     default_fields = set(CHANGES_FIELDS) | {"id", "dateCreated"}
     views = {
         "": inspections_real_by_monitoring_id_view,
-        "test": inspections_test_by_monitoring_id_view,
     }
     views_total = {
         "": inspections_real_by_monitoring_id_total_view,
-        "test": inspections_test_by_monitoring_id_total_view,
     }

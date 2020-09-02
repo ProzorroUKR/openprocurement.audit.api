@@ -1543,8 +1543,7 @@ class RequestResourceTest(BaseRequestWebTest):
             response = self.app.get("/requests?opt_fields=answer".format(request_id))
 
         with open("docs/source/request/tutorial/http/requests-list-answered.http", "wt") as self.app.file_obj:
-            response = self.app.get("/requests?mode=real_answered&opt_fields=answer".format(request_id))
-
+            response = self.app.get("/requests?mode=answered&opt_fields=answer".format(request_id))
 
 
 class RequestByTenderResourceTest(BaseRequestWebTest):

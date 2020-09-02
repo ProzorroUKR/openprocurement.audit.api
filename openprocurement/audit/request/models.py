@@ -87,7 +87,6 @@ class Request(BaseModel):
     tenderId = MD5Type(required=True)
     documents = ListType(ModelType(Document, required=True), default=list())
     parties = ListType(ModelType(RequestParty, required=True), required=True)
-    mode = StringType(choices=['test'])
     revisions = ListType(ModelType(Revision), default=list())
 
     def __repr__(self):

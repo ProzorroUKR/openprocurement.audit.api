@@ -95,11 +95,8 @@ Here are all available requests:
 Feed modes available:
 
 * by default - all real requests
-* ``mode=real_answered`` - real requests that have an answer
-* ``mode=real_not_answered`` - real requests that dont't have an answer
-* ``mode=test`` - all test requests
-* ``mode=test_answered`` - test requests that have an answer
-* ``mode=test_not_answered`` - test requests that dont't have an answer
+* ``mode=answered`` - real requests that have an answer
+* ``mode=not_answered`` - real requests that dont't have an answer
 
 For example:
 

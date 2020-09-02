@@ -560,7 +560,7 @@ class APIResourcePaginatedListing(APIResource):
             self.default_fields,
             self.views,
             self.obj_id_key
-        ]):
+        ]) or '' not in self.views:
             raise NotImplemented
 
         obj_id = self.request.matchdict[self.obj_id_key]
@@ -569,7 +569,7 @@ class APIResourcePaginatedListing(APIResource):
         opt_fields = set(e for e in opt_fields.split(',') if e)
 
         mode = self.request.params.get('mode', '')
-        list_view = self.views.get(mode, "")
+        list_view = self.views.get(mode, self.views.get(''))
 
         limit = int(self.request.params.get('limit', DEFAULT_LIMIT))
         page = int(self.request.params.get('page', DEFAULT_PAGE))

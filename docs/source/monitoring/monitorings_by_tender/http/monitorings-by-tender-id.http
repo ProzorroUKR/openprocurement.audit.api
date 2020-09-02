@@ -7,14 +7,14 @@ Content-Type: application/json
 {
   "data": [
     {
+      "status": "active",
       "id": "96ac9c0ecd6749488c2350401d82279c",
-      "dateCreated": "2018-01-01T02:00:00+02:00",
-      "status": "active"
+      "dateCreated": "2018-01-01T02:00:00+02:00"
     },
     {
+      "status": "active",
       "id": "7587745c540240f3a12b516544087fef",
-      "dateCreated": "2018-01-01T02:01:00+02:00",
-      "status": "active"
+      "dateCreated": "2018-01-01T02:01:00+02:00"
     }
   ],
   "count": 2,

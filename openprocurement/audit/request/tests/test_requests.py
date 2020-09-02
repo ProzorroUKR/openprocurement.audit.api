@@ -24,6 +24,93 @@ class RequestsListingResourceTest(BaseWebTest):
             [{u"dateModified": u"2018-01-01T11:00:00+02:00", u"id": self.request_id}],
         )
 
+    def test_get_modes(self):
+        for i in range(5):
+            self.create_request()
+
+        self.app.authorization = ("Basic", (self.sas_name, self.sas_pass))
+        response = self.app.patch_json(
+            "/requests/{}".format(self.request_id),
+            {
+                "data": {
+                    "answer": "I am your father",
+                }
+            }
+        )
+
+        for i in range(5):
+            self.create_request(mode="test")
+
+        self.app.authorization = ("Basic", (self.sas_name, self.sas_pass))
+        response = self.app.patch_json(
+            "/requests/{}".format(self.request_id),
+            {
+                "data": {
+                    "answer": "I am your father",
+                }
+            }
+        )
+
+        response = self.app.get("/requests")
+        self.assertEqual(response.status, "200 OK")
+        self.assertEqual(response.content_type, "application/json")
+        self.assertEqual(len(response.json["data"]), 5)
+
+        response = self.app.get("/requests?mode=test")
+        self.assertEqual(response.status, "200 OK")
+        self.assertEqual(response.content_type, "application/json")
+        self.assertEqual(len(response.json["data"]), 5)
+
+        response = self.app.get("/requests?mode=real_answered")
+        self.assertEqual(response.status, "200 OK")
+        self.assertEqual(response.content_type, "application/json")
+        self.assertEqual(len(response.json["data"]), 1)
+
+        response = self.app.get("/requests?mode=test_answered")
+        self.assertEqual(response.status, "200 OK")
+        self.assertEqual(response.content_type, "application/json")
+        self.assertEqual(len(response.json["data"]), 1)
+
+        response = self.app.get("/requests?mode=real_not_answered")
+        self.assertEqual(response.status, "200 OK")
+        self.assertEqual(response.content_type, "application/json")
+        self.assertEqual(len(response.json["data"]), 4)
+
+        response = self.app.get("/requests?mode=test_not_answered")
+        self.assertEqual(response.status, "200 OK")
+        self.assertEqual(response.content_type, "application/json")
+        self.assertEqual(len(response.json["data"]), 4)
+
+        response = self.app.get("/requests?feed=changes")
+        self.assertEqual(response.status, "200 OK")
+        self.assertEqual(response.content_type, "application/json")
+        self.assertEqual(len(response.json["data"]), 5)
+
+        response = self.app.get("/requests?mode=test&feed=changes")
+        self.assertEqual(response.status, "200 OK")
+        self.assertEqual(response.content_type, "application/json")
+        self.assertEqual(len(response.json["data"]), 5)
+
+        response = self.app.get("/requests?feed=changes&mode=real_answered")
+        self.assertEqual(response.status, "200 OK")
+        self.assertEqual(response.content_type, "application/json")
+        self.assertEqual(len(response.json["data"]), 1)
+
+        response = self.app.get("/requests?feed=changes&mode=test_answered")
+        self.assertEqual(response.status, "200 OK")
+        self.assertEqual(response.content_type, "application/json")
+        self.assertEqual(len(response.json["data"]), 1)
+
+        response = self.app.get("/requests?feed=changes&mode=real_not_answered")
+        self.assertEqual(response.status, "200 OK")
+        self.assertEqual(response.content_type, "application/json")
+        self.assertEqual(len(response.json["data"]), 4)
+
+        response = self.app.get("/requests?feed=changes&mode=test_not_answered")
+        self.assertEqual(response.status, "200 OK")
+        self.assertEqual(response.content_type, "application/json")
+        self.assertEqual(len(response.json["data"]), 4)
+
     def test_get_opt_fields(self):
         self.create_request()
 

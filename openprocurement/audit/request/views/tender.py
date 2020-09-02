@@ -7,10 +7,8 @@ from openprocurement.audit.request.design import (
     CHANGES_FIELDS,
     requests_real_by_tender_id_view,
     requests_test_by_tender_id_view,
-    requests_by_tender_id_view,
     requests_real_by_tender_id_total_view,
     requests_test_by_tender_id_total_view,
-    requests_by_tender_id_total_view,
 )
 from openprocurement.audit.request.utils import request_serialize, op_resource
 
@@ -26,10 +24,8 @@ class TenderRequestResource(APIResourcePaginatedListing):
     views = {
         "": requests_real_by_tender_id_view,
         "test": requests_test_by_tender_id_view,
-        "_all_": requests_by_tender_id_view,
     }
     views_total = {
         "": requests_real_by_tender_id_total_view,
         "test": requests_test_by_tender_id_total_view,
-        "_all_": requests_by_tender_id_total_view,
     }

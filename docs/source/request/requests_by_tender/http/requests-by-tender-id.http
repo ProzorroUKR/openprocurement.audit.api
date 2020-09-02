@@ -6,16 +6,82 @@ Content-Type: application/json
 {
   "data": [
     {
-      "id": "f865ad1cbb504547baa837e247469212",
-      "dateCreated": "2018-01-01T02:00:00+02:00",
       "requestId": "UA-R-2018-01-01-000001",
-      "dateModified": "2018-01-01T02:00:00+02:00"
+      "description": "First request",
+      "violationTypes": [
+        "corruptionDescription",
+        "corruptionProcurementMethodType",
+        "corruptionPublicDisclosure",
+        "corruptionBiddingDocuments",
+        "documentsForm",
+        "corruptionAwarded",
+        "corruptionCancelled",
+        "corruptionContracting",
+        "corruptionChanges",
+        "other"
+      ],
+      "dateCreated": "2018-01-01T02:00:00+02:00",
+      "parties": [
+        {
+          "id": "dd84caf5317a4578b8b6bb4614a318bc",
+          "name": "party name",
+          "datePublished": "2018-01-01T02:00:00+02:00",
+          "address": {
+            "streetAddress": "test street address",
+            "locality": "test locality",
+            "region": "test region",
+            "postalCode": "test postalCode",
+            "countryName": "test country"
+          },
+          "contactPoint": {
+            "email": "test@example.com"
+          },
+          "roles": [
+            "public"
+          ]
+        }
+      ],
+      "dateModified": "2018-01-01T02:00:00+02:00",
+      "id": "f865ad1cbb504547baa837e247469212"
     },
     {
-      "id": "6c4b2f344c4545f3a5df4b88a5e2de7e",
-      "dateCreated": "2018-01-01T02:01:00+02:00",
       "requestId": "UA-R-2018-01-01-000002",
-      "dateModified": "2018-01-01T02:01:00+02:00"
+      "description": "Second request",
+      "violationTypes": [
+        "corruptionDescription",
+        "corruptionProcurementMethodType",
+        "corruptionPublicDisclosure",
+        "corruptionBiddingDocuments",
+        "documentsForm",
+        "corruptionAwarded",
+        "corruptionCancelled",
+        "corruptionContracting",
+        "corruptionChanges",
+        "other"
+      ],
+      "dateCreated": "2018-01-01T02:01:00+02:00",
+      "parties": [
+        {
+          "id": "480257938a0e491b94c865bcc3e1c812",
+          "name": "party name",
+          "datePublished": "2018-01-01T02:01:00+02:00",
+          "address": {
+            "streetAddress": "test street address",
+            "locality": "test locality",
+            "region": "test region",
+            "postalCode": "test postalCode",
+            "countryName": "test country"
+          },
+          "contactPoint": {
+            "email": "test@example.com"
+          },
+          "roles": [
+            "public"
+          ]
+        }
+      ],
+      "dateModified": "2018-01-01T02:01:00+02:00",
+      "id": "6c4b2f344c4545f3a5df4b88a5e2de7e"
     }
   ],
   "count": 2,

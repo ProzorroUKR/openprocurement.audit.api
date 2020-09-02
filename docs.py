@@ -1463,18 +1463,63 @@ class RequestResourceTest(BaseRequestWebTest):
         self.assertEqual(response.status, "403 Forbidden")
 
         self.app.authorization = None
-        with freeze_time("2018.01.01 00:03"):
-            with open("docs/source/request/tutorial/http/request-get-no-auth.http", "wt") as self.app.file_obj:
-                response = self.app.get("/requests/{}".format(request_id))
+        with open("docs/source/request/tutorial/http/request-get-no-auth.http", "wt") as self.app.file_obj:
+            response = self.app.get("/requests/{}".format(request_id))
         self.assertNotIn("address", response.json["data"]["parties"][0])
         self.assertEqual(response.status, "200 OK")
 
         self.app.authorization = ("Basic", (self.sas_name, self.sas_pass))
-        with freeze_time("2018.01.01 00:03"):
-            with open("docs/source/request/tutorial/http/request-get-sas.http", "wt") as self.app.file_obj:
-                response = self.app.get("/requests/{}".format(request_id))
+        with open("docs/source/request/tutorial/http/request-get-sas.http", "wt") as self.app.file_obj:
+            response = self.app.get("/requests/{}".format(request_id))
         self.assertIn("address", response.json["data"]["parties"][0])
         self.assertEqual(response.status, "200 OK")
+
+        self.app.authorization = ("Basic", (self.public_name, self.public_pass))
+        with freeze_time("2018.02.01 00:00"):
+            with open("docs/source/request/tutorial/http/request-post-not-answered.http", "wt") as self.app.file_obj:
+                response = self.app.post_json(
+                    "/requests",
+                    {
+                        "data": {
+                            "tenderId": "f" * 32,
+                            "description": "Yo-ho-ho",
+                            "violationTypes": VIOLATION_TYPE_CHOICES,
+                            "parties": [
+                                {
+                                    "name": "party name",
+                                    "address": {
+                                        "streetAddress": "test street address",
+                                        "locality": "test locality",
+                                        "region": "test region",
+                                        "postalCode": "test postalCode",
+                                        "countryName": "test country",
+                                    },
+                                    "contactPoint": {
+                                        "email": "test@example.com"
+                                    }
+                                }
+                            ],
+                            "documents": [
+                                {
+                                    "title": "doc.txt",
+                                    "url": self.generate_docservice_url(),
+                                    "hash": "md5:" + "0" * 32,
+                                    "format": "plain/text",
+                                }
+                            ]
+                        }
+                    }
+                )
+        request_id = response.json["data"]["id"]
+        self.assertEqual(response.status, "201 Created")
+
+        self.app.authorization = None
+        with open("docs/source/request/tutorial/http/requests-list.http", "wt") as self.app.file_obj:
+            response = self.app.get("/requests?opt_fields=answer".format(request_id))
+
+        with open("docs/source/request/tutorial/http/requests-list-answered.http", "wt") as self.app.file_obj:
+            response = self.app.get("/requests?mode=real_answered&opt_fields=answer".format(request_id))
+
 
 
 class RequestByTenderResourceTest(BaseRequestWebTest):

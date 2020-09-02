@@ -67,3 +67,27 @@ But hidden `parties` fields would be visible for reviewer and you'll need an acc
 
 .. include:: http/request-get-sas.http
     :code:
+
+Lets add another request and leave it without an answer:
+
+.. include:: http/request-post-not-answered.http
+    :code:
+
+Here are all available requests:
+
+.. include:: http/requests-list.http
+    :code:
+
+Feed modes available:
+
+* by default - all real requests
+* ``mode=real_answered`` - real requests that have an answer
+* ``mode=real_not_answered`` - real requests that dont't have an answer
+* ``mode=test`` - all test requests
+* ``mode=test_answered`` - test requests that have an answer
+* ``mode=test_not_answered`` - test requests that dont't have an answer
+
+For example:
+
+.. include:: http/requests-list-answered.http
+    :code:

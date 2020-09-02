@@ -595,10 +595,12 @@ class APIResourcePaginatedListing(APIResource):
                 for i in list_view(self.db, include_docs=True, **view_kwargs, **pagination_kwargs)
             ]
         else:
-            results = [
-                dict(id=e.id, dateCreated=e.key[1], **e.value)
-                for e in list_view(self.db, **view_kwargs, **pagination_kwargs)
-            ]
+            def make_result(item):
+                result = dict(**item.value)
+                result.setdefault('id', item.id)
+                result.setdefault('dateCreated', item.key[1])
+                return result
+            results = [make_result(e) for e in list_view(self.db, **view_kwargs, **pagination_kwargs)]
 
         count = len(results)
 

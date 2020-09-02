@@ -7,10 +7,10 @@ Content-Type: application/json
 {
   "data": [
     {
-      "id": "d0863edd3aaf4c6393480afae0679c2d",
-      "dateCreated": "2018-01-01T02:01:00+02:00",
       "inspection_id": "UA-I-2018-01-01-000002",
-      "dateModified": "2018-01-01T02:01:00+02:00"
+      "dateModified": "2018-01-01T02:01:00+02:00",
+      "id": "d0863edd3aaf4c6393480afae0679c2d",
+      "dateCreated": "2018-01-01T02:01:00+02:00"
     }
   ],
   "count": 1,

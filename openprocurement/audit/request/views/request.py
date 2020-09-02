@@ -15,11 +15,17 @@ from openprocurement.audit.api.utils import (
 from openprocurement.audit.request.design import (
     requests_real_by_dateModified_view,
     requests_test_by_dateModified_view,
-    requests_by_dateModified_view,
     requests_real_by_local_seq_view,
     requests_test_by_local_seq_view,
-    requests_by_local_seq_view,
     FIELDS,
+    requests_real_answered_by_dateModified_view,
+    requests_test_answered_by_dateModified_view,
+    requests_real_not_answered_by_dateModified_view,
+    requests_test_not_answered_by_dateModified_view,
+    requests_real_answered_by_local_seq_view,
+    requests_real_not_answered_by_local_seq_view,
+    requests_test_answered_by_local_seq_view,
+    requests_test_not_answered_by_local_seq_view,
 )
 from openprocurement.audit.request.utils import (
     save_request,
@@ -37,13 +43,19 @@ from openprocurement.audit.monitoring.utils import set_author
 LOGGER = getLogger(__name__)
 VIEW_MAP = {
     u"": requests_real_by_dateModified_view,
+    u"real_answered": requests_real_answered_by_dateModified_view,
+    u"real_not_answered": requests_real_not_answered_by_dateModified_view,
     u"test": requests_test_by_dateModified_view,
-    u"_all_": requests_by_dateModified_view,
+    u"test_answered": requests_test_answered_by_dateModified_view,
+    u"test_not_answered": requests_test_not_answered_by_dateModified_view,
 }
 CHANGES_VIEW_MAP = {
     u"": requests_real_by_local_seq_view,
+    u"real_answered": requests_real_answered_by_local_seq_view,
+    u"real_not_answered": requests_real_not_answered_by_local_seq_view,
     u"test": requests_test_by_local_seq_view,
-    u"_all_": requests_by_local_seq_view,
+    u"test_answered": requests_test_answered_by_local_seq_view,
+    u"test_not_answered": requests_test_not_answered_by_local_seq_view,
 }
 FEED = {
     u"dateModified": VIEW_MAP,

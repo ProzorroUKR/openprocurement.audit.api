@@ -113,7 +113,7 @@ class RequestResource(APIResource):
     def patch(self):
         obj = self.request.validated["request"]
         now = get_now()
-        if obj.answer:
+        if obj.answer is not None:
             raise forbidden(self.request)
         apply_patch(self.request, src=self.request.validated["request_src"], save=False)
         if obj.answer:

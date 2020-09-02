@@ -3,8 +3,10 @@ from schematics.exceptions import (
     ModelValidationError, ModelConversionError
 )
 
+from openprocurement.audit.api.constants import PUBLIC_ROLE
 from openprocurement.audit.api.utils import (
-    apply_data_patch, update_logging_context, error_handler
+    apply_data_patch, update_logging_context, error_handler,
+    forbidden,
 )
 
 OPERATIONS = {"POST": "add", "PATCH": "update", "PUT": "update", "DELETE": "delete"}
@@ -99,3 +101,9 @@ def validate_file_update(request):
         return validate_document_data(request)
     if request.content_type == 'multipart/form-data':
         validate_file_upload(request)
+
+
+def validate_request_document_allowed(request):
+    obj = request.validated['request']
+    if request.authenticated_role == PUBLIC_ROLE and obj.answer is not None:
+        raise forbidden(request)

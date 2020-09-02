@@ -70,8 +70,33 @@ class RequestDocumentsResourceTest(BaseWebTest):
         self.assertIn("Content-Disposition", response.headers)
         self.assertIn("Location", response.headers)
 
-    def test_post_forbidden(self):
+    def test_post_no_auth_forbidden(self):
         self.create_request()
+        self.app.post_json(
+            "/requests/{}/documents".format(self.request_id),
+            {
+                "data": {
+                    "title": "doc.txt",
+                    "url": self.generate_docservice_url(),
+                    "hash": "md5:" + "0" * 32,
+                    "format": "plain/text",
+                }
+            },
+            status=403,
+        )
+
+    def test_post_public_answered_forbidden(self):
+        self.create_request()
+        self.app.authorization = ("Basic", (self.sas_name, self.sas_pass))
+        response = self.app.patch_json(
+            "/requests/{}".format(self.request_id),
+            {
+                "data": {
+                    "answer": "I am your father",
+                }
+            }
+        )
+        self.app.authorization = ("Basic", (self.public_name, self.public_pass))
         self.app.post_json(
             "/requests/{}/documents".format(self.request_id),
             {

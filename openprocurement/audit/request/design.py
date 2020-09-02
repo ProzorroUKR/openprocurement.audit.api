@@ -17,7 +17,6 @@ FIELDS = [
     "answer",
     "dateAnswered",
     "dateCreated",
-    "parties",
 ]
 CHANGES_FIELDS = FIELDS + ["dateModified"]
 

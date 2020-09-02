@@ -10,8 +10,8 @@ from openprocurement.audit.api.validation import (
     validate_file_update,
     validate_file_upload,
     validate_patch_document_data,
-    validate_request_document_allowed,
 )
+from openprocurement.audit.request.validation import validate_allowed_request_document
 from openprocurement.audit.request.utils import save_request, apply_patch, op_resource, set_author
 
 
@@ -34,7 +34,7 @@ class RequestsDocumentBaseResource(APIResource):
 
     @json_view(
         permission="create_request_document",
-        validators=(validate_file_upload, validate_request_document_allowed)
+        validators=(validate_file_upload, validate_allowed_request_document)
     )
     def collection_post(self):
         document = upload_file(self.request)
@@ -73,7 +73,7 @@ class RequestsDocumentBaseResource(APIResource):
 
     @json_view(
         permission="create_request_document",
-        validators=(validate_file_update, validate_request_document_allowed)
+        validators=(validate_file_update, validate_allowed_request_document)
     )
     def put(self):
         parent = self.request.context.__parent__
@@ -94,7 +94,7 @@ class RequestsDocumentBaseResource(APIResource):
     @json_view(
         content_type="application/json",
         permission="create_request_document",
-        validators=(validate_patch_document_data, validate_request_document_allowed),
+        validators=(validate_patch_document_data, validate_allowed_request_document),
     )
     def patch(self):
         document = self.request.context

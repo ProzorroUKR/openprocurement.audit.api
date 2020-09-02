@@ -14,8 +14,9 @@ The ``opt_fields`` param is supported:
     :code:
 
 Pagination can be controlled with ``limit`` and ``page`` params where:
-    * ``limit`` - the maximum number of items
-    * ``page`` - the number of page
+
+* ``limit`` - the maximum number of items
+* ``page`` - the number of page
 
 .. include:: http/inspections-by-monitoring_id-pagination.http
     :code:

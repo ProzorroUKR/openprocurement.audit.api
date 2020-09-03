@@ -6,6 +6,7 @@ from functools import partial
 from gevent import sleep
 from schematics.exceptions import ModelValidationError
 
+from openprocurement.audit.api.constants import SAS_ROLE, PUBLIC_ROLE
 from openprocurement.audit.api.utils import (
     get_revision_changes,
     apply_data_patch,
@@ -115,8 +116,15 @@ def extract_request(request):
 def request_serialize(request, data, fields):
     obj = request.request_from_data(data, raise_error=False)
     obj.__parent__ = request.context
-    return {i: j for i, j in obj.serialize("view").items() if i in fields}
+    return {i: j for i, j in request_serialize_view(
+        obj, request.authenticated_role
+    ).items() if i in fields}
 
+def request_serialize_view(obj, authenticated_role):
+    if authenticated_role in (SAS_ROLE, PUBLIC_ROLE):
+        return obj.serialize("view_%s" % authenticated_role)
+    else:
+        return obj.serialize("view")
 
 def request_from_data(request, data, **_):
     return Request(data)

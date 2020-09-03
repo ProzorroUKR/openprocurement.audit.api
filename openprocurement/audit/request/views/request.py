@@ -28,6 +28,7 @@ from openprocurement.audit.request.utils import (
     request_serialize,
     op_resource,
     set_author,
+    request_serialize_view,
 )
 from openprocurement.audit.request.validation import (
     validate_request_data,
@@ -87,11 +88,7 @@ class RequestsResource(APIResourceListing):
         self.request.response.headers["Location"] = self.request.route_url(
             "Request", request_id=obj.id
         )
-        if self.request.authenticated_role in (SAS_ROLE, PUBLIC_ROLE) :
-            data = obj.serialize("view_%s" % self.request.authenticated_role)
-        else:
-            data = obj.serialize("view")
-        return {"data": data}
+        return {"data": request_serialize_view(obj, self.request.authenticated_role)}
 
 
 @op_resource(name="Request", path="/requests/{request_id}")
@@ -99,11 +96,7 @@ class RequestResource(APIResource):
     @json_view(permission="view_request")
     def get(self):
         obj = self.request.validated["request"]
-        if self.request.authenticated_role in (SAS_ROLE, PUBLIC_ROLE) :
-            data = obj.serialize("view_%s" % self.request.authenticated_role)
-        else:
-            data = obj.serialize("view")
-        return {"data": data}
+        return {"data": request_serialize_view(obj, self.request.authenticated_role)}
 
     @json_view(
         content_type="application/json",
@@ -123,8 +116,4 @@ class RequestResource(APIResource):
             "Updated request {}".format(obj.id),
             extra=context_unpack(self.request, {"MESSAGE_ID": "request_patch"}),
         )
-        if self.request.authenticated_role in (SAS_ROLE, PUBLIC_ROLE) :
-            data = obj.serialize("view_%s" % self.request.authenticated_role)
-        else:
-            data = obj.serialize("view")
-        return {"data": data}
+        return {"data": request_serialize_view(obj, self.request.authenticated_role)}

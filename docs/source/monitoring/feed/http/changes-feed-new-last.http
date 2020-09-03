@@ -1,4 +1,4 @@
-GET /api/2.5/monitorings?limit=3&feed=changes&offset=a5a75b70780adf54ba803549523831d6 HTTP/1.0
+GET /api/2.5/monitorings?limit=3&feed=changes&offset=9c9044fd6fbd406653167a45a81aacfa HTTP/1.0
 Host: audit-api-sandbox.prozorro.gov.ua
 
 Response: 200 OK
@@ -11,14 +11,14 @@ Content-Type: application/json
     }
   ],
   "next_page": {
-    "offset": "6eee44022b8932ff5c2b7dd9ee866593",
-    "path": "/api/2.5/monitorings?limit=3&feed=changes&offset=6eee44022b8932ff5c2b7dd9ee866593",
-    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings?limit=3&feed=changes&offset=6eee44022b8932ff5c2b7dd9ee866593"
+    "offset": "e063e89aeac253e9250c0d6123e5de81",
+    "path": "/api/2.5/monitorings?limit=3&feed=changes&offset=e063e89aeac253e9250c0d6123e5de81",
+    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings?limit=3&feed=changes&offset=e063e89aeac253e9250c0d6123e5de81"
   },
   "prev_page": {
-    "offset": "a5a75b70780adf54ba803549523831d6",
-    "path": "/api/2.5/monitorings?limit=3&descending=1&feed=changes&offset=a5a75b70780adf54ba803549523831d6",
-    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings?limit=3&descending=1&feed=changes&offset=a5a75b70780adf54ba803549523831d6"
+    "offset": "9c9044fd6fbd406653167a45a81aacfa",
+    "path": "/api/2.5/monitorings?limit=3&descending=1&feed=changes&offset=9c9044fd6fbd406653167a45a81aacfa",
+    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings?limit=3&descending=1&feed=changes&offset=9c9044fd6fbd406653167a45a81aacfa"
   }
 }
 

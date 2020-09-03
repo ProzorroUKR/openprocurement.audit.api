@@ -141,3 +141,21 @@ class TenderRequestsResourceTest(BaseWebTest):
         self.assertEqual(response.json['limit'], 2)
         self.assertEqual(response.json['page'], 4)
         self.assertEqual(len(response.json['data']), 0)
+
+    def test_get_with_pagination_with_descending(self):
+        tender_id = "a" * 32
+        for i in range(5):
+            self.create_request(tenderId=tender_id, description="description %s" % str(i + 1))
+
+        response = self.app.get(
+            '/tenders/{}/requests?opt_fields=description&limit=2&page=2&descending=1'.format(tender_id)
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['total'], 5)
+        self.assertEqual(response.json['count'], 2)
+        self.assertEqual(response.json['limit'], 2)
+        self.assertEqual(response.json['page'], 2)
+        self.assertEqual(len(response.json['data']), 2)
+        self.assertEqual(response.json['data'][0]["description"], "description 3")
+        self.assertEqual(response.json['data'][1]["description"], "description 2")

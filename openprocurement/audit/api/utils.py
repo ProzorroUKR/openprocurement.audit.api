@@ -38,6 +38,7 @@ from openprocurement.audit.api.traversal import factory
 
 DEFAULT_PAGE = 1
 DEFAULT_LIMIT = 500
+DEFAULT_DESCENDING = False
 
 
 def get_now():
@@ -571,19 +572,17 @@ class APIResourcePaginatedListing(APIResource):
         mode = self.request.params.get('mode', '')
         list_view = self.views.get(mode, self.views.get(''))
 
+        descending = bool(self.request.params.get('descending', DEFAULT_DESCENDING))
         limit = int(self.request.params.get('limit', DEFAULT_LIMIT))
         page = int(self.request.params.get('page', DEFAULT_PAGE))
         skip = page * limit - limit
 
-        pagination_kwargs = dict(
-            limit=limit,
-            skip=skip,
-        )
+        pagination_kwargs = dict(limit=limit, skip=skip)
 
-        view_kwargs = dict(
-            startkey=[obj_id, None],
-            endkey=[obj_id, {}],
-        )
+        startkey = [obj_id, None if not descending else {}]
+        endkey = [obj_id, {} if not descending else None]
+
+        view_kwargs = dict(startkey=startkey, endkey=endkey, descending=descending)
 
         if opt_fields - self.default_fields:
             self.LOGGER.info(

@@ -17,6 +17,7 @@ Pagination can be controlled with ``limit`` and ``page`` params where:
 
 * ``limit`` - the maximum number of items
 * ``page`` - the number of page
+* ``descending`` - items in reverse order
 
 .. include:: http/requests-by-tender-id-pagination.http
     :code:

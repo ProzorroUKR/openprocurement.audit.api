@@ -74,3 +74,51 @@ class MonitoringInspectionsResourceTest(BaseWebTest):
                 response.json['data'],
                 [expected_one, expected_two]
             )
+
+    def test_get_with_pagination(self):
+        for i in range(5):
+            self.create_inspection()
+
+        for uid in self.monitoring_ids:
+            response = self.app.get(
+                '/monitorings/{}/inspections?limit=2&page=2'.format(uid)
+            )
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.content_type, 'application/json')
+            self.assertEqual(response.json['total'], 5)
+            self.assertEqual(response.json['count'], 2)
+            self.assertEqual(response.json['limit'], 2)
+            self.assertEqual(response.json['page'], 2)
+            self.assertEqual(len(response.json['data']), 2)
+
+    def test_get_with_pagination_not_full_page(self):
+        for i in range(5):
+            self.create_inspection()
+
+        for uid in self.monitoring_ids:
+            response = self.app.get(
+                '/monitorings/{}/inspections?limit=2&page=3'.format(uid)
+            )
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.content_type, 'application/json')
+            self.assertEqual(response.json['total'], 5)
+            self.assertEqual(response.json['count'], 1)
+            self.assertEqual(response.json['limit'], 2)
+            self.assertEqual(response.json['page'], 3)
+            self.assertEqual(len(response.json['data']), 1)
+
+    def test_get_with_pagination_out_of_bounds_page(self):
+        for i in range(5):
+            self.create_inspection()
+
+        for uid in self.monitoring_ids:
+            response = self.app.get(
+                '/monitorings/{}/inspections?limit=2&page=4'.format(uid)
+            )
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.content_type, 'application/json')
+            self.assertEqual(response.json['total'], 5)
+            self.assertEqual(response.json['count'], 0)
+            self.assertEqual(response.json['limit'], 2)
+            self.assertEqual(response.json['page'], 4)
+            self.assertEqual(len(response.json['data']), 0)

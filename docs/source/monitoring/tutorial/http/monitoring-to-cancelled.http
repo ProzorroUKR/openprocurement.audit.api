@@ -8,7 +8,7 @@ DATA:
   "data": {
     "cancellation": {
       "description": "Some reason",
-      "relatedParty": "d88d2c0a350b4d9989bfb14872f69097"
+      "relatedParty": "638442ddbc634878a74b7b5839ebc704"
     },
     "status": "cancelled"
   }
@@ -31,8 +31,9 @@ Content-Type: application/json
     ],
     "parties": [
       {
-        "id": "d88d2c0a350b4d9989bfb14872f69097",
+        "id": "638442ddbc634878a74b7b5839ebc704",
         "name": "The State Audit Service of Ukraine",
+        "datePublished": "2018-01-01T02:00:00+02:00",
         "identifier": {
           "scheme": "UA-EDR",
           "id": "40165856",
@@ -46,13 +47,12 @@ Content-Type: application/json
           "countryName": "Ukraine"
         },
         "contactPoint": {
-          "name": "Oleksii Kovalenko",
-          "telephone": "0440000000"
+          "telephone": "0440000000",
+          "name": "Oleksii Kovalenko"
         },
         "roles": [
           "sas"
-        ],
-        "datePublished": "2018-01-01T02:00:00+02:00"
+        ]
       }
     ],
     "dateModified": "2018-01-03T02:00:00+02:00",
@@ -62,7 +62,7 @@ Content-Type: application/json
       "description": "Some reason",
       "dateCreated": "2018-01-03T02:00:00+02:00",
       "datePublished": "2018-01-03T02:00:00+02:00",
-      "relatedParty": "d88d2c0a350b4d9989bfb14872f69097"
+      "relatedParty": "638442ddbc634878a74b7b5839ebc704"
     }
   }
 }

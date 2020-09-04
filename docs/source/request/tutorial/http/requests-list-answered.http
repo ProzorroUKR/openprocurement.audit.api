@@ -1,0 +1,20 @@
+GET /api/2.5/requests?mode=answered&opt_fields=answer HTTP/1.0
+Host: audit-api-sandbox.prozorro.gov.ua
+
+Response: 200 OK
+Content-Type: application/json
+{
+  "data": [
+    {
+      "answer": "There is my answer",
+      "id": "6270491497034cc79fe4a00e1b7b84f1",
+      "dateModified": "2018-01-01T02:01:00+02:00"
+    }
+  ],
+  "next_page": {
+    "offset": "2018-01-01T02:01:00+02:00",
+    "path": "/api/2.5/requests?mode=answered&opt_fields=answer&offset=2018-01-01T02%3A01%3A00%2B02%3A00",
+    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.5/requests?mode=answered&opt_fields=answer&offset=2018-01-01T02%3A01%3A00%2B02%3A00"
+  }
+}
+

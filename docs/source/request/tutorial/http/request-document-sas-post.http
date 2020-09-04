@@ -1,0 +1,31 @@
+POST /api/2.5/requests/6270491497034cc79fe4a00e1b7b84f1/documents HTTP/1.0
+Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
+Content-Length: 315
+Content-Type: application/json
+Host: audit-api-sandbox.prozorro.gov.ua
+DATA:
+{
+  "data": {
+    "title": "doc(3).txt",
+    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/29ec040bd85647289a6f7627985f4970?Signature=jBfRFdjWn4nG0gnM7obV1yfjiueCaZnVpEvgRH9qT3rDKrPUrp8RjpMLQHREpEYRu09s8f0%2BzO3584wQLixaBw%3D%3D&KeyID=a8968c46",
+    "hash": "md5:00000000000000000000000000000000",
+    "format": "plain/text"
+  }
+}
+
+Response: 201 Created
+Content-Type: application/json
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/requests/6270491497034cc79fe4a00e1b7b84f1/documents/05987ceeec0d434c99568077dc15c9a6
+{
+  "data": {
+    "id": "05987ceeec0d434c99568077dc15c9a6",
+    "hash": "md5:00000000000000000000000000000000",
+    "title": "doc(3).txt",
+    "format": "plain/text",
+    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/29ec040bd85647289a6f7627985f4970?Signature=oskLJCq7LX%2F8vlfsSoOiMpRSIbTAoXU4CB%2FpjLh%2FjqEbYXOBRDATxl6vu%2FHJ5VJXYiE6WspuJGWt8JMbQjzkBw%253D%253D&KeyID=a8968c46",
+    "datePublished": "2018-01-01T02:01:00+02:00",
+    "dateModified": "2018-01-01T02:01:00+02:00",
+    "author": "monitoring_owner"
+  }
+}
+

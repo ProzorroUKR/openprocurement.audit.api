@@ -8,11 +8,7 @@ from openprocurement.audit.api.utils import (
 )
 from openprocurement.audit.inspection.design import (
     inspections_real_by_dateModified_view,
-    inspections_test_by_dateModified_view,
-    inspections_by_dateModified_view,
     inspections_real_by_local_seq_view,
-    inspections_test_by_local_seq_view,
-    inspections_by_local_seq_view,
     FIELDS,
 )
 from openprocurement.audit.inspection.utils import (
@@ -28,13 +24,9 @@ from openprocurement.audit.monitoring.utils import set_author
 LOGGER = getLogger(__name__)
 VIEW_MAP = {
     u'': inspections_real_by_dateModified_view,
-    u'test': inspections_test_by_dateModified_view,
-    u'_all_': inspections_by_dateModified_view,
 }
 CHANGES_VIEW_MAP = {
     u'': inspections_real_by_local_seq_view,
-    u'test': inspections_test_by_local_seq_view,
-    u'_all_': inspections_by_local_seq_view,
 }
 FEED = {
     u'dateModified': VIEW_MAP,
@@ -89,6 +81,6 @@ class InspectionResource(APIResource):
     def patch(self):
         inspection = self.request.validated['inspection']
         apply_patch(self.request, src=self.request.validated['inspection_src'])
-        LOGGER.info('Updated monitoring {}'.format(inspection.id),
+        LOGGER.info('Updated inspection {}'.format(inspection.id),
                     extra=context_unpack(self.request, {'MESSAGE_ID': 'inspection_patch'}))
         return {'data': inspection.serialize('view')}

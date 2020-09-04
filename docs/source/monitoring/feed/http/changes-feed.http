@@ -19,9 +19,9 @@ Content-Type: application/json
     }
   ],
   "next_page": {
-    "offset": "d5c565246fcf9c9a0e18eb61b7064ff4",
-    "path": "/api/2.5/monitorings?limit=3&feed=changes&offset=d5c565246fcf9c9a0e18eb61b7064ff4",
-    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings?limit=3&feed=changes&offset=d5c565246fcf9c9a0e18eb61b7064ff4"
+    "offset": "a8ff31c911fc600038fa5a1b2942952b",
+    "path": "/api/2.5/monitorings?limit=3&feed=changes&offset=a8ff31c911fc600038fa5a1b2942952b",
+    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings?limit=3&feed=changes&offset=a8ff31c911fc600038fa5a1b2942952b"
   }
 }
 

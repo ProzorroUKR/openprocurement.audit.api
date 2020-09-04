@@ -21,7 +21,8 @@ from openprocurement.audit.api.utils import (
     get_now,
 )
 from openprocurement.audit.api.validation import validate_data
-from openprocurement.audit.monitoring.models import Monitoring, EliminationReport, Party, Appeal, Post
+from openprocurement.audit.monitoring.models import Monitoring, EliminationReport, Appeal, Post
+from openprocurement.audit.monitoring.models import MonitoringParty as Party
 from openprocurement.audit.monitoring.utils import (
     get_access_token,
     get_monitoring_role,

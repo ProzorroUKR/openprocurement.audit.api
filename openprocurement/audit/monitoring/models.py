@@ -1,7 +1,7 @@
 from pyramid.security import Allow
 from schematics.exceptions import ValidationError
 from schematics.transforms import whitelist, blacklist
-from schematics.types import StringType, FloatType, URLType, BooleanType, BaseType, EmailType, MD5Type
+from schematics.types import StringType, FloatType, BooleanType, BaseType, MD5Type
 from schematics.types.compound import ModelType, DictType
 from schematics.types.serializable import serializable
 from uuid import uuid4
@@ -11,21 +11,24 @@ from openprocurement.audit.api.constants import (
     DRAFT_STATUS,
     OTHER_VIOLATION,
 )
-from openprocurement.audit.api.constants import SANDBOX_MODE, ORA_CODES
-from openprocurement.audit.api.models import Model, Revision, Document, BaseModel
+from openprocurement.audit.api.constants import SANDBOX_MODE
+from openprocurement.audit.api.models import (
+    Model, Revision, Document, BaseModel, Party, Identifier, ContactPoint,
+    Address,
+)
 from openprocurement.audit.api.models import schematics_default_role, schematics_embedded_role
 from openprocurement.audit.api.types import ListType, IsoDateTimeType
 from openprocurement.audit.api.utils import get_now
 from openprocurement.audit.monitoring.choices import (
     DIALOGUE_TYPE_CHOICES,
-    PARTY_ROLES_CHOICES,
     MONITORING_STATUS_CHOICES,
-    MONITORING_VIOLATION_TYPE_CHOICES,
     MONITORING_REASON_CHOICES,
     MONITORING_PROCURING_STAGES,
     RESOLUTION_RESULT_CHOICES,
     RESOLUTION_BY_TYPE_CHOICES,
+    PARTY_ROLES_CHOICES,
 )
+from openprocurement.audit.api.choices import VIOLATION_TYPE_CHOICES
 
 
 class Period(Model):
@@ -112,7 +115,7 @@ class Decision(Report):
 
 class Conclusion(Report):
     violationOccurred = BooleanType(required=True)
-    violationType = ListType(StringType(choices=MONITORING_VIOLATION_TYPE_CHOICES), default=[])
+    violationType = ListType(StringType(choices=VIOLATION_TYPE_CHOICES), default=[])
     otherViolationType = StringType()
     auditFinding = StringType()
     stringsAttached = StringType()
@@ -195,56 +198,38 @@ class Appeal(Report):
         }
 
 
-class Identifier(Model):
-    scheme = StringType(required=True, choices=ORA_CODES)
-    id = BaseType(required=True)
-    legalName = StringType()
-    legalName_en = StringType()
-    legalName_ru = StringType()
-    uri = URLType()
+class MonitoringAddress(Address):
+    class Options:
+        namespace = "Address"
 
-
-class Address(Model):
-    streetAddress = StringType()
-    locality = StringType()
-    region = StringType()
-    postalCode = StringType()
     countryName = StringType(required=True)
-    countryName_en = StringType()
-    countryName_ru = StringType()
 
 
-class ContactPoint(Model):
+class MonitoringContactPoint(ContactPoint):
+    class Options:
+        namespace = "ContactPoint"
+
     name = StringType(required=True)
-    name_en = StringType()
-    name_ru = StringType()
-    email = EmailType()
-    telephone = StringType()
-    faxNumber = StringType()
-    url = URLType()
 
     def validate_email(self, data, value):
         if not value and not data.get('telephone'):
             raise ValidationError(u"telephone or email should be present")
 
 
-class Party(Model):
+class MonitoringParty(Party):
     class Options:
+        namespace = "Party"
         roles = {
             'create': blacklist('id') + schematics_embedded_role,
             'edit': blacklist('id') + schematics_embedded_role,
             'embedded': schematics_embedded_role,
             'view': schematics_default_role,
         }
-    id = MD5Type(required=True, default=lambda: uuid4().hex)
 
-    name = StringType(required=True)
     identifier = ModelType(Identifier, required=True)
-    additionalIdentifiers = ListType(ModelType(Identifier))
-    address = ModelType(Address, required=True)
-    contactPoint = ModelType(ContactPoint, required=True)
+    address = ModelType(MonitoringAddress, required=True)
+    contactPoint = ModelType(MonitoringContactPoint, required=True)
     roles = ListType(StringType(choices=PARTY_ROLES_CHOICES), default=[])
-    datePublished = IsoDateTimeType(default=get_now)
 
 
 class Monitoring(BaseModel):
@@ -298,7 +283,7 @@ class Monitoring(BaseModel):
     cancellation = ModelType(Cancellation)
     appeal = ModelType(Appeal)
 
-    parties = ListType(ModelType(Party), default=[])
+    parties = ListType(ModelType(MonitoringParty), default=[])
 
     dateModified = IsoDateTimeType()
     endDate = IsoDateTimeType()

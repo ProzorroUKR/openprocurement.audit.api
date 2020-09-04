@@ -143,3 +143,61 @@ class TenderMonitoringsResourceTest(BaseWebTest):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data'], [])
+
+    def test_get_with_pagination(self):
+        tender_id = "a" * 32
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        for i in range(5):
+            self.create_monitoring(tender_id=tender_id)
+        self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "decision": {"description": "text"},
+                "status": ACTIVE_STATUS,
+            }}
+        )
+
+        response = self.app.get(
+            '/tenders/{}/monitorings?mode=draft&limit=2&page=2'.format(tender_id)
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['total'], 5)
+        self.assertEqual(response.json['count'], 2)
+        self.assertEqual(response.json['limit'], 2)
+        self.assertEqual(response.json['page'], 2)
+        self.assertEqual(len(response.json['data']), 2)
+
+    def test_get_with_pagination_not_full_page(self):
+        tender_id = "a" * 32
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        for i in range(5):
+            self.create_monitoring(tender_id=tender_id)
+
+        response = self.app.get(
+            '/tenders/{}/monitorings?mode=draft&limit=2&page=3'.format(tender_id)
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['total'], 5)
+        self.assertEqual(response.json['count'], 1)
+        self.assertEqual(response.json['limit'], 2)
+        self.assertEqual(response.json['page'], 3)
+        self.assertEqual(len(response.json['data']), 1)
+
+    def test_get_with_pagination_out_of_bounds_page(self):
+        tender_id = "a" * 32
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        for i in range(5):
+            self.create_monitoring(tender_id=tender_id)
+
+        response = self.app.get(
+            '/tenders/{}/monitorings?mode=draft&limit=2&page=4'.format(tender_id)
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['total'], 5)
+        self.assertEqual(response.json['count'], 0)
+        self.assertEqual(response.json['limit'], 2)
+        self.assertEqual(response.json['page'], 4)
+        self.assertEqual(len(response.json['data']), 0)

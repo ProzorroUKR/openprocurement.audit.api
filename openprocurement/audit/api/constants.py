@@ -30,6 +30,9 @@ DOCUMENT_WHITELISTED_FIELDS = ('id', 'datePublished', 'author', '__parent__')
 WORKING_DAYS = read_json('working_days.json')
 ORA_CODES = [i['code'] for i in read_json('organization_identifier_scheme.json')['data']]
 
+SAS_ROLE = "sas"
+PUBLIC_ROLE = "public"
+
 # Time restrictions
 MONITORING_TIME = timedelta(days=15)
 ELIMINATION_PERIOD_TIME = timedelta(days=10)

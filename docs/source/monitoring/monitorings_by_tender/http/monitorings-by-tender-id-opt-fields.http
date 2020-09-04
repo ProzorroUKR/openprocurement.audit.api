@@ -1,0 +1,25 @@
+GET /api/2.5/tenders/580997bb06674235801d75f2f6e6c6c6/monitorings?opt_fields=status HTTP/1.0
+Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
+Host: audit-api-sandbox.prozorro.gov.ua
+
+Response: 200 OK
+Content-Type: application/json
+{
+  "data": [
+    {
+      "status": "active",
+      "id": "96ac9c0ecd6749488c2350401d82279c",
+      "dateCreated": "2018-01-01T02:00:00+02:00"
+    },
+    {
+      "status": "active",
+      "id": "7587745c540240f3a12b516544087fef",
+      "dateCreated": "2018-01-01T02:01:00+02:00"
+    }
+  ],
+  "count": 2,
+  "page": 1,
+  "limit": 500,
+  "total": 2
+}
+

@@ -171,7 +171,7 @@ MONITORINGS_BY_TENDER_FIELDS = [
     'status',
 ]
 
-monitorings_by_tender_id_view = ViewDefinition('monitorings', 'by_tender_id', '''function(doc) {
+monitorings_real_by_tender_id_view = ViewDefinition('monitorings', 'by_tender_id', '''function(doc) {
     if(doc.doc_type == 'Monitoring' && !doc.mode && ['draft', 'cancelled'].indexOf(doc.status) == -1) {
         var fields=%s, data={};
         for (var i in fields) {
@@ -183,7 +183,14 @@ monitorings_by_tender_id_view = ViewDefinition('monitorings', 'by_tender_id', ''
     }
 }''' % MONITORINGS_BY_TENDER_FIELDS)
 
-test_monitorings_by_tender_id_view = ViewDefinition('monitorings', 'test_by_tender_id', '''function(doc) {
+monitorings_real_by_tender_id_total_view = ViewDefinition(
+    monitorings_real_by_tender_id_view.design,
+    monitorings_real_by_tender_id_view.name + "_total",
+    monitorings_real_by_tender_id_view.map_fun,
+    "_count"
+)
+
+monitorings_test_by_tender_id_view = ViewDefinition('monitorings', 'test_by_tender_id', '''function(doc) {
     if(doc.doc_type == 'Monitoring' && doc.mode == 'test' && ['draft', 'cancelled'].indexOf(doc.status) == -1) {
         var fields=%s, data={};
         for (var i in fields) {
@@ -195,7 +202,14 @@ test_monitorings_by_tender_id_view = ViewDefinition('monitorings', 'test_by_tend
     }
 }''' % MONITORINGS_BY_TENDER_FIELDS)
 
-draft_monitorings_by_tender_id_view = ViewDefinition('monitorings', 'draft_by_tender_id', '''function(doc) {
+monitorings_test_by_tender_id_total_view = ViewDefinition(
+    monitorings_test_by_tender_id_view.design,
+    monitorings_test_by_tender_id_view.name + "_total",
+    monitorings_test_by_tender_id_view.map_fun,
+    "_count"
+)
+
+monitorings_draft_by_tender_id_view = ViewDefinition('monitorings', 'draft_by_tender_id', '''function(doc) {
     if(doc.doc_type == 'Monitoring' && !doc.mode) {
         var fields=%s, data={};
         for (var i in fields) {
@@ -206,3 +220,10 @@ draft_monitorings_by_tender_id_view = ViewDefinition('monitorings', 'draft_by_te
         emit([doc.tender_id, doc.dateCreated], data);
     }
 }''' % MONITORINGS_BY_TENDER_FIELDS)
+
+monitorings_draft_by_tender_id_total_view = ViewDefinition(
+    monitorings_draft_by_tender_id_view.design,
+    monitorings_draft_by_tender_id_view.name + "_total",
+    monitorings_draft_by_tender_id_view.map_fun,
+    "_count"
+)

@@ -4,7 +4,7 @@ from schematics.exceptions import (
 )
 
 from openprocurement.audit.api.utils import (
-    apply_data_patch, update_logging_context, error_handler
+    apply_data_patch, update_logging_context, error_handler,
 )
 
 OPERATIONS = {"POST": "add", "PATCH": "update", "PUT": "update", "DELETE": "delete"}
@@ -13,7 +13,7 @@ def validate_json_data(request):
     try:
         json = request.json_body
     except ValueError as e:
-        request.errors.add('body', 'data', e.message)
+        request.errors.add('body', 'data', str(e))
         request.errors.status = 422
         raise error_handler(request.errors)
     if not isinstance(json, dict) or 'data' not in json or not isinstance(json.get('data'), dict):

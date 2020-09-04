@@ -16,7 +16,7 @@ DATA:
         "format": "application/msword"
       }
     ],
-    "relatedParty": "6ecc4ca22c014c30a27e286a6c4b6dec"
+    "relatedParty": "f745206183964f70a17622acdead1015"
   }
 }
 
@@ -44,7 +44,7 @@ Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/c71542103
     "postOf": "decision",
     "datePublished": "2018-01-03T02:05:00+02:00",
     "dateOverdue": "2018-01-10T00:00:00+02:00",
-    "relatedParty": "6ecc4ca22c014c30a27e286a6c4b6dec"
+    "relatedParty": "f745206183964f70a17622acdead1015"
   }
 }
 

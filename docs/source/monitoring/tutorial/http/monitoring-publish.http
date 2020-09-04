@@ -18,7 +18,7 @@ DATA:
           "format": "application/msword"
         }
       ],
-      "relatedParty": "99bda284b4e045439d5295679bcf77ad"
+      "relatedParty": "47cbc1f79fac4f29ae9bfa57cd1d727f"
     }
   }
 }
@@ -44,8 +44,9 @@ Content-Type: application/json
     },
     "parties": [
       {
-        "id": "99bda284b4e045439d5295679bcf77ad",
+        "id": "47cbc1f79fac4f29ae9bfa57cd1d727f",
         "name": "The State Audit Service of Ukraine",
+        "datePublished": "2018-01-01T02:00:00+02:00",
         "identifier": {
           "scheme": "UA-EDR",
           "id": "40165856",
@@ -59,13 +60,12 @@ Content-Type: application/json
           "countryName": "Ukraine"
         },
         "contactPoint": {
-          "name": "Oleksii Kovalenko",
-          "telephone": "0440000000"
+          "telephone": "0440000000",
+          "name": "Oleksii Kovalenko"
         },
         "roles": [
           "sas"
-        ],
-        "datePublished": "2018-01-01T02:00:00+02:00"
+        ]
       }
     ],
     "dateModified": "2018-01-02T02:00:00+02:00",
@@ -89,7 +89,7 @@ Content-Type: application/json
       "dateCreated": "2018-01-02T02:00:00+02:00",
       "datePublished": "2018-01-02T02:00:00+02:00",
       "date": "2018-01-02T00:00:00+02:00",
-      "relatedParty": "99bda284b4e045439d5295679bcf77ad"
+      "relatedParty": "47cbc1f79fac4f29ae9bfa57cd1d727f"
     }
   }
 }

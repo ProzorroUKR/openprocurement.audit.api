@@ -3,12 +3,6 @@
 Inspections by monitoring id
 ============================
 
-
-.. tip::
-    | This section contains available actions for next roles:
-    | |no| Monitoring owner
-    | |no| Tender owner
-
 All the inspections can be found by theirs monitoring id:
 
 .. include:: http/inspections-by-monitoring_id.http
@@ -17,4 +11,12 @@ All the inspections can be found by theirs monitoring id:
 The ``opt_fields`` param is supported:
 
 .. include:: http/inspections-by-monitoring_id-opt_fields.http
+    :code:
+
+Pagination can be controlled with ``limit`` and ``page`` params where:
+
+* ``limit`` - the maximum number of items
+* ``page`` - the number of page
+
+.. include:: http/inspections-by-monitoring_id-pagination.http
     :code:

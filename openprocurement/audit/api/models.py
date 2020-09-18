@@ -321,7 +321,7 @@ class ContactPoint(Model):
 
 class Party(Model):
     id = MD5Type(required=True, default=lambda: uuid4().hex)
-    name = StringType(required=True)
+    name = StringType(required=True, min_length=1)
     identifier = ModelType(Identifier)
     additionalIdentifiers = ListType(ModelType(Identifier))
     address = ModelType(Address)

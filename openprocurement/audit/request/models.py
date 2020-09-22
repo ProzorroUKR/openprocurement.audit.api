@@ -25,18 +25,18 @@ class RequestAddress(Address):
     class Options:
         namespace = "Address"
 
-    streetAddress = StringType(required=True)
-    locality = StringType(required=True)
-    region = StringType(required=True)
-    postalCode = StringType(required=True)
-    countryName = StringType(required=True)
+    streetAddress = StringType(required=True, min_length=1)
+    locality = StringType(required=True, min_length=1)
+    region = StringType(required=True, min_length=1)
+    postalCode = StringType(required=True, min_length=1)
+    countryName = StringType(required=True, min_length=1)
 
 
 class RequestContactPoint(ContactPoint):
     class Options:
         namespace = "ContactPoint"
 
-    email = EmailType(required=True)
+    email = EmailType(required=True, min_length=1)
 
 
 class RequestParty(Party):
@@ -78,16 +78,29 @@ class Request(BaseModel):
             "default": schematics_default_role,
         }
 
-    description = StringType(required=True)
-    violationType = ListType(StringType(choices=VIOLATION_TYPE_CHOICES), required=True)
-    answer = StringType()
+    description = StringType(required=True, min_length=1)
+    violationType = ListType(
+        StringType(choices=VIOLATION_TYPE_CHOICES),
+        required=True,
+        min_size=1)
+    answer = StringType(choices=[
+        "monitoringCreated",
+        "noViolations",
+        "plannedInspection",
+        "lawEnforcement",
+        "inspectionCreated",
+        "plannedMonitoring",
+        "noCompetency",
+        "tenderCancelled",
+        "violationRemoved"
+    ])
     dateAnswered = IsoDateTimeType()
     dateModified = IsoDateTimeType()
     dateCreated = IsoDateTimeType(default=get_now)
     requestId = StringType()
     tenderId = MD5Type(required=True)
-    documents = ListType(ModelType(Document, required=True), default=list())
-    parties = ListType(ModelType(RequestParty, required=True), required=True)
+    documents = ListType(ModelType(Document, required=True), required=True, min_size=1)
+    parties = ListType(ModelType(RequestParty, required=True), required=True, min_size=1)
     revisions = ListType(ModelType(Revision), default=list())
 
     def __repr__(self):

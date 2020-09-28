@@ -1,6 +1,7 @@
 from schematics.transforms import whitelist, blacklist
 from schematics.types import StringType, MD5Type, EmailType
 from schematics.types.compound import ModelType
+from schematics.validate import ValidationError
 
 from openprocurement.audit.api.constants import SAS_ROLE, PUBLIC_ROLE
 from openprocurement.audit.api.models import (
@@ -70,7 +71,7 @@ class Request(BaseModel):
             "create": whitelist(
                 "description", "violationType", "documents", "parties", "tenderId", "mode"
             ),
-            "edit": whitelist("answer"),
+            "edit": whitelist("answer", "reason"),
             "view": blacklist("revisions") + schematics_embedded_role,
             "view_%s" % SAS_ROLE: blacklist("revisions") + schematics_embedded_role,
             "view_%s" % PUBLIC_ROLE: blacklist("revisions") + schematics_embedded_role,
@@ -83,6 +84,16 @@ class Request(BaseModel):
         StringType(choices=VIOLATION_TYPE_CHOICES),
         required=True,
         min_size=1)
+    dateAnswered = IsoDateTimeType()
+    dateModified = IsoDateTimeType()
+    dateCreated = IsoDateTimeType(default=get_now)
+    requestId = StringType()
+    tenderId = MD5Type(required=True)
+    documents = ListType(ModelType(Document, required=True), required=True, min_size=1)
+    parties = ListType(ModelType(RequestParty, required=True), required=True, min_size=1)
+    revisions = ListType(ModelType(Revision), default=list())
+
+    reason = StringType()
     answer = StringType(choices=[
         "monitoringCreated",
         "noViolations",
@@ -94,14 +105,6 @@ class Request(BaseModel):
         "tenderCancelled",
         "violationRemoved"
     ])
-    dateAnswered = IsoDateTimeType()
-    dateModified = IsoDateTimeType()
-    dateCreated = IsoDateTimeType(default=get_now)
-    requestId = StringType()
-    tenderId = MD5Type(required=True)
-    documents = ListType(ModelType(Document, required=True), required=True, min_size=1)
-    parties = ListType(ModelType(RequestParty, required=True), required=True, min_size=1)
-    revisions = ListType(ModelType(Revision), default=list())
 
     def __repr__(self):
         return "<%s:%r-%r@%r>" % (
@@ -110,3 +113,11 @@ class Request(BaseModel):
             self.id,
             self.rev,
         )
+
+    def validate_answer(self, data, value):
+        if data.get("reason") and not value:
+            raise ValidationError("This field is required.")
+
+    def validate_reason(self, data, value):
+        if data.get("answer") and not value:
+            raise ValidationError("This field is required.")

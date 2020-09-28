@@ -18,7 +18,8 @@ class TenderRequestsResourceTest(BaseWebTest):
             ids.append(self.request_id)
             self.app.authorization = ("Basic", (self.sas_name, self.sas_pass))
             request_data = {
-                "answer": "answer"
+                "answer": "monitoringCreated",
+                "reason": "some reason",
             }
             response = self.app.patch_json(
                 "/requests/{}".format(self.request_id), {"data": request_data}
@@ -56,7 +57,8 @@ class TenderRequestsResourceTest(BaseWebTest):
             ids.append(self.request_id)
             self.app.authorization = ("Basic", (self.sas_name, self.sas_pass))
             request_data = {
-                "answer": "answer"
+                "answer": "monitoringCreated",
+                "reason": "some reason",
             }
             response = self.app.patch_json(
                 "/requests/{}".format(self.request_id), {"data": request_data}

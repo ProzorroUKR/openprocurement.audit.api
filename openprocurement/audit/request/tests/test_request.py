@@ -139,7 +139,7 @@ class RequestResourceTest(BaseWebTest):
 
         self.app.authorization = ("Basic", (self.sas_name, self.sas_pass))
         request_data = {
-            "answer": "I am your father",
+            "answer": "monitoringCreated",
             "reason": "Because i am your father",
         }
 
@@ -157,7 +157,7 @@ class RequestResourceTest(BaseWebTest):
 
         self.app.authorization = ("Basic", (self.sas_name, self.sas_pass))
         request_data = {
-            "answer": "I am your father",
+            "answer": "monitoringCreated",
             "reason": "Because i am your father",
         }
 

@@ -134,12 +134,13 @@ class RequestResourceTest(BaseWebTest):
             response.json["data"]["dateModified"], initial_data["dateModified"]
         )
 
-    def test_patch_sas_answer_fields(self):
+    def test_patch_sas_answer_reason_fields(self):
         self.create_request()
 
         self.app.authorization = ("Basic", (self.sas_name, self.sas_pass))
         request_data = {
             "answer": "I am your father",
+            "reason": "Because i am your father",
         }
 
         modified_date = "2018-01-02T13:30:00+02:00"
@@ -157,6 +158,7 @@ class RequestResourceTest(BaseWebTest):
         self.app.authorization = ("Basic", (self.sas_name, self.sas_pass))
         request_data = {
             "answer": "I am your father",
+            "reason": "Because i am your father",
         }
 
         response = self.app.patch_json(

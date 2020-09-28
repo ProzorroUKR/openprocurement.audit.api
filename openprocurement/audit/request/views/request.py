@@ -12,6 +12,7 @@ from openprocurement.audit.api.utils import (
     get_now,
     generate_id,
 )
+from openprocurement.audit.monitoring.utils import upload_objects_documents
 from openprocurement.audit.request.design import (
     FIELDS,
     requests_real_by_dateModified_view,
@@ -75,6 +76,7 @@ class RequestsResource(APIResourceListing):
         obj.id = generate_id()
         obj.requestId = generate_request_id(get_now(), self.db, self.server_id)
         set_author(obj.documents, self.request, "author")
+        upload_objects_documents(self.request, obj)
         save_request(self.request, date_modified=obj.dateCreated)
         LOGGER.info(
             "Created request {}".format(obj.id),

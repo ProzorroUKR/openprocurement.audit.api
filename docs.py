@@ -1442,7 +1442,8 @@ class RequestResourceTest(BaseRequestWebTest):
                     "/requests/{}".format(request_id),
                     {
                         "data": {
-                            "answer": "There is my answer",
+                            "answer": "monitoringCreated",
+                            "reason": "There is my answer",
                         }
                     }
                 )
@@ -1455,7 +1456,7 @@ class RequestResourceTest(BaseRequestWebTest):
                     "/requests/{}".format(request_id),
                     {
                         "data": {
-                            "answer": "There is my another answer",
+                            "reason": "There is my another answer",
                         }
                     },
                     status=403

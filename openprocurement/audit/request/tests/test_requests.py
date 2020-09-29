@@ -33,7 +33,8 @@ class RequestsListingResourceTest(BaseWebTest):
             "/requests/{}".format(self.request_id),
             {
                 "data": {
-                    "answer": "I am your father",
+                    "answer":  "monitoringCreated",
+                    "reason": "Because i am your father"
                 }
             }
         )
@@ -113,6 +114,7 @@ class RequestsListingResourceTest(BaseWebTest):
                 ("body", "violationType"),
                 ("body", "parties"),
                 ("body", "tenderId"),
+                ("body", "documents"),
             },
             set(get_errors_field_names(response, "This field is required.")),
         )
@@ -127,6 +129,14 @@ class RequestsListingResourceTest(BaseWebTest):
                     "description": "Yo-ho-ho",
                     "violationType": VIOLATION_TYPE_CHOICES,
                     "parties": [{}],
+                    "documents": [
+                        {
+                            "title": "doc.txt",
+                            "url": self.generate_docservice_url(),
+                            "hash": "md5:" + "0" * 32,
+                            "format": "plain/text",
+                        },
+                    ],
                 }
             },
             status=422,
@@ -156,6 +166,14 @@ class RequestsListingResourceTest(BaseWebTest):
                             "email": "test@example.com"
                         }
                     }],
+                    "documents": [
+                        {
+                            "title": "doc.txt",
+                            "url": self.generate_docservice_url(),
+                            "hash": "md5:" + "0" * 32,
+                            "format": "plain/text",
+                        },
+                    ],
                 }
             },
             status=422,
@@ -191,6 +209,14 @@ class RequestsListingResourceTest(BaseWebTest):
                         },
                         "contactPoint": {}
                     }],
+                    "documents": [
+                        {
+                            "title": "doc.txt",
+                            "url": self.generate_docservice_url(),
+                            "hash": "md5:" + "0" * 32,
+                            "format": "plain/text",
+                        },
+                    ],
                 }
             },
             status=422,
@@ -226,6 +252,14 @@ class RequestsListingResourceTest(BaseWebTest):
                             }
                         }
                     ],
+                    "documents": [
+                        {
+                            "title": "doc.txt",
+                            "url": self.generate_docservice_url(),
+                            "hash": "md5:" + "0" * 32,
+                            "format": "plain/text",
+                        },
+                    ],
                 }
             },
             status=201,
@@ -243,6 +277,7 @@ class RequestsListingResourceTest(BaseWebTest):
                 "violationType",
                 "parties",
                 "tenderId",
+                "documents",
             },
         )
         self.assertIn("Location", response.headers)

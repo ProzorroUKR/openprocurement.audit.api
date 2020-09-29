@@ -1,12 +1,13 @@
 PATCH /api/2.5/requests/6270491497034cc79fe4a00e1b7b84f1 HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
-Content-Length: 42
+Content-Length: 73
 Content-Type: application/json
 Host: audit-api-sandbox.prozorro.gov.ua
 DATA:
 {
   "data": {
-    "answer": "There is my answer"
+    "answer": "monitoringCreated",
+    "reason": "There is my answer"
   }
 }
 
@@ -38,7 +39,6 @@ Content-Type: application/json
       "notComplyDecisionACU",
       "contractsWithoutProcurement"
     ],
-    "answer": "There is my answer",
     "dateAnswered": "2018-01-01T02:03:00+02:00",
     "dateModified": "2018-01-01T02:03:00+02:00",
     "dateCreated": "2018-01-01T02:00:00+02:00",
@@ -96,6 +96,8 @@ Content-Type: application/json
         ]
       }
     ],
+    "reason": "There is my answer",
+    "answer": "monitoringCreated",
     "id": "6270491497034cc79fe4a00e1b7b84f1"
   }
 }

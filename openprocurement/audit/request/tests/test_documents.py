@@ -92,7 +92,8 @@ class RequestDocumentsResourceTest(BaseWebTest):
             "/requests/{}".format(self.request_id),
             {
                 "data": {
-                    "answer": "I am your father",
+                    "answer":  "monitoringCreated",
+                    "reason": "Because i am your father"
                 }
             }
         )

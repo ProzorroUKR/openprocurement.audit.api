@@ -6,7 +6,7 @@ Host: audit-api-sandbox.prozorro.gov.ua
 DATA:
 {
   "data": {
-    "answer": "There is my another answer"
+    "reason": "There is my another answer"
   }
 }
 

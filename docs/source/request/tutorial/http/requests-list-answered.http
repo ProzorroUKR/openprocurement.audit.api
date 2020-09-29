@@ -6,7 +6,7 @@ Content-Type: application/json
 {
   "data": [
     {
-      "answer": "There is my answer",
+      "answer": "monitoringCreated",
       "id": "6270491497034cc79fe4a00e1b7b84f1",
       "dateModified": "2018-01-01T02:01:00+02:00"
     }

@@ -145,6 +145,13 @@ test_monitoring:
     COV_PATH: openprocurement/audit/monitoring
     COV_FILE: .coveragerc
 
+test_request:
+  extends: .test_main
+  variables:
+    TESTS_PATH: openprocurement/audit/request/tests
+    COV_PATH: openprocurement/audit/request
+    COV_FILE: .coveragerc
+
 test_inspection:
   extends: .test_main
   variables:

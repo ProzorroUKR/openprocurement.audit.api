@@ -230,6 +230,7 @@ class RequestsListingResourceTest(BaseWebTest):
 
     def test_post_request_public(self):
         self.app.authorization = ("Basic", (self.public_name, self.public_pass))
+        document_url = self.generate_docservice_url()
         response = self.app.post_json(
             "/requests",
             {
@@ -255,7 +256,7 @@ class RequestsListingResourceTest(BaseWebTest):
                     "documents": [
                         {
                             "title": "doc.txt",
-                            "url": self.generate_docservice_url(),
+                            "url": document_url,
                             "hash": "md5:" + "0" * 32,
                             "format": "plain/text",
                         },
@@ -266,6 +267,7 @@ class RequestsListingResourceTest(BaseWebTest):
         )
 
         self.assertIn("data", response.json)
+        self.assertNotEqual(document_url, response.json["data"]["documents"][0]["url"])
         self.assertEqual(
             set(response.json["data"]),
             {

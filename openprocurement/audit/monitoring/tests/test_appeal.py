@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 import unittest
+from openprocurement.audit.api.utils import get_now
 
 from freezegun import freeze_time
 
@@ -75,6 +76,28 @@ class MonitoringAppealResourceTest(BaseAppealTest):
         self.assertEqual(
             response.json["errors"],
             [{'description': "Can't post before conclusion is published.", 'location': 'body', 'name': 'appeal'}]
+        )
+
+    def test_fail_patch_appeal_before_added(self):
+        self.post_conclusion(publish=False)
+
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+        response = self.app.patch_json(
+            '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
+            {"data": {
+                "proceeding": {
+                    "type": "sas",
+                    "dateProceedings": get_now().isoformat(),
+                    "proceedingNumber": "somenumber",
+                }
+            }},
+            status=404
+        )
+
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(
+            response.json["errors"],
+            [{'location': 'body', 'name': 'data', 'description': 'Appeal not found'}]
         )
 
     def test_fail_appeal_none(self):
@@ -176,6 +199,61 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json["data"]["description"], 'Lorem ipsum dolor sit amet')
+
+    def test_success_update_appeal(self):
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+        response = self.app.patch_json(
+            '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
+            {"data": {
+                "proceeding": {
+                    "type": "sas",
+                    "dateProceedings": get_now().isoformat(),
+                    "proceedingNumber": "somenumber",
+                }
+            }}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertIn("proceeding", response.json["data"])
+        proceeding = response.json["data"]["proceeding"]
+        self.assertIn(proceeding["type"], "sas")
+        self.assertEqual(proceeding["proceedingNumber"], "somenumber")
+
+        response = self.app.patch_json(
+            '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
+            {"data": {
+                "proceeding": {
+                    "type": "court",
+                    "dateProceedings": get_now().isoformat(),
+                    "proceedingNumber": "somenumber",
+                }
+            }}
+        )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertIn("proceeding", response.json["data"])
+        proceeding = response.json["data"]["proceeding"]
+        self.assertIn(proceeding["type"], "court")
+        self.assertEqual(proceeding["proceedingNumber"], "somenumber")
+
+    def test_fail_patch_appeal(self):
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+        response = self.app.patch_json(
+            '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
+            {"data": {
+                "proceeding": {
+                    "type": "some_type",
+                    "proceedingNumber": "somenumber",
+                }
+            }},
+            status=422
+        )
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(
+            response.json["errors"][0]["description"],
+            {'type': ["Value must be one of ['sas', 'court']."]},
+        )
 
     def test_fail_update_appeal(self):
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))

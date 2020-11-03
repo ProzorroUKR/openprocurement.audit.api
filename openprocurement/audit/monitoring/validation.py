@@ -109,6 +109,22 @@ def validate_appeal_data(request):
 
     return validate_data(request, Appeal)
 
+
+def validate_patch_appeal_data(request):
+    """
+    Validate appeal report data PATCH
+    """
+    monitoring = request.validated['monitoring']
+    if monitoring.appeal is None:
+        raise_operation_error(request, "Appeal not found", status=404)
+
+    # TODO: запрещать патчить proceeding
+
+    request.context = monitoring.appeal
+
+    return validate_data(request, Appeal, partial=True)
+
+
 def validate_document_decision_status(request):
     _validate_document_status(request, DRAFT_STATUS)
 

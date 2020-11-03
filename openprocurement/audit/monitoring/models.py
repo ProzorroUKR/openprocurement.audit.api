@@ -40,6 +40,12 @@ class Period(Model):
             raise ValidationError(u"period should begin before its end")
 
 
+class Proceeding(Model):
+    type = StringType(choices=["sas", "court"], required=True)
+    dateProceedings = IsoDateTimeType(required=True)
+    proceedingNumber = StringType(required=True)
+
+
 class Report(Model):
     description = StringType(required=True)
     documents = ListType(ModelType(Document), default=[])
@@ -191,11 +197,18 @@ class EliminationReport(Report):
 
 
 class Appeal(Report):
+
+    proceeding = ModelType(Proceeding)
+
     class Options:
         roles = {
             'create': whitelist('description', 'documents'),
+            'edit': whitelist('proceeding'),
             'view': schematics_default_role,
         }
+
+    def get_role(self):
+        return 'edit'
 
 
 class MonitoringAddress(Address):

@@ -5,6 +5,7 @@ from openprocurement.audit.api.constants import (
     DECISION_OBJECT_TYPE,
     CONCLUSION_OBJECT_TYPE,
     APPEAL_OBJECT_TYPE,
+    LIABILITY_OBJECT_TYPE,
     ELIMINATION_REPORT_OBJECT_TYPE,
     ELIMINATION_RESOLUTION_OBJECT_TYPE,
     POST_OBJECT_TYPE,
@@ -246,3 +247,26 @@ class AppealDocumentResource(MonitoringsDocumentBaseResource):
                validators=(validate_file_update,))
     def put(self):
         return super(AppealDocumentResource, self).put()
+
+
+@op_resource(name='Monitoring LIABILITY Documents',
+             collection_path='/monitorings/{monitoring_id}/liability/documents',
+             path='/monitorings/{monitoring_id}/liability/documents/{document_id}',
+             description='Monitoring Liability related binary files (PDFs, etc.)')
+class LiabilityDocumentResource(MonitoringsDocumentBaseResource):
+    document_type = LIABILITY_OBJECT_TYPE
+
+    @json_view(permission='edit_monitoring',
+               validators=(validate_file_upload,))
+    def collection_post(self):
+        return super(LiabilityDocumentResource, self).collection_post()
+
+    @json_view(permission='edit_monitoring',
+               validators=(validate_patch_document_data,))
+    def patch(self):
+        return super(LiabilityDocumentResource, self).patch()
+
+    @json_view(permission='edit_monitoring',
+               validators=(validate_file_update,))
+    def put(self):
+        return super(LiabilityDocumentResource, self).put()

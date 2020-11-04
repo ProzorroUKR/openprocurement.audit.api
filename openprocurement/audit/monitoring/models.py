@@ -245,6 +245,23 @@ class MonitoringParty(Party):
     roles = ListType(StringType(choices=PARTY_ROLES_CHOICES), default=[])
 
 
+class Liability(Model):
+    class Options:
+        roles = {
+            'create': whitelist('reportNumber', 'documents'),
+            'edit': whitelist('proceeding'),
+            'view': schematics_default_role,
+        }
+
+    reportNumber = StringType(required=True, min_length=1)
+    datePublished = IsoDateTimeType(default=get_now)
+    documents = ListType(ModelType(Document), default=[])
+    proceeding = ModelType(Proceeding)
+
+    def get_role(self):
+        return 'edit'
+
+
 class Monitoring(BaseModel):
 
     class Options:
@@ -295,6 +312,7 @@ class Monitoring(BaseModel):
     posts = ListType(ModelType(Post), default=[])
     cancellation = ModelType(Cancellation)
     appeal = ModelType(Appeal)
+    liability = ModelType(Liability)
 
     parties = ListType(ModelType(MonitoringParty), default=[])
 

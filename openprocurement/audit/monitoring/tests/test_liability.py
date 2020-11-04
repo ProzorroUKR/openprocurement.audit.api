@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
 import unittest
+from unittest import mock
+from hashlib import sha512
+
 from openprocurement.audit.api.utils import get_now
 
 from freezegun import freeze_time
@@ -8,10 +11,10 @@ from openprocurement.audit.monitoring.tests.base import BaseWebTest, DSWebTestMi
 
 
 @freeze_time('2018-01-01T11:00:00+02:00')
-class BaseAppealTest(BaseWebTest, DSWebTestMixin):
+class BaseLiabilityTest(BaseWebTest, DSWebTestMixin):
 
     def setUp(self):
-        super(BaseAppealTest, self).setUp()
+        super(BaseLiabilityTest, self).setUp()
         self.app.app.registry.docservice_url = 'http://localhost'
         self.create_monitoring()
 
@@ -20,76 +23,119 @@ class BaseAppealTest(BaseWebTest, DSWebTestMixin):
         monitoring.update(tender_owner="broker", tender_owner_token=self.tender_owner_token)
         self.db.save(monitoring)
 
-    def post_conclusion(self, publish=True):
-        authorization = self.app.authorization
+    def create_active_monitoring(self, **kwargs):
+        self.create_monitoring(**kwargs)
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+
+        self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "decision": {
+                    "description": "text",
+                    "date": get_now().isoformat()
+                },
+                "status": "active",
+            }}
+        )
+
+        # get credentials for tha monitoring owner
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+        with mock.patch('openprocurement.audit.monitoring.validation.TendersClient') as mock_api_client:
+            mock_api_client.return_value.extract_credentials.return_value = {
+                'data': {'tender_token': sha512(b'tender_token').hexdigest()}
+            }
+            response = self.app.patch_json(
+                '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token')
+            )
+        self.tender_owner_token = response.json['access']['token']
+
+    def create_addressed_monitoring(self, **kwargs):
+        self.create_active_monitoring(**kwargs)
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
-            {'data': {
-                "status": "active",
-                "decision": {
-                    "date": "2015-05-10T23:11:39.720908+03:00",
-                    "description": "text",
-                }
+            {"data": {
+                "conclusion": {
+                    "description": "Some text",
+                    "violationOccurred": True,
+                    "violationType": ["corruptionProcurementMethodType", "corruptionAwarded"],
+                },
+                "status": "addressed",
             }}
         )
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+
+    def create_monitoring_with_elimination(self, **kwargs):
+        self.create_addressed_monitoring(**kwargs)
+        response = self.app.put_json(
+            '/monitorings/{}/eliminationReport?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
+            {"data": {
+                "description": "It's a minimal required elimination report",
+                "documents": [
+                    {
+                        'title': 'lorem.doc',
+                        'url': self.generate_docservice_url(),
+                        'hash': 'md5:' + '0' * 32,
+                        'format': 'application/msword',
+                    }
+                ]
+            }},
+        )
+        self.elimination = response.json["data"]
+
+    def post_eliminationResolution(self):
+        self.create_monitoring_with_elimination()
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
-            {'data': {
-                "status": "declined" if publish else None,
-                "conclusion": {
-                    "description": "text",
-                    "violationOccurred": False,
-                }
-            }}
-        )
-        self.app.authorization = authorization
-
-
-class MonitoringAppealResourceTest(BaseAppealTest):
-
-    def test_fail_appeal_before_conclusion(self):
-        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
-        response = self.app.put_json(
-            '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
-            {'data': {
-                'description': 'Lorem ipsum dolor sit amet'
-            }},
-            status=422
-        )
-        self.assertEqual(
-            response.json["errors"],
-            [{'description': "Can't post before conclusion is published.", 'location': 'body', 'name': 'appeal'}]
-        )
-
-    def test_fail_appeal_before_conclusion_posted(self):
-        self.post_conclusion(publish=False)
-
-        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
-        response = self.app.put_json(
-            '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
-            {'data': {
-                'description': 'Lorem ipsum dolor sit amet'
-            }},
-            status=422
-        )
-        self.assertEqual(
-            response.json["errors"],
-            [{'description': "Can't post before conclusion is published.", 'location': 'body', 'name': 'appeal'}]
-        )
-
-    def test_fail_patch_appeal_before_added(self):
-        self.post_conclusion(publish=False)
-
-        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
-        response = self.app.patch_json(
-            '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
             {"data": {
-                "proceeding": {
-                    "type": "sas",
-                    "dateProceedings": get_now().isoformat(),
-                    "proceedingNumber": "somenumber",
-                }
+                "eliminationResolution": {
+                    "result": "partly",
+                    "resultByType": {
+                        "corruptionProcurementMethodType": "eliminated",
+                        "corruptionAwarded": "not_eliminated",
+                    },
+                    "description": "Do you have spare crutches?",
+                    "documents": [
+                        {
+                            'title': 'sign.p7s',
+                            'url': self.generate_docservice_url(),
+                            'hash': 'md5:' + '0' * 32,
+                            'format': 'application/pkcs7-signature',
+                        }
+                    ]
+                },
+            }},
+        )
+
+
+class MonitoringLiabilityResourceTest(BaseLiabilityTest):
+
+    def test_fail_liability_before_eliminationResolution(self):
+        self.create_monitoring_with_elimination()
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+
+        response = self.app.put_json(
+            '/monitorings/{}/liability'.format(self.monitoring_id),
+            {'data': {
+                'reportNumber': '1234567890',
+            }},
+            status=422
+        )
+        self.assertEqual(
+            response.json["errors"],
+            [{'description': "Can't post before eliminationResolution is published.",
+              'location': 'body', 'name': 'liability'}]
+        )
+
+    def test_fail_patch_liability_before_added(self):
+        self.post_eliminationResolution()
+
+        response = self.app.patch_json(
+            '/monitorings/{}/liability'.format(self.monitoring_id),
+            {'data': {
+                'reportNumber': '1234567890',
             }},
             status=404
         )
@@ -97,57 +143,44 @@ class MonitoringAppealResourceTest(BaseAppealTest):
         self.assertEqual(response.status_code, 404)
         self.assertEqual(
             response.json["errors"],
-            [{'location': 'body', 'name': 'data', 'description': 'Appeal not found'}]
+            [{'location': 'body', 'name': 'data', 'description': 'Liability not found'}]
         )
 
-    def test_fail_appeal_none(self):
-        self.post_conclusion()
+    def test_fail_liability_none(self):
+        self.post_eliminationResolution()
 
         self.app.authorization = None
         self.app.put_json(
-            '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
+            '/monitorings/{}/liability'.format(self.monitoring_id),
             {'data': {
-                'description': 'Lorem ipsum dolor sit amet'
+                'reportNumber': '1234567890',
             }},
             status=403
         )
 
-    def test_fail_appeal_sas(self):
-        self.post_conclusion()
+    def test_success_liability_minimum(self):
+        self.post_eliminationResolution()
 
-        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
-        self.app.put_json(
-            '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
-            {'data': {
-                'description': 'Lorem ipsum dolor sit amet'
-            }},
-            status=403
-        )
-
-    def test_success_appeal_minimum(self):
-        self.post_conclusion()
-
-        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.put_json(
-            '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
+            '/monitorings/{}/liability'.format(self.monitoring_id),
             {'data': {
-                'description': 'Lorem ipsum dolor sit amet'
+                'reportNumber': '1234567890',
             }},
         )
         self.assertEqual(
             response.json["data"],
-            {'dateCreated': '2018-01-01T11:00:00+02:00', 'description': 'Lorem ipsum dolor sit amet',
+            {'reportNumber': '1234567890',
              'datePublished': '2018-01-01T11:00:00+02:00'}
         )
 
-    def test_success_appeal_with_document(self):
-        self.post_conclusion()
+    def test_success_liability_with_document(self):
+        self.post_eliminationResolution()
 
-        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.put_json(
-            '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
+            '/monitorings/{}/liability'.format(self.monitoring_id),
             {'data': {
-                'description': 'Lorem ipsum dolor sit amet',
+                'reportNumber': '1234567890',
                 'documents': [
                     {
                         'title': 'lorem.doc',
@@ -169,16 +202,16 @@ class MonitoringAppealResourceTest(BaseAppealTest):
         )
 
 
-class MonitoringAppealPostedResourceTest(BaseAppealTest):
+class MonitoringLiabilityPostedResourceTest(BaseLiabilityTest):
 
     def setUp(self):
-        super(MonitoringAppealPostedResourceTest, self).setUp()
-        self.post_conclusion()
-        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+        super(MonitoringLiabilityPostedResourceTest, self).setUp()
+        self.post_eliminationResolution()
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.put_json(
-            '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
+            '/monitorings/{}/liability'.format(self.monitoring_id),
             {'data': {
-                'description': 'Lorem ipsum dolor sit amet',
+                'reportNumber': '1234567890',
                 'documents': [
                     {
                         'title': 'first.doc',
@@ -191,19 +224,19 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
         )
         self.document_id = response.json["data"]["documents"][0]["id"]
 
-    def test_get_appeal(self):
-        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+    def test_get_liability(self):
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.get(
-            '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token)
+            '/monitorings/{}/liability'.format(self.monitoring_id)
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
-        self.assertEqual(response.json["data"]["description"], 'Lorem ipsum dolor sit amet')
+        self.assertEqual(response.json["data"]["reportNumber"], '1234567890')
 
-    def test_success_update_appeal(self):
-        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+    def test_success_update_liability(self):
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.patch_json(
-            '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
+            '/monitorings/{}/liability'.format(self.monitoring_id),
             {"data": {
                 "proceeding": {
                     "type": "sas",
@@ -220,7 +253,7 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
         self.assertEqual(proceeding["proceedingNumber"], "somenumber")
 
         response = self.app.patch_json(
-            '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
+            '/monitorings/{}/liability'.format(self.monitoring_id),
             {"data": {
                 "proceeding": {
                     "type": "court",
@@ -237,10 +270,10 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
             [{"location": "body", "name": "data", "description": "Can't post another proceeding."}]
         )
 
-    def test_fail_patch_appeal(self):
-        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+    def test_fail_patch_liability(self):
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.patch_json(
-            '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
+            '/monitorings/{}/liability?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
             {"data": {
                 "proceeding": {
                     "type": "some_type",
@@ -255,10 +288,10 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
             {'type': ["Value must be one of ['sas', 'court']."], 'dateProceedings': ['This field is required.']},
         )
 
-    def test_fail_update_appeal(self):
-        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+    def test_fail_update_liability(self):
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.put_json(
-            '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
+            '/monitorings/{}/liability?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
             {'data': {
                 'description': 'Another description',
             }},
@@ -270,15 +303,15 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
                 {
                     "location": "body",
                     "name": "data",
-                    "description": "Can't post another appeal."
+                    "description": "Can't post another liability."
                 }
             ]
         )
 
     def test_success_post_document(self):
-        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json(
-            '/monitorings/{}/appeal/documents?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
+            '/monitorings/{}/liability/documents?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
             {'data': {
                 'title': 'lorem.doc',
                 'url': self.generate_docservice_url(),
@@ -292,7 +325,7 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
         )
 
     def test_success_put_document(self):
-        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         request_data = {
             'title': 'another.doc',
             'url': self.generate_docservice_url(),
@@ -300,7 +333,7 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
             'format': 'application/json',
         }
         response = self.app.put_json(
-            '/monitorings/{}/appeal/documents/{}?acc_token={}'.format(
+            '/monitorings/{}/liability/documents/{}?acc_token={}'.format(
                 self.monitoring_id, self.document_id, self.tender_owner_token
             ),
             {'data': request_data},
@@ -315,14 +348,14 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
         self.assertEqual(data["title"], request_data["title"])
 
     def test_success_patch_document(self):
-        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         request_data = {
             'title': 'another.doc',
             'url': self.generate_docservice_url(),
             'format': 'application/json',
         }
         response = self.app.patch_json(
-            '/monitorings/{}/appeal/documents/{}?acc_token={}'.format(
+            '/monitorings/{}/liability/documents/{}?acc_token={}'.format(
                 self.monitoring_id, self.document_id, self.tender_owner_token
             ),
             {'data': request_data},

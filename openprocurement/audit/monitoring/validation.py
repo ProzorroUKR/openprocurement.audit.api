@@ -21,7 +21,7 @@ from openprocurement.audit.api.utils import (
     get_now,
 )
 from openprocurement.audit.api.validation import validate_data
-from openprocurement.audit.monitoring.models import Monitoring, EliminationReport, Appeal, Post
+from openprocurement.audit.monitoring.models import Monitoring, EliminationReport, Appeal, Post, Liability
 from openprocurement.audit.monitoring.models import MonitoringParty as Party
 from openprocurement.audit.monitoring.utils import (
     get_access_token,
@@ -118,11 +118,40 @@ def validate_patch_appeal_data(request):
     if monitoring.appeal is None:
         raise_operation_error(request, "Appeal not found", status=404)
 
-    # TODO: запрещать патчить proceeding
-
-    request.context = monitoring.appeal
+    if request.context.proceeding is not None:
+        raise_operation_error(request, "Can't post another proceeding.")
 
     return validate_data(request, Appeal, partial=True)
+
+
+def validate_liability_data(request):
+    """
+    Validate liability report data POST
+    """
+    monitoring = request.validated['monitoring']
+    if monitoring.liability is not None:
+        raise_operation_error(request, "Can't post another liability.")
+
+    if monitoring.eliminationResolution is None or monitoring.eliminationResolution.datePublished is None:
+        request.errors.status = 422
+        request.errors.add('body', 'liability', 'Can\'t post before eliminationResolution is published.')
+        raise error_handler(request.errors)
+
+    return validate_data(request, Liability)
+
+
+def validate_patch_liability_data(request):
+    """
+    Validate liability report data PATCH
+    """
+    monitoring = request.validated['monitoring']
+    if monitoring.liability is None:
+        raise_operation_error(request, "Liability not found", status=404)
+
+    if request.context.proceeding:
+        raise_operation_error(request, "Can't post another proceeding.")
+
+    return validate_data(request, Liability, partial=True)
 
 
 def validate_document_decision_status(request):

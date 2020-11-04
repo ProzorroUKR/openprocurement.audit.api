@@ -38,7 +38,7 @@ class AppealResource(APIResource):
     def patch(self):
         appeal = self.request.context
         monitoring = self.request.validated['monitoring']
-        apply_patch(self.request, save=False, src=appeal.serialize())
+        apply_patch(self.request, src=appeal.serialize())
         self.LOGGER.info('Updated appeal {}'.format(monitoring.id),
                          extra=context_unpack(self.request, {'MESSAGE_ID': 'appeal_patch'}))
         return {'data': appeal.serialize('view')}

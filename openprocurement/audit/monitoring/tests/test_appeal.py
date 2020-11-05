@@ -252,7 +252,7 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(
             response.json["errors"][0]["description"],
-            {'type': ["Value must be one of ['sas', 'court']."], 'dateProceedings': ['This field is required.']},
+            {'type': ["Value must be one of ('sas', 'court')."], 'dateProceedings': ['This field is required.']},
         )
 
     def test_fail_update_appeal(self):

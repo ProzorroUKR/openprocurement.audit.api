@@ -27,6 +27,7 @@ from openprocurement.audit.monitoring.choices import (
     RESOLUTION_RESULT_CHOICES,
     RESOLUTION_BY_TYPE_CHOICES,
     PARTY_ROLES_CHOICES,
+    PROCEEDING_TYPE_CHOICES,
 )
 from openprocurement.audit.api.choices import VIOLATION_TYPE_CHOICES
 
@@ -41,7 +42,7 @@ class Period(Model):
 
 
 class Proceeding(Model):
-    type = StringType(choices=["sas", "court"], required=True)
+    type = StringType(choices=PROCEEDING_TYPE_CHOICES, required=True)
     dateProceedings = IsoDateTimeType(required=True)
     proceedingNumber = StringType(required=True)
 

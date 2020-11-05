@@ -1,0 +1,42 @@
+PATCH /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/liability HTTP/1.0
+Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
+Content-Length: 125
+Content-Type: application/json
+Host: audit-api-sandbox.prozorro.gov.ua
+DATA:
+{
+  "data": {
+    "proceeding": {
+      "type": "court",
+      "dateProceedings": "2019-04-01T00:00:00+02:00",
+      "proceedingNumber": "0123456789"
+    }
+  }
+}
+
+Response: 200 OK
+Content-Type: application/json
+{
+  "data": {
+    "reportNumber": "1234567890",
+    "datePublished": "2018-01-09T02:30:00+02:00",
+    "documents": [
+      {
+        "id": "fa996cbc6c074f659ef30788ab2d6782",
+        "hash": "md5:00000000000000000000000000000000",
+        "title": "letter.doc",
+        "format": "application/msword",
+        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/ebc81e9025064d789bece0f57453d4dd?Signature=TMThtjAcxaQGQfAUMUbGDEpJ8YSHhOWIyZlkiNNruHaOQDvkKn6GVifMCOm83CG3ov%2F2eUiGKsZUkMUCyIhvBQ%253D%253D&KeyID=a8968c46",
+        "datePublished": "2018-01-09T02:30:00+02:00",
+        "dateModified": "2018-01-09T02:30:00+02:00",
+        "author": "monitoring_owner"
+      }
+    ],
+    "proceeding": {
+      "type": "court",
+      "dateProceedings": "2019-04-01T00:00:00+02:00",
+      "proceedingNumber": "0123456789"
+    }
+  }
+}
+

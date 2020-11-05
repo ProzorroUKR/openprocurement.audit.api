@@ -1,0 +1,29 @@
+PATCH /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/liability HTTP/1.0
+Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
+Content-Length: 125
+Content-Type: application/json
+Host: audit-api-sandbox.prozorro.gov.ua
+DATA:
+{
+  "data": {
+    "proceeding": {
+      "type": "court",
+      "dateProceedings": "2019-04-01T00:00:00+02:00",
+      "proceedingNumber": "0123456789"
+    }
+  }
+}
+
+Response: 403 Forbidden
+Content-Type: application/json
+{
+  "status": "error",
+  "errors": [
+    {
+      "location": "body",
+      "name": "data",
+      "description": "Can't post another proceeding."
+    }
+  ]
+}
+

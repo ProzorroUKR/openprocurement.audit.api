@@ -1,0 +1,33 @@
+PUT /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/liability HTTP/1.0
+Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
+Content-Length: 378
+Content-Type: application/json
+Host: audit-api-sandbox.prozorro.gov.ua
+DATA:
+{
+  "data": {
+    "reportNumber": "1111111111",
+    "documents": [
+      {
+        "title": "another-letter.doc",
+        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/1ae2e0c7128640a7b83a4b876025582f?Signature=aC%2BxXIkiPzfQyjhqzDN6UOJv7VdWeyocCq2vkamYdR7FXlaCdKCzTHIWI7uEEq4gAcRRQaJH8Tc1lJX3or62AQ%3D%3D&KeyID=a8968c46",
+        "hash": "md5:00000000000000000000000000000000",
+        "format": "application/msword"
+      }
+    ]
+  }
+}
+
+Response: 403 Forbidden
+Content-Type: application/json
+{
+  "status": "error",
+  "errors": [
+    {
+      "location": "body",
+      "name": "data",
+      "description": "Can't post another liability."
+    }
+  ]
+}
+

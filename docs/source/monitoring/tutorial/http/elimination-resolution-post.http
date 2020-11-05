@@ -240,7 +240,12 @@ Content-Type: application/json
         }
       ],
       "dateCreated": "2018-01-06T09:00:00+02:00",
-      "datePublished": "2018-01-06T09:00:00+02:00"
+      "datePublished": "2018-01-06T09:00:00+02:00",
+      "proceeding": {
+        "type": "court",
+        "dateProceedings": "2019-04-01T00:00:00+02:00",
+        "proceedingNumber": "0123456789"
+      }
     },
     "parties": [
       {

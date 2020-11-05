@@ -48,3 +48,8 @@ RESOLUTION_BY_TYPE_CHOICES = [
     'not_eliminated',
     'no_mechanism'
 ]
+
+PROCEEDING_TYPE_CHOICES = (
+    'sas',
+    'court',
+)

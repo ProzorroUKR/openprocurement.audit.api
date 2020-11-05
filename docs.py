@@ -671,6 +671,37 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                     status=403
                 )
 
+        with freeze_time("2018.01.06 07:15"):
+            with open('docs/source/monitoring/tutorial/http/add-proceeding-to-appeal.http', 'wt') as self.app.file_obj:
+                self.app.patch_json(
+                    '/monitorings/{}/appeal?acc_token={}'.format(monitoring_id, tender_owner_token),
+                    {
+                        "data": {
+                            "proceeding": {
+                                "type": "court",
+                                "dateProceedings": MOCK_DATETIME,
+                                "proceedingNumber": "0123456789",
+                            },
+                        },
+                    },
+                )
+
+        with freeze_time("2018.01.06 07:15"):
+            with open('docs/source/monitoring/tutorial/http/add-proceeding-to-appeal-again.http', 'wt') as self.app.file_obj:
+                self.app.patch_json(
+                    '/monitorings/{}/appeal?acc_token={}'.format(monitoring_id, tender_owner_token),
+                    {
+                        "data": {
+                            "proceeding": {
+                                "type": "court",
+                                "dateProceedings": MOCK_DATETIME,
+                                "proceedingNumber": "0123456789",
+                            },
+                        },
+                    },
+                    status=403,
+                )
+
         with freeze_time("2018.01.06 08:00"):
             with open('docs/source/monitoring/tutorial/http/appeal-post-doc.http', 'wt') as self.app.file_obj:
                 self.app.post_json(
@@ -747,6 +778,101 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                                 ],
                                 "relatedParty": party_id
                             },
+                        }
+                    },
+                )
+
+        # LIABILITY
+
+        with freeze_time("2018.01.09 00:30"):
+            with open('docs/source/monitoring/tutorial/http/liability-post.http', 'wt') as self.app.file_obj:
+                response = self.app.put_json(
+                    '/monitorings/{}/liability'.format(monitoring_id),
+                    {
+                        'data': {
+                            'reportNumber': '1234567890',
+                            'documents': [{
+                                'title': 'letter.doc',
+                                'url': self.generate_docservice_url(),
+                                'hash': 'md5:' + '0' * 32,
+                                'format': 'application/msword',
+                            }]
+                        }
+                    },
+                )
+                liability_doc_id = response.json["data"]["documents"][0]["id"]
+
+        another_document = {
+            'title': 'another-letter.doc',
+            'url': self.generate_docservice_url(),
+            'hash': 'md5:' + '0' * 32,
+            'format': 'application/msword',
+        }
+
+        with freeze_time("2018.01.09 01:00"):
+            with open('docs/source/monitoring/tutorial/http/liability-post-again.http', 'wt') as self.app.file_obj:
+                self.app.put_json(
+                    '/monitorings/{}/liability'.format(monitoring_id),
+                    {
+                        "data": {
+                            "reportNumber": "1111111111",
+                            "documents": [another_document]
+                        }
+                    },
+                    status=403
+                )
+
+        with freeze_time("2018.01.09 01:30"):
+            with open('docs/source/monitoring/tutorial/http/add-proceeding-to-liability.http', 'wt') as self.app.file_obj:
+                self.app.patch_json(
+                    '/monitorings/{}/liability'.format(monitoring_id),
+                    {
+                        "data": {
+                            "proceeding": {
+                                "type": "court",
+                                "dateProceedings": MOCK_DATETIME,
+                                "proceedingNumber": "0123456789",
+                            },
+                        },
+                    },
+                )
+
+        with freeze_time("2018.01.09 02:00"):
+            with open('docs/source/monitoring/tutorial/http/add-proceeding-to-liability-again.http', 'wt') as self.app.file_obj:
+                self.app.patch_json(
+                    '/monitorings/{}/liability'.format(monitoring_id),
+                    {
+                        "data": {
+                            "proceeding": {
+                                "type": "court",
+                                "dateProceedings": MOCK_DATETIME,
+                                "proceedingNumber": "0123456789",
+                            },
+                        },
+                    },
+                    status=403,
+                )
+
+        with freeze_time("2018.01.09 02:30"):
+            with open('docs/source/monitoring/tutorial/http/liability-post-doc.http', 'wt') as self.app.file_obj:
+                self.app.post_json(
+                    '/monitorings/{}/liability/documents'.format(monitoring_id),
+                    {"data": another_document},
+                )
+
+        with freeze_time("2018.01.09 03:00"):
+            with open('docs/source/monitoring/tutorial/http/liability-patch-doc.http', 'wt') as self.app.file_obj:
+                self.app.patch_json(
+                    '/monitorings/{}/liability/documents/{}'.format(
+                        monitoring_id,
+                        liability_doc_id,
+                    ),
+                    {
+                        "data": {
+                            'title': 'letter(0).doc',
+                            'url': self.generate_docservice_url(),
+                            'hash': 'md5:' + '0' * 32,
+                            'format': 'application/json',
                         }
                     },
                 )

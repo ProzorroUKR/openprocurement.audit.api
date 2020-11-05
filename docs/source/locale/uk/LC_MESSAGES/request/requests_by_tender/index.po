@@ -2,7 +2,7 @@
 # Copyright (C) 2018, Raccoongang
 # This file is distributed under the same license as the
 # openprocurement.audit.api package.
-# FIRST AUTHOR <EMAIL@ADDRESS>, 2019.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
 #
 #, fuzzy
 msgid ""
@@ -18,36 +18,31 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Generated-By: Babel 2.8.0\n"
 
-#: ../../source/inspection/inspections_by_monitoring/index.rst:4
-msgid "Inspections by monitoring id"
+#: ../../source/request/requests_by_tender/index.rst:4
+msgid "Requests by tender id"
 msgstr ""
 
-#: ../../source/inspection/inspections_by_monitoring/index.rst:6
-msgid "All the inspections can be found by theirs monitoring id:"
+#: ../../source/request/requests_by_tender/index.rst:6
+msgid "All the requests can be found by theirs tender id:"
 msgstr ""
 
-#: ../../source/inspection/inspections_by_monitoring/index.rst:11
+#: ../../source/request/requests_by_tender/index.rst:11
 msgid "The ``opt_fields`` param is supported:"
 msgstr ""
 
-#: ../../source/inspection/inspections_by_monitoring/index.rst:16
+#: ../../source/request/requests_by_tender/index.rst:16
 msgid "Pagination can be controlled with ``limit`` and ``page`` params where:"
 msgstr ""
 
-#: ../../source/inspection/inspections_by_monitoring/index.rst:18
+#: ../../source/request/requests_by_tender/index.rst:18
 msgid "``limit`` - the maximum number of items"
 msgstr ""
 
-#: ../../source/inspection/inspections_by_monitoring/index.rst:19
+#: ../../source/request/requests_by_tender/index.rst:19
 msgid "``page`` - the number of page"
 msgstr ""
 
-#~ msgid "This section contains available actions for next roles:"
-#~ msgstr ""
-
-#~ msgid "|no| Monitoring owner"
-#~ msgstr ""
-
-#~ msgid "|no| Tender owner"
-#~ msgstr ""
+#: ../../source/request/requests_by_tender/index.rst:20
+msgid "``descending`` - items in reverse order"
+msgstr ""
 

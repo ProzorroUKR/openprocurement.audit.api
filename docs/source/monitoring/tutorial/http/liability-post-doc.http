@@ -1,0 +1,31 @@
+POST /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/liability/documents HTTP/1.0
+Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
+Content-Length: 331
+Content-Type: application/json
+Host: audit-api-sandbox.prozorro.gov.ua
+DATA:
+{
+  "data": {
+    "title": "another-letter.doc",
+    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/1ae2e0c7128640a7b83a4b876025582f?Signature=aC%2BxXIkiPzfQyjhqzDN6UOJv7VdWeyocCq2vkamYdR7FXlaCdKCzTHIWI7uEEq4gAcRRQaJH8Tc1lJX3or62AQ%3D%3D&KeyID=a8968c46",
+    "hash": "md5:00000000000000000000000000000000",
+    "format": "application/msword"
+  }
+}
+
+Response: 201 Created
+Content-Type: application/json
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/liability/documents/b2740ddf7f574f40bda8ef38ae105ba5
+{
+  "data": {
+    "id": "b2740ddf7f574f40bda8ef38ae105ba5",
+    "hash": "md5:00000000000000000000000000000000",
+    "title": "another-letter.doc",
+    "format": "application/msword",
+    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/1ae2e0c7128640a7b83a4b876025582f?Signature=gYMbl6M9fXgPpM3BEVD6CTnHts2NY%2FnV6QAypR27kWqcGBQXceX%2FPoyV8myjN7WszG6W1FVzpdKIi%2FMC%252BTJtCQ%253D%253D&KeyID=a8968c46",
+    "datePublished": "2018-01-09T04:30:00+02:00",
+    "dateModified": "2018-01-09T04:30:00+02:00",
+    "author": "monitoring_owner"
+  }
+}
+

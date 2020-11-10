@@ -15,11 +15,6 @@ As soon as the elimination resolution is published, monitoring owner can add lia
    :code:
 
 
-This action can be performed only once:
-
-.. include:: http/liability-post-again.http
-   :code:
-
 After adding the liability, to liability can be added proceeding:
 
 .. include:: http/add-proceeding-to-liability.http

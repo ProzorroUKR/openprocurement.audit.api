@@ -27,7 +27,8 @@ from openprocurement.audit.monitoring.choices import (
     RESOLUTION_RESULT_CHOICES,
     RESOLUTION_BY_TYPE_CHOICES,
     PARTY_ROLES_CHOICES,
-    PROCEEDING_TYPE_CHOICES,
+    LEGISLATION_CHOICES,
+    NATIONAL_LEGISLATION_TYPE,
 )
 from openprocurement.audit.api.choices import VIOLATION_TYPE_CHOICES
 
@@ -41,10 +42,21 @@ class Period(Model):
             raise ValidationError(u"period should begin before its end")
 
 
+class LegislationIdentifier(Identifier):
+    scheme = StringType()
+
+
+class Legislation(Model):
+    version = StringType()
+    identifier = ModelType(LegislationIdentifier, required=True)
+    type = StringType(choices=LEGISLATION_CHOICES, default=NATIONAL_LEGISLATION_TYPE)
+    article = StringType()
+
+
 class Proceeding(Model):
-    type = StringType(choices=PROCEEDING_TYPE_CHOICES, required=True)
     dateProceedings = IsoDateTimeType(required=True)
     proceedingNumber = StringType(required=True)
+    legislation = ModelType(Legislation, required=True)
 
 
 class Report(Model):
@@ -254,6 +266,8 @@ class Liability(Model):
             'view': schematics_default_role,
         }
 
+    id = MD5Type(required=True, default=lambda: uuid4().hex)
+
     reportNumber = StringType(required=True, min_length=1)
     datePublished = IsoDateTimeType(default=get_now)
     documents = ListType(ModelType(Document), default=[])
@@ -313,7 +327,7 @@ class Monitoring(BaseModel):
     posts = ListType(ModelType(Post), default=[])
     cancellation = ModelType(Cancellation)
     appeal = ModelType(Appeal)
-    liability = ModelType(Liability)
+    liabilities = ListType(ModelType(Liability), default=list())
 
     parties = ListType(ModelType(MonitoringParty), default=[])
 

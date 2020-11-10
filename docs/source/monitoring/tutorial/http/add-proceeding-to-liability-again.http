@@ -1,15 +1,23 @@
-PATCH /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/liability HTTP/1.0
+PATCH /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/liabilities/acb2b6cf115c40819a6579e37d502ce9 HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
-Content-Length: 125
+Content-Length: 552
 Content-Type: application/json
 Host: audit-api-sandbox.prozorro.gov.ua
 DATA:
 {
   "data": {
     "proceeding": {
-      "type": "court",
       "dateProceedings": "2019-04-01T00:00:00+02:00",
-      "proceedingNumber": "0123456789"
+      "proceedingNumber": "0123456789",
+      "legislation": {
+        "version": "13.08.2020",
+        "article": "8.10",
+        "identifier": {
+          "id": "8073-X",
+          "legalName": "Кодекс України про адміністративні правопорушення",
+          "uri": "https://zakon.rada.gov.ua/laws/show/80731-10#Text"
+        }
+      }
     }
   }
 }

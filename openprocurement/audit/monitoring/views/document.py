@@ -250,8 +250,8 @@ class AppealDocumentResource(MonitoringsDocumentBaseResource):
 
 
 @op_resource(name='Monitoring LIABILITY Documents',
-             collection_path='/monitorings/{monitoring_id}/liability/documents',
-             path='/monitorings/{monitoring_id}/liability/documents/{document_id}',
+             collection_path='/monitorings/{monitoring_id}/liabilities/{liability_id}/documents',
+             path='/monitorings/{monitoring_id}/liabilities/{liability_id}/documents/{document_id}',
              description='Monitoring Liability related binary files (PDFs, etc.)')
 class LiabilityDocumentResource(MonitoringsDocumentBaseResource):
     document_type = LIABILITY_OBJECT_TYPE

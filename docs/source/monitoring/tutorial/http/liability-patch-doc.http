@@ -1,4 +1,4 @@
-PATCH /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/liability/documents/fa996cbc6c074f659ef30788ab2d6782 HTTP/1.0
+PATCH /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/liabilities/acb2b6cf115c40819a6579e37d502ce9/documents/fa996cbc6c074f659ef30788ab2d6782 HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
 Content-Length: 324
 Content-Type: application/json
@@ -21,7 +21,7 @@ Content-Type: application/json
     "hash": "md5:00000000000000000000000000000000",
     "title": "letter(0).doc",
     "format": "application/json",
-    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/ebc81e9025064d789bece0f57453d4dd?Signature=TMThtjAcxaQGQfAUMUbGDEpJ8YSHhOWIyZlkiNNruHaOQDvkKn6GVifMCOm83CG3ov%2F2eUiGKsZUkMUCyIhvBQ%253D%253D&KeyID=a8968c46",
+    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/ebc81e9025064d789bece0f57453d4dd?Signature=AxeYkDhVemkPPh%2FiXyJNEK2%2Fu5mFdqWQSbMcb9Iq4ekAvnWP4zmL4mkZsb%2B1vShUvDXUbPFML2O%2FgK40Fm49Aw%3D%3D&KeyID=a8968c46",
     "datePublished": "2018-01-09T02:30:00+02:00",
     "dateModified": "2018-01-09T02:30:00+02:00",
     "author": "monitoring_owner"

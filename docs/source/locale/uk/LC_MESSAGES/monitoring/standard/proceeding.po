@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: openprocurement.audit.api 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-05 17:27+0200\n"
+"POT-Creation-Date: 2020-11-10 17:15+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -27,31 +27,10 @@ msgid "Schema"
 msgstr ""
 
 #: ../../source/monitoring/standard/proceeding.rst
-msgid "type"
-msgstr ""
-
-#: ../../source/monitoring/standard/proceeding.rst:10
-#: ../../source/monitoring/standard/proceeding.rst:21
-msgid "string, required"
-msgstr "рядок, обов'язково"
-
-#: ../../source/monitoring/standard/proceeding.rst:12
-msgid "Possible values are:"
-msgstr "Можливі значення:"
-
-#: ../../source/monitoring/standard/proceeding.rst:14
-msgid "sas"
-msgstr ""
-
-#: ../../source/monitoring/standard/proceeding.rst:15
-msgid "court"
-msgstr ""
-
-#: ../../source/monitoring/standard/proceeding.rst
 msgid "dateProceedings"
 msgstr ""
 
-#: ../../source/monitoring/standard/proceeding.rst:18
+#: ../../source/monitoring/standard/proceeding.rst:10
 msgid "string, :ref:`date`, required"
 msgstr "рядок, :ref:`date`, обов'язково"
 
@@ -59,3 +38,14 @@ msgstr "рядок, :ref:`date`, обов'язково"
 msgid "proceedingNumber"
 msgstr ""
 
+#: ../../source/monitoring/standard/proceeding.rst:13
+msgid "string, required"
+msgstr "рядок, обов'язково"
+
+#: ../../source/monitoring/standard/proceeding.rst
+msgid "legislation"
+msgstr ""
+
+#: ../../source/monitoring/standard/proceeding.rst:16
+msgid ":ref:`Legislation` object"
+msgstr "об'єкт :ref:`Legislation`"

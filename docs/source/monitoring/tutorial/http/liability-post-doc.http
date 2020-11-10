@@ -1,4 +1,4 @@
-POST /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/liability/documents HTTP/1.0
+POST /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/liabilities/acb2b6cf115c40819a6579e37d502ce9/documents HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
 Content-Length: 331
 Content-Type: application/json
@@ -15,7 +15,7 @@ DATA:
 
 Response: 201 Created
 Content-Type: application/json
-Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/liability/documents/b2740ddf7f574f40bda8ef38ae105ba5
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/liabilities/acb2b6cf115c40819a6579e37d502ce9/documents/b2740ddf7f574f40bda8ef38ae105ba5
 {
   "data": {
     "id": "b2740ddf7f574f40bda8ef38ae105ba5",

@@ -83,3 +83,7 @@ INACCURATE_PERSONAL_DATA = "inaccuratePersonalData"
 DEADLINE_FOR_THE_PUBLICATION_DOCUMENTATION = "deadlineForThePublicationDocumentation"
 NOT_COMPLY_DECISION_ACU = "notComplyDecisionACU"
 CONTRACTS_WITHOUT_PROCUREMENT = "contractsWithoutProcurement"
+
+# Legislation violation types
+
+NATIONAL_LEGISLATION_TYPE = "NATIONAL_LEGISLATION"

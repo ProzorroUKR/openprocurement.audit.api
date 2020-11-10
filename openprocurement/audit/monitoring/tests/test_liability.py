@@ -116,8 +116,8 @@ class MonitoringLiabilityResourceTest(BaseLiabilityTest):
         self.create_monitoring_with_elimination()
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
-        response = self.app.put_json(
-            '/monitorings/{}/liability'.format(self.monitoring_id),
+        response = self.app.post_json(
+            '/monitorings/{}/liabilities'.format(self.monitoring_id),
             {'data': {
                 'reportNumber': '1234567890',
             }},
@@ -133,7 +133,7 @@ class MonitoringLiabilityResourceTest(BaseLiabilityTest):
         self.post_eliminationResolution()
 
         response = self.app.patch_json(
-            '/monitorings/{}/liability'.format(self.monitoring_id),
+            '/monitorings/{}/liabilities/some_id'.format(self.monitoring_id),
             {'data': {
                 'reportNumber': '1234567890',
             }},
@@ -143,15 +143,15 @@ class MonitoringLiabilityResourceTest(BaseLiabilityTest):
         self.assertEqual(response.status_code, 404)
         self.assertEqual(
             response.json["errors"],
-            [{'location': 'body', 'name': 'data', 'description': 'Liability not found'}]
+            [{'location': 'url', 'name': 'liability_id', 'description': 'Not Found'}]
         )
 
     def test_fail_liability_none(self):
         self.post_eliminationResolution()
 
         self.app.authorization = None
-        self.app.put_json(
-            '/monitorings/{}/liability'.format(self.monitoring_id),
+        self.app.post_json(
+            '/monitorings/{}/liabilities'.format(self.monitoring_id),
             {'data': {
                 'reportNumber': '1234567890',
             }},
@@ -161,15 +161,17 @@ class MonitoringLiabilityResourceTest(BaseLiabilityTest):
     def test_success_liability_minimum(self):
         self.post_eliminationResolution()
 
-        response = self.app.put_json(
-            '/monitorings/{}/liability'.format(self.monitoring_id),
+        response = self.app.post_json(
+            '/monitorings/{}/liabilities'.format(self.monitoring_id),
             {'data': {
                 'reportNumber': '1234567890',
             }},
         )
+        laibilty_id = response.json["data"]["id"]
         self.assertEqual(
             response.json["data"],
-            {'reportNumber': '1234567890',
+            {'id': laibilty_id,
+             'reportNumber': '1234567890',
              'datePublished': '2018-01-01T11:00:00+02:00'}
         )
 
@@ -177,8 +179,8 @@ class MonitoringLiabilityResourceTest(BaseLiabilityTest):
         self.post_eliminationResolution()
 
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
-        response = self.app.put_json(
-            '/monitorings/{}/liability'.format(self.monitoring_id),
+        response = self.app.post_json(
+            '/monitorings/{}/liabilities'.format(self.monitoring_id),
             {'data': {
                 'reportNumber': '1234567890',
                 'documents': [
@@ -208,8 +210,8 @@ class MonitoringLiabilityPostedResourceTest(BaseLiabilityTest):
         super(MonitoringLiabilityPostedResourceTest, self).setUp()
         self.post_eliminationResolution()
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
-        response = self.app.put_json(
-            '/monitorings/{}/liability'.format(self.monitoring_id),
+        response = self.app.post_json(
+            '/monitorings/{}/liabilities'.format(self.monitoring_id),
             {'data': {
                 'reportNumber': '1234567890',
                 'documents': [
@@ -222,12 +224,13 @@ class MonitoringLiabilityPostedResourceTest(BaseLiabilityTest):
                 ]
             }},
         )
+        self.liability_id = response.json["data"]["id"]
         self.document_id = response.json["data"]["documents"][0]["id"]
 
     def test_get_liability(self):
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.get(
-            '/monitorings/{}/liability'.format(self.monitoring_id)
+            '/monitorings/{}/liabilities/{}'.format(self.monitoring_id, self.liability_id)
         )
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
@@ -236,12 +239,20 @@ class MonitoringLiabilityPostedResourceTest(BaseLiabilityTest):
     def test_success_update_liability(self):
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.patch_json(
-            '/monitorings/{}/liability'.format(self.monitoring_id),
-            {"data": {
-                "proceeding": {
-                    "type": "sas",
-                    "dateProceedings": get_now().isoformat(),
-                    "proceedingNumber": "somenumber",
+            '/monitorings/{}/liabilities/{}'.format(self.monitoring_id, self.liability_id),
+            {'data': {
+                'proceeding': {
+                    'dateProceedings': get_now().isoformat(),
+                    'proceedingNumber': 'somenumber',
+                    'legislation': {
+                        'version': '13.08.2020',
+                        'article': '8.10',
+                        'identifier': {
+                            'id': '8073-X',
+                            'legalName': 'Кодекс України про адміністративні правопорушення',
+                            'uri': 'https://zakon.rada.gov.ua/laws/show/80731-10#Text',
+                        }
+                    }
                 }
             }}
         )
@@ -249,14 +260,13 @@ class MonitoringLiabilityPostedResourceTest(BaseLiabilityTest):
         self.assertEqual(response.content_type, 'application/json')
         self.assertIn("proceeding", response.json["data"])
         proceeding = response.json["data"]["proceeding"]
-        self.assertIn(proceeding["type"], "sas")
+        self.assertIn("legislation", proceeding)
         self.assertEqual(proceeding["proceedingNumber"], "somenumber")
 
         response = self.app.patch_json(
-            '/monitorings/{}/liability'.format(self.monitoring_id),
+            '/monitorings/{}/liabilities/{}'.format(self.monitoring_id, self.liability_id),
             {"data": {
                 "proceeding": {
-                    "type": "court",
                     "dateProceedings": get_now().isoformat(),
                     "proceedingNumber": "somenumber",
                 }
@@ -273,10 +283,9 @@ class MonitoringLiabilityPostedResourceTest(BaseLiabilityTest):
     def test_fail_patch_liability(self):
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.patch_json(
-            '/monitorings/{}/liability?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
+            '/monitorings/{}/liabilities/{}'.format(self.monitoring_id, self.liability_id),
             {"data": {
                 "proceeding": {
-                    "type": "some_type",
                     "proceedingNumber": "somenumber",
                 }
             }},
@@ -285,33 +294,15 @@ class MonitoringLiabilityPostedResourceTest(BaseLiabilityTest):
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(
             response.json["errors"][0]["description"],
-            {'type': ["Value must be one of ('sas', 'court')."], 'dateProceedings': ['This field is required.']},
-        )
-
-    def test_fail_update_liability(self):
-        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
-        response = self.app.put_json(
-            '/monitorings/{}/liability?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
-            {'data': {
-                'description': 'Another description',
-            }},
-            status=403
-        )
-        self.assertEqual(
-            response.json["errors"],
-            [
-                {
-                    "location": "body",
-                    "name": "data",
-                    "description": "Can't post another liability."
-                }
-            ]
+            {'legislation': ['This field is required.'], 'dateProceedings': ['This field is required.']},
         )
 
     def test_success_post_document(self):
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.post_json(
-            '/monitorings/{}/liability/documents?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
+            '/monitorings/{}/liabilities/{}/documents'.format(
+                self.monitoring_id, self.liability_id
+            ),
             {'data': {
                 'title': 'lorem.doc',
                 'url': self.generate_docservice_url(),
@@ -333,8 +324,8 @@ class MonitoringLiabilityPostedResourceTest(BaseLiabilityTest):
             'format': 'application/json',
         }
         response = self.app.put_json(
-            '/monitorings/{}/liability/documents/{}?acc_token={}'.format(
-                self.monitoring_id, self.document_id, self.tender_owner_token
+            '/monitorings/{}/liabilities/{}/documents/{}'.format(
+                self.monitoring_id, self.liability_id, self.document_id
             ),
             {'data': request_data},
         )
@@ -355,8 +346,8 @@ class MonitoringLiabilityPostedResourceTest(BaseLiabilityTest):
             'format': 'application/json',
         }
         response = self.app.patch_json(
-            '/monitorings/{}/liability/documents/{}?acc_token={}'.format(
-                self.monitoring_id, self.document_id, self.tender_owner_token
+            '/monitorings/{}/liabilities/{}/documents/{}'.format(
+                self.monitoring_id, self.liability_id, self.document_id
             ),
             {'data': request_data},
         )

@@ -86,7 +86,6 @@ class MonitoringAppealResourceTest(BaseAppealTest):
             '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
             {"data": {
                 "proceeding": {
-                    "type": "sas",
                     "dateProceedings": get_now().isoformat(),
                     "proceedingNumber": "somenumber",
                 }
@@ -204,11 +203,19 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
         response = self.app.patch_json(
             '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
-            {"data": {
-                "proceeding": {
-                    "type": "sas",
-                    "dateProceedings": get_now().isoformat(),
-                    "proceedingNumber": "somenumber",
+            {'data': {
+                'proceeding': {
+                    'dateProceedings': get_now().isoformat(),
+                    'proceedingNumber': 'somenumber',
+                    'legislation': {
+                        'version': '2020-04-19',
+                        'article': '8.10',
+                        'identifier': {
+                            'id': '922-VIII',
+                            'legalName': 'Закон України "Про публічні закупівлі"',
+                            'uri': 'https://zakon.rada.gov.ua/laws/show/922-19',
+                        }
+                    }
                 }
             }}
         )
@@ -216,14 +223,13 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
         self.assertEqual(response.content_type, 'application/json')
         self.assertIn("proceeding", response.json["data"])
         proceeding = response.json["data"]["proceeding"]
-        self.assertIn(proceeding["type"], "sas")
+        self.assertIn("legislation", proceeding)
         self.assertEqual(proceeding["proceedingNumber"], "somenumber")
 
         response = self.app.patch_json(
             '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
             {"data": {
                 "proceeding": {
-                    "type": "court",
                     "dateProceedings": get_now().isoformat(),
                     "proceedingNumber": "somenumber",
                 }
@@ -243,7 +249,6 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
             '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
             {"data": {
                 "proceeding": {
-                    "type": "some_type",
                     "proceedingNumber": "somenumber",
                 }
             }},
@@ -252,7 +257,7 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(
             response.json["errors"][0]["description"],
-            {'type': ["Value must be one of ('sas', 'court')."], 'dateProceedings': ['This field is required.']},
+            {'legislation': ['This field is required.'], 'dateProceedings': ['This field is required.']},
         )
 
     def test_fail_update_appeal(self):

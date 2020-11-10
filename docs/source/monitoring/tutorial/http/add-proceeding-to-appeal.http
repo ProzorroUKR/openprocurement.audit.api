@@ -1,15 +1,23 @@
 PATCH /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/appeal?acc_token=ab906ad83e9c4acd9b9c06215f87bfe6 HTTP/1.0
 Authorization: Basic YnJva2VyOmJyb2tlcg==
-Content-Length: 125
+Content-Length: 473
 Content-Type: application/json
 Host: audit-api-sandbox.prozorro.gov.ua
 DATA:
 {
   "data": {
     "proceeding": {
-      "type": "court",
       "dateProceedings": "2019-04-01T00:00:00+02:00",
-      "proceedingNumber": "0123456789"
+      "proceedingNumber": "0123456789",
+      "legislation": {
+        "version": "2020-04-19",
+        "article": "8.10",
+        "identifier": {
+          "id": "922-VIII",
+          "legalName": "Закон України \"Про публічні закупівлі\"",
+          "uri": "https://zakon.rada.gov.ua/laws/show/922-19"
+        }
+      }
     }
   }
 }
@@ -34,9 +42,18 @@ Content-Type: application/json
     "dateCreated": "2018-01-06T09:00:00+02:00",
     "datePublished": "2018-01-06T09:00:00+02:00",
     "proceeding": {
-      "type": "court",
       "dateProceedings": "2019-04-01T00:00:00+02:00",
-      "proceedingNumber": "0123456789"
+      "proceedingNumber": "0123456789",
+      "legislation": {
+        "version": "2020-04-19",
+        "identifier": {
+          "id": "922-VIII",
+          "legalName": "Закон України \"Про публічні закупівлі\"",
+          "uri": "https://zakon.rada.gov.ua/laws/show/922-19"
+        },
+        "type": "NATIONAL_LEGISLATION",
+        "article": "8.10"
+      }
     }
   }
 }

@@ -129,8 +129,6 @@ def validate_liability_data(request):
     Validate liability report data POST
     """
     monitoring = request.validated['monitoring']
-    if monitoring.liability is not None:
-        raise_operation_error(request, "Can't post another liability.")
 
     if monitoring.eliminationResolution is None or monitoring.eliminationResolution.datePublished is None:
         request.errors.status = 422
@@ -144,9 +142,6 @@ def validate_patch_liability_data(request):
     """
     Validate liability report data PATCH
     """
-    monitoring = request.validated['monitoring']
-    if monitoring.liability is None:
-        raise_operation_error(request, "Liability not found", status=404)
 
     if request.context.proceeding:
         raise_operation_error(request, "Can't post another proceeding.")

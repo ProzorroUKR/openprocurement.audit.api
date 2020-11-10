@@ -226,42 +226,63 @@ Content-Type: application/json
       "dateCreated": "2018-01-06T09:00:00+02:00",
       "datePublished": "2018-01-06T09:00:00+02:00",
       "proceeding": {
-        "type": "court",
         "dateProceedings": "2019-04-01T00:00:00+02:00",
-        "proceedingNumber": "0123456789"
-      }
-    },
-    "liability": {
-      "reportNumber": "1234567890",
-      "datePublished": "2018-01-09T02:30:00+02:00",
-      "documents": [
-        {
-          "id": "fa996cbc6c074f659ef30788ab2d6782",
-          "hash": "md5:00000000000000000000000000000000",
-          "title": "letter(0).doc",
-          "format": "application/json",
-          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/ebc81e9025064d789bece0f57453d4dd?Signature=TMThtjAcxaQGQfAUMUbGDEpJ8YSHhOWIyZlkiNNruHaOQDvkKn6GVifMCOm83CG3ov%2F2eUiGKsZUkMUCyIhvBQ%253D%253D&KeyID=a8968c46",
-          "datePublished": "2018-01-09T02:30:00+02:00",
-          "dateModified": "2018-01-09T02:30:00+02:00",
-          "author": "monitoring_owner"
-        },
-        {
-          "id": "b2740ddf7f574f40bda8ef38ae105ba5",
-          "hash": "md5:00000000000000000000000000000000",
-          "title": "another-letter.doc",
-          "format": "application/msword",
-          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/1ae2e0c7128640a7b83a4b876025582f?Signature=gYMbl6M9fXgPpM3BEVD6CTnHts2NY%2FnV6QAypR27kWqcGBQXceX%2FPoyV8myjN7WszG6W1FVzpdKIi%2FMC%252BTJtCQ%253D%253D&KeyID=a8968c46",
-          "datePublished": "2018-01-09T04:30:00+02:00",
-          "dateModified": "2018-01-09T04:30:00+02:00",
-          "author": "monitoring_owner"
+        "proceedingNumber": "0123456789",
+        "legislation": {
+          "version": "2020-04-19",
+          "identifier": {
+            "id": "922-VIII",
+            "legalName": "Закон України \"Про публічні закупівлі\"",
+            "uri": "https://zakon.rada.gov.ua/laws/show/922-19"
+          },
+          "type": "NATIONAL_LEGISLATION",
+          "article": "8.10"
         }
-      ],
-      "proceeding": {
-        "type": "court",
-        "dateProceedings": "2019-04-01T00:00:00+02:00",
-        "proceedingNumber": "0123456789"
       }
     },
+    "liabilities": [
+      {
+        "id": "acb2b6cf115c40819a6579e37d502ce9",
+        "reportNumber": "1234567890",
+        "datePublished": "2018-01-09T02:30:00+02:00",
+        "documents": [
+          {
+            "id": "fa996cbc6c074f659ef30788ab2d6782",
+            "hash": "md5:00000000000000000000000000000000",
+            "title": "letter(0).doc",
+            "format": "application/json",
+            "url": "http://public-docs-sandbox.prozorro.gov.ua/get/ebc81e9025064d789bece0f57453d4dd?Signature=AxeYkDhVemkPPh%2FiXyJNEK2%2Fu5mFdqWQSbMcb9Iq4ekAvnWP4zmL4mkZsb%2B1vShUvDXUbPFML2O%2FgK40Fm49Aw%3D%3D&KeyID=a8968c46",
+            "datePublished": "2018-01-09T02:30:00+02:00",
+            "dateModified": "2018-01-09T02:30:00+02:00",
+            "author": "monitoring_owner"
+          },
+          {
+            "id": "b2740ddf7f574f40bda8ef38ae105ba5",
+            "hash": "md5:00000000000000000000000000000000",
+            "title": "another-letter.doc",
+            "format": "application/msword",
+            "url": "http://public-docs-sandbox.prozorro.gov.ua/get/1ae2e0c7128640a7b83a4b876025582f?Signature=gYMbl6M9fXgPpM3BEVD6CTnHts2NY%2FnV6QAypR27kWqcGBQXceX%2FPoyV8myjN7WszG6W1FVzpdKIi%2FMC%252BTJtCQ%253D%253D&KeyID=a8968c46",
+            "datePublished": "2018-01-09T04:30:00+02:00",
+            "dateModified": "2018-01-09T04:30:00+02:00",
+            "author": "monitoring_owner"
+          }
+        ],
+        "proceeding": {
+          "dateProceedings": "2019-04-01T00:00:00+02:00",
+          "proceedingNumber": "0123456789",
+          "legislation": {
+            "version": "13.08.2020",
+            "identifier": {
+              "id": "8073-X",
+              "legalName": "Кодекс України про адміністративні правопорушення",
+              "uri": "https://zakon.rada.gov.ua/laws/show/80731-10#Text"
+            },
+            "type": "NATIONAL_LEGISLATION",
+            "article": "8.10"
+          }
+        }
+      }
+    ],
     "parties": [
       {
         "id": "f745206183964f70a17622acdead1015",

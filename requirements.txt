@@ -54,3 +54,14 @@ git+git://github.com/ProzorroUKR/cornice.git@1.2.0.dev0
 git+git://github.com/ProzorroUKR/barbecue.git@0.2
 git+git://github.com/ProzorroUKR/server_cookie_middleware.git@0.2
 git+git://github.com/ProzorroUKR/couchdb-python.git@1.2-bad-status-line#egg=couchdb
+
+############
+### On standards version update you should consider
+### to update it in all related repos and chronograph db:
+### https://github.com/ProzorroUKR/openprocurement.api
+### https://github.com/ProzorroUKR/openprocurement.audit.api
+### https://github.com/ProzorroUKR/prozorro_tasks
+### Also don't forget to upload new versions to
+### https://repo.prozorro.gov.ua/repos/dist.quintagroup.com/prozorro/
+############
+git+git://github.com/ProzorroUKR/standards.git@1.0.4

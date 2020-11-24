@@ -7,6 +7,8 @@ from requests import Session
 from json import load
 import os.path
 
+import standards
+
 
 def read_json(name):
     curr_dir = os.path.dirname(os.path.realpath(__file__))
@@ -27,7 +29,10 @@ TZ = timezone(os.environ['TZ'] if 'TZ' in os.environ else 'Europe/Kiev')
 SANDBOX_MODE = os.environ.get('SANDBOX_MODE', False)
 DOCUMENT_BLACKLISTED_FIELDS = ('title', 'format', 'url', 'dateModified', 'hash')
 DOCUMENT_WHITELISTED_FIELDS = ('id', 'datePublished', 'author', '__parent__')
-WORKING_DAYS = read_json('working_days.json')
+WORKING_DAYS = {}
+HOLIDAYS = standards.load("calendars/workdays_off.json")
+for date_str in HOLIDAYS:
+    WORKING_DAYS[date_str] = True
 ORA_CODES = [i['code'] for i in read_json('organization_identifier_scheme.json')['data']]
 
 SAS_ROLE = "sas"

@@ -27,6 +27,7 @@ requires = [
     'rfc6266==0.0.6',
     'openprocurement_client==2.1.1dp',
     'CouchDB==1.2-bad-status-line',
+    'standards>=1.0.3',
 ]
 test_requires = requires + [
     'pytest',

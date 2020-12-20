@@ -112,23 +112,6 @@ class BaseLiabilityTest(BaseWebTest, DSWebTestMixin):
 
 class MonitoringLiabilityResourceTest(BaseLiabilityTest):
 
-    def test_fail_liability_before_eliminationResolution(self):
-        self.create_monitoring_with_elimination()
-        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
-
-        response = self.app.post_json(
-            '/monitorings/{}/liabilities'.format(self.monitoring_id),
-            {'data': {
-                'reportNumber': '1234567890',
-            }},
-            status=422
-        )
-        self.assertEqual(
-            response.json["errors"],
-            [{'description': "Can't post before eliminationResolution is published.",
-              'location': 'body', 'name': 'liability'}]
-        )
-
     def test_fail_patch_liability_before_added(self):
         self.post_eliminationResolution()
 

@@ -128,12 +128,6 @@ def validate_liability_data(request):
     """
     Validate liability report data POST
     """
-    monitoring = request.validated['monitoring']
-
-    if monitoring.eliminationResolution is None or monitoring.eliminationResolution.datePublished is None:
-        request.errors.status = 422
-        request.errors.add('body', 'liability', 'Can\'t post before eliminationResolution is published.')
-        raise error_handler(request.errors)
 
     return validate_data(request, Liability)
 

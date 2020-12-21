@@ -246,7 +246,7 @@ class MonitoringLiabilityPostedResourceTest(BaseLiabilityTest):
                     'proceedingNumber': 'somenumber',
                     'legislation': {
                         'version': '13.08.2020',
-                        'article': '8.10',
+                        'article': ['8.10'],
                         'identifier': {
                             'id': '8073-X',
                             'legalName': 'Кодекс України про адміністративні правопорушення',

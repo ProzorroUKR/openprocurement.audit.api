@@ -236,7 +236,9 @@ Content-Type: application/json
             "uri": "https://zakon.rada.gov.ua/laws/show/922-19"
           },
           "type": "NATIONAL_LEGISLATION",
-          "article": "8.10"
+          "article": [
+            "8.10"
+          ]
         }
       }
     },
@@ -278,7 +280,9 @@ Content-Type: application/json
               "uri": "https://zakon.rada.gov.ua/laws/show/80731-10#Text"
             },
             "type": "NATIONAL_LEGISLATION",
-            "article": "8.10"
+            "article": [
+              "8.10"
+            ]
           }
         }
       }

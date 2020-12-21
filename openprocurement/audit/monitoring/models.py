@@ -50,7 +50,7 @@ class Legislation(Model):
     version = StringType()
     identifier = ModelType(LegislationIdentifier, required=True)
     type = StringType(choices=LEGISLATION_CHOICES, default=NATIONAL_LEGISLATION_TYPE)
-    article = StringType()
+    article = ListType(StringType, min_size=1)
 
 
 class Proceeding(Model):

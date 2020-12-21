@@ -209,7 +209,7 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
                     'proceedingNumber': 'somenumber',
                     'legislation': {
                         'version': '2020-04-19',
-                        'article': '8.10',
+                        'article': ['8.10'],
                         'identifier': {
                             'id': '922-VIII',
                             'legalName': 'Закон України "Про публічні закупівлі"',

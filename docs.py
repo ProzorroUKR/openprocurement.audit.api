@@ -682,7 +682,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                                 'proceedingNumber': "0123456789",
                                 'legislation': {
                                     'version': '2020-04-19',
-                                    'article': '8.10',
+                                    'article': ['8.10'],
                                     'identifier': {
                                         'id': '922-VIII',
                                         'legalName': 'Закон України "Про публічні закупівлі"',
@@ -830,7 +830,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                                 "proceedingNumber": "0123456789",
                                 "legislation": {
                                     "version": "13.08.2020",
-                                    "article": "8.10",
+                                    "article": ["8.10"],
                                     "identifier": {
                                         "id": "8073-X",
                                         "legalName": "Кодекс України про адміністративні правопорушення",
@@ -853,7 +853,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                                 "proceedingNumber": "0123456789",
                                 "legislation": {
                                     "version": "13.08.2020",
-                                    "article": "8.10",
+                                    "article": ["8.10"],
                                     "identifier": {
                                         "id": "8073-X",
                                         "legalName": "Кодекс України про адміністративні правопорушення",

@@ -1,6 +1,6 @@
 PATCH /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/appeal?acc_token=ab906ad83e9c4acd9b9c06215f87bfe6 HTTP/1.0
 Authorization: Basic YnJva2VyOmJyb2tlcg==
-Content-Length: 473
+Content-Length: 475
 Content-Type: application/json
 Host: audit-api-sandbox.prozorro.gov.ua
 DATA:
@@ -11,7 +11,9 @@ DATA:
       "proceedingNumber": "0123456789",
       "legislation": {
         "version": "2020-04-19",
-        "article": "8.10",
+        "article": [
+          "8.10"
+        ],
         "identifier": {
           "id": "922-VIII",
           "legalName": "Закон України \"Про публічні закупівлі\"",
@@ -52,7 +54,9 @@ Content-Type: application/json
           "uri": "https://zakon.rada.gov.ua/laws/show/922-19"
         },
         "type": "NATIONAL_LEGISLATION",
-        "article": "8.10"
+        "article": [
+          "8.10"
+        ]
       }
     }
   }

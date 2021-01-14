@@ -75,6 +75,7 @@ review:
   except:
     - master
     - schedules
+  when: manual    
 
 deploy_master:
   <<: *base_deploy

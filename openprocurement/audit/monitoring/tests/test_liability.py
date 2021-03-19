@@ -148,14 +148,35 @@ class MonitoringLiabilityResourceTest(BaseLiabilityTest):
             '/monitorings/{}/liabilities'.format(self.monitoring_id),
             {'data': {
                 'reportNumber': '1234567890',
+                'legislation': {
+                    'version': '13.08.2020',
+                    'article': ['8.10'],
+                    'identifier': {
+                        'id': '8073-X',
+                        'legalName': 'Кодекс України про адміністративні правопорушення',
+                        'uri': 'https://zakon.rada.gov.ua/laws/show/80731-10#Text',
+                    }
+                }
             }},
         )
         laibilty_id = response.json["data"]["id"]
         self.assertEqual(
             response.json["data"],
-            {'id': laibilty_id,
-             'reportNumber': '1234567890',
-             'datePublished': '2018-01-01T11:00:00+02:00'}
+            {
+                'id': laibilty_id,
+                'reportNumber': '1234567890',
+                'datePublished': '2018-01-01T11:00:00+02:00',
+                'legislation': {
+                    'version': '13.08.2020',
+                    'article': ['8.10'],
+                    'type': 'NATIONAL_LEGISLATION',
+                    'identifier': {
+                        'id': '8073-X',
+                        'legalName': 'Кодекс України про адміністративні правопорушення',
+                        'uri': 'https://zakon.rada.gov.ua/laws/show/80731-10#Text',
+                    }
+                }
+            }
         )
 
     def test_success_liability_with_document(self):
@@ -166,6 +187,16 @@ class MonitoringLiabilityResourceTest(BaseLiabilityTest):
             '/monitorings/{}/liabilities'.format(self.monitoring_id),
             {'data': {
                 'reportNumber': '1234567890',
+                'legislation': {
+                    'version': '13.08.2020',
+                    'article': ['8.10'],
+                    'type': 'NATIONAL_LEGISLATION',
+                    'identifier': {
+                        'id': '8073-X',
+                        'legalName': 'Кодекс України про адміністративні правопорушення',
+                        'uri': 'https://zakon.rada.gov.ua/laws/show/80731-10#Text',
+                    }
+                },
                 'documents': [
                     {
                         'title': 'lorem.doc',
@@ -197,6 +228,16 @@ class MonitoringLiabilityPostedResourceTest(BaseLiabilityTest):
             '/monitorings/{}/liabilities'.format(self.monitoring_id),
             {'data': {
                 'reportNumber': '1234567890',
+                'legislation': {
+                    'version': '13.08.2020',
+                    'article': ['8.10'],
+                    'type': 'NATIONAL_LEGISLATION',
+                    'identifier': {
+                        'id': '8073-X',
+                        'legalName': 'Кодекс України про адміністративні правопорушення',
+                        'uri': 'https://zakon.rada.gov.ua/laws/show/80731-10#Text',
+                    }
+                },
                 'documents': [
                     {
                         'title': 'first.doc',
@@ -227,15 +268,6 @@ class MonitoringLiabilityPostedResourceTest(BaseLiabilityTest):
                 'proceeding': {
                     'dateProceedings': get_now().isoformat(),
                     'proceedingNumber': 'somenumber',
-                    'legislation': {
-                        'version': '13.08.2020',
-                        'article': ['8.10'],
-                        'identifier': {
-                            'id': '8073-X',
-                            'legalName': 'Кодекс України про адміністративні правопорушення',
-                            'uri': 'https://zakon.rada.gov.ua/laws/show/80731-10#Text',
-                        }
-                    }
                 }
             }}
         )
@@ -243,7 +275,6 @@ class MonitoringLiabilityPostedResourceTest(BaseLiabilityTest):
         self.assertEqual(response.content_type, 'application/json')
         self.assertIn("proceeding", response.json["data"])
         proceeding = response.json["data"]["proceeding"]
-        self.assertIn("legislation", proceeding)
         self.assertEqual(proceeding["proceedingNumber"], "somenumber")
 
         response = self.app.patch_json(
@@ -277,7 +308,7 @@ class MonitoringLiabilityPostedResourceTest(BaseLiabilityTest):
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(
             response.json["errors"][0]["description"],
-            {'legislation': ['This field is required.'], 'dateProceedings': ['This field is required.']},
+            {'dateProceedings': ['This field is required.']},
         )
 
     def test_success_post_document(self):

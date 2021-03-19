@@ -56,7 +56,6 @@ class Legislation(Model):
 class Proceeding(Model):
     dateProceedings = IsoDateTimeType(required=True)
     proceedingNumber = StringType(required=True)
-    legislation = ModelType(Legislation, required=True)
 
 
 class Report(Model):
@@ -212,6 +211,7 @@ class EliminationReport(Report):
 class Appeal(Report):
 
     proceeding = ModelType(Proceeding)
+    legislation = ModelType(Legislation)
 
     class Options:
         roles = {
@@ -222,6 +222,20 @@ class Appeal(Report):
 
     def get_role(self):
         return 'edit'
+
+    @serializable(serialized_name="legislation")
+    def set_legislation(self):
+        legislation = {
+            'version': '2020-04-19',
+            'type': 'NATIONAL_LEGISLATION',
+            'article': ['8.10'],
+            'identifier': {
+                'id': '922-VIII',
+                'legalName': 'Закон України "Про публічні закупівлі"',
+                'uri': 'https://zakon.rada.gov.ua/laws/show/922-19',
+            }
+        }
+        return legislation
 
 
 class MonitoringAddress(Address):
@@ -261,7 +275,7 @@ class MonitoringParty(Party):
 class Liability(Model):
     class Options:
         roles = {
-            'create': whitelist('reportNumber', 'documents'),
+            'create': whitelist('reportNumber', 'documents', 'legislation'),
             'edit': whitelist('proceeding'),
             'view': schematics_default_role,
         }
@@ -272,6 +286,7 @@ class Liability(Model):
     datePublished = IsoDateTimeType(default=get_now)
     documents = ListType(ModelType(Document), default=[])
     proceeding = ModelType(Proceeding)
+    legislation = ModelType(Legislation, required=True)
 
     def get_role(self):
         return 'edit'

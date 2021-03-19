@@ -135,8 +135,21 @@ class MonitoringAppealResourceTest(BaseAppealTest):
         )
         self.assertEqual(
             response.json["data"],
-            {'dateCreated': '2018-01-01T11:00:00+02:00', 'description': 'Lorem ipsum dolor sit amet',
-             'datePublished': '2018-01-01T11:00:00+02:00'}
+            {
+                'dateCreated': '2018-01-01T11:00:00+02:00',
+                'description': 'Lorem ipsum dolor sit amet',
+                'datePublished': '2018-01-01T11:00:00+02:00',
+                'legislation': {
+                    'article': ['8.10'],
+                    'identifier': {
+                        'id': '922-VIII',
+                        'legalName': 'Закон України "Про публічні закупівлі"',
+                        'uri': 'https://zakon.rada.gov.ua/laws/show/922-19'
+                    },
+                    'type': 'NATIONAL_LEGISLATION',
+                    'version': '2020-04-19',
+                }
+             }
         )
 
     def test_success_appeal_with_document(self):
@@ -207,15 +220,6 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
                 'proceeding': {
                     'dateProceedings': get_now().isoformat(),
                     'proceedingNumber': 'somenumber',
-                    'legislation': {
-                        'version': '2020-04-19',
-                        'article': ['8.10'],
-                        'identifier': {
-                            'id': '922-VIII',
-                            'legalName': 'Закон України "Про публічні закупівлі"',
-                            'uri': 'https://zakon.rada.gov.ua/laws/show/922-19',
-                        }
-                    }
                 }
             }}
         )
@@ -223,7 +227,6 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
         self.assertEqual(response.content_type, 'application/json')
         self.assertIn("proceeding", response.json["data"])
         proceeding = response.json["data"]["proceeding"]
-        self.assertIn("legislation", proceeding)
         self.assertEqual(proceeding["proceedingNumber"], "somenumber")
 
         response = self.app.patch_json(
@@ -257,7 +260,7 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(
             response.json["errors"][0]["description"],
-            {'legislation': ['This field is required.'], 'dateProceedings': ['This field is required.']},
+            {'dateProceedings': ['This field is required.']},
         )
 
     def test_fail_update_appeal(self):

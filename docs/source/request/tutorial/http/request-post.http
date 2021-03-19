@@ -59,7 +59,7 @@ DATA:
 
 Response: 201 Created
 Content-Type: application/json
-Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/requests/6270491497034cc79fe4a00e1b7b84f1
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/requests/3a613f38dfbc4d3da9032846b6f75aee
 {
   "data": {
     "description": "Yo-ho-ho",
@@ -92,7 +92,7 @@ Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/requests/627049149703
     "tenderId": "ffffffffffffffffffffffffffffffff",
     "documents": [
       {
-        "id": "5be38e76a17d479e913a0a8b47432e23",
+        "id": "d37ec4a82f43470688f905e93ba39eac",
         "hash": "md5:00000000000000000000000000000000",
         "title": "doc.txt",
         "format": "plain/text",
@@ -104,7 +104,7 @@ Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/requests/627049149703
     ],
     "parties": [
       {
-        "id": "133e7ada35564da3bd5da0c54d57f212",
+        "id": "e891c55b34c84e38a3a61ef86988772d",
         "name": "party name",
         "datePublished": "2018-01-01T02:00:00+02:00",
         "address": {
@@ -122,7 +122,7 @@ Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/requests/627049149703
         ]
       }
     ],
-    "id": "6270491497034cc79fe4a00e1b7b84f1"
+    "id": "3a613f38dfbc4d3da9032846b6f75aee"
   }
 }
 

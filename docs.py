@@ -680,15 +680,6 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                             'proceeding': {
                                 'dateProceedings': MOCK_DATETIME,
                                 'proceedingNumber': "0123456789",
-                                'legislation': {
-                                    'version': '2020-04-19',
-                                    'article': ['8.10'],
-                                    'identifier': {
-                                        'id': '922-VIII',
-                                        'legalName': 'Закон України "Про публічні закупівлі"',
-                                        'uri': 'https://zakon.rada.gov.ua/laws/show/922-19',
-                                    }
-                                }
                             },
                         },
                     },
@@ -799,6 +790,16 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                     {
                         'data': {
                             'reportNumber': '1234567890',
+                            'legislation': {
+                                'version': '13.08.2020',
+                                'article': ['8.10'],
+                                'type': 'NATIONAL_LEGISLATION',
+                                'identifier': {
+                                    'id': '8073-X',
+                                    'legalName': 'Кодекс України про адміністративні правопорушення',
+                                    'uri': 'https://zakon.rada.gov.ua/laws/show/80731-10#Text',
+                                }
+                            },
                             'documents': [{
                                 'title': 'letter.doc',
                                 'url': self.generate_docservice_url(),
@@ -828,15 +829,6 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                             "proceeding": {
                                 "dateProceedings": MOCK_DATETIME,
                                 "proceedingNumber": "0123456789",
-                                "legislation": {
-                                    "version": "13.08.2020",
-                                    "article": ["8.10"],
-                                    "identifier": {
-                                        "id": "8073-X",
-                                        "legalName": "Кодекс України про адміністративні правопорушення",
-                                        "uri": "https://zakon.rada.gov.ua/laws/show/80731-10#Text",
-                                    }
-                                }
                             },
                         },
                     },

@@ -1,4 +1,4 @@
-PUT /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/eliminationReport?acc_token=ab906ad83e9c4acd9b9c06215f87bfe6 HTTP/1.0
+PUT /api/2.5/monitorings/3c06b16c6bb747449e2e60158453c491/eliminationReport?acc_token=0ebba00a48cf49c28c856e1c900d1c7b HTTP/1.0
 Authorization: Basic YnJva2VyOmJyb2tlcg==
 Content-Length: 445
 Content-Type: application/json
@@ -25,7 +25,7 @@ Content-Type: application/json
     "description": "The procurement requirements have been fixed and the changes are attached.",
     "documents": [
       {
-        "id": "0ee71b931a2e4ad8a470d0b8c0ceb0d9",
+        "id": "33839bd4a909496bb559b6084333182c",
         "hash": "md5:00000000000000000000000000000000",
         "title": "requirements.doc",
         "format": "application/msword",

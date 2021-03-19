@@ -1,4 +1,4 @@
-POST /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/posts/ca85c88b657b4bba974b037e532e581c/documents HTTP/1.0
+POST /api/2.5/monitorings/3c06b16c6bb747449e2e60158453c491/posts/b5ccc45a3c5943ab9bf9e95b631f98e4/documents HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
 Content-Length: 330
 Content-Type: application/json
@@ -15,10 +15,10 @@ DATA:
 
 Response: 201 Created
 Content-Type: application/json
-Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/posts/ca85c88b657b4bba974b037e532e581c/documents/547bc5cf5f4a48d5b4443cefb9a62802
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/3c06b16c6bb747449e2e60158453c491/posts/b5ccc45a3c5943ab9bf9e95b631f98e4/documents/8319cc43396a4368b281fcf0fa4679ce
 {
   "data": {
-    "id": "547bc5cf5f4a48d5b4443cefb9a62802",
+    "id": "8319cc43396a4368b281fcf0fa4679ce",
     "hash": "md5:00000000000000000000000000000000",
     "title": "dolor.doc",
     "format": "application/msword",

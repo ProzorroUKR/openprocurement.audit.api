@@ -1,12 +1,24 @@
-POST /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/liabilities HTTP/1.0
+POST /api/2.5/monitorings/3c06b16c6bb747449e2e60158453c491/liabilities HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
-Content-Length: 376
+Content-Length: 854
 Content-Type: application/json
 Host: audit-api-sandbox.prozorro.gov.ua
 DATA:
 {
   "data": {
     "reportNumber": "1234567890",
+    "legislation": {
+      "version": "13.08.2020",
+      "article": [
+        "8.10"
+      ],
+      "type": "NATIONAL_LEGISLATION",
+      "identifier": {
+        "id": "8073-X",
+        "legalName": "Кодекс України про адміністративні правопорушення",
+        "uri": "https://zakon.rada.gov.ua/laws/show/80731-10#Text"
+      }
+    },
     "documents": [
       {
         "title": "letter.doc",
@@ -20,15 +32,15 @@ DATA:
 
 Response: 201 Created
 Content-Type: application/json
-Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/liabilities/acb2b6cf115c40819a6579e37d502ce9
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/3c06b16c6bb747449e2e60158453c491/liabilities/4245d45087514ce69c280dc3d8bcb127
 {
   "data": {
-    "id": "acb2b6cf115c40819a6579e37d502ce9",
+    "id": "4245d45087514ce69c280dc3d8bcb127",
     "reportNumber": "1234567890",
     "datePublished": "2018-01-09T02:30:00+02:00",
     "documents": [
       {
-        "id": "fa996cbc6c074f659ef30788ab2d6782",
+        "id": "a6c95adc117444bc8ff627989dd270ed",
         "hash": "md5:00000000000000000000000000000000",
         "title": "letter.doc",
         "format": "application/msword",
@@ -37,7 +49,19 @@ Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/c71542103
         "dateModified": "2018-01-09T02:30:00+02:00",
         "author": "monitoring_owner"
       }
-    ]
+    ],
+    "legislation": {
+      "version": "13.08.2020",
+      "identifier": {
+        "id": "8073-X",
+        "legalName": "Кодекс України про адміністративні правопорушення",
+        "uri": "https://zakon.rada.gov.ua/laws/show/80731-10#Text"
+      },
+      "type": "NATIONAL_LEGISLATION",
+      "article": [
+        "8.10"
+      ]
+    }
   }
 }
 

@@ -1,4 +1,4 @@
-PATCH /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa HTTP/1.0
+PATCH /api/2.5/monitorings/3c06b16c6bb747449e2e60158453c491 HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
 Content-Length: 585
 Content-Type: application/json
@@ -21,7 +21,7 @@ DATA:
           "format": "application/pkcs7-signature"
         }
       ],
-      "relatedParty": "f745206183964f70a17622acdead1015"
+      "relatedParty": "4b95d1d6a43c4693b88a144765befaba"
     }
   }
 }
@@ -49,7 +49,7 @@ Content-Type: application/json
       "description": "The procurement requirements have been fixed and the changes are attached.",
       "documents": [
         {
-          "id": "0ee71b931a2e4ad8a470d0b8c0ceb0d9",
+          "id": "33839bd4a909496bb559b6084333182c",
           "hash": "md5:00000000000000000000000000000000",
           "title": "requirements.doc",
           "format": "application/msword",
@@ -65,7 +65,7 @@ Content-Type: application/json
     "eliminationResolution": {
       "documents": [
         {
-          "id": "546ff6ab1cec47dfa01c98c9002c1724",
+          "id": "ff9cd7f22ff949018cb5eec2d549babe",
           "hash": "md5:00000000000000000000000000000000",
           "title": "sign.p7s",
           "format": "application/pkcs7-signature",
@@ -82,7 +82,7 @@ Content-Type: application/json
         "corruptionAwarded": "not_eliminated"
       },
       "description": "The award hasn't been fixed.",
-      "relatedParty": "f745206183964f70a17622acdead1015"
+      "relatedParty": "4b95d1d6a43c4693b88a144765befaba"
     },
     "eliminationPeriod": {
       "startDate": "2018-01-05T02:25:00+02:00",
@@ -90,12 +90,12 @@ Content-Type: application/json
     },
     "posts": [
       {
-        "id": "ca85c88b657b4bba974b037e532e581c",
+        "id": "b5ccc45a3c5943ab9bf9e95b631f98e4",
         "title": "Lorem ipsum",
         "description": "Lorem ipsum dolor sit amet.",
         "documents": [
           {
-            "id": "51013265fd914fa6b01a6334b95ee70c",
+            "id": "f8069abe43c547a8a87074b1ff983da4",
             "hash": "md5:00000000000000000000000000000000",
             "title": "ipsum.doc",
             "format": "application/msword",
@@ -105,7 +105,7 @@ Content-Type: application/json
             "author": "monitoring_owner"
           },
           {
-            "id": "547bc5cf5f4a48d5b4443cefb9a62802",
+            "id": "8319cc43396a4368b281fcf0fa4679ce",
             "hash": "md5:00000000000000000000000000000000",
             "title": "dolor.doc",
             "format": "application/msword",
@@ -119,15 +119,15 @@ Content-Type: application/json
         "postOf": "decision",
         "datePublished": "2018-01-03T02:05:00+02:00",
         "dateOverdue": "2018-01-10T00:00:00+02:00",
-        "relatedParty": "f745206183964f70a17622acdead1015"
+        "relatedParty": "4b95d1d6a43c4693b88a144765befaba"
       },
       {
-        "id": "0dd18f852fcf43e28a7fd7fc2c0dc2a1",
+        "id": "ecca8fc4c85a4b78aa2c97e9703784c6",
         "title": "Sit amet",
         "description": "Dolor sit amet",
         "documents": [
           {
-            "id": "74ebb22006f044fa80ab4f0199904b51",
+            "id": "787c847df60b4bed80ec1aac479c354f",
             "hash": "md5:00000000000000000000000000000000",
             "title": "dolor.doc",
             "format": "application/msword",
@@ -140,15 +140,15 @@ Content-Type: application/json
         "author": "tender_owner",
         "postOf": "decision",
         "datePublished": "2018-01-04T02:05:00+02:00",
-        "relatedPost": "ca85c88b657b4bba974b037e532e581c"
+        "relatedPost": "b5ccc45a3c5943ab9bf9e95b631f98e4"
       },
       {
-        "id": "886a5cdd71dc416faaf90c28eedbf742",
+        "id": "85dc0473a2b34b38ab545ed39b23f863",
         "title": "Dolor sit amet",
         "description": "Lorem ipsum dolor sit amet.",
         "documents": [
           {
-            "id": "748a11ca06fc4d468c610ee8fae035d0",
+            "id": "53f815fd73264997a0ba6644672276a6",
             "hash": "md5:00000000000000000000000000000000",
             "title": "ipsum.doc",
             "format": "application/msword",
@@ -163,12 +163,12 @@ Content-Type: application/json
         "datePublished": "2018-01-04T03:05:00+02:00"
       },
       {
-        "id": "75c8163ecd55417ea04507ed1071bed5",
+        "id": "6050f6e782d4453f924e03bb3dd5efb5",
         "title": "Lorem ipsum",
         "description": "Lorem ipsum dolor sit amet.",
         "documents": [
           {
-            "id": "8247f603a3114154a55a3350993c126a",
+            "id": "f95956b52bb14543861507e6b4ea1951",
             "hash": "md5:00000000000000000000000000000000",
             "title": "ipsum.doc",
             "format": "application/msword",
@@ -181,16 +181,16 @@ Content-Type: application/json
         "author": "monitoring_owner",
         "postOf": "decision",
         "datePublished": "2018-01-04T03:15:00+02:00",
-        "relatedPost": "886a5cdd71dc416faaf90c28eedbf742",
-        "relatedParty": "f745206183964f70a17622acdead1015"
+        "relatedPost": "85dc0473a2b34b38ab545ed39b23f863",
+        "relatedParty": "4b95d1d6a43c4693b88a144765befaba"
       },
       {
-        "id": "7b3cbba723734b3b8a1a49fdefee7164",
+        "id": "9acee33b9ba94f548e6b60234c8caf5e",
         "title": "Sit amet",
         "description": "Sit amet lorem ipsum dolor.",
         "documents": [
           {
-            "id": "79251caf27fe413d9aa98717620b71cc",
+            "id": "43270da8a7d94557840ecf49b9edc340",
             "hash": "md5:00000000000000000000000000000000",
             "title": "dolor.doc",
             "format": "application/msword",
@@ -200,7 +200,7 @@ Content-Type: application/json
             "author": "tender_owner"
           },
           {
-            "id": "1f1d318e37214cea882d41b38181e249",
+            "id": "893b0c2491ed45e289b8995333179840",
             "hash": "md5:00000000000000000000000000000000",
             "title": "dolor.doc",
             "format": "application/msword",
@@ -219,7 +219,7 @@ Content-Type: application/json
       "description": "Appeal description",
       "documents": [
         {
-          "id": "249ca4ca1499416a8e276260b4b27f69",
+          "id": "cef6a851979f4f7897e277ff61125d59",
           "hash": "md5:00000000000000000000000000000000",
           "title": "letter(0).doc",
           "format": "application/json",
@@ -229,7 +229,7 @@ Content-Type: application/json
           "author": "tender_owner"
         },
         {
-          "id": "d46bbc42014541cea0d2753454b7a076",
+          "id": "2d68adf5bea64c42a6529fcae4d7df9b",
           "hash": "md5:00000000000000000000000000000000",
           "title": "another-letter.doc",
           "format": "application/msword",
@@ -243,24 +243,24 @@ Content-Type: application/json
       "datePublished": "2018-01-06T09:00:00+02:00",
       "proceeding": {
         "dateProceedings": "2019-04-01T00:00:00+02:00",
-        "proceedingNumber": "0123456789",
-        "legislation": {
-          "version": "2020-04-19",
-          "identifier": {
-            "id": "922-VIII",
-            "legalName": "Закон України \"Про публічні закупівлі\"",
-            "uri": "https://zakon.rada.gov.ua/laws/show/922-19"
-          },
-          "type": "NATIONAL_LEGISLATION",
-          "article": [
-            "8.10"
-          ]
+        "proceedingNumber": "0123456789"
+      },
+      "legislation": {
+        "version": "2020-04-19",
+        "type": "NATIONAL_LEGISLATION",
+        "article": [
+          "8.10"
+        ],
+        "identifier": {
+          "id": "922-VIII",
+          "legalName": "Закон України \"Про публічні закупівлі\"",
+          "uri": "https://zakon.rada.gov.ua/laws/show/922-19"
         }
       }
     },
     "parties": [
       {
-        "id": "f745206183964f70a17622acdead1015",
+        "id": "4b95d1d6a43c4693b88a144765befaba",
         "name": "The State Audit Service of Ukraine",
         "datePublished": "2018-01-01T02:00:00+02:00",
         "identifier": {
@@ -288,12 +288,12 @@ Content-Type: application/json
     "endDate": "2018-01-25T00:00:00+02:00",
     "dateCreated": "2018-01-01T02:00:00+02:00",
     "tender_owner": "broker",
-    "id": "c715421038304838a046654fa8c1e9aa",
+    "id": "3c06b16c6bb747449e2e60158453c491",
     "decision": {
       "description": "text",
       "documents": [
         {
-          "id": "98bc0622515644cab1364b94516a560d",
+          "id": "326df5cf6b1e4aaea1200275919a3730",
           "hash": "md5:00000000000000000000000000000000",
           "title": "lorem.doc",
           "format": "application/msword",
@@ -303,7 +303,7 @@ Content-Type: application/json
           "author": "monitoring_owner"
         },
         {
-          "id": "6eb0b671cbe641bbb97ecef5a87d6ce6",
+          "id": "fb9d923f614c41c68444007cb3c64e37",
           "hash": "md5:00000000000000000000000000000000",
           "title": "dolor.doc",
           "format": "application/msword",
@@ -316,12 +316,12 @@ Content-Type: application/json
       "dateCreated": "2018-01-02T03:05:00+02:00",
       "datePublished": "2018-01-02T03:15:00+02:00",
       "date": "2018-01-02T01:05:00+02:00",
-      "relatedParty": "f745206183964f70a17622acdead1015"
+      "relatedParty": "4b95d1d6a43c4693b88a144765befaba"
     },
     "conclusion": {
       "documents": [
         {
-          "id": "1185cb589b6f4db6bf71d9dc7ad3d42f",
+          "id": "20709160fbe4418da6706dfed7958881",
           "hash": "md5:00000000000000000000000000000000",
           "title": "New document(2).doc",
           "format": "application/msword",
@@ -331,7 +331,7 @@ Content-Type: application/json
           "author": "monitoring_owner"
         },
         {
-          "id": "a34e3f49ae1c4f03bb35d5d1d47f36e9",
+          "id": "c6676892ba0c466cbe5c50842dc78ef6",
           "hash": "md5:00000000000000000000000000000000",
           "title": "sign.p7s",
           "format": "application/pkcs7-signature",
@@ -351,7 +351,7 @@ Content-Type: application/json
       "auditFinding": "Ring around the rosies",
       "stringsAttached": "Pocket full of posies",
       "description": "Ashes, ashes, we all fall down",
-      "relatedParty": "f745206183964f70a17622acdead1015"
+      "relatedParty": "4b95d1d6a43c4693b88a144765befaba"
     }
   }
 }

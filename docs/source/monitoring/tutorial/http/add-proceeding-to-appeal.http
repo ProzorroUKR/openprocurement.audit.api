@@ -1,6 +1,6 @@
-PATCH /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/appeal?acc_token=ab906ad83e9c4acd9b9c06215f87bfe6 HTTP/1.0
+PATCH /api/2.5/monitorings/3c06b16c6bb747449e2e60158453c491/appeal?acc_token=0ebba00a48cf49c28c856e1c900d1c7b HTTP/1.0
 Authorization: Basic YnJva2VyOmJyb2tlcg==
-Content-Length: 475
+Content-Length: 108
 Content-Type: application/json
 Host: audit-api-sandbox.prozorro.gov.ua
 DATA:
@@ -8,18 +8,7 @@ DATA:
   "data": {
     "proceeding": {
       "dateProceedings": "2019-04-01T00:00:00+02:00",
-      "proceedingNumber": "0123456789",
-      "legislation": {
-        "version": "2020-04-19",
-        "article": [
-          "8.10"
-        ],
-        "identifier": {
-          "id": "922-VIII",
-          "legalName": "Закон України \"Про публічні закупівлі\"",
-          "uri": "https://zakon.rada.gov.ua/laws/show/922-19"
-        }
-      }
+      "proceedingNumber": "0123456789"
     }
   }
 }
@@ -31,7 +20,7 @@ Content-Type: application/json
     "description": "Appeal description",
     "documents": [
       {
-        "id": "249ca4ca1499416a8e276260b4b27f69",
+        "id": "cef6a851979f4f7897e277ff61125d59",
         "hash": "md5:00000000000000000000000000000000",
         "title": "letter.doc",
         "format": "application/msword",
@@ -45,18 +34,18 @@ Content-Type: application/json
     "datePublished": "2018-01-06T09:00:00+02:00",
     "proceeding": {
       "dateProceedings": "2019-04-01T00:00:00+02:00",
-      "proceedingNumber": "0123456789",
-      "legislation": {
-        "version": "2020-04-19",
-        "identifier": {
-          "id": "922-VIII",
-          "legalName": "Закон України \"Про публічні закупівлі\"",
-          "uri": "https://zakon.rada.gov.ua/laws/show/922-19"
-        },
-        "type": "NATIONAL_LEGISLATION",
-        "article": [
-          "8.10"
-        ]
+      "proceedingNumber": "0123456789"
+    },
+    "legislation": {
+      "version": "2020-04-19",
+      "type": "NATIONAL_LEGISLATION",
+      "article": [
+        "8.10"
+      ],
+      "identifier": {
+        "id": "922-VIII",
+        "legalName": "Закон України \"Про публічні закупівлі\"",
+        "uri": "https://zakon.rada.gov.ua/laws/show/922-19"
       }
     }
   }

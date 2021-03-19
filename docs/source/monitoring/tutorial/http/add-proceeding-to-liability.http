@@ -1,6 +1,6 @@
-PATCH /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/liabilities/acb2b6cf115c40819a6579e37d502ce9 HTTP/1.0
+PATCH /api/2.5/monitorings/3c06b16c6bb747449e2e60158453c491/liabilities/4245d45087514ce69c280dc3d8bcb127 HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
-Content-Length: 554
+Content-Length: 108
 Content-Type: application/json
 Host: audit-api-sandbox.prozorro.gov.ua
 DATA:
@@ -8,18 +8,7 @@ DATA:
   "data": {
     "proceeding": {
       "dateProceedings": "2019-04-01T00:00:00+02:00",
-      "proceedingNumber": "0123456789",
-      "legislation": {
-        "version": "13.08.2020",
-        "article": [
-          "8.10"
-        ],
-        "identifier": {
-          "id": "8073-X",
-          "legalName": "Кодекс України про адміністративні правопорушення",
-          "uri": "https://zakon.rada.gov.ua/laws/show/80731-10#Text"
-        }
-      }
+      "proceedingNumber": "0123456789"
     }
   }
 }
@@ -28,12 +17,12 @@ Response: 200 OK
 Content-Type: application/json
 {
   "data": {
-    "id": "acb2b6cf115c40819a6579e37d502ce9",
+    "id": "4245d45087514ce69c280dc3d8bcb127",
     "reportNumber": "1234567890",
     "datePublished": "2018-01-09T02:30:00+02:00",
     "documents": [
       {
-        "id": "fa996cbc6c074f659ef30788ab2d6782",
+        "id": "a6c95adc117444bc8ff627989dd270ed",
         "hash": "md5:00000000000000000000000000000000",
         "title": "letter.doc",
         "format": "application/msword",
@@ -45,19 +34,19 @@ Content-Type: application/json
     ],
     "proceeding": {
       "dateProceedings": "2019-04-01T00:00:00+02:00",
-      "proceedingNumber": "0123456789",
-      "legislation": {
-        "version": "13.08.2020",
-        "identifier": {
-          "id": "8073-X",
-          "legalName": "Кодекс України про адміністративні правопорушення",
-          "uri": "https://zakon.rada.gov.ua/laws/show/80731-10#Text"
-        },
-        "type": "NATIONAL_LEGISLATION",
-        "article": [
-          "8.10"
-        ]
-      }
+      "proceedingNumber": "0123456789"
+    },
+    "legislation": {
+      "version": "13.08.2020",
+      "identifier": {
+        "id": "8073-X",
+        "legalName": "Кодекс України про адміністративні правопорушення",
+        "uri": "https://zakon.rada.gov.ua/laws/show/80731-10#Text"
+      },
+      "type": "NATIONAL_LEGISLATION",
+      "article": [
+        "8.10"
+      ]
     }
   }
 }

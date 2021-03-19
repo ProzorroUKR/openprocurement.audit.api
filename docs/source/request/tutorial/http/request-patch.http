@@ -1,4 +1,4 @@
-PATCH /api/2.5/requests/6270491497034cc79fe4a00e1b7b84f1 HTTP/1.0
+PATCH /api/2.5/requests/3a613f38dfbc4d3da9032846b6f75aee HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
 Content-Length: 73
 Content-Type: application/json
@@ -46,7 +46,7 @@ Content-Type: application/json
     "tenderId": "ffffffffffffffffffffffffffffffff",
     "documents": [
       {
-        "id": "5be38e76a17d479e913a0a8b47432e23",
+        "id": "d37ec4a82f43470688f905e93ba39eac",
         "hash": "md5:00000000000000000000000000000000",
         "title": "doc.txt",
         "format": "plain/text",
@@ -56,7 +56,7 @@ Content-Type: application/json
         "author": "request_owner"
       },
       {
-        "id": "f92b51b672f743cc9f913760320624f9",
+        "id": "7c73ad5badbf4288bd24bac55e3ac5e6",
         "hash": "md5:00000000000000000000000000000000",
         "title": "doc(1).txt",
         "format": "plain/text",
@@ -66,7 +66,7 @@ Content-Type: application/json
         "author": "request_owner"
       },
       {
-        "id": "f92b51b672f743cc9f913760320624f9",
+        "id": "7c73ad5badbf4288bd24bac55e3ac5e6",
         "hash": "md5:00000000000000000000000000000000",
         "title": "doc(2).json",
         "format": "application/json",
@@ -78,7 +78,7 @@ Content-Type: application/json
     ],
     "parties": [
       {
-        "id": "133e7ada35564da3bd5da0c54d57f212",
+        "id": "e891c55b34c84e38a3a61ef86988772d",
         "name": "party name",
         "datePublished": "2018-01-01T02:00:00+02:00",
         "address": {
@@ -98,7 +98,7 @@ Content-Type: application/json
     ],
     "reason": "There is my answer",
     "answer": "monitoringCreated",
-    "id": "6270491497034cc79fe4a00e1b7b84f1"
+    "id": "3a613f38dfbc4d3da9032846b6f75aee"
   }
 }
 

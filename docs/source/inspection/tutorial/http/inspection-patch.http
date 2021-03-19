@@ -1,4 +1,4 @@
-PATCH /api/2.5/inspections/d0863edd3aaf4c6393480afae0679c2d HTTP/1.0
+PATCH /api/2.5/inspections/32bd447a7a024973a7eb88b58ba5a75e HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
 Content-Length: 144
 Content-Type: application/json
@@ -25,7 +25,7 @@ Content-Type: application/json
     "description": "I regretted my decision",
     "documents": [
       {
-        "id": "47ef0c56853149ab851d792cd97b4508",
+        "id": "7c73ad5badbf4288bd24bac55e3ac5e6",
         "hash": "md5:00000000000000000000000000000000",
         "title": "doc.txt",
         "format": "plain/text",
@@ -35,7 +35,7 @@ Content-Type: application/json
         "author": "monitoring_owner"
       },
       {
-        "id": "47ef0c56853149ab851d792cd97b4508",
+        "id": "7c73ad5badbf4288bd24bac55e3ac5e6",
         "hash": "md5:00000000000000000000000000000000",
         "title": "doc(1).json",
         "format": "application/json",
@@ -48,7 +48,7 @@ Content-Type: application/json
     "inspection_id": "UA-I-2018-01-01-000001",
     "dateModified": "2018-01-01T02:03:00+02:00",
     "dateCreated": "2018-01-01T02:00:00+02:00",
-    "id": "d0863edd3aaf4c6393480afae0679c2d"
+    "id": "32bd447a7a024973a7eb88b58ba5a75e"
   }
 }
 

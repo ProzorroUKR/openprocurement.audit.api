@@ -40,7 +40,7 @@ test_requires = requires + [
 ]
 setup_requires = [
     'pytest-runner',
-    'setuptools==45.1.0',
+    'setuptools==33.1.1',
     'six',
 ]
 dependency_links = [

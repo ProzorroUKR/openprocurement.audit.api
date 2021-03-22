@@ -19,7 +19,7 @@ shell:
   beforeInstall:
   - apt-get update
   - apt-get install -y git gcc libzmq-dev libssl-dev
-  - pip install setuptools==33.1.1
+  - pip install setuptools==45.1.0
   - pip install --upgrade pip
   install:
   - pip install --no-cache-dir -r /app/requirements.txt

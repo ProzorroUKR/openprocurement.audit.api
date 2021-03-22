@@ -48,9 +48,9 @@ class LegislationIdentifier(Identifier):
 
 class Legislation(Model):
     version = StringType()
-    identifier = ModelType(LegislationIdentifier, required=True)
+    identifier = ModelType(LegislationIdentifier)
     type = StringType(choices=LEGISLATION_CHOICES, default=NATIONAL_LEGISLATION_TYPE)
-    article = ListType(StringType, min_size=1)
+    article = ListType(StringType, min_size=1, required=True)
 
 
 class Proceeding(Model):
@@ -224,7 +224,7 @@ class Appeal(Report):
         return 'edit'
 
     @serializable(serialized_name="legislation")
-    def set_legislation(self):
+    def fill_legislation(self):
         legislation = {
             'version': '2020-04-19',
             'type': 'NATIONAL_LEGISLATION',
@@ -290,6 +290,20 @@ class Liability(Model):
 
     def get_role(self):
         return 'edit'
+
+    @serializable(serialized_name="legislation", serialize_when_none=False)
+    def fill_legislation(self):
+        legislation = {
+            'version': '2020-11-21',
+            'type': 'NATIONAL_LEGISLATION',
+            'article': self.legislation.article,
+            'identifier': {
+                'id': '8073-X',
+                'legalName': 'Кодекс України про адміністративні правопорушення',
+                'uri': 'https://zakon.rada.gov.ua/laws/show/80731-10#Text',
+            }
+        }
+        return legislation
 
 
 class Monitoring(BaseModel):

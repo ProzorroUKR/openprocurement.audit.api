@@ -149,13 +149,7 @@ class MonitoringLiabilityResourceTest(BaseLiabilityTest):
             {'data': {
                 'reportNumber': '1234567890',
                 'legislation': {
-                    'version': '13.08.2020',
                     'article': ['8.10'],
-                    'identifier': {
-                        'id': '8073-X',
-                        'legalName': 'Кодекс України про адміністративні правопорушення',
-                        'uri': 'https://zakon.rada.gov.ua/laws/show/80731-10#Text',
-                    }
                 }
             }},
         )
@@ -167,7 +161,7 @@ class MonitoringLiabilityResourceTest(BaseLiabilityTest):
                 'reportNumber': '1234567890',
                 'datePublished': '2018-01-01T11:00:00+02:00',
                 'legislation': {
-                    'version': '13.08.2020',
+                    'version': '2020-11-21',
                     'article': ['8.10'],
                     'type': 'NATIONAL_LEGISLATION',
                     'identifier': {

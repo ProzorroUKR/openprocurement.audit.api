@@ -18,9 +18,13 @@ class AppealResource(APIResource):
     def get(self):
         return {'data': self.context.serialize('view')}
 
-    @json_view(content_type='application/json',
-               validators=(validate_appeal_data,),
-               permission='create_appeal')
+    @json_view(
+        content_type='application/json',
+        validators=(
+            validate_appeal_data,
+        ),
+        permission='create_appeal',
+    )
     def put(self):
         appeal = self.request.validated['appeal']
         set_author(appeal.documents, self.request, 'author')
@@ -32,9 +36,13 @@ class AppealResource(APIResource):
                          extra=context_unpack(self.request, {'MESSAGE_ID': 'appeal_put'}))
         return {'data': appeal.serialize('view')}
 
-    @json_view(content_type='application/json',
-               validators=(validate_patch_appeal_data,),
-               permission='create_appeal')
+    @json_view(
+        content_type='application/json',
+        validators=(
+            validate_patch_appeal_data,
+        ),
+        permission='create_appeal',
+    )
     def patch(self):
         appeal = self.request.context
         monitoring = self.request.validated['monitoring']

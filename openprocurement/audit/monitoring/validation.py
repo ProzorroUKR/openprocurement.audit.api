@@ -10,7 +10,10 @@ from openprocurement.audit.api.constants import (
     DRAFT_STATUS,
     ACTIVE_STATUS,
     ADDRESSED_STATUS,
+    COMPLETED_STATUS,
     DECLINED_STATUS,
+    CLOSED_STATUS,
+    STOPPED_STATUS,
     RESOLUTION_WAIT_PERIOD,
 )
 from openprocurement.audit.api.utils import (
@@ -29,8 +32,6 @@ from openprocurement.audit.monitoring.utils import (
     calculate_normalized_business_date,
     get_monitoring_accelerator,
 )
-from openprocurement.audit.monitoring.choices import ADDRESSED_STATUS, COMPLETED_STATUS
-
 
 def validate_monitoring_data(request):
     """
@@ -95,6 +96,12 @@ def validate_elimination_report_data(request):
     return validate_data(request, EliminationReport)
 
 
+def _validate_monitoring_statuses(request, obj_name, valid_statuses):
+    monitoring = request.validated["monitoring"]
+    if monitoring.status not in valid_statuses:
+        raise_operation_error(request, "{} can't be added to monitoring in current ({}) status".format(obj_name, monitoring.status))
+
+
 def validate_appeal_data(request):
     """
     Validate appeal report data POST
@@ -107,6 +114,8 @@ def validate_appeal_data(request):
         request.errors.status = 422
         request.errors.add('body', 'appeal', 'Can\'t post before conclusion is published.')
         raise error_handler(request.errors)
+
+    _validate_monitoring_statuses(request, "Appeal", (ADDRESSED_STATUS, DECLINED_STATUS))
 
     return validate_data(request, Appeal)
 
@@ -122,6 +131,12 @@ def validate_patch_appeal_data(request):
     if request.context.proceeding is not None:
         raise_operation_error(request, "Can't post another proceeding.")
 
+    _validate_monitoring_statuses(
+        request,
+        "Appeal proceeding",
+        (ADDRESSED_STATUS, DECLINED_STATUS, COMPLETED_STATUS, CLOSED_STATUS, STOPPED_STATUS),
+    )
+
     return validate_data(request, Appeal, partial=True)
 
 
@@ -130,6 +145,11 @@ def validate_liability_data(request):
     Validate liability report data POST
     """
 
+    _validate_monitoring_statuses(
+        request,
+        "Liability",
+        (ADDRESSED_STATUS,),
+    )
     return validate_data(request, Liability)
 
 
@@ -140,6 +160,12 @@ def validate_patch_liability_data(request):
 
     if request.context.proceeding:
         raise_operation_error(request, "Can't post another proceeding.")
+
+    _validate_monitoring_statuses(
+        request,
+        "Liability proceeding",
+        (ADDRESSED_STATUS, COMPLETED_STATUS),
+    )
 
     return validate_data(request, Liability, partial=True)
 

@@ -6,7 +6,12 @@ from openprocurement.audit.api.utils import context_unpack, json_view
 from openprocurement.audit.monitoring.utils import (
     apply_patch, set_author, op_resource, save_monitoring,
 )
-from openprocurement.audit.monitoring.validation import validate_liability_data, validate_patch_liability_data
+from openprocurement.audit.monitoring.validation import (
+    validate_liability_data,
+    validate_patch_liability_data,
+    validate_liability_monitoring_statuses,
+    validate_proceeding_monitoring_statuses,
+)
 
 
 @op_resource(
@@ -17,9 +22,14 @@ from openprocurement.audit.monitoring.validation import validate_liability_data,
 )
 class LiabilityResource(APIResource):
 
-    @json_view(content_type='application/json',
-               validators=(validate_liability_data,),
-               permission='edit_monitoring')
+    @json_view(
+        content_type='application/json',
+        validators=(
+            validate_liability_data,
+            validate_liability_monitoring_statuses,
+        ),
+        permission='edit_monitoring'
+    )
     def collection_post(self):
 
         monitoring = self.context
@@ -37,9 +47,14 @@ class LiabilityResource(APIResource):
                 'Monitoring Liability', monitoring_id=monitoring.id, liability_id=liability.id)
             return {'data': liability.serialize('view')}
 
-    @json_view(content_type='application/json',
-               validators=(validate_patch_liability_data,),
-               permission='edit_monitoring')
+    @json_view(
+        content_type='application/json',
+        validators=(
+            validate_patch_liability_data,
+            validate_proceeding_monitoring_statuses,
+        ),
+        permission='edit_monitoring',
+    )
     def patch(self):
         apply_patch(self.request)
         self.LOGGER.info('Updated liability {}'.format(self.request.context.id),

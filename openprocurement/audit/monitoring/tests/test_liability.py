@@ -141,6 +141,30 @@ class MonitoringLiabilityResourceTest(BaseLiabilityTest):
             status=403
         )
 
+    def test_fail_liability_not_in_valid_monitoring_status(self):
+        self.create_active_monitoring()
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        response = self.app.post_json(
+            '/monitorings/{}/liabilities'.format(self.monitoring_id),
+            {'data': {
+                'reportNumber': '1234567890',
+                'legislation': {
+                    'article': ['8.10'],
+                }
+            }},
+            status=403,
+        )
+        self.assertEqual(
+            response.json["errors"],
+            [
+                {
+                    "location": "body",
+                    "name": "data",
+                    "description": "Liability can\'t be added to monitoring in current (active) status",
+                },
+            ],
+        )
+
     def test_success_liability_minimum(self):
         self.post_eliminationResolution()
 

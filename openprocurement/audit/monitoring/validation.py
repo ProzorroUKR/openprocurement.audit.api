@@ -29,6 +29,7 @@ from openprocurement.audit.monitoring.utils import (
     calculate_normalized_business_date,
     get_monitoring_accelerator,
 )
+from openprocurement.audit.monitoring.choices import ADDRESSED_STATUS, COMPLETED_STATUS
 
 
 def validate_monitoring_data(request):
@@ -141,6 +142,24 @@ def validate_patch_liability_data(request):
         raise_operation_error(request, "Can't post another proceeding.")
 
     return validate_data(request, Liability, partial=True)
+
+
+def validate_liability_monitoring_statuses(request):
+    monitoring = request.context
+    if monitoring.status != ADDRESSED_STATUS:
+        raise_operation_error(
+            request,
+            "Liability can't be added to monitoring in current ({}) status".format(monitoring.status)
+        )
+
+
+def validate_proceeding_monitoring_statuses(request):
+    monitoring = request.validated["monitoring"]
+    if monitoring.status not in [ADDRESSED_STATUS, COMPLETED_STATUS]:
+        raise_operation_error(
+            request,
+            "Proceeding can't be added to monitoring in current ({}) status".format(monitoring.status)
+        )
 
 
 def validate_document_decision_status(request):

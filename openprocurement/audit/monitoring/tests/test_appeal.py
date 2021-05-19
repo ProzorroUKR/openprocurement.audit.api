@@ -48,36 +48,6 @@ class BaseAppealTest(BaseWebTest, DSWebTestMixin):
 
 class MonitoringAppealResourceTest(BaseAppealTest):
 
-    def test_fail_appeal_before_conclusion(self):
-        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
-        response = self.app.put_json(
-            '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
-            {'data': {
-                'description': 'Lorem ipsum dolor sit amet'
-            }},
-            status=422
-        )
-        self.assertEqual(
-            response.json["errors"],
-            [{'description': "Can't post before conclusion is published.", 'location': 'body', 'name': 'appeal'}]
-        )
-
-    def test_fail_appeal_before_conclusion_posted(self):
-        self.post_conclusion(publish=False)
-
-        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
-        response = self.app.put_json(
-            '/monitorings/{}/appeal?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
-            {'data': {
-                'description': 'Lorem ipsum dolor sit amet'
-            }},
-            status=422
-        )
-        self.assertEqual(
-            response.json["errors"],
-            [{'description': "Can't post before conclusion is published.", 'location': 'body', 'name': 'appeal'}]
-        )
-
     def test_fail_patch_appeal_before_added(self):
         self.post_conclusion(publish=False)
 

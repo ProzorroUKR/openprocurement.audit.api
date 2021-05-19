@@ -107,15 +107,10 @@ def validate_appeal_data(request):
     Validate appeal report data POST
     """
     monitoring = request.validated['monitoring']
+    _validate_monitoring_statuses(request, "Appeal", (ADDRESSED_STATUS, DECLINED_STATUS))
+
     if monitoring.appeal is not None:
         raise_operation_error(request, "Can't post another appeal.")
-
-    if monitoring.conclusion is None or monitoring.conclusion.datePublished is None:
-        request.errors.status = 422
-        request.errors.add('body', 'appeal', 'Can\'t post before conclusion is published.')
-        raise error_handler(request.errors)
-
-    _validate_monitoring_statuses(request, "Appeal", (ADDRESSED_STATUS, DECLINED_STATUS))
 
     return validate_data(request, Appeal)
 
@@ -128,14 +123,14 @@ def validate_patch_appeal_data(request):
     if monitoring.appeal is None:
         raise_operation_error(request, "Appeal not found", status=404)
 
-    if request.context.proceeding is not None:
-        raise_operation_error(request, "Can't post another proceeding.")
-
     _validate_monitoring_statuses(
         request,
         "Appeal proceeding",
         (ADDRESSED_STATUS, DECLINED_STATUS, COMPLETED_STATUS, CLOSED_STATUS, STOPPED_STATUS),
     )
+
+    if request.context.proceeding is not None:
+        raise_operation_error(request, "Can't post another proceeding.")
 
     return validate_data(request, Appeal, partial=True)
 
@@ -158,14 +153,14 @@ def validate_patch_liability_data(request):
     Validate liability report data PATCH
     """
 
-    if request.context.proceeding:
-        raise_operation_error(request, "Can't post another proceeding.")
-
     _validate_monitoring_statuses(
         request,
         "Liability proceeding",
         (ADDRESSED_STATUS, COMPLETED_STATUS),
     )
+
+    if request.context.proceeding:
+        raise_operation_error(request, "Can't post another proceeding.")
 
     return validate_data(request, Liability, partial=True)
 

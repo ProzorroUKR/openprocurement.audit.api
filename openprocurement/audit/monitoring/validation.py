@@ -165,24 +165,6 @@ def validate_patch_liability_data(request):
     return validate_data(request, Liability, partial=True)
 
 
-def validate_liability_monitoring_statuses(request):
-    monitoring = request.context
-    if monitoring.status != ADDRESSED_STATUS:
-        raise_operation_error(
-            request,
-            "Liability can't be added to monitoring in current ({}) status".format(monitoring.status)
-        )
-
-
-def validate_proceeding_monitoring_statuses(request):
-    monitoring = request.validated["monitoring"]
-    if monitoring.status not in [ADDRESSED_STATUS, COMPLETED_STATUS]:
-        raise_operation_error(
-            request,
-            "Proceeding can't be added to monitoring in current ({}) status".format(monitoring.status)
-        )
-
-
 def validate_document_decision_status(request):
     _validate_document_status(request, DRAFT_STATUS)
 

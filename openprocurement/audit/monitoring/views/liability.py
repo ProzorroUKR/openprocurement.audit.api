@@ -9,8 +9,6 @@ from openprocurement.audit.monitoring.utils import (
 from openprocurement.audit.monitoring.validation import (
     validate_liability_data,
     validate_patch_liability_data,
-    validate_liability_monitoring_statuses,
-    validate_proceeding_monitoring_statuses,
 )
 
 
@@ -26,7 +24,6 @@ class LiabilityResource(APIResource):
         content_type='application/json',
         validators=(
             validate_liability_data,
-            validate_liability_monitoring_statuses,
         ),
         permission='edit_monitoring'
     )
@@ -51,7 +48,6 @@ class LiabilityResource(APIResource):
         content_type='application/json',
         validators=(
             validate_patch_liability_data,
-            validate_proceeding_monitoring_statuses,
         ),
         permission='edit_monitoring',
     )

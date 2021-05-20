@@ -971,6 +971,37 @@ class MonitoringConclusionDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.content_type, 'application/json')
 
+    def test_document_patch(self):
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        response = self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {'data': {'conclusion': self.test_monitoring_addressed_data['conclusion']}})
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+
+        response = self.app.post_json('/monitorings/{}/conclusion/documents'.format(
+            self.monitoring_id),
+            {'data': self.test_docservice_document_data})
+        self.assertEqual(response.status_code, 201)
+        self.assertEqual(response.content_type, 'application/json')
+
+        doc_id = response.json["data"]["id"]
+        old_dateModified = response.json["data"]["dateModified"]
+
+        response = self.app.patch_json('/monitorings/{}/conclusion/documents/{}'.format(
+            self.monitoring_id, doc_id),
+            {'data': {'title': self.test_docservice_document_data["title"]}}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json, None)
+
+        response = self.app.patch_json('/monitorings/{}/conclusion/documents/{}'.format(
+            self.monitoring_id, doc_id),
+            {'data': {'title': 'lorem1.doc'}}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertNotEqual(response.json["data"]["dateModified"], old_dateModified)
+
     def test_document_upload_forbidden(self):
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.patch_json(

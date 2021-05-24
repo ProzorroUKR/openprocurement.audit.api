@@ -43,7 +43,7 @@ msgstr "|yes| Власник тендеру"
 msgid ""
 "We have already seen how to get ``acc_token`` in :ref:`credentials` "
 "section"
-msgstr "Ми вже `отримали токен <credentials>`_"
+msgstr "Ми вже :ref:`отримали токен<credentials>`"
 
 #: ../../source/monitoring/tutorial/appeal.rst:14
 msgid ""

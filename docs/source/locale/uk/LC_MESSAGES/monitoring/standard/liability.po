@@ -40,7 +40,7 @@ msgstr ""
 
 #: ../../source/monitoring/standard/liability.rst:13
 msgid "List of :ref:`document` objects"
-msgstr "Список об’єктів :ref:`document"
+msgstr "Список об’єктів :ref:`document`"
 
 #: ../../source/monitoring/standard/liability.rst
 msgid "datePublished"

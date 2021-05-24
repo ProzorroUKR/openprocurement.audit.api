@@ -9,14 +9,22 @@ msgid ""
 msgstr ""
 "Project-Id-Version: openprocurement.audit.api 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-10 17:15+0200\n"
+"POT-Creation-Date: 2021-05-24 14:03+0300\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.8.0\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../source/images.hrst:1
+msgid "yes"
+msgstr ""
+
+#: ../../source/images.hrst:5
+msgid "no"
+msgstr ""
 
 #: ../../source/monitoring/tutorial/liability.rst:4
 msgid "Liability"
@@ -36,21 +44,27 @@ msgstr "|no| Власник тендеру"
 
 #: ../../source/monitoring/tutorial/liability.rst:12
 msgid ""
-"As soon as the elimination resolution is published, monitoring owner can "
-"add liability:"
+"After publication the elimination resolution (monitoring in status "
+"`addressed`), monitoring owner can add liability:"
 msgstr ""
-"Оскільки факт усунення порушення вже опубліковано, власник моніторингу "
-"може додати протокол:"
+"Після публікації висновку, в якому були виявлені порушення (моніторинг в "
+"статусі `addressed`), власник моніторингу може опублікувати "
+"протокол/протоколи про притягнення до адміністративної відповідальності:"
 
 #: ../../source/monitoring/tutorial/liability.rst:18
-msgid "After adding the liability, to liability can be added proceeding:"
-msgstr "Після подання протоколу, до протоколу можна доддати провадження"
+msgid ""
+"After adding the liability(monitoring in status: `addressed` or "
+"`complete`), to liability can be added proceeding:"
+msgstr ""
+"Після публікації протоколу (моніторинг в статусі: `addressed` або "
+"`complete`), до нього можна додати провадження, зазначивши номер такого "
+"провадження та дату відкриття:"
 
 #: ../../source/monitoring/tutorial/liability.rst:23
 msgid "This action also can be performed only once:"
-msgstr "Ця дія може також бути виконана лише один раз:"
+msgstr "Ця дія може бути виконана лише один раз:"
 
 #: ../../source/monitoring/tutorial/liability.rst:29
-msgid "Documents can be added/changed any time:"
-msgstr "Документи можуть бути додані/змінені в будь який момент:"
+msgid "Documents can be added/changed/replaced any time:"
+msgstr "Документи можуть бути додані/змінені/замінені:"
 

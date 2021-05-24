@@ -26,7 +26,7 @@ Content-Type: application/json
         "hash": "md5:00000000000000000000000000000000",
         "title": "letter.doc",
         "format": "application/msword",
-        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/ebc81e9025064d789bece0f57453d4dd?Signature=AxeYkDhVemkPPh%2FiXyJNEK2%2Fu5mFdqWQSbMcb9Iq4ekAvnWP4zmL4mkZsb%2B1vShUvDXUbPFML2O%2FgK40Fm49Aw%3D%3D&KeyID=a8968c46",
+        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/1ae2e0c7128640a7b83a4b876025582f?Signature=aC%2BxXIkiPzfQyjhqzDN6UOJv7VdWeyocCq2vkamYdR7FXlaCdKCzTHIWI7uEEq4gAcRRQaJH8Tc1lJX3or62AQ%3D%3D&KeyID=a8968c46",
         "datePublished": "2018-01-09T02:30:00+02:00",
         "dateModified": "2018-01-09T02:30:00+02:00",
         "author": "monitoring_owner"
@@ -37,16 +37,16 @@ Content-Type: application/json
       "proceedingNumber": "0123456789"
     },
     "legislation": {
-      "version": "13.08.2020",
+      "version": "2020-11-21",
+      "type": "NATIONAL_LEGISLATION",
+      "article": [
+        "8.10"
+      ],
       "identifier": {
         "id": "8073-X",
         "legalName": "Кодекс України про адміністративні правопорушення",
         "uri": "https://zakon.rada.gov.ua/laws/show/80731-10#Text"
-      },
-      "type": "NATIONAL_LEGISLATION",
-      "article": [
-        "8.10"
-      ]
+      }
     }
   }
 }

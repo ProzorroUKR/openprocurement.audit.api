@@ -1,0 +1,29 @@
+PATCH /api/2.5/monitorings/3c06b16c6bb747449e2e60158453c491/appeal?acc_token=0ebba00a48cf49c28c856e1c900d1c7b HTTP/1.0
+Authorization: Basic YnJva2VyOmJyb2tlcg==
+Content-Length: 125
+Content-Type: application/json
+Host: audit-api-sandbox.prozorro.gov.ua
+DATA:
+{
+  "data": {
+    "proceeding": {
+      "type": "court",
+      "dateProceedings": "2019-04-01T00:00:00+02:00",
+      "proceedingNumber": "0123456789"
+    }
+  }
+}
+
+Response: 403 Forbidden
+Content-Type: application/json
+{
+  "status": "error",
+  "errors": [
+    {
+      "location": "body",
+      "name": "data",
+      "description": "Can't post another proceeding."
+    }
+  ]
+}
+

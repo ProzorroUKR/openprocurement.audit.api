@@ -1,0 +1,53 @@
+PATCH /api/2.5/monitorings/3c06b16c6bb747449e2e60158453c491/appeal?acc_token=0ebba00a48cf49c28c856e1c900d1c7b HTTP/1.0
+Authorization: Basic YnJva2VyOmJyb2tlcg==
+Content-Length: 108
+Content-Type: application/json
+Host: audit-api-sandbox.prozorro.gov.ua
+DATA:
+{
+  "data": {
+    "proceeding": {
+      "dateProceedings": "2019-04-01T00:00:00+02:00",
+      "proceedingNumber": "0123456789"
+    }
+  }
+}
+
+Response: 200 OK
+Content-Type: application/json
+{
+  "data": {
+    "description": "Appeal description",
+    "documents": [
+      {
+        "id": "cef6a851979f4f7897e277ff61125d59",
+        "hash": "md5:00000000000000000000000000000000",
+        "title": "letter.doc",
+        "format": "application/msword",
+        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/37df4b6da2c24b6a97a6c35bb69fcccf?Signature=X%2Ff0ajCeap0OHcwyz1XO0dLSTED0fK3VUByfMLazlN6qfuMigrYsbcVTMH645ldiGRT%2FFULQP5SUs6m%252BP%2FT1Dg%253D%253D&KeyID=a8968c46",
+        "datePublished": "2018-01-06T09:00:00+02:00",
+        "dateModified": "2018-01-06T09:00:00+02:00",
+        "author": "tender_owner"
+      }
+    ],
+    "dateCreated": "2018-01-06T09:00:00+02:00",
+    "datePublished": "2018-01-06T09:00:00+02:00",
+    "proceeding": {
+      "dateProceedings": "2019-04-01T00:00:00+02:00",
+      "proceedingNumber": "0123456789"
+    },
+    "legislation": {
+      "version": "2020-04-19",
+      "type": "NATIONAL_LEGISLATION",
+      "article": [
+        "8.10"
+      ],
+      "identifier": {
+        "id": "922-VIII",
+        "legalName": "Закон України \"Про публічні закупівлі\"",
+        "uri": "https://zakon.rada.gov.ua/laws/show/922-19"
+      }
+    }
+  }
+}
+

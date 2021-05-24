@@ -1,0 +1,56 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2018, Raccoongang
+# This file is distributed under the same license as the
+# openprocurement.audit.api package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2020.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: openprocurement.audit.api 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2020-11-10 17:15+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.8.0\n"
+
+#: ../../source/monitoring/tutorial/liability.rst:4
+msgid "Liability"
+msgstr "Протокол"
+
+#: ../../source/monitoring/tutorial/liability.rst
+msgid "This section contains available actions for next roles:"
+msgstr "Секція містить опис можливих дій для наступний учасників моніторингу:"
+
+#: ../../source/monitoring/tutorial/liability.rst
+msgid "|yes| Monitoring owner"
+msgstr "|yes| Власник моніторингу"
+
+#: ../../source/monitoring/tutorial/liability.rst
+msgid "|no| Tender owner"
+msgstr "|no| Власник тендеру"
+
+#: ../../source/monitoring/tutorial/liability.rst:12
+msgid ""
+"As soon as the elimination resolution is published, monitoring owner can "
+"add liability:"
+msgstr ""
+"Оскільки факт усунення порушення вже опубліковано, власник моніторингу "
+"може додати протокол:"
+
+#: ../../source/monitoring/tutorial/liability.rst:18
+msgid "After adding the liability, to liability can be added proceeding:"
+msgstr "Після подання протоколу, до протоколу можна доддати провадження"
+
+#: ../../source/monitoring/tutorial/liability.rst:23
+msgid "This action also can be performed only once:"
+msgstr "Ця дія може також бути виконана лише один раз:"
+
+#: ../../source/monitoring/tutorial/liability.rst:29
+msgid "Documents can be added/changed any time:"
+msgstr "Документи можуть бути додані/змінені в будь який момент:"
+

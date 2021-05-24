@@ -53,6 +53,8 @@ def factory(request):
         return elimination_resolution_factory(request)
     elif 'appeal' in request.path.split('/'):
         return appeal_factory(request)
+    elif request.matchdict.get('liability_id'):
+        return liability_factory(request)
     elif request.matchdict.get('post_id'):
         return post_factory(request)
     elif request.matchdict.get('party_id'):
@@ -68,6 +70,13 @@ def appeal_factory(request):
             return get_item(request.monitoring.appeal, 'document', request)
         return request.monitoring.appeal
     return request.monitoring
+
+
+def liability_factory(request):
+    liability = get_item(request.monitoring, 'liability', request)
+    if request.matchdict.get('document_id'):
+        return get_item(liability, 'document', request)
+    return liability
 
 
 def elimination_factory(request):

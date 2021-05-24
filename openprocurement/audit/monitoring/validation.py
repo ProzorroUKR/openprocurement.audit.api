@@ -10,7 +10,10 @@ from openprocurement.audit.api.constants import (
     DRAFT_STATUS,
     ACTIVE_STATUS,
     ADDRESSED_STATUS,
+    COMPLETED_STATUS,
     DECLINED_STATUS,
+    CLOSED_STATUS,
+    STOPPED_STATUS,
     RESOLUTION_WAIT_PERIOD,
 )
 from openprocurement.audit.api.utils import (
@@ -21,7 +24,7 @@ from openprocurement.audit.api.utils import (
     get_now,
 )
 from openprocurement.audit.api.validation import validate_data
-from openprocurement.audit.monitoring.models import Monitoring, EliminationReport, Appeal, Post
+from openprocurement.audit.monitoring.models import Monitoring, EliminationReport, Appeal, Post, Liability
 from openprocurement.audit.monitoring.models import MonitoringParty as Party
 from openprocurement.audit.monitoring.utils import (
     get_access_token,
@@ -29,7 +32,6 @@ from openprocurement.audit.monitoring.utils import (
     calculate_normalized_business_date,
     get_monitoring_accelerator,
 )
-
 
 def validate_monitoring_data(request):
     """
@@ -94,20 +96,74 @@ def validate_elimination_report_data(request):
     return validate_data(request, EliminationReport)
 
 
+def _validate_monitoring_statuses(request, obj_name, valid_statuses):
+    monitoring = request.validated["monitoring"]
+    if monitoring.status not in valid_statuses:
+        raise_operation_error(request, "{} can't be added to monitoring in current ({}) status".format(obj_name, monitoring.status))
+
+
 def validate_appeal_data(request):
     """
     Validate appeal report data POST
     """
     monitoring = request.validated['monitoring']
+    _validate_monitoring_statuses(request, "Appeal", (ADDRESSED_STATUS, DECLINED_STATUS))
+
     if monitoring.appeal is not None:
         raise_operation_error(request, "Can't post another appeal.")
 
-    if monitoring.conclusion is None or monitoring.conclusion.datePublished is None:
-        request.errors.status = 422
-        request.errors.add('body', 'appeal', 'Can\'t post before conclusion is published.')
-        raise error_handler(request.errors)
-
     return validate_data(request, Appeal)
+
+
+def validate_patch_appeal_data(request):
+    """
+    Validate appeal report data PATCH
+    """
+    monitoring = request.validated['monitoring']
+    if monitoring.appeal is None:
+        raise_operation_error(request, "Appeal not found", status=404)
+
+    _validate_monitoring_statuses(
+        request,
+        "Appeal proceeding",
+        (ADDRESSED_STATUS, DECLINED_STATUS, COMPLETED_STATUS, CLOSED_STATUS, STOPPED_STATUS),
+    )
+
+    if request.context.proceeding is not None:
+        raise_operation_error(request, "Can't post another proceeding.")
+
+    return validate_data(request, Appeal, partial=True)
+
+
+def validate_liability_data(request):
+    """
+    Validate liability report data POST
+    """
+
+    _validate_monitoring_statuses(
+        request,
+        "Liability",
+        (ADDRESSED_STATUS,),
+    )
+    return validate_data(request, Liability)
+
+
+def validate_patch_liability_data(request):
+    """
+    Validate liability report data PATCH
+    """
+
+    _validate_monitoring_statuses(
+        request,
+        "Liability proceeding",
+        (ADDRESSED_STATUS, COMPLETED_STATUS),
+    )
+
+    if request.context.proceeding:
+        raise_operation_error(request, "Can't post another proceeding.")
+
+    return validate_data(request, Liability, partial=True)
+
 
 def validate_document_decision_status(request):
     _validate_document_status(request, DRAFT_STATUS)

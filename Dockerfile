@@ -5,7 +5,7 @@ RUN apt-get update && apt-get install -y git gcc libzmq-dev libssl-dev
 WORKDIR /app
 
 COPY requirements.txt /app/
-RUN pip install setuptools==45.1.0 && pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+RUN pip install setuptools==33.1.1 && pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
 
 COPY . /app
 RUN pip install -e .

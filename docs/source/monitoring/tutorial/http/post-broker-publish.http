@@ -1,4 +1,4 @@
-POST /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/posts?acc_token=ab906ad83e9c4acd9b9c06215f87bfe6 HTTP/1.0
+POST /api/2.5/monitorings/3c06b16c6bb747449e2e60158453c491/posts?acc_token=0ebba00a48cf49c28c856e1c900d1c7b HTTP/1.0
 Authorization: Basic YnJva2VyOmJyb2tlcg==
 Content-Length: 416
 Content-Type: application/json
@@ -21,15 +21,15 @@ DATA:
 
 Response: 201 Created
 Content-Type: application/json
-Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/posts/886a5cdd71dc416faaf90c28eedbf742
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/3c06b16c6bb747449e2e60158453c491/posts/85dc0473a2b34b38ab545ed39b23f863
 {
   "data": {
-    "id": "886a5cdd71dc416faaf90c28eedbf742",
+    "id": "85dc0473a2b34b38ab545ed39b23f863",
     "title": "Dolor sit amet",
     "description": "Lorem ipsum dolor sit amet.",
     "documents": [
       {
-        "id": "748a11ca06fc4d468c610ee8fae035d0",
+        "id": "53f815fd73264997a0ba6644672276a6",
         "hash": "md5:00000000000000000000000000000000",
         "title": "ipsum.doc",
         "format": "application/msword",

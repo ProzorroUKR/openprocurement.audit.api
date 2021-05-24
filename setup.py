@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '1.1.12'
+version = '1.26'
 
 requires = [
     'pyramid<1.10.0',
@@ -40,7 +40,7 @@ test_requires = requires + [
 ]
 setup_requires = [
     'pytest-runner',
-    'setuptools==45.1.0',
+    'setuptools==33.1.1',
     'six',
 ]
 dependency_links = [

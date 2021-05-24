@@ -28,7 +28,7 @@ msgstr ""
 
 #: ../../source/monitoring/tutorial/liability.rst:4
 msgid "Liability"
-msgstr "Протокол"
+msgstr "Притягнення до адмін. відповідальності"
 
 #: ../../source/monitoring/tutorial/liability.rst
 msgid "This section contains available actions for next roles:"

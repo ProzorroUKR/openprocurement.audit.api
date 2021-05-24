@@ -27,6 +27,8 @@ from openprocurement.audit.monitoring.choices import (
     RESOLUTION_RESULT_CHOICES,
     RESOLUTION_BY_TYPE_CHOICES,
     PARTY_ROLES_CHOICES,
+    LEGISLATION_CHOICES,
+    NATIONAL_LEGISLATION_TYPE,
 )
 from openprocurement.audit.api.choices import VIOLATION_TYPE_CHOICES
 
@@ -38,6 +40,22 @@ class Period(Model):
     def validate_startDate(self, data, value):
         if value and data.get('endDate') and data.get('endDate') < value:
             raise ValidationError(u"period should begin before its end")
+
+
+class LegislationIdentifier(Identifier):
+    scheme = StringType()
+
+
+class Legislation(Model):
+    version = StringType()
+    identifier = ModelType(LegislationIdentifier)
+    type = StringType(choices=LEGISLATION_CHOICES, default=NATIONAL_LEGISLATION_TYPE)
+    article = ListType(StringType, min_size=1, required=True)
+
+
+class Proceeding(Model):
+    dateProceedings = IsoDateTimeType(required=True)
+    proceedingNumber = StringType(required=True)
 
 
 class Report(Model):
@@ -191,11 +209,33 @@ class EliminationReport(Report):
 
 
 class Appeal(Report):
+
+    proceeding = ModelType(Proceeding)
+    legislation = ModelType(Legislation)
+
     class Options:
         roles = {
             'create': whitelist('description', 'documents'),
+            'edit': whitelist('proceeding'),
             'view': schematics_default_role,
         }
+
+    def get_role(self):
+        return 'edit'
+
+    @serializable(serialized_name="legislation")
+    def fill_legislation(self):
+        legislation = {
+            'version': '2020-04-19',
+            'type': 'NATIONAL_LEGISLATION',
+            'article': ['8.10'],
+            'identifier': {
+                'id': '922-VIII',
+                'legalName': 'Закон України "Про публічні закупівлі"',
+                'uri': 'https://zakon.rada.gov.ua/laws/show/922-19',
+            }
+        }
+        return legislation
 
 
 class MonitoringAddress(Address):
@@ -230,6 +270,40 @@ class MonitoringParty(Party):
     address = ModelType(MonitoringAddress, required=True)
     contactPoint = ModelType(MonitoringContactPoint, required=True)
     roles = ListType(StringType(choices=PARTY_ROLES_CHOICES), default=[])
+
+
+class Liability(Model):
+    class Options:
+        roles = {
+            'create': whitelist('reportNumber', 'documents', 'legislation'),
+            'edit': whitelist('proceeding'),
+            'view': schematics_default_role,
+        }
+
+    id = MD5Type(required=True, default=lambda: uuid4().hex)
+
+    reportNumber = StringType(required=True, min_length=1)
+    datePublished = IsoDateTimeType(default=get_now)
+    documents = ListType(ModelType(Document), default=[])
+    proceeding = ModelType(Proceeding)
+    legislation = ModelType(Legislation, required=True)
+
+    def get_role(self):
+        return 'edit'
+
+    @serializable(serialized_name="legislation", serialize_when_none=False)
+    def fill_legislation(self):
+        legislation = {
+            'version': '2020-11-21',
+            'type': 'NATIONAL_LEGISLATION',
+            'article': self.legislation.article,
+            'identifier': {
+                'id': '8073-X',
+                'legalName': 'Кодекс України про адміністративні правопорушення',
+                'uri': 'https://zakon.rada.gov.ua/laws/show/80731-10#Text',
+            }
+        }
+        return legislation
 
 
 class Monitoring(BaseModel):
@@ -282,6 +356,7 @@ class Monitoring(BaseModel):
     posts = ListType(ModelType(Post), default=[])
     cancellation = ModelType(Cancellation)
     appeal = ModelType(Appeal)
+    liabilities = ListType(ModelType(Liability), default=list())
 
     parties = ListType(ModelType(MonitoringParty), default=[])
 

@@ -1,4 +1,4 @@
-POST /api/2.5/requests/6270491497034cc79fe4a00e1b7b84f1/documents HTTP/1.0
+POST /api/2.5/requests/3a613f38dfbc4d3da9032846b6f75aee/documents HTTP/1.0
 Authorization: Basic cHVibGljOnB1YmxpYw==
 Content-Length: 315
 Content-Type: application/json
@@ -15,10 +15,10 @@ DATA:
 
 Response: 201 Created
 Content-Type: application/json
-Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/requests/6270491497034cc79fe4a00e1b7b84f1/documents/f92b51b672f743cc9f913760320624f9
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/requests/3a613f38dfbc4d3da9032846b6f75aee/documents/7c73ad5badbf4288bd24bac55e3ac5e6
 {
   "data": {
-    "id": "f92b51b672f743cc9f913760320624f9",
+    "id": "7c73ad5badbf4288bd24bac55e3ac5e6",
     "hash": "md5:00000000000000000000000000000000",
     "title": "doc(1).txt",
     "format": "plain/text",

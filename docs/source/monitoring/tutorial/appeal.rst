@@ -22,6 +22,17 @@ This action can be performed only once:
 .. include:: http/appeal-post-again.http
    :code:
 
+After adding the appeal, to appeal can be added proceeding:
+
+.. include:: http/add-proceeding-to-appeal.http
+   :code:
+
+This action also can be performed only once:
+
+.. include:: http/add-proceeding-to-appeal-again.http
+   :code:
+
+
 Documents can be added/changed any time:
 
 .. include:: http/appeal-post-doc.http

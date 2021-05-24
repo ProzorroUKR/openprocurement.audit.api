@@ -1,4 +1,4 @@
-POST /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/posts?acc_token=ab906ad83e9c4acd9b9c06215f87bfe6 HTTP/1.0
+POST /api/2.5/monitorings/3c06b16c6bb747449e2e60158453c491/posts?acc_token=0ebba00a48cf49c28c856e1c900d1c7b HTTP/1.0
 Authorization: Basic YnJva2VyOmJyb2tlcg==
 Content-Length: 410
 Content-Type: application/json
@@ -21,15 +21,15 @@ DATA:
 
 Response: 201 Created
 Content-Type: application/json
-Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/posts/7b3cbba723734b3b8a1a49fdefee7164
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/3c06b16c6bb747449e2e60158453c491/posts/9acee33b9ba94f548e6b60234c8caf5e
 {
   "data": {
-    "id": "7b3cbba723734b3b8a1a49fdefee7164",
+    "id": "9acee33b9ba94f548e6b60234c8caf5e",
     "title": "Sit amet",
     "description": "Sit amet lorem ipsum dolor.",
     "documents": [
       {
-        "id": "79251caf27fe413d9aa98717620b71cc",
+        "id": "43270da8a7d94557840ecf49b9edc340",
         "hash": "md5:00000000000000000000000000000000",
         "title": "dolor.doc",
         "format": "application/msword",

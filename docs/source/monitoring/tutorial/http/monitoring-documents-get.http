@@ -1,4 +1,4 @@
-GET /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/documents/634d8e673bb64f0d92953593c533b511 HTTP/1.0
+GET /api/2.5/monitorings/3c06b16c6bb747449e2e60158453c491/documents/a41cf437bd2c435c8556094918951028 HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
 Host: audit-api-sandbox.prozorro.gov.ua
 
@@ -6,7 +6,7 @@ Response: 200 OK
 Content-Type: application/json
 {
   "data": {
-    "id": "634d8e673bb64f0d92953593c533b511",
+    "id": "a41cf437bd2c435c8556094918951028",
     "hash": "md5:11111111111111111111111111111111",
     "title": "sign_updated.p7s",
     "format": "application/ms-word",
@@ -16,7 +16,7 @@ Content-Type: application/json
     "author": "monitoring_owner",
     "previousVersions": [
       {
-        "id": "634d8e673bb64f0d92953593c533b511",
+        "id": "a41cf437bd2c435c8556094918951028",
         "hash": "md5:00000000000000000000000000000000",
         "title": "sign.p7s",
         "format": "application/ms-word",

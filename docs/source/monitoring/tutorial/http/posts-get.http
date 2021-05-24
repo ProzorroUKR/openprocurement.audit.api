@@ -1,4 +1,4 @@
-GET /api/2.5/monitorings/c715421038304838a046654fa8c1e9aa/posts HTTP/1.0
+GET /api/2.5/monitorings/3c06b16c6bb747449e2e60158453c491/posts HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
 Host: audit-api-sandbox.prozorro.gov.ua
 
@@ -7,12 +7,12 @@ Content-Type: application/json
 {
   "data": [
     {
-      "id": "ca85c88b657b4bba974b037e532e581c",
+      "id": "b5ccc45a3c5943ab9bf9e95b631f98e4",
       "title": "Lorem ipsum",
       "description": "Lorem ipsum dolor sit amet.",
       "documents": [
         {
-          "id": "51013265fd914fa6b01a6334b95ee70c",
+          "id": "f8069abe43c547a8a87074b1ff983da4",
           "hash": "md5:00000000000000000000000000000000",
           "title": "ipsum.doc",
           "format": "application/msword",
@@ -22,7 +22,7 @@ Content-Type: application/json
           "author": "monitoring_owner"
         },
         {
-          "id": "547bc5cf5f4a48d5b4443cefb9a62802",
+          "id": "8319cc43396a4368b281fcf0fa4679ce",
           "hash": "md5:00000000000000000000000000000000",
           "title": "dolor.doc",
           "format": "application/msword",
@@ -36,15 +36,15 @@ Content-Type: application/json
       "postOf": "decision",
       "datePublished": "2018-01-03T02:05:00+02:00",
       "dateOverdue": "2018-01-10T00:00:00+02:00",
-      "relatedParty": "f745206183964f70a17622acdead1015"
+      "relatedParty": "4b95d1d6a43c4693b88a144765befaba"
     },
     {
-      "id": "0dd18f852fcf43e28a7fd7fc2c0dc2a1",
+      "id": "ecca8fc4c85a4b78aa2c97e9703784c6",
       "title": "Sit amet",
       "description": "Dolor sit amet",
       "documents": [
         {
-          "id": "74ebb22006f044fa80ab4f0199904b51",
+          "id": "787c847df60b4bed80ec1aac479c354f",
           "hash": "md5:00000000000000000000000000000000",
           "title": "dolor.doc",
           "format": "application/msword",
@@ -57,15 +57,15 @@ Content-Type: application/json
       "author": "tender_owner",
       "postOf": "decision",
       "datePublished": "2018-01-04T02:05:00+02:00",
-      "relatedPost": "ca85c88b657b4bba974b037e532e581c"
+      "relatedPost": "b5ccc45a3c5943ab9bf9e95b631f98e4"
     },
     {
-      "id": "886a5cdd71dc416faaf90c28eedbf742",
+      "id": "85dc0473a2b34b38ab545ed39b23f863",
       "title": "Dolor sit amet",
       "description": "Lorem ipsum dolor sit amet.",
       "documents": [
         {
-          "id": "748a11ca06fc4d468c610ee8fae035d0",
+          "id": "53f815fd73264997a0ba6644672276a6",
           "hash": "md5:00000000000000000000000000000000",
           "title": "ipsum.doc",
           "format": "application/msword",
@@ -80,12 +80,12 @@ Content-Type: application/json
       "datePublished": "2018-01-04T03:05:00+02:00"
     },
     {
-      "id": "75c8163ecd55417ea04507ed1071bed5",
+      "id": "6050f6e782d4453f924e03bb3dd5efb5",
       "title": "Lorem ipsum",
       "description": "Lorem ipsum dolor sit amet.",
       "documents": [
         {
-          "id": "8247f603a3114154a55a3350993c126a",
+          "id": "f95956b52bb14543861507e6b4ea1951",
           "hash": "md5:00000000000000000000000000000000",
           "title": "ipsum.doc",
           "format": "application/msword",
@@ -98,8 +98,8 @@ Content-Type: application/json
       "author": "monitoring_owner",
       "postOf": "decision",
       "datePublished": "2018-01-04T03:15:00+02:00",
-      "relatedPost": "886a5cdd71dc416faaf90c28eedbf742",
-      "relatedParty": "f745206183964f70a17622acdead1015"
+      "relatedPost": "85dc0473a2b34b38ab545ed39b23f863",
+      "relatedParty": "4b95d1d6a43c4693b88a144765befaba"
     }
   ]
 }

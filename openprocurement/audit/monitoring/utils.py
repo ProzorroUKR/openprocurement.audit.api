@@ -31,14 +31,17 @@ def monitoring_serialize(request, monitoring_data, fields):
     return {i: j for i, j in monitoring.serialize('view').items() if i in fields}
 
 
-def save_monitoring(request, date_modified=None):
+def save_monitoring(request, date_modified=None, update_context_date=False):
     monitoring = request.validated['monitoring']
     patch = get_revision_changes(request.validated['monitoring_src'], monitoring.serialize('plain'))
     if patch:
         add_revision(request, monitoring, patch)
 
         old_date_modified = monitoring.dateModified
-        monitoring.dateModified = date_modified or get_now()
+        now = date_modified or get_now()
+        monitoring.dateModified = now
+        if update_context_date and "dateModified" in request.context:
+            request.context.dateModified = now
         try:
             monitoring.store(request.registry.db)
         except ModelValidationError as e:  # pragma: no cover
@@ -59,13 +62,13 @@ def save_monitoring(request, date_modified=None):
             return True
 
 
-def apply_patch(request, data=None, save=True, src=None, date_modified=None):
+def apply_patch(request, data=None, save=True, src=None, date_modified=None, update_context_date=False):
     data = request.validated['data'] if data is None else data
     patch = data and apply_data_patch(src or request.context.serialize(), data)
     if patch:
         request.context.import_data(patch)
         if save:
-            return save_monitoring(request, date_modified=date_modified)
+            return save_monitoring(request, date_modified=date_modified, update_context_date=update_context_date)
 
 
 def add_revision(request, item, changes):

@@ -11,7 +11,7 @@ from openprocurement.audit.api.constants import (
     POST_OBJECT_TYPE,
 )
 from openprocurement.audit.api.utils import (
-    upload_file, get_file, context_unpack, APIResource, forbidden, op_resource, json_view
+    upload_file, get_file, context_unpack, APIResource, forbidden, op_resource, json_view, get_now
 )
 from openprocurement.audit.api.validation import (
     validate_file_update,
@@ -105,7 +105,7 @@ class MonitoringsDocumentBaseResource(APIResource):
         Monitoring Document Update
         """
         document = self.request.context
-        if apply_patch(self.request):
+        if apply_patch(self.request, update_context_date=True):
             self.LOGGER.info('Updated {} monitoring document {}'.format(self.document_type, document.id),
                              extra=context_unpack(self.request,
                                                   {'MESSAGE_ID': 'monitoring_document_patch'},

@@ -1,6 +1,6 @@
 PATCH /api/2.5/monitorings/3c06b16c6bb747449e2e60158453c491 HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
-Content-Length: 585
+Content-Length: 587
 Content-Type: application/json
 Host: audit-api-sandbox.prozorro.gov.ua
 DATA:
@@ -16,7 +16,7 @@ DATA:
       "documents": [
         {
           "title": "sign.p7s",
-          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/c58a40771f0a41d0880fa3397981d0f7?Signature=QVY7PJHGoIuKekQQa5Krhq%2BgsCPu2c3jQB7fdIwh5ecvQgfbyvNl2miYHg7UHoD%2FDIdLEI3XO6a91eNB7IJ%2BDA%3D%3D&KeyID=a8968c46",
+          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/ebc81e9025064d789bece0f57453d4dd?Signature=AxeYkDhVemkPPh%2FiXyJNEK2%2Fu5mFdqWQSbMcb9Iq4ekAvnWP4zmL4mkZsb%2B1vShUvDXUbPFML2O%2FgK40Fm49Aw%3D%3D&KeyID=a8968c46",
           "hash": "md5:00000000000000000000000000000000",
           "format": "application/pkcs7-signature"
         }
@@ -53,7 +53,7 @@ Content-Type: application/json
           "hash": "md5:00000000000000000000000000000000",
           "title": "requirements.doc",
           "format": "application/msword",
-          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/8156e7122c6e497cb271478f924cc846?Signature=gxWcVkXilNhJisonuLONqVW4S%252BEQiFNyNTuPtwTQQbmRdEinhKXYHO7BAZlzGCKtTS3aZvIimRSq%252B2AO3tpxCQ%253D%253D&KeyID=a8968c46",
+          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/c58a40771f0a41d0880fa3397981d0f7?Signature=4coRPCRhZJJYXMLoxQp%2FfVCpbJ3Jyemnu8GiBz90%252Bfaa03hZxCQc9LUMKa7KER0%252BPE01PtDqAyj%2FGb9EQRVSAA%253D%253D&KeyID=a8968c46",
           "datePublished": "2018-01-07T02:00:00+02:00",
           "dateModified": "2018-01-07T02:00:00+02:00",
           "author": "tender_owner"
@@ -69,7 +69,7 @@ Content-Type: application/json
           "hash": "md5:00000000000000000000000000000000",
           "title": "sign.p7s",
           "format": "application/pkcs7-signature",
-          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/c58a40771f0a41d0880fa3397981d0f7?Signature=4coRPCRhZJJYXMLoxQp%2FfVCpbJ3Jyemnu8GiBz90%252Bfaa03hZxCQc9LUMKa7KER0%252BPE01PtDqAyj%2FGb9EQRVSAA%253D%253D&KeyID=a8968c46",
+          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/ebc81e9025064d789bece0f57453d4dd?Signature=TMThtjAcxaQGQfAUMUbGDEpJ8YSHhOWIyZlkiNNruHaOQDvkKn6GVifMCOm83CG3ov%2F2eUiGKsZUkMUCyIhvBQ%253D%253D&KeyID=a8968c46",
           "datePublished": "2018-01-09T02:00:00+02:00",
           "dateModified": "2018-01-09T02:00:00+02:00"
         }
@@ -225,7 +225,7 @@ Content-Type: application/json
           "format": "application/json",
           "url": "http://public-docs-sandbox.prozorro.gov.ua/get/37df4b6da2c24b6a97a6c35bb69fcccf?Signature=X%2Ff0ajCeap0OHcwyz1XO0dLSTED0fK3VUByfMLazlN6qfuMigrYsbcVTMH645ldiGRT%2FFULQP5SUs6m%252BP%2FT1Dg%253D%253D&KeyID=a8968c46",
           "datePublished": "2018-01-06T09:00:00+02:00",
-          "dateModified": "2018-01-06T09:00:00+02:00",
+          "dateModified": "2018-01-06T10:15:00+02:00",
           "author": "tender_owner"
         },
         {
@@ -236,6 +236,16 @@ Content-Type: application/json
           "url": "http://public-docs-sandbox.prozorro.gov.ua/get/59ec68b1b09a425a8fca371a3b12b4cf?Signature=sRNJw%2FbCYENI%2F9xBkCK67MwDV2sFmjLJYR%2FrD04uxg81W8gJDneA%252B%2FxUhcqQOBfErBhS7JFK1VpTVlRgV6tUAQ%253D%253D&KeyID=a8968c46",
           "datePublished": "2018-01-06T10:00:00+02:00",
           "dateModified": "2018-01-06T10:00:00+02:00",
+          "author": "tender_owner"
+        },
+        {
+          "id": "cef6a851979f4f7897e277ff61125d59",
+          "hash": "md5:00000000000000000000000000000000",
+          "title": "letter_put.doc",
+          "format": "application/json",
+          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/8156e7122c6e497cb271478f924cc846?Signature=gxWcVkXilNhJisonuLONqVW4S%252BEQiFNyNTuPtwTQQbmRdEinhKXYHO7BAZlzGCKtTS3aZvIimRSq%252B2AO3tpxCQ%253D%253D&KeyID=a8968c46",
+          "datePublished": "2018-01-06T09:00:00+02:00",
+          "dateModified": "2018-01-06T10:15:00+02:00",
           "author": "tender_owner"
         }
       ],

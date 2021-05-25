@@ -1,6 +1,6 @@
 PUT /api/2.5/monitorings/3c06b16c6bb747449e2e60158453c491/eliminationReport?acc_token=0ebba00a48cf49c28c856e1c900d1c7b HTTP/1.0
 Authorization: Basic YnJva2VyOmJyb2tlcg==
-Content-Length: 445
+Content-Length: 443
 Content-Type: application/json
 Host: audit-api-sandbox.prozorro.gov.ua
 DATA:
@@ -10,7 +10,7 @@ DATA:
     "documents": [
       {
         "title": "requirements.doc",
-        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/8156e7122c6e497cb271478f924cc846?Signature=WDKZ%2BOn40wFfeTsbfAT%2FjE7E1SAR5XQKJNK%2FjciHJyhCRFTHDKHuhf4FPL6pIKvEIcujg%2BgKIHtOacjuDIKrCA%3D%3D&KeyID=a8968c46",
+        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/c58a40771f0a41d0880fa3397981d0f7?Signature=QVY7PJHGoIuKekQQa5Krhq%2BgsCPu2c3jQB7fdIwh5ecvQgfbyvNl2miYHg7UHoD%2FDIdLEI3XO6a91eNB7IJ%2BDA%3D%3D&KeyID=a8968c46",
         "hash": "md5:00000000000000000000000000000000",
         "format": "application/msword"
       }
@@ -29,7 +29,7 @@ Content-Type: application/json
         "hash": "md5:00000000000000000000000000000000",
         "title": "requirements.doc",
         "format": "application/msword",
-        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/8156e7122c6e497cb271478f924cc846?Signature=gxWcVkXilNhJisonuLONqVW4S%252BEQiFNyNTuPtwTQQbmRdEinhKXYHO7BAZlzGCKtTS3aZvIimRSq%252B2AO3tpxCQ%253D%253D&KeyID=a8968c46",
+        "url": "http://public-docs-sandbox.prozorro.gov.ua/get/c58a40771f0a41d0880fa3397981d0f7?Signature=4coRPCRhZJJYXMLoxQp%2FfVCpbJ3Jyemnu8GiBz90%252Bfaa03hZxCQc9LUMKa7KER0%252BPE01PtDqAyj%2FGb9EQRVSAA%253D%253D&KeyID=a8968c46",
         "datePublished": "2018-01-07T02:00:00+02:00",
         "dateModified": "2018-01-07T02:00:00+02:00",
         "author": "tender_owner"

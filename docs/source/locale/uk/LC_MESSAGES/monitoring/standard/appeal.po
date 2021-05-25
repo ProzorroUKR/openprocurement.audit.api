@@ -34,7 +34,7 @@ msgstr ""
 
 #: ../../source/monitoring/standard/appeal.rst:13
 msgid "List of :ref:`document` objects"
-msgstr "Список об’єктів :ref:`document"
+msgstr "Список об’єктів :ref:`document`"
 
 #: ../../source/monitoring/standard/appeal.rst
 msgid "dateCreated"

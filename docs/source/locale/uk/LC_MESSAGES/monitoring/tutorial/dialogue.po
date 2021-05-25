@@ -3,147 +3,171 @@ msgid ""
 msgstr ""
 "Project-Id-Version: openprocurement.audit.api 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2018-06-13 11:14+0300\n"
+"POT-Creation-Date: 2021-05-24 13:22+0300\n"
 "PO-Revision-Date: 2018-07-12 09:25+0300\n"
 "Last-Translator: \n"
-"Language-Team: \n"
 "Language: uk\n"
+"Language-Team: \n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2)\n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n"
-"%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
-"X-Generator: Poedit 1.8.7.1\n"
+"Generated-By: Babel 2.9.1\n"
 
-#: ../../source/tutorial/dialogue.rst:6
+#: ../../source/images.hrst:1
+msgid "yes"
+msgstr ""
+
+#: ../../source/images.hrst:5
+msgid "no"
+msgstr ""
+
+#: ../../source/monitoring/tutorial/dialogue.rst:6
 msgid "Make a Dialogue"
 msgstr "Запит пояснень"
 
-#: ../../source/tutorial/dialogue.rst:0
+#: ../../source/monitoring/tutorial/dialogue.rst
 msgid "This section contains available actions for next roles:"
 msgstr "Секція містить опис можливих дій для наступний учасників моніторингу:"
 
-#: ../../source/tutorial/dialogue.rst:0
+#: ../../source/monitoring/tutorial/dialogue.rst
 msgid "|yes| Monitoring owner"
 msgstr "|yes| Власник моніторингу"
 
-#: ../../source/tutorial/dialogue.rst:0
+#: ../../source/monitoring/tutorial/dialogue.rst
 msgid "|yes| Tender owner"
 msgstr "|yes| Власник тендеру"
 
-#: ../../source/tutorial/dialogue.rst:41
-msgid "And also add documents:"
-msgstr "А також додамо документи:"
-
-#: ../../source/tutorial/dialogue.rst:14
+#: ../../source/monitoring/tutorial/dialogue.rst:14
 msgid ""
-"For published monitoring we can start dialogue by publishing a post as a SAS-"
-"employee:"
+"For published monitoring we can start dialogue by publishing a post as a "
+"SAS-employee:"
 msgstr ""
-"Для опублікованого моніторингу у власнику моніторингу можна запитати пояснення:"
+"Для опублікованого моніторингу у власнику моніторингу можна запитати "
+"пояснення:"
 
-#: ../../source/tutorial/dialogue.rst:26
-msgid "Lets add another document to a post:"
-msgstr "Додамо ще один документ до запиту:"
-
-#: ../../source/tutorial/dialogue.rst:31
-msgid "We also can get a list of all post documents:"
-msgstr "Також ми можемо отримати всіх доданих документів до запиту на пояснення:"
-
-#: ../../source/tutorial/dialogue.rst:46
+#: ../../source/monitoring/tutorial/dialogue.rst:19
 msgid ""
-"Also we can create another question as a broker by publishing an another post:"
-msgstr "Також власник тендеру може надання пояснення з власної ініціативи:"
-
-#: ../../source/tutorial/dialogue.rst:51
-msgid "And also SAS-employee can publish an answer post:"
-msgstr "Співробітник ДАСУ може надати відповідь:"
-
-#: ../../source/tutorial/dialogue.rst:56
-msgid "Lets see all posts we have:"
-msgstr "Подивимось усі запити:"
-
-#: ../../source/tutorial/dialogue.rst:36
-msgid ""
-"To answer the question as a broker we must get :ref:`credentials` first. Now "
-"lets add an answer using generated token. To link the answer to a question we "
-"should pass `id` of the question  post as `relatedPost`:"
-msgstr ""
-"Для надання відповіді на запит власником тендеру ми маємо спочатку `отримати "
-"токен <credentials>`_. Тепер спробуємо додати відповідь використовуючи "
-"згенерований токен. Щоб прив'язати відповідь до запиту ми маємо передати "
-"`relatedPost`:"
-
-#: ../../source/tutorial/dialogue.rst:19
-msgid ""
-"We can see that ``postOf`` field was generated. Possible  values of this field "
-"are:"
+"We can see that ``postOf`` field was generated. Possible  values of this "
+"field are:"
 msgstr "Бачимо що було згенеровано поле ``postOf`. Можливі наступні значення:"
 
-#: ../../source/tutorial/dialogue.rst:21
+#: ../../source/monitoring/tutorial/dialogue.rst:21
 msgid ""
 "``decision`` - means that post is related to a decision and was added in "
 "``active`` monitoring status"
 msgstr ""
-"``decision`` - означає що запит/відповідь відносяться до рішення про початок "
-"моніторингу та було додано у ``active`` статусі"
+"``decision`` - означає що запит/відповідь відносяться до рішення про "
+"початок моніторингу та було додано у ``active`` статусі"
 
-#: ../../source/tutorial/dialogue.rst:22
+#: ../../source/monitoring/tutorial/dialogue.rst:22
 msgid ""
-"``conclusion`` - means that post is related to a conclusion and was added in "
-"``addressed`` or ``declined`` monitoring status"
+"``conclusion`` - means that post is related to a conclusion and was added"
+" in ``addressed`` or ``declined`` monitoring status"
 msgstr ""
-"``conclusion`` - означає що запит/відповідь відносяться до висновку та було "
-"додано у ``active`` статусах  ``addressed`` чи ``declined``"
+"``conclusion`` - означає що запит/відповідь відносяться до висновку та "
+"було додано у ``active`` статусах  ``addressed`` чи ``declined``"
 
-#: ../../source/tutorial/dialogue.rst:24
+#: ../../source/monitoring/tutorial/dialogue.rst:24
 msgid ""
-"Also ``dateOverdue`` was generated for SAS question, that is end date for "
-"reply. This is info field and there are no validations that use this date."
+"Also ``dateOverdue`` was generated for SAS question, that is end date for"
+" reply. This is info field and there are no validations that use this "
+"date."
 msgstr ""
-"Також було  згенеровано ``dateOverdue`` для запиту від співробітника ДАСУ та "
-"означає кінцеву дату до якої має бути надана відповідь. Поле носить "
+"Також було  згенеровано ``dateOverdue`` для запиту від співробітника ДАСУ"
+" та означає кінцеву дату до якої має бути надана відповідь. Поле носить "
 "інформативний характер та не приймає участі у жодній валідації."
 
-#~ msgid ""
-#~ "To answer the question as a broker we must get :ref:`credentials` first. "
-#~ "Now lets add an answer using generated token:"
-#~ msgstr ""
-#~ "Для надання відповіді на запит власником тендеру ми маємо спочатку "
-#~ "`отримати токен <credentials>`_. Тепер спробуємо додати відповідь "
-#~ "використовуючи згенерований токен."
+#: ../../source/monitoring/tutorial/dialogue.rst:26
+msgid "Lets add another document to a post:"
+msgstr "Додамо ще один документ до запиту:"
+
+#: ../../source/monitoring/tutorial/dialogue.rst:31
+msgid "We also can get a list of all post documents:"
+msgstr "Також ми можемо отримати всіх доданих документів до запиту на пояснення:"
+
+#: ../../source/monitoring/tutorial/dialogue.rst:36
+msgid ""
+"To answer the question as a broker we must get :ref:`credentials` first. "
+"Now lets add an answer using generated token. To link the answer to a "
+"question we should pass `id` of the question  post as `relatedPost`:"
+msgstr ""
+"Для надання відповіді на запит власником тендеру ми маємо спочатку "
+"`отримати токен <credentials>`_. Тепер спробуємо додати відповідь "
+"використовуючи згенерований токен. Щоб прив'язати відповідь до запиту ми "
+"маємо передати `relatedPost`:"
+
+#: ../../source/monitoring/tutorial/dialogue.rst:41
+msgid "And also add documents:"
+msgstr "А також додамо документи:"
+
+#: ../../source/monitoring/tutorial/dialogue.rst:46
+msgid ""
+"Also we can create another question as a broker by publishing an another "
+"post:"
+msgstr "Також власник тендеру може надання пояснення з власної ініціативи:"
+
+#: ../../source/monitoring/tutorial/dialogue.rst:51
+msgid "And also SAS-employee can publish an answer post:"
+msgstr "Співробітник ДАСУ може надати відповідь:"
+
+#: ../../source/monitoring/tutorial/dialogue.rst:56
+msgid "Lets see all posts we have:"
+msgstr "Подивимось усі запити:"
 
 #~ msgid ""
-#~ "Let's provide party that will be used as related party for our dialogue:"
+#~ "To answer the question as a broker"
+#~ " we must get :ref:`credentials` first. "
+#~ "Now lets add an answer using "
+#~ "generated token:"
+#~ msgstr ""
+#~ "Для надання відповіді на запит власником"
+#~ " тендеру ми маємо спочатку `отримати "
+#~ "токен <credentials>`_. Тепер спробуємо додати"
+#~ " відповідь використовуючи згенерований токен."
+
+#~ msgid ""
+#~ "Let's provide party that will be "
+#~ "used as related party for our "
+#~ "dialogue:"
 #~ msgstr "Додаємо учасника моніторингу на якого буде посилатися запит: "
 
 #~ msgid "For published monitoring we can start dialogue:"
 #~ msgstr ""
-#~ "Для моніторингу  з опублікованим рішенням про початок моніторингу є "
-#~ "можливість створення запиту на пояснення:"
+#~ "Для моніторингу  з опублікованим рішенням "
+#~ "про початок моніторингу є можливість "
+#~ "створення запиту на пояснення:"
 
 #~ msgid "Lets add another document to dialogue:"
 #~ msgstr "Додамо ще один документ для діалогу:"
 
 #~ msgid "We also can get a list of all dialogue documents:"
 #~ msgstr ""
-#~ "Також ми можемо отримати всіх доданих документів до запиту на пояснення:"
+#~ "Також ми можемо отримати всіх доданих"
+#~ " документів до запиту на пояснення:"
 
 #~ msgid ""
-#~ "To answer the question as a broker we must get :ref:`credentials` first. "
-#~ "Now lets update answer using generated token:"
+#~ "To answer the question as a broker"
+#~ " we must get :ref:`credentials` first. "
+#~ "Now lets update answer using generated"
+#~ " token:"
 #~ msgstr ""
-#~ "Для надання відповіді на запит від імені власника тендеру ми маємо спочатку "
-#~ "`отримати токен <credentials>`_. Тепер спробуємо додати відповідь "
-#~ "використовуючи згенерований токен."
+#~ "Для надання відповіді на запит від "
+#~ "імені власника тендеру ми маємо спочатку"
+#~ " `отримати токен <credentials>`_. Тепер "
+#~ "спробуємо додати відповідь використовуючи "
+#~ "згенерований токен."
 
 #~ msgid "Lets see the result dialogue:"
 #~ msgstr "Поглянемо на результат діалогу:"
 
 #~ msgid "Also we can create another question as a broker:"
 #~ msgstr ""
-#~ "Також ми можемо від імені власника тендеру надати пояснення з власної "
+#~ "Також ми можемо від імені власника "
+#~ "тендеру надати пояснення з власної "
 #~ "ініціативи:"
 
 #~ msgid "Lets see all dialogues we have:"
 #~ msgstr "Поглянемо на список всіх діалогів у моніторингу:"
+

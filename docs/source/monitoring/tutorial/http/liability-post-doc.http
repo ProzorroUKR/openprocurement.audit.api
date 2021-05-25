@@ -7,7 +7,7 @@ DATA:
 {
   "data": {
     "title": "another-letter.doc",
-    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/1ae2e0c7128640a7b83a4b876025582f?Signature=aC%2BxXIkiPzfQyjhqzDN6UOJv7VdWeyocCq2vkamYdR7FXlaCdKCzTHIWI7uEEq4gAcRRQaJH8Tc1lJX3or62AQ%3D%3D&KeyID=a8968c46",
+    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/23d1c5d4d9d44842932bba730ab74b2e?Signature=aaTOLnbefmASQlsMobraEYxgBvir42haO28PQIDQzHWUcwjOYk9UsfoBXi5CiUcaKXPF9J%2FI6Q3LxErofsNSBQ%3D%3D&KeyID=a8968c46",
     "hash": "md5:00000000000000000000000000000000",
     "format": "application/msword"
   }
@@ -22,7 +22,7 @@ Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/3c06b16c6
     "hash": "md5:00000000000000000000000000000000",
     "title": "another-letter.doc",
     "format": "application/msword",
-    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/1ae2e0c7128640a7b83a4b876025582f?Signature=gYMbl6M9fXgPpM3BEVD6CTnHts2NY%2FnV6QAypR27kWqcGBQXceX%2FPoyV8myjN7WszG6W1FVzpdKIi%2FMC%252BTJtCQ%253D%253D&KeyID=a8968c46",
+    "url": "http://public-docs-sandbox.prozorro.gov.ua/get/23d1c5d4d9d44842932bba730ab74b2e?Signature=o1IEQWFbDFQ38kVvM%252BfLjYk1ixKNyWeNGmOrqwArkCUNOC2mPNdqQinSttB1IN5x2fHOHHjFxTz%252BKTeqVwALBA%253D%253D&KeyID=a8968c46",
     "datePublished": "2018-01-09T04:30:00+02:00",
     "dateModified": "2018-01-09T04:30:00+02:00",
     "author": "monitoring_owner"

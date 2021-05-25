@@ -11,7 +11,9 @@ Appeal
 
 We have already seen how to get ``acc_token`` in :ref:`credentials` section
 
-As soon as the conclusion is published, tender's owner may point out that the conclusion has been appealed in court:
+After publication conclusion by SAS (monitoring in status `addressed` or `declined` ),
+the tender owner may point out that the conclusion has been appealed in court.
+In this case the object of legislation is automatically filled by CDB:
 
 .. include:: http/appeal-post.http
    :code:
@@ -22,7 +24,7 @@ This action can be performed only once:
 .. include:: http/appeal-post-again.http
    :code:
 
-After adding the appeal, to appeal can be added proceeding:
+After adding the appeal (monitoring in status: `addressed`/`complete`/`declined`/`closed`/`stopped`), to appeal can be added proceeding:
 
 .. include:: http/add-proceeding-to-appeal.http
    :code:
@@ -33,10 +35,13 @@ This action also can be performed only once:
    :code:
 
 
-Documents can be added/changed any time:
+Documents can be added/changed/replaced any time:
 
 .. include:: http/appeal-post-doc.http
    :code:
 
 .. include:: http/appeal-patch-doc.http
+   :code:
+
+.. include:: http/appeal-put-doc.http
    :code:

@@ -692,7 +692,6 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                     {
                         "data": {
                             "proceeding": {
-                                "type": "court",
                                 "dateProceedings": MOCK_DATETIME,
                                 "proceedingNumber": "0123456789",
                             },
@@ -719,6 +718,24 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                     {
                         "data": {
                             'title': 'letter(0).doc',
+                            'url': self.generate_docservice_url(),
+                            'hash': 'md5:' + '0' * 32,
+                            'format': 'application/json',
+                        }
+                    },
+                )
+
+        with freeze_time("2018.01.06 08:15"):
+            with open('docs/source/monitoring/tutorial/http/appeal-put-doc.http', 'wt') as self.app.file_obj:
+                self.app.put_json(
+                    '/monitorings/{}/appeal/documents/{}?acc_token={}'.format(
+                        monitoring_id,
+                        appeal_doc_id,
+                        tender_owner_token
+                    ),
+                    {
+                        "data": {
+                            'title': 'letter_put.doc',
                             'url': self.generate_docservice_url(),
                             'hash': 'md5:' + '0' * 32,
                             'format': 'application/json',
@@ -791,14 +808,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                         'data': {
                             'reportNumber': '1234567890',
                             'legislation': {
-                                'version': '13.08.2020',
                                 'article': ['8.10'],
-                                'type': 'NATIONAL_LEGISLATION',
-                                'identifier': {
-                                    'id': '8073-X',
-                                    'legalName': 'Кодекс України про адміністративні правопорушення',
-                                    'uri': 'https://zakon.rada.gov.ua/laws/show/80731-10#Text',
-                                }
                             },
                             'documents': [{
                                 'title': 'letter.doc',
@@ -843,15 +853,6 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                             "proceeding": {
                                 "dateProceedings": MOCK_DATETIME,
                                 "proceedingNumber": "0123456789",
-                                "legislation": {
-                                    "version": "13.08.2020",
-                                    "article": ["8.10"],
-                                    "identifier": {
-                                        "id": "8073-X",
-                                        "legalName": "Кодекс України про адміністративні правопорушення",
-                                        "uri": "https://zakon.rada.gov.ua/laws/show/80731-10#Text",
-                                    }
-                                }
                             },
                         },
                     },
@@ -876,6 +877,24 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                     {
                         'data': {
                             'title': 'letter(0).doc',
+                            'url': self.generate_docservice_url(),
+                            'hash': 'md5:' + '0' * 32,
+                            'format': 'application/json',
+                        }
+                    },
+                )
+
+        with freeze_time("2018.01.09 03:5"):
+            with open('docs/source/monitoring/tutorial/http/liability-put-doc.http', 'wt') as self.app.file_obj:
+                self.app.put_json(
+                    '/monitorings/{}/liabilities/{}/documents/{}'.format(
+                        monitoring_id,
+                        liability_id,
+                        liability_doc_id,
+                    ),
+                    {
+                        'data': {
+                            'title': 'letter_put.doc',
                             'url': self.generate_docservice_url(),
                             'hash': 'md5:' + '0' * 32,
                             'format': 'application/json',

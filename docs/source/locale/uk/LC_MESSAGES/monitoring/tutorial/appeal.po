@@ -3,7 +3,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: openprocurement.audit.api 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2020-11-05 16:05+0200\n"
+"POT-Creation-Date: 2021-05-24 14:03+0300\n"
 "PO-Revision-Date: 2018-06-15 00:31+0300\n"
 "Last-Translator: \n"
 "Language: uk\n"
@@ -13,7 +13,15 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=utf-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"Generated-By: Babel 2.8.0\n"
+"Generated-By: Babel 2.9.1\n"
+
+#: ../../source/images.hrst:1
+msgid "yes"
+msgstr ""
+
+#: ../../source/images.hrst:5
+msgid "no"
+msgstr ""
 
 #: ../../source/monitoring/tutorial/appeal.rst:4
 msgid "Appeal"
@@ -35,29 +43,39 @@ msgstr "|yes| Власник тендеру"
 msgid ""
 "We have already seen how to get ``acc_token`` in :ref:`credentials` "
 "section"
-msgstr "Ми вже `отримати токен <credentials>`_"
+msgstr "Для отримання доступу до моніторингу дивись: :ref:`credentials`"
 
 #: ../../source/monitoring/tutorial/appeal.rst:14
 msgid ""
-"As soon as the conclusion is published, tender's owner may point out that"
-" the conclusion has been appealed in court:"
+"After publication conclusion by SAS (monitoring in status `addressed` or "
+"`declined` ), the tender owner may point out that the conclusion has been"
+" appealed in court. In this case the object of legislation is "
+"automatically filled by CDB:"
 msgstr ""
-"Оскільки висновок вже опубліковано, власник тендеру може зазначити що "
-"висновок оскаржено у суді:"
+"Після публікації ДАСУ висновку (моніторинг в статусі `addressed` або "
+"`declined`), власник тендеру може зазначити, що висновок оскаржено в "
+"суді.При цьому об’єкт legislation заповнюється ЦБД автоматично:"
 
-#: ../../source/monitoring/tutorial/appeal.rst:20
+#: ../../source/monitoring/tutorial/appeal.rst:22
 msgid "This action can be performed only once:"
 msgstr "Ця дія може бути виконана лише один раз:"
 
-#: ../../source/monitoring/tutorial/appeal.rst:25
-msgid "After adding the appeal, to appeal can be added proceeding:"
-msgstr "Після подання оскраження, до оскарження можна доддати провадження"
+#: ../../source/monitoring/tutorial/appeal.rst:27
+msgid ""
+"After adding the appeal (monitoring in status: "
+"`addressed`/`complete`/`declined`/`closed`/`stopped`), to appeal can be "
+"added proceeding:"
+msgstr ""
+"Після публікації оскарження (моніторинг в статусі: `addressed` або "
+"`complete`, або `declined`, або `closed`, або `stopped`), до нього можна "
+"додати провадження, зазначивши номер такого провадження та дату "
+"відкриття:"
 
-#: ../../source/monitoring/tutorial/appeal.rst:30
+#: ../../source/monitoring/tutorial/appeal.rst:32
 msgid "This action also can be performed only once:"
 msgstr "Ця дія може також бути виконана лише один раз:"
 
-#: ../../source/monitoring/tutorial/appeal.rst:36
-msgid "Documents can be added/changed any time:"
-msgstr "Документи можуть бути додані/змінені в будь який момент:"
+#: ../../source/monitoring/tutorial/appeal.rst:38
+msgid "Documents can be added/changed/replaced any time:"
+msgstr "Документи можуть бути додані/змінені/замінені:"
 

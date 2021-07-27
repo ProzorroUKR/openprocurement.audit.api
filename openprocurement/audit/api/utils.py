@@ -585,10 +585,6 @@ class APIResourcePaginatedListing(APIResource):
         view_kwargs = dict(startkey=startkey, endkey=endkey, descending=descending)
 
         if opt_fields - self.default_fields:
-            self.LOGGER.info(
-                'Used custom fields list: {}'.format(','.join(sorted(opt_fields))),
-                extra=context_unpack(self.request, {'MESSAGE_ID': "CUSTOM_LIST"}))
-
             results = [
                 self.serialize(self.request, i[u'doc'], opt_fields | self.default_fields)
                 for i in list_view(self.db, include_docs=True, **view_kwargs, **pagination_kwargs)

@@ -111,7 +111,7 @@ stop_review:
   services:
     - couchdb:1.6
   tags:
-    - kube
+    - kube-dev
   only:
     - branches
   except:

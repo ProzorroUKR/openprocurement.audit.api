@@ -52,9 +52,9 @@ build_tag:
 .base_deploy: &base_deploy
   stage: deploy
   script:
-    - helm repo add prozorro $REPO_URL
-    - helm repo update
-    - helm upgrade $APP_NAME-$CI_COMMIT_REF_SLUG --install prozorro/$HELM_CHART --namespace $HELM_NAMESPACE --set $HELM_TAG_PARAMETER=$TAG --wait --debug
+    - helm3 repo add prozorro $REPO_URL
+    - helm3 repo update
+    - helm3 upgrade $APP_NAME-$CI_COMMIT_REF_SLUG --install prozorro/$HELM_CHART --namespace $HELM_NAMESPACE --set $HELM_TAG_PARAMETER=$TAG --wait --debug
   tags:
     - shell
   variables:
@@ -92,7 +92,7 @@ deploy_master:
 stop_review:
   stage: deploy
   script:
-    - helm delete $CI_COMMIT_REF_SLUG --purge
+    - helm3 uninstall $CI_COMMIT_REF_SLUG
   environment:
     name: review/${CI_COMMIT_REF_SLUG}
     action: stop

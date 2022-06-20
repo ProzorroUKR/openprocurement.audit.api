@@ -24,9 +24,25 @@ from openprocurement.audit.api.auth import AuthenticationPolicy, authenticated_r
 from openprocurement.audit.api.constants import ROUTE_PREFIX
 from openprocurement.audit.api.database import set_api_security
 from openprocurement.audit.api.utils import forbidden, request_params, couchdb_json_decode
+from sentry_sdk.integrations.logging import LoggingIntegration
+from sentry_sdk.integrations.pyramid import PyramidIntegration
+import sentry_sdk
 
 
 def main(global_config, **settings):
+    dsn = settings.get("sentry.dsn") or os.environ.get("SENTRY_DSN")
+    if dsn:
+        sentry_sdk.init(
+            dsn=dsn,
+            integrations=[
+                LoggingIntegration(),
+                PyramidIntegration(),
+            ],
+            send_default_pii=True,
+            request_bodies="always",
+            environment=settings.get("sentry.environment"),
+        )
+
     config = Configurator(
         autocommit=True,
         settings=settings,

@@ -40,7 +40,7 @@ build_master:
   only:
     - master
   variables:
-    WERF_TAG_GIT_BRANCH: $CI_COMMIT_REF_SLUG
+    WERF_TAG_GIT_BRANCH: latest
 
 build_tag:
   extends: .build
@@ -68,6 +68,9 @@ review:
     action: start
     url: http://$APP_NAME-${CI_COMMIT_REF_SLUG}.${K8S_DOMAIN}/api/2.5/monitorings
     on_stop: stop_review
+  variables:
+    APP_NAME: audit-api
+    TAG: latest
   dependencies:
     - build
   only:

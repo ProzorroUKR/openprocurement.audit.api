@@ -59,7 +59,7 @@ build_tag:
     - shell
   variables:
     APP_NAME: audit-api
-    TAG: ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
+    TAG: latest
 
 review:
   <<: *base_deploy
@@ -70,7 +70,7 @@ review:
     on_stop: stop_review
   variables:
     APP_NAME: audit-api
-    TAG: latest
+    TAG: ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
   dependencies:
     - build
   only:

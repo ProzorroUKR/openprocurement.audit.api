@@ -1,21 +1,9 @@
-# -*- coding: utf-8 -*-
-import os
 from logging import getLogger
 from datetime import timedelta
 from pytz import timezone
 from requests import Session
-from json import load
 import os.path
-
 import standards
-
-
-def read_json(name):
-    curr_dir = os.path.dirname(os.path.realpath(__file__))
-    file_path = os.path.join(curr_dir, 'data', name)
-    with open(file_path, encoding='utf-8') as f:
-        data = load(f)
-    return data
 
 
 LOGGER = getLogger('openprocurement.audit.api')
@@ -33,7 +21,7 @@ WORKING_DAYS = {}
 HOLIDAYS = standards.load("calendars/workdays_off.json")
 for date_str in HOLIDAYS:
     WORKING_DAYS[date_str] = True
-ORA_CODES = [i['code'] for i in read_json('organization_identifier_scheme.json')['data']]
+ORA_CODES = [i["code"] for i in standards.load("organizations/identifier_scheme.json")["data"]]
 
 SAS_ROLE = "sas"
 PUBLIC_ROLE = "public"

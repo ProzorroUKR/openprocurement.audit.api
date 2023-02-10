@@ -1,6 +1,6 @@
 FROM python:3.6-slim-stretch
 
-RUN apt-get update && apt-get install -y git gcc libzmq-dev libssl-dev
+RUN apt-get update && apt-get install -y git gcc libzmq3-dev libssl-dev
 
 WORKDIR /app
 

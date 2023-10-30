@@ -326,6 +326,7 @@ class Monitoring(BaseModel):
             'edit_closed': whitelist('documents'),
             'edit_stopped': whitelist('documents'),
             'edit_cancelled': whitelist('documents'),
+            'admins': whitelist('is_masked'),
             'view': blacklist(
                 'tender_owner_token', '_attachments', 'revisions',
                 'decision', 'conclusion', 'cancellation'
@@ -368,6 +369,8 @@ class Monitoring(BaseModel):
     revisions = ListType(ModelType(Revision), default=[])
     _attachments = DictType(DictType(BaseType), default=dict())
 
+    is_masked = BooleanType()
+
     mode = StringType(choices=['test'])
     if SANDBOX_MODE:
         monitoringDetails = StringType()
@@ -392,8 +395,14 @@ class Monitoring(BaseModel):
 
     def get_role(self):
         role = super(Monitoring, self).get_role()
-        status = self.__parent__.request.context.status
-        return 'edit_{}'.format(status) if role == 'edit' else role
+        root = self.__parent__
+        request = root.request
+        if request.authenticated_role == "admins":
+            role = "admins"
+        elif role == 'edit':
+            status = self.__parent__.request.context.status
+            role = f'edit_{status}'
+        return role
 
     def __acl__(self):
         return [

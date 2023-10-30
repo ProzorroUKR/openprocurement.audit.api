@@ -8,6 +8,20 @@ from openprocurement.audit.monitoring.tests.utils import get_errors_field_names
 from openprocurement.audit.monitoring.utils import get_monitoring_accelerator
 
 
+def masking_monitoring(self):
+    # mask as admin
+    self.app.authorization = ('Basic', (self.admin_name, self.admin_pass))
+    response = self.app.patch_json(
+        '/monitorings/{}'.format(self.monitoring_id),
+        {"data": {"is_masked": True}},
+    )
+    self.assertTrue(response.json['data']["is_masked"])
+
+    # see masked
+    response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
+    self.assertTrue(response.json['data']["is_masked"])
+
+
 @freeze_time('2018-01-01T09:00:00+02:00')
 class MonitoringResourceTest(BaseWebTest):
 
@@ -185,6 +199,8 @@ class MonitoringResourceTest(BaseWebTest):
             }]
         )
 
+    test_masking_monitoring = masking_monitoring
+
 
 class ActiveMonitoringResourceTest(BaseWebTest):
     def setUp(self):
@@ -339,6 +355,8 @@ class ActiveMonitoringResourceTest(BaseWebTest):
         )
         self.assertEqual(('body', 'cancellation'), next(get_errors_field_names(response, 'This field is required.')))
 
+    test_masking_monitoring = masking_monitoring
+
 
 @freeze_time('2018-01-01T12:00:00.000000+03:00')
 class AddressedMonitoringResourceTest(BaseWebTest):
@@ -406,6 +424,8 @@ class AddressedMonitoringResourceTest(BaseWebTest):
             }}, status=422
         )
         self.assertEqual(('body', 'cancellation'), next(get_errors_field_names(response, 'This field is required.')))
+
+    test_masking_monitoring = masking_monitoring
 
 
 @freeze_time('2018-01-01T12:00:00.000000+03:00')
@@ -503,3 +523,5 @@ class DeclinedMonitoringResourceTest(BaseWebTest):
             }}, status=422
         )
         self.assertEqual(('body', 'cancellation'), next(get_errors_field_names(response, 'This field is required.')))
+
+    test_masking_monitoring = masking_monitoring

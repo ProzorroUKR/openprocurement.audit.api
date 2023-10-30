@@ -24,6 +24,7 @@ class Root(object):
         (Allow, 'g:sas', 'create_party'),
         (Allow, 'g:sas', 'edit_party'),
         (Allow, 'g:sas', 'create_post'),
+        (Allow, 'g:admins', 'edit_monitoring'),
     ]
 
     def __init__(self, request):

@@ -60,6 +60,8 @@ class BaseWebTest(BaseApiWebTest):
         self.sas_pass = "test_sas_token"
         self.risk_indicator_name = "risk_indicator_bot"
         self.risk_indicator_pass = "test_risk_indicator_bot_token"
+        self.admin_name = "test"
+        self.admin_pass = "token"
 
     def create_monitoring(self, **kwargs):
 

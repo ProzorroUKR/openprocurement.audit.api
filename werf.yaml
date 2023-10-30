@@ -2,7 +2,7 @@ project: prozorro-audit
 configVersion: 1
 ---
 image: ~
-from: python:3.6-slim-jessie
+from: python:3.6
 docker:
   WORKDIR: /app
   EXPOSE: "80"
@@ -18,7 +18,7 @@ git:
 shell:
   beforeInstall:
   - apt-get update
-  - apt-get install -y git gcc libzmq-dev libssl-dev
+  - apt-get install -y git gcc libzmq3-dev libssl-dev
   - pip install setuptools==45.1.0
   - pip install --upgrade pip
   install:

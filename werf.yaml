@@ -2,7 +2,7 @@ project: prozorro-audit
 configVersion: 1
 ---
 image: ~
-from: python:3.6
+from: python:3.6-slim
 docker:
   WORKDIR: /app
   EXPOSE: "80"

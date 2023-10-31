@@ -91,6 +91,8 @@ def set_logging_context(event):
 
 
 def monitoring_from_data(request, data):
+    # wartime measures
+    mask_object_data(request, data)
     return Monitoring(data)
 
 
@@ -101,8 +103,6 @@ def extract_monitoring_adapter(request, monitoring_id):
         request.errors.add('url', 'monitoring_id', 'Not Found')
         request.errors.status = 404
         raise error_handler(request.errors)
-    # wartime measures
-    mask_object_data(request, doc)
     return request.monitoring_from_data(doc)
 
 

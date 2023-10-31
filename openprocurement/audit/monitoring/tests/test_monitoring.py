@@ -16,10 +16,29 @@ def masking_monitoring(self):
         {"data": {"is_masked": True}},
     )
     self.assertTrue(response.json['data']["is_masked"])
+    tender_id = response.json['data']["tender_id"]
 
     # see masked
     response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
     self.assertTrue(response.json['data']["is_masked"])
+    if "decision" in response.json['data']:
+        self.assertEqual(response.json['data']["decision"]["description"], "0000")
+
+        # get listing
+        response = self.app.get('/monitorings?opt_fields=decision,tender_id')
+        monitoring = response.json["data"][0]
+        self.assertEqual(monitoring["id"], self.monitoring_id)
+        self.assertNotIn("decision", monitoring)
+
+        # get listing by tender
+        response = self.app.get(f'/tenders/{tender_id}/monitorings?opt_fields=decision')
+        monitoring = response.json["data"][0]
+        self.assertEqual(monitoring["id"], self.monitoring_id)
+        self.assertEqual(monitoring["decision"]["description"], "0000")
+
+        # get decision directly
+        response = self.app.get(f'/monitorings/{self.monitoring_id}/decision')
+        self.assertEqual(response.json['data']["description"], "0000")
 
 
 @freeze_time('2018-01-01T09:00:00+02:00')

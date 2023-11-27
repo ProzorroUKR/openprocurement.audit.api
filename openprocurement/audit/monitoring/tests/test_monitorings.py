@@ -1,6 +1,4 @@
-# -*- coding: utf-8 -*-
 from math import ceil
-
 from openprocurement.audit.api.constants import CANCELLED_STATUS, ACTIVE_STATUS
 from openprocurement.audit.monitoring.tests.base import BaseWebTest, DSWebTestMixin
 from openprocurement.audit.monitoring.tests.utils import get_errors_field_names
@@ -100,7 +98,7 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest, DSWebTestMixin):
         )
         self.assertEqual(response.json["data"]["status"], "draft")
 
-        obj = self.db.get(response.json["data"]["id"])
+        obj = self.app.app.registry.mongodb.monitoring.get(response.json["data"]["id"])
         self.assertEqual(obj["decision"]["description"], data["decision"]["description"])
         self.assertEqual(obj["decision"]['documents'][0]['title'], data["decision"]['documents'][0]['title'])
         self.assertNotEqual(obj["decision"]['documents'][0]['url'], data["decision"]['documents'][0]['url'])

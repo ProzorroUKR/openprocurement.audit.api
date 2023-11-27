@@ -1,18 +1,18 @@
 import json
 import traceback
 from hashlib import sha512, md5
-
+from functools import partial
 from unittest import mock
 import uuid
-from datetime import datetime
-from freezegun import freeze_time
-
+from datetime import datetime, timedelta
 from openprocurement.audit.api.choices import VIOLATION_TYPE_CHOICES
 from openprocurement.audit.monitoring.tests.base import BaseWebTest as MonitoringWebTest, DSWebTestMixin
 from openprocurement.audit.inspection.tests.base import BaseWebTest as InspectionWebTest
 from openprocurement.audit.request.tests.base import BaseWebTest as RequestWebTest
 from openprocurement.audit.api.tests.base import BaseTestApp
+from freezegun import freeze_time as base_freeze_time
 
+freeze_time = partial(base_freeze_time, ignore=["pymongo"])
 API_HOST = "audit-api-sandbox.prozorro.gov.ua"
 
 
@@ -1163,8 +1163,11 @@ class FeedDocsTest(BaseMonitoringWebTest):
     def setUp(self):
         super(FeedDocsTest, self).setUp()
 
+        self.now = datetime(2018, 1, 1)
         for i in range(5):
-            self.create_active_monitoring()
+            self.now += timedelta(seconds=1)
+            with freeze_time(self.now):
+                self.create_active_monitoring()
 
     def test_changes_feed(self):
         with open('docs/source/monitoring/feed/http/changes-feed.http', 'wt') as self.app.file_obj:
@@ -1185,7 +1188,9 @@ class FeedDocsTest(BaseMonitoringWebTest):
             self.assertEqual(len(response.json["data"]), 0)
             self.assertIn("next_page", response.json)
 
-        self.create_active_monitoring()
+        self.now += timedelta(seconds=1)
+        with freeze_time(self.now):
+            self.create_active_monitoring()
 
         with open('docs/source/monitoring/feed/http/changes-feed-new.http', 'wt') as self.app.file_obj:
             response = self.app.get(response.json["next_page"]["path"])
@@ -1200,7 +1205,9 @@ class FeedDocsTest(BaseMonitoringWebTest):
             self.assertEqual(len(response.json["data"]), 0)
             self.assertIn("next_page", response.json)
 
-        self.create_active_monitoring()
+        self.now += timedelta(seconds=1)
+        with freeze_time(self.now):
+            self.create_active_monitoring()
 
         with open('docs/source/monitoring/feed/http/changes-feed-new-last.http', 'wt') as self.app.file_obj:
             response = self.app.get(next_url)
@@ -1215,23 +1222,25 @@ class PrivateFeedDocsTest(BaseMonitoringWebTest):
         self.tender_id = '13c14e6a15b24e1a982310f262e18e7a'
         kwargs.update(tender_id=self.tender_id)
 
-        self.create_monitoring(**kwargs)  # draft
+        with freeze_time("2018.01.01 00:01"):
+            self.create_monitoring(**kwargs)  # draft
 
-        self.create_monitoring(**kwargs)  # cancelled
-
-        self.app.patch_json(
-            '/monitorings/{}'.format(self.monitoring_id),
-            {
-                "data": {
-                    "cancellation": {
-                        "description": "Some reason",
-                    },
-                    "status": "cancelled",
+        with freeze_time("2018.01.01 00:02"):
+            self.create_monitoring(**kwargs)  # cancelled
+            self.app.patch_json(
+                '/monitorings/{}'.format(self.monitoring_id),
+                {
+                    "data": {
+                        "cancellation": {
+                            "description": "Some reason",
+                        },
+                        "status": "cancelled",
+                    }
                 }
-            }
-        )
+            )
 
-        self.create_active_monitoring(**kwargs)  # active
+        with freeze_time("2018.01.01 00:03"):
+            self.create_active_monitoring(**kwargs)  # active
 
     def test_feed_public(self):
         self.create_items()

@@ -1,32 +1,20 @@
 from logging import getLogger
-
-from openprocurement.audit.api.constants import SAS_ROLE, PUBLIC_ROLE
-from openprocurement.audit.api.utils import (
+from openprocurement.audit.api.utils import forbidden
+from openprocurement.audit.api.views.base import (
     APIResource,
-    APIResourceListing,
+    MongodbResourceListing,
     json_view,
-    forbidden,
 )
 from openprocurement.audit.api.utils import (
     context_unpack,
-    get_now,
     generate_id,
 )
+from openprocurement.audit.api.context import get_now
 from openprocurement.audit.monitoring.utils import upload_objects_documents
-from openprocurement.audit.request.design import (
-    FIELDS,
-    requests_real_by_dateModified_view,
-    requests_real_by_local_seq_view,
-    requests_real_answered_by_dateModified_view,
-    requests_real_not_answered_by_dateModified_view,
-    requests_real_answered_by_local_seq_view,
-    requests_real_not_answered_by_local_seq_view,
-)
+from openprocurement.audit.request.utils import save_request
 from openprocurement.audit.request.utils import (
-    save_request,
     apply_patch,
     generate_request_id,
-    request_serialize,
     op_resource,
     set_author,
     request_serialize_view,
@@ -37,34 +25,28 @@ from openprocurement.audit.request.validation import (
 )
 
 LOGGER = getLogger(__name__)
-VIEW_MAP = {
-    u"": requests_real_by_dateModified_view,
-    u"answered": requests_real_answered_by_dateModified_view,
-    u"not_answered": requests_real_not_answered_by_dateModified_view,
-}
-CHANGES_VIEW_MAP = {
-    u"": requests_real_by_local_seq_view,
-    u"answered": requests_real_answered_by_local_seq_view,
-    u"not_answered": requests_real_not_answered_by_local_seq_view,
-}
-FEED = {
-    u"dateModified": VIEW_MAP,
-    u"changes": CHANGES_VIEW_MAP,
-}
 
 
 @op_resource(name="Requests", path="/requests")
-class RequestsResource(APIResourceListing):
+class RequestsResource(MongodbResourceListing):
     def __init__(self, request, context):
         super(RequestsResource, self).__init__(request, context)
+        self.listing_name = "Requests"
+        self.listing_default_fields = {"dateModified"}
+        self.listing_allowed_fields = {"dateCreated", "dateModified", "requestId"}
+        self.db_listing_method = request.registry.mongodb.request.list
 
-        self.VIEW_MAP = VIEW_MAP
-        self.CHANGES_VIEW_MAP = CHANGES_VIEW_MAP
-        self.FEED = FEED
-        self.FIELDS = FIELDS
-        self.serialize_func = request_serialize
-        self.object_name_for_listing = "Requests"
-        self.log_message_id = "requests_list_custom"
+    @staticmethod
+    def add_mode_filters(filters: dict, mode: str):
+        if mode == "answered":
+            filters["is_answered"] = True
+        elif mode == "not_answered":
+            filters["is_answered"] = False
+
+        if "test" in mode:
+            filters["is_test"] = True
+        elif "all" not in mode:
+            filters["is_test"] = False
 
     @json_view(
         content_type="application/json",
@@ -74,10 +56,14 @@ class RequestsResource(APIResourceListing):
     def post(self):
         obj = self.request.validated["request"]
         obj.id = generate_id()
-        obj.requestId = generate_request_id(get_now(), self.db, self.server_id)
+        obj.requestId = generate_request_id(self.request)
         set_author(obj.documents, self.request, "author")
         upload_objects_documents(self.request, obj)
-        save_request(self.request, date_modified=obj.dateCreated)
+        save_request(
+            self.request,
+            modified=True,
+            insert=True
+        )
         LOGGER.info(
             "Created request {}".format(obj.id),
             extra=context_unpack(
@@ -113,7 +99,7 @@ class RequestResource(APIResource):
         apply_patch(self.request, src=self.request.validated["request_src"], save=False)
         if obj.answer:
             obj.dateAnswered = now
-        save_request(self.request, date_modified=now)
+        save_request(self.request)
         LOGGER.info(
             "Updated request {}".format(obj.id),
             extra=context_unpack(self.request, {"MESSAGE_ID": "request_patch"}),

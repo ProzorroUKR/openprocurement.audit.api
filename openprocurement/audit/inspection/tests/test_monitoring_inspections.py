@@ -20,13 +20,13 @@ class MonitoringInspectionsResourceTest(BaseWebTest):
             self.assertEqual(response.status, '200 OK')
             self.assertEqual(response.content_type, 'application/json')
             self.assertEqual(
-                response.json['data'],
                 [{
                     u'dateCreated': u'2018-01-01T11:00:00+02:00',
                     u'dateModified': u'2018-01-01T11:00:00+02:00',
                     u'inspection_id': self.inspectionId,
                     u'id': self.inspection_id
-                }]
+                }],
+                response.json['data'],
             )
 
     def test_get_opt_fields(self):

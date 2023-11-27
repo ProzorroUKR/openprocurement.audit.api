@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from openprocurement.audit.api.constants import (
     MONITORING_OBJECT_TYPE,
     CANCELLATION_OBJECT_TYPE,
@@ -10,9 +9,8 @@ from openprocurement.audit.api.constants import (
     ELIMINATION_RESOLUTION_OBJECT_TYPE,
     POST_OBJECT_TYPE,
 )
-from openprocurement.audit.api.utils import (
-    upload_file, get_file, context_unpack, APIResource, forbidden, op_resource, json_view, get_now
-)
+from openprocurement.audit.api.utils import upload_file, get_file, context_unpack
+from openprocurement.audit.api.views.base import APIResource, json_view
 from openprocurement.audit.api.validation import (
     validate_file_update,
     validate_file_upload,

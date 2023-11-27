@@ -1,21 +1,18 @@
 from logging import getLogger
-
 from cornice.resource import resource
-from couchdb import ResourceConflict
 from functools import partial
-from gevent import sleep
-from schematics.exceptions import ModelValidationError
-
 from openprocurement.audit.api.utils import (
     get_revision_changes,
-    apply_data_patch, error_handler, get_now,
-    update_logging_context, context_unpack
+    apply_data_patch,
+    error_handler,
+    update_logging_context,
+    context_unpack,
+    handle_store_exceptions,
+    append_revision,
 )
 from openprocurement.audit.inspection.models import Inspection
 from openprocurement.audit.inspection.traversal import factory
-from openprocurement.audit.monitoring.utils import (
-    add_revision,
-)
+from openprocurement.audit.api.context import get_now
 
 LOGGER = getLogger(__package__)
 
@@ -23,60 +20,47 @@ LOGGER = getLogger(__package__)
 op_resource = partial(resource, error_handler=error_handler, factory=factory)
 
 
-def save_inspection(request, date_modified=None):
-    inspection = request.validated['inspection']
-    patch = get_revision_changes(request.validated['inspection_src'], inspection.serialize("plain"))
-    if patch:
-        add_revision(request, inspection, patch)
+def save_inspection(request, modified: bool = True, insert: bool = False) -> bool:
+    inspection = request.validated["inspection"]
 
-        old_date_modified = inspection.dateModified
-        inspection.dateModified = date_modified or get_now()
-        try:
-            inspection.store(request.registry.db)
-        except ModelValidationError as e:  # pragma: no cover
-            for i in e.messages:
-                request.errors.add('body', i, e.messages[i])
-            request.errors.status = 422
-        except Exception as e:  # pragma: no cover
-            request.errors.add('body', 'data', str(e))
-        else:
+    patch = get_revision_changes(inspection.serialize("plain"), request.validated["inspection_src"])
+    if patch:
+        now = get_now()
+
+        append_revision(request, inspection, patch)
+        old_date_modified = inspection.get("dateModified", now.isoformat())
+        with handle_store_exceptions(request):
+            request.registry.mongodb.inspection.save(
+                inspection,
+                insert=insert,
+                modified=modified,
+            )
             LOGGER.info(
-                'Saved inspection {}: dateModified {} -> {}'.format(
+                "Saved inspection {}: dateModified {} -> {}".format(
                     inspection.id,
-                    old_date_modified and old_date_modified.isoformat(),
+                    old_date_modified,
                     inspection.dateModified.isoformat()
                 ),
-                extra=context_unpack(request, {'MESSAGE_ID': 'save_inspection'})
+                extra=context_unpack(request, {"MESSAGE_ID": "save_inspection"}, {"RESULT": inspection["_rev"]}),
             )
             return True
+    return False
 
 
-def apply_patch(request, data=None, save=True, src=None, date_modified=None):
+def apply_patch(request, data=None, save=True, src=None):
     data = request.validated['data'] if data is None else data
     patch = data and apply_data_patch(src or request.context.serialize(), data)
     if patch:
         request.context.import_data(patch)
         if save:
-            return save_inspection(request, date_modified=date_modified)
+            return save_inspection(request)
 
 
-def generate_inspection_id(ctime, db, server_id=''):
-    key = ctime.date().isoformat()
-    inspection_id_doc = 'inspectionID_' + server_id if server_id else 'inspectionID'
-    while True:
-        try:
-            inspection_id = db.get(inspection_id_doc, {'_id': inspection_id_doc})
-            index = inspection_id.get(key, 1)
-            inspection_id[key] = index + 1
-            db.save(inspection_id)
-        except ResourceConflict:  # pragma: no cover
-            pass
-        except Exception:  # pragma: no cover
-            sleep(1)
-        else:
-            break
-    return 'UA-I-{:04}-{:02}-{:02}-{:06}{}'.format(
-        ctime.year, ctime.month, ctime.day, index, server_id and '-' + server_id)
+def generate_inspection_id(request):
+    ctime = get_now().date()
+    index_key = "inspection_{}".format(ctime.isoformat())
+    index = request.registry.mongodb.get_next_sequence_value(index_key)
+    return 'UA-I-{:04}-{:02}-{:02}-{:06}'.format(ctime.year, ctime.month, ctime.day, index)
 
 
 def set_logging_context(event):
@@ -92,17 +76,11 @@ def extract_inspection(request):
     key = "inspection_id"
     uid = request.matchdict.get(key)
     if uid:
-        db = request.registry.db
-        doc = db.get(uid)
-        if doc is not None and doc.get('doc_type') == 'inspection':
-            request.errors.add('url', key, 'Archived')
-            request.errors.status = 410
-            raise error_handler(request.errors)
-        elif doc is None or doc.get('doc_type') != 'Inspection':
+        doc = request.registry.mongodb.inspection.get(uid)
+        if doc is None:
             request.errors.add('url', key, 'Not Found')
             request.errors.status = 404
             raise error_handler(request.errors)
-
         return request.inspection_from_data(doc)
 
 

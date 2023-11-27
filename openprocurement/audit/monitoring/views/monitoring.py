@@ -1,7 +1,6 @@
 from logging import getLogger
 
 from pyramid.security import ACLAllowed
-
 from openprocurement.audit.api.constants import (
     MONITORING_TIME,
     ELIMINATION_PERIOD_TIME,
@@ -13,33 +12,13 @@ from openprocurement.audit.api.constants import (
     STOPPED_STATUS,
     CANCELLED_STATUS,
 )
-from openprocurement.audit.api.utils import (
-    context_unpack, APIResource, APIResourceListing, json_view, forbidden,
-)
-from openprocurement.audit.api.utils import (
-    generate_id,
-)
-from openprocurement.audit.monitoring.design import FIELDS
-from openprocurement.audit.monitoring.design import (
-    monitorings_real_by_dateModified_view,
-    monitorings_test_by_dateModified_view,
-    monitorings_by_dateModified_view,
-    monitorings_real_by_local_seq_view,
-    monitorings_test_by_local_seq_view,
-    monitorings_by_local_seq_view,
-    monitorings_real_draft_by_local_seq_view,
-    monitorings_all_draft_by_local_seq_view,
-    monitorings_real_draft_by_dateModified_view,
-    monitorings_all_draft_by_dateModified_view,
-    monitorings_real_count_view,
-    monitorings_test_count_view,
-)
+from openprocurement.audit.api.views.base import APIResource, MongodbResourceListing, json_view
+from openprocurement.audit.api.utils import context_unpack, forbidden, generate_id
 from openprocurement.audit.monitoring.utils import (
     get_now, calculate_normalized_business_date, upload_objects_documents
 )
 from openprocurement.audit.monitoring.utils import (
     save_monitoring,
-    monitoring_serialize,
     apply_patch,
     generate_monitoring_id,
     generate_period,
@@ -54,43 +33,30 @@ from openprocurement.audit.monitoring.validation import (
     validate_credentials_generate,
     validate_posting_elimination_resolution,
 )
-
 LOGGER = getLogger(__name__)
-
-VIEW_MAP = {
-    u'': monitorings_real_by_dateModified_view,
-    u'test': monitorings_test_by_dateModified_view,
-    u'real_draft': monitorings_real_draft_by_dateModified_view,
-    u'all_draft': monitorings_all_draft_by_dateModified_view,
-    u'_all_': monitorings_by_dateModified_view,
-}
-CHANGES_VIEW_MAP = {
-    u'': monitorings_real_by_local_seq_view,
-    u'test': monitorings_test_by_local_seq_view,
-    u'real_draft': monitorings_real_draft_by_local_seq_view,
-    u'all_draft': monitorings_all_draft_by_local_seq_view,
-    u'_all_': monitorings_by_local_seq_view,
-}
-FEED = {
-    u'dateModified': VIEW_MAP,
-    u'changes': CHANGES_VIEW_MAP,
-}
 
 
 @op_resource(name='Monitorings', path='/monitorings')
-class MonitoringsResource(APIResourceListing):
+class MonitoringsResource(MongodbResourceListing):
 
     def __init__(self, request, context):
         super(MonitoringsResource, self).__init__(request, context)
+        self.listing_name = "Monitorings"
+        self.listing_default_fields = {"dateModified"}
+        self.listing_allowed_fields = {"dateCreated", "dateModified", "tender_id", "status"}
+        self.db_listing_method = request.registry.mongodb.monitoring.list
 
-        self.VIEW_MAP = VIEW_MAP
-        self.CHANGES_VIEW_MAP = CHANGES_VIEW_MAP
-        self.FEED = FEED
-        self.FIELDS = FIELDS
-        self.serialize_func = monitoring_serialize
-        self.object_name_for_listing = 'Monitorings'
-        self.log_message_id = 'monitoring_list_custom'
+    @staticmethod
+    def add_mode_filters(filters: dict, mode: str):
+        if "draft" not in mode:
+            filters["is_public"] = True
 
+        if "test" in mode:
+            filters["is_test"] = True
+        elif "all" not in mode:
+            filters["is_test"] = False
+
+    @json_view(permission='view_listing')
     def get(self):
         if self.request.params.get('mode') in ('real_draft', 'all_draft'):
             perm = self.request.has_permission('view_draft_monitoring')
@@ -104,11 +70,14 @@ class MonitoringsResource(APIResourceListing):
     def post(self):
         monitoring = self.request.validated['monitoring']
         monitoring.id = generate_id()
-        monitoring.monitoring_id = generate_monitoring_id(get_now(), self.db, self.server_id)
+        monitoring.monitoring_id = generate_monitoring_id(self.request)
         if monitoring.decision:
             upload_objects_documents(self.request, monitoring.decision, key="decision")
             set_author(monitoring.decision.documents, self.request, 'author')
-        save_monitoring(self.request, date_modified=monitoring.dateCreated)
+        save_monitoring(
+            self.request,
+            insert=True
+        )
         LOGGER.info('Created monitoring {}'.format(monitoring.id),
                     extra=context_unpack(self.request,
                                          {'MESSAGE_ID': 'monitoring_create'},
@@ -171,7 +140,7 @@ class MonitoringResource(APIResource):
             if hasattr(getattr(monitoring, key, None), "documents") and "documents" in raw_data[key]:
                 upload_objects_documents(self.request, getattr(monitoring, key), key=key)
 
-        save_monitoring(self.request, date_modified=now)
+        save_monitoring(self.request)
         LOGGER.info('Updated monitoring {}'.format(monitoring.id),
                     extra=context_unpack(self.request, {'MESSAGE_ID': 'monitoring_patch'}))
         return {'data': monitoring.serialize('view')}
@@ -200,19 +169,9 @@ class MonitoringCredentialsResource(APIResource):
 @op_resource(name='Monitoring count', path='/monitorings/count')
 class MonitoringCountResource(APIResource):
 
-    def __init__(self, request, context):
-        super(MonitoringCountResource, self).__init__(request, context)
-        self.views = {
-            "": monitorings_real_count_view,
-            "test": monitorings_test_count_view,
-        }
-
     @json_view(permission='view_listing')
     def get(self):
         mode = self.request.params.get('mode', '')
-        eval_view = self.views.get(mode, monitorings_real_count_view)
-        result = list(eval_view(self.db))
-        data = {
-            'data': result[0].value if len(result) else 0,
-        }
+        count = self.request.registry.mongodb.monitoring.count(mode)
+        data = {'data': count}
         return data

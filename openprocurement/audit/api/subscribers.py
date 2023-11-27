@@ -1,14 +1,15 @@
-# -*- coding: utf-8 -*-
 from pyramid.events import NewRequest, BeforeRender, ContextFound
 from pyramid.events import subscriber
-
 from openprocurement.audit.api.constants import VERSION
-from openprocurement.audit.api.utils import get_now, update_logging_context, fix_url
+from openprocurement.audit.api.utils import update_logging_context, fix_url
+from openprocurement.audit.api.context import set_now, set_request, get_now
 
 
 @subscriber(NewRequest)
 def add_logging_context(event):
     request = event.request
+    set_now()
+    set_request(request)
     params = {
         'API_VERSION': VERSION,
         'TAGS': 'python,api',

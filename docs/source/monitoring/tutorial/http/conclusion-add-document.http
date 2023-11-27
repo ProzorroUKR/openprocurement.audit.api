@@ -1,4 +1,4 @@
-POST /api/2.5/monitorings/3c06b16c6bb747449e2e60158453c491/conclusion/documents HTTP/1.0
+POST /api/2.5/monitorings/93480d4ae651486ab8cb03ad7baf778c/conclusion/documents HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
 Content-Length: 332
 Content-Type: application/json
@@ -15,10 +15,11 @@ DATA:
 
 Response: 201 Created
 Content-Type: application/json
-Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/3c06b16c6bb747449e2e60158453c491/conclusion/documents/c6676892ba0c466cbe5c50842dc78ef6
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/93480d4ae651486ab8cb03ad7baf778c/conclusion/documents/bb46d74e454f4d0881b4b495fb48a35e
+Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDEyNTE2NzYsICJpIjogNn19LCAiY2x1c3Rlcl90aW1lIjogeyJjbHVzdGVyVGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDEyNTE2NzYsICJpIjogNn19LCAic2lnbmF0dXJlIjogeyJoYXNoIjogeyIkYmluYXJ5IjogeyJiYXNlNjQiOiAiUW4wSFBvcXVvVjQ1aE04TWl0MnpQbDN4S0hBPSIsICJzdWJUeXBlIjogIjAwIn19LCAia2V5SWQiOiA3MzA2NDA4NzQxMTQ5MDgxNjA2fX19; Path=/
 {
   "data": {
-    "id": "c6676892ba0c466cbe5c50842dc78ef6",
+    "id": "bb46d74e454f4d0881b4b495fb48a35e",
     "hash": "md5:00000000000000000000000000000000",
     "title": "sign.p7s",
     "format": "application/pkcs7-signature",

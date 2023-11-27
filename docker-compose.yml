@@ -5,7 +5,7 @@ services:
       context: .
       dockerfile: Dockerfile
     depends_on:
-      - couchdb
+      - mongo
     volumes:
       - "./openprocurement:/app/openprocurement:delegated"
       - "./docs.py:/app/docs.py:delegated"
@@ -13,10 +13,12 @@ services:
       - "./etc:/app/etc:delegated"
     ports:
     - "80:80"
-  couchdb:
-    image: "couchdb:1.6"
+  mongo:
+    image: 'bitnami/mongodb:latest'
     environment:
-      COUCHDB_USER: op
-      COUCHDB_PASSWORD: op
+      MONGODB_ROOT_PASSWORD: example
+      MONGODB_REPLICA_SET_MODE: primary
+      MONGODB_REPLICA_SET_NAME: rs0
+      MONGODB_REPLICA_SET_KEY: replicaSetKey
     ports:
-      - "5984:5984"
+      - 27017:27017

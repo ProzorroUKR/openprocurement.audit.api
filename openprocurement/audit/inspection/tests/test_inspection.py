@@ -1,7 +1,4 @@
-import unittest
-
 from freezegun import freeze_time
-
 from openprocurement.audit.inspection.tests.base import BaseWebTest
 
 
@@ -11,25 +8,6 @@ class InspectionResourceTest(BaseWebTest):
     def test_get_404(self):
         self.create_inspection()
         self.app.get('/inspections/{}'.format("fake_id"), status=404)
-
-    def test_get_archive(self):
-        data = self.create_inspection()
-
-        doc = self.db.get(data["id"])
-        doc["doc_type"] = "inspection"
-        self.db.save(doc)
-
-        response = self.app.get('/inspections/{}'.format(data["id"]), status=410)
-        self.assertEqual(
-            response.json["errors"],
-            [
-                {
-                    "location": "url",
-                    "name": "inspection_id",
-                    "description": "Archived"
-                }
-            ]
-        )
 
     def test_get(self):
         self.create_inspection()

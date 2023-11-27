@@ -1,4 +1,4 @@
-POST /api/2.5/monitorings/3c06b16c6bb747449e2e60158453c491/posts HTTP/1.0
+POST /api/2.5/monitorings/93480d4ae651486ab8cb03ad7baf778c/posts HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
 Content-Length: 465
 Content-Type: application/json
@@ -16,21 +16,22 @@ DATA:
         "format": "application/msword"
       }
     ],
-    "relatedParty": "4b95d1d6a43c4693b88a144765befaba"
+    "relatedParty": "8927b826e9d2470b88a2604917340770"
   }
 }
 
 Response: 201 Created
 Content-Type: application/json
-Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/3c06b16c6bb747449e2e60158453c491/posts/b5ccc45a3c5943ab9bf9e95b631f98e4
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/93480d4ae651486ab8cb03ad7baf778c/posts/5e4e5b408fc14504ab3dcff00991fc84
+Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDEyNTE2NzUsICJpIjogMzB9fSwgImNsdXN0ZXJfdGltZSI6IHsiY2x1c3RlclRpbWUiOiB7IiR0aW1lc3RhbXAiOiB7InQiOiAxNzAxMjUxNjc1LCAiaSI6IDMwfX0sICJzaWduYXR1cmUiOiB7Imhhc2giOiB7IiRiaW5hcnkiOiB7ImJhc2U2NCI6ICJydGFNak1kd0srTEpUbFByaEhNdWRLTjZ5RkU9IiwgInN1YlR5cGUiOiAiMDAifX0sICJrZXlJZCI6IDczMDY0MDg3NDExNDkwODE2MDZ9fX0=; Path=/
 {
   "data": {
-    "id": "b5ccc45a3c5943ab9bf9e95b631f98e4",
+    "id": "5e4e5b408fc14504ab3dcff00991fc84",
     "title": "Lorem ipsum",
     "description": "Lorem ipsum dolor sit amet.",
     "documents": [
       {
-        "id": "f8069abe43c547a8a87074b1ff983da4",
+        "id": "395cecb1b7b7488c812e1915b89de198",
         "hash": "md5:00000000000000000000000000000000",
         "title": "ipsum.doc",
         "format": "application/msword",
@@ -44,7 +45,7 @@ Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/3c06b16c6
     "postOf": "decision",
     "datePublished": "2018-01-03T02:05:00+02:00",
     "dateOverdue": "2018-01-10T00:00:00+02:00",
-    "relatedParty": "4b95d1d6a43c4693b88a144765befaba"
+    "relatedParty": "8927b826e9d2470b88a2604917340770"
   }
 }
 

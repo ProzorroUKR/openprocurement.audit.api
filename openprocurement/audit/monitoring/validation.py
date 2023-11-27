@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from hashlib import sha512
 
 from openprocurement_client.resources.tenders import TendersClient
@@ -21,8 +20,8 @@ from openprocurement.audit.api.utils import (
     raise_operation_error,
     error_handler,
     forbidden,
-    get_now,
 )
+from openprocurement.audit.api.context import get_now
 from openprocurement.audit.api.validation import validate_data
 from openprocurement.audit.monitoring.models import Monitoring, EliminationReport, Appeal, Post, Liability
 from openprocurement.audit.monitoring.models import MonitoringParty as Party

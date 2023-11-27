@@ -18,7 +18,7 @@ from openprocurement.audit.api.models import (
 )
 from openprocurement.audit.api.models import schematics_default_role, schematics_embedded_role
 from openprocurement.audit.api.types import ListType, IsoDateTimeType
-from openprocurement.audit.api.utils import get_now
+from openprocurement.audit.api.context import get_now
 from openprocurement.audit.monitoring.choices import (
     DIALOGUE_TYPE_CHOICES,
     MONITORING_STATUS_CHOICES,
@@ -328,7 +328,7 @@ class Monitoring(BaseModel):
             'edit_cancelled': whitelist('documents'),
             'admins': whitelist('is_masked'),
             'view': blacklist(
-                'tender_owner_token', '_attachments', 'revisions',
+                'tender_owner_token', '_attachments', 'revisions', 'public_modified',
                 'decision', 'conclusion', 'cancellation'
             ) + schematics_embedded_role,
             'listing': whitelist('dateModified', 'doc_id'),
@@ -368,6 +368,7 @@ class Monitoring(BaseModel):
     tender_owner_token = StringType()
     revisions = ListType(ModelType(Revision), default=[])
     _attachments = DictType(DictType(BaseType), default=dict())
+    doc_type = StringType(default="Monitoring")
 
     is_masked = BooleanType()
 

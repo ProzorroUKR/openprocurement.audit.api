@@ -1,8 +1,5 @@
-# -*- coding: utf-8 -*-
-from openprocurement.audit.api.utils import (
-    APIResource
-)
-from openprocurement.audit.api.utils import context_unpack, json_view
+from openprocurement.audit.api.views.base import APIResource, json_view
+from openprocurement.audit.api.utils import context_unpack
 from openprocurement.audit.monitoring.utils import (
     apply_patch, set_author, op_resource, save_monitoring,
 )

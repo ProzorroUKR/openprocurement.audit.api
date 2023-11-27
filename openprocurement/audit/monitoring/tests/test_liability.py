@@ -1,10 +1,8 @@
-# -*- coding: utf-8 -*-
-import unittest
 from unittest import mock
 from hashlib import sha512
 
-from openprocurement.audit.api.utils import get_now
-
+from openprocurement.audit.api.constants import TZ
+from datetime import datetime
 from freezegun import freeze_time
 
 from openprocurement.audit.monitoring.tests.base import BaseWebTest, DSWebTestMixin
@@ -19,9 +17,12 @@ class BaseLiabilityTest(BaseWebTest, DSWebTestMixin):
         self.create_monitoring()
 
         self.tender_owner_token = "1234qwerty"
-        monitoring = self.db.get(self.monitoring_id)
+        monitoring = self.app.app.registry.mongodb.monitoring.get(self.monitoring_id)
         monitoring.update(tender_owner="broker", tender_owner_token=self.tender_owner_token)
-        self.db.save(monitoring)
+        self.app.app.registry.mongodb.save_data(
+            self.app.app.registry.mongodb.monitoring.collection,
+            monitoring,
+        )
 
     def create_active_monitoring(self, **kwargs):
         self.create_monitoring(**kwargs)
@@ -32,7 +33,7 @@ class BaseLiabilityTest(BaseWebTest, DSWebTestMixin):
             {"data": {
                 "decision": {
                     "description": "text",
-                    "date": get_now().isoformat()
+                    "date": datetime.now(TZ).isoformat()
                 },
                 "status": "active",
             }}
@@ -284,7 +285,7 @@ class MonitoringLiabilityPostedResourceTest(BaseLiabilityTest):
             '/monitorings/{}/liabilities/{}'.format(self.monitoring_id, self.liability_id),
             {'data': {
                 'proceeding': {
-                    'dateProceedings': get_now().isoformat(),
+                    'dateProceedings': datetime.now(TZ).isoformat(),
                     'proceedingNumber': 'somenumber',
                 }
             }}
@@ -299,7 +300,7 @@ class MonitoringLiabilityPostedResourceTest(BaseLiabilityTest):
             '/monitorings/{}/liabilities/{}'.format(self.monitoring_id, self.liability_id),
             {"data": {
                 "proceeding": {
-                    "dateProceedings": get_now().isoformat(),
+                    "dateProceedings": datetime.now(TZ).isoformat(),
                     "proceedingNumber": "somenumber",
                 }
             }},

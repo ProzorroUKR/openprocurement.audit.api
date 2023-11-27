@@ -2,22 +2,20 @@ from cornice.resource import resource
 from functools import partial
 from logging import getLogger
 from re import compile
-
-from couchdb import ResourceConflict
+from datetime import timedelta
 from dateorro import calc_datetime, calc_normalized_datetime, calc_working_datetime
-from datetime import timedelta, datetime, time
-from gevent import sleep
-from schematics.exceptions import ModelValidationError
-
 from openprocurement.audit.api.constants import TZ, WORKING_DAYS
 from openprocurement.audit.api.utils import (
     update_logging_context, context_unpack, get_revision_changes,
-    apply_data_patch, error_handler, generate_id, get_now,
-    check_document, update_document_url
+    apply_data_patch, error_handler, generate_id,
+    check_document, update_document_url,
+    append_revision,
+    handle_store_exceptions,
 )
 from openprocurement.audit.monitoring.models import Period, Monitoring
 from openprocurement.audit.api.models import Revision
 from openprocurement.audit.api.mask import mask_object_data
+from openprocurement.audit.api.context import get_now
 from openprocurement.audit.monitoring.traversal import factory
 
 LOGGER = getLogger(__package__)
@@ -26,50 +24,49 @@ ACCELERATOR_RE = compile(r'accelerator=(?P<accelerator>\d+)')
 op_resource = partial(resource, error_handler=error_handler, factory=factory)
 
 
-def monitoring_serialize(request, monitoring_data, fields):
-    monitoring = request.monitoring_from_data(monitoring_data)
+def monitoring_serialize(request, data, fields):
+    monitoring = request.monitoring_from_data(data)
     monitoring.__parent__ = request.context
-    return {i: j for i, j in monitoring.serialize('view').items() if i in fields}
+    return {i: j for i, j in monitoring.serialize('view').items()
+            if i in fields}
 
 
-def save_monitoring(request, date_modified=None, update_context_date=False):
-    monitoring = request.validated['monitoring']
-    patch = get_revision_changes(request.validated['monitoring_src'], monitoring.serialize('plain'))
+def save_monitoring(request, modified: bool = True, insert: bool = False, update_context_date=False) -> bool:
+    monitoring = request.validated["monitoring"]
+    patch = get_revision_changes(monitoring.serialize("plain"), request.validated["monitoring_src"])
     if patch:
-        add_revision(request, monitoring, patch)
-
-        old_date_modified = monitoring.dateModified
-        now = date_modified or get_now()
-        monitoring.dateModified = now
+        now = get_now()
+        append_revision(request, monitoring, patch)
+        old_date_modified = monitoring.get("dateModified", now.isoformat())
         if update_context_date and "dateModified" in request.context:
             request.context.dateModified = now
-        try:
-            monitoring.store(request.registry.db)
-        except ModelValidationError as e:  # pragma: no cover
-            for i in e.messages:
-                request.errors.add('body', i, e.messages[i])
-            request.errors.status = 422
-        except Exception as e:  # pragma: no cover
-            request.errors.add('body', 'data', str(e))
-        else:
+
+        with handle_store_exceptions(request):
+            monitoring.validate()  # it had been called before in couchdb-schematics; some validations rely on it
+            request.registry.mongodb.monitoring.save(
+                monitoring,
+                insert=insert,
+                modified=modified,
+            )
             LOGGER.info(
-                'Saved monitoring {}: dateModified {} -> {}'.format(
+                "Saved monitoring {}: dateModified {} -> {}".format(
                     monitoring.id,
-                    old_date_modified and old_date_modified.isoformat(),
+                    old_date_modified,
                     monitoring.dateModified.isoformat()
                 ),
-                extra=context_unpack(request, {'MESSAGE_ID': 'save_monitoring'})
+                extra=context_unpack(request, {"MESSAGE_ID": "save_monitoring"}, {"RESULT": monitoring["_rev"]}),
             )
             return True
+    return False
 
 
-def apply_patch(request, data=None, save=True, src=None, date_modified=None, update_context_date=False):
+def apply_patch(request, data=None, save=True, src=None, update_context_date=False):
     data = request.validated['data'] if data is None else data
     patch = data and apply_data_patch(src or request.context.serialize(), data)
     if patch:
         request.context.import_data(patch)
         if save:
-            return save_monitoring(request, date_modified=date_modified, update_context_date=update_context_date)
+            return save_monitoring(request, update_context_date=update_context_date)
 
 
 def add_revision(request, item, changes):
@@ -97,13 +94,12 @@ def monitoring_from_data(request, data):
 
 
 def extract_monitoring_adapter(request, monitoring_id):
-    db = request.registry.db
-    doc = db.get(monitoring_id)
-    if doc is None or doc.get('doc_type') != 'Monitoring':
+    data = request.registry.mongodb.monitoring.get(monitoring_id)
+    if data is None:
         request.errors.add('url', 'monitoring_id', 'Not Found')
         request.errors.status = 404
         raise error_handler(request.errors)
-    return request.monitoring_from_data(doc)
+    return request.monitoring_from_data(data)
 
 
 def extract_monitoring(request):
@@ -111,32 +107,11 @@ def extract_monitoring(request):
     return extract_monitoring_adapter(request, monitoring_id) if monitoring_id else None
 
 
-def generate_monitoring_id(ctime, db, server_id=''):
-    """ Generate ID for new monitoring in format "UA-M-YYYY-MM-DD-NNNNNN" + ["-server_id"]
-        YYYY - year, MM - month (start with 1), DD - day, NNNNNN - sequence number per 1 day
-        and save monitorings count per day in database document with _id = "monitoringID"
-        as { key, value } = { "2015-12-03": 2 }
-    :param ctime: system date-time
-    :param db: couchdb database object
-    :param server_id: server mark (for claster mode)
-    :return: planID in "UA-M-2015-05-08-000005"
-    """
-    key = ctime.date().isoformat()
-    monitoring_id_doc = 'monitoringID_' + server_id if server_id else 'monitoringID'
-    while True:
-        try:
-            monitoring_id = db.get(monitoring_id_doc, {'_id': monitoring_id_doc})
-            index = monitoring_id.get(key, 1)
-            monitoring_id[key] = index + 1
-            db.save(monitoring_id)
-        except ResourceConflict:  # pragma: no cover
-            pass
-        except Exception:  # pragma: no cover
-            sleep(1)
-        else:
-            break
-    return 'UA-M-{:04}-{:02}-{:02}-{:06}{}'.format(
-        ctime.year, ctime.month, ctime.day, index, server_id and '-' + server_id)
+def generate_monitoring_id(request):
+    ctime = get_now().date()
+    index_key = "monitoring_{}".format(ctime.isoformat())
+    index = request.registry.mongodb.get_next_sequence_value(index_key)
+    return 'UA-M-{:04}-{:02}-{:02}-{:06}'.format(ctime.year, ctime.month, ctime.day, index)
 
 
 def generate_period(date, delta, accelerator=None):

@@ -1,5 +1,4 @@
-# -*- coding: utf-8 -*-
-from openprocurement.audit.api.utils import APIResource, json_view
+from openprocurement.audit.api.views.base import APIResource, json_view
 from openprocurement.audit.monitoring.utils import op_resource
 
 

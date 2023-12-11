@@ -1,4 +1,4 @@
-PUT /api/2.5/monitorings/3c06b16c6bb747449e2e60158453c491/appeal/documents/cef6a851979f4f7897e277ff61125d59?acc_token=0ebba00a48cf49c28c856e1c900d1c7b HTTP/1.0
+PUT /api/2.5/monitorings/93480d4ae651486ab8cb03ad7baf778c/appeal/documents/b38726ee5f94428383d5634a3cc92ebb?acc_token=c5614e7f9edb460fb3f59aae20bf6b17 HTTP/1.0
 Authorization: Basic YnJva2VyOmJyb2tlcg==
 Content-Length: 331
 Content-Type: application/json
@@ -15,9 +15,10 @@ DATA:
 
 Response: 200 OK
 Content-Type: application/json
+Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDEyNTE2NzcsICJpIjogOH19LCAiY2x1c3Rlcl90aW1lIjogeyJjbHVzdGVyVGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDEyNTE2NzcsICJpIjogOH19LCAic2lnbmF0dXJlIjogeyJoYXNoIjogeyIkYmluYXJ5IjogeyJiYXNlNjQiOiAiZXA1Ty85Wmwzb2w5VUJOQnNPSmxtcyt2bjVjPSIsICJzdWJUeXBlIjogIjAwIn19LCAia2V5SWQiOiA3MzA2NDA4NzQxMTQ5MDgxNjA2fX19; Path=/
 {
   "data": {
-    "id": "cef6a851979f4f7897e277ff61125d59",
+    "id": "b38726ee5f94428383d5634a3cc92ebb",
     "hash": "md5:00000000000000000000000000000000",
     "title": "letter_put.doc",
     "format": "application/json",

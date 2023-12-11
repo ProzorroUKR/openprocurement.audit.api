@@ -1,4 +1,4 @@
-POST /api/2.5/monitorings/3c06b16c6bb747449e2e60158453c491/liabilities/4245d45087514ce69c280dc3d8bcb127/documents HTTP/1.0
+POST /api/2.5/monitorings/93480d4ae651486ab8cb03ad7baf778c/liabilities/0875071d90154a6eb27229d672a873fb/documents HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
 Content-Length: 331
 Content-Type: application/json
@@ -15,10 +15,11 @@ DATA:
 
 Response: 201 Created
 Content-Type: application/json
-Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/3c06b16c6bb747449e2e60158453c491/liabilities/4245d45087514ce69c280dc3d8bcb127/documents/6e18f7205f4f4c9485b84e848432afb2
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/93480d4ae651486ab8cb03ad7baf778c/liabilities/0875071d90154a6eb27229d672a873fb/documents/bcc23016e50145f9b2065710d96d4a02
+Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDEyNTE2NzgsICJpIjogMn19LCAiY2x1c3Rlcl90aW1lIjogeyJjbHVzdGVyVGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDEyNTE2NzgsICJpIjogMn19LCAic2lnbmF0dXJlIjogeyJoYXNoIjogeyIkYmluYXJ5IjogeyJiYXNlNjQiOiAiTXlVVDdwSldmUC93ZDYyUUo3RW10OHJsYjVnPSIsICJzdWJUeXBlIjogIjAwIn19LCAia2V5SWQiOiA3MzA2NDA4NzQxMTQ5MDgxNjA2fX19; Path=/
 {
   "data": {
-    "id": "6e18f7205f4f4c9485b84e848432afb2",
+    "id": "bcc23016e50145f9b2065710d96d4a02",
     "hash": "md5:00000000000000000000000000000000",
     "title": "another-letter.doc",
     "format": "application/msword",

@@ -1,4 +1,4 @@
-PATCH /api/2.5/monitorings/76a958ceb5444f578cae8687dcf7d6d4 HTTP/1.0
+PATCH /api/2.5/monitorings/7084012e3c704a40b16b0d31bc601149 HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
 Content-Length: 30
 Content-Type: application/json
@@ -12,6 +12,7 @@ DATA:
 
 Response: 200 OK
 Content-Type: application/json
+Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDEyNTE2NzUsICJpIjogMTZ9fSwgImNsdXN0ZXJfdGltZSI6IHsiY2x1c3RlclRpbWUiOiB7IiR0aW1lc3RhbXAiOiB7InQiOiAxNzAxMjUxNjc1LCAiaSI6IDE2fX0sICJzaWduYXR1cmUiOiB7Imhhc2giOiB7IiRiaW5hcnkiOiB7ImJhc2U2NCI6ICJydGFNak1kd0srTEpUbFByaEhNdWRLTjZ5RkU9IiwgInN1YlR5cGUiOiAiMDAifX0sICJrZXlJZCI6IDczMDY0MDg3NDExNDkwODE2MDZ9fX0=; Path=/
 {
   "data": {
     "tender_id": "7e36c2af6c3c92198329808d9443eea8",
@@ -35,12 +36,12 @@ Content-Type: application/json
     },
     "posts": [
       {
-        "id": "2846b71dc33c47009eed32d5e432a2c3",
+        "id": "95af013e49bd4ce8bb950c68385652ac",
         "title": "Lorem ipsum",
         "description": "Lorem ipsum dolor sit amet.",
         "documents": [
           {
-            "id": "1a7d37396d1542b2acf5b1e144238253",
+            "id": "74a2a473a60146a6b1333f6afd96263f",
             "hash": "md5:00000000000000000000000000000000",
             "title": "ipsum.doc",
             "format": "application/msword",
@@ -54,12 +55,12 @@ Content-Type: application/json
         "postOf": "decision",
         "datePublished": "2018-01-03T02:10:00+02:00",
         "dateOverdue": "2018-01-10T00:00:00+02:00",
-        "relatedParty": "344c8f0cd9ad45968c822bb8cb2705c1"
+        "relatedParty": "a959e584d0cc48e9bf3612923308ee11"
       }
     ],
     "parties": [
       {
-        "id": "344c8f0cd9ad45968c822bb8cb2705c1",
+        "id": "a959e584d0cc48e9bf3612923308ee11",
         "name": "The State Audit Service of Ukraine",
         "datePublished": "2018-01-01T02:00:00+02:00",
         "identifier": {
@@ -86,12 +87,12 @@ Content-Type: application/json
     "dateModified": "2018-01-11T02:00:00+02:00",
     "endDate": "2018-01-25T00:00:00+02:00",
     "dateCreated": "2018-01-01T02:00:00+02:00",
-    "id": "76a958ceb5444f578cae8687dcf7d6d4",
+    "id": "7084012e3c704a40b16b0d31bc601149",
     "decision": {
       "description": "text",
       "documents": [
         {
-          "id": "e63e804db09b43c78c61fe616c1a4c20",
+          "id": "5263533782df4dd481c83de21614da72",
           "hash": "md5:00000000000000000000000000000000",
           "title": "lorem.doc",
           "format": "application/msword",
@@ -104,13 +105,13 @@ Content-Type: application/json
       "dateCreated": "2018-01-02T02:00:00+02:00",
       "datePublished": "2018-01-02T02:00:00+02:00",
       "date": "2018-01-02T00:00:00+02:00",
-      "relatedParty": "344c8f0cd9ad45968c822bb8cb2705c1"
+      "relatedParty": "a959e584d0cc48e9bf3612923308ee11"
     },
     "conclusion": {
       "dateCreated": "2018-01-04T02:00:00+02:00",
       "datePublished": "2018-01-04T02:00:00+02:00",
       "violationOccurred": false,
-      "relatedParty": "344c8f0cd9ad45968c822bb8cb2705c1"
+      "relatedParty": "a959e584d0cc48e9bf3612923308ee11"
     }
   }
 }

@@ -1,4 +1,4 @@
-PATCH /api/2.5/monitorings/d31eb5a7a0a34834bcc0a6c8f7ad88d2 HTTP/1.0
+PATCH /api/2.5/monitorings/da52b456b7484ca893512d2fea871b6c HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
 Content-Length: 133
 Content-Type: application/json
@@ -8,7 +8,7 @@ DATA:
   "data": {
     "cancellation": {
       "description": "Some reason",
-      "relatedParty": "60f0a7097ea946c6adbde3b3e25459e5"
+      "relatedParty": "50394b9d47a949d09a2a4deeabe3c163"
     },
     "status": "cancelled"
   }
@@ -16,6 +16,7 @@ DATA:
 
 Response: 200 OK
 Content-Type: application/json
+Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDEyNTE2NzQsICJpIjogOH19LCAiY2x1c3Rlcl90aW1lIjogeyJjbHVzdGVyVGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDEyNTE2NzQsICJpIjogOH19LCAic2lnbmF0dXJlIjogeyJoYXNoIjogeyIkYmluYXJ5IjogeyJiYXNlNjQiOiAiSUNJSno5czQvQnBJMUpSWWxRY1o5RUM3ck5nPSIsICJzdWJUeXBlIjogIjAwIn19LCAia2V5SWQiOiA3MzA2NDA4NzQxMTQ5MDgxNjA2fX19; Path=/
 {
   "data": {
     "tender_id": "cf0dc0d3327d1831fc607656c89a6b6e",
@@ -31,7 +32,7 @@ Content-Type: application/json
     ],
     "parties": [
       {
-        "id": "60f0a7097ea946c6adbde3b3e25459e5",
+        "id": "50394b9d47a949d09a2a4deeabe3c163",
         "name": "The State Audit Service of Ukraine",
         "datePublished": "2018-01-01T02:00:00+02:00",
         "identifier": {
@@ -57,12 +58,12 @@ Content-Type: application/json
     ],
     "dateModified": "2018-01-03T02:00:00+02:00",
     "dateCreated": "2018-01-01T02:00:00+02:00",
-    "id": "d31eb5a7a0a34834bcc0a6c8f7ad88d2",
+    "id": "da52b456b7484ca893512d2fea871b6c",
     "cancellation": {
       "description": "Some reason",
       "dateCreated": "2018-01-03T02:00:00+02:00",
       "datePublished": "2018-01-03T02:00:00+02:00",
-      "relatedParty": "60f0a7097ea946c6adbde3b3e25459e5"
+      "relatedParty": "50394b9d47a949d09a2a4deeabe3c163"
     }
   }
 }

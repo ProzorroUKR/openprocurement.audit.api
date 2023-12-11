@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os
 import unittest
 from types import FunctionType
@@ -7,9 +6,7 @@ import webtest
 from paste.deploy.loadwsgi import loadapp
 
 from openprocurement.audit.api.constants import VERSION
-from openprocurement.audit.api.design import sync_design
-
-COUCHBD_NAME_SETTING = 'couchdb.db_name'
+from openprocurement.audit.api.database import COLLECTION_CLASSES
 
 
 def snitch(func):
@@ -39,28 +36,6 @@ class PrefixedTestRequest(webtest.app.TestRequest):
 class BaseTestApp(webtest.TestApp):
     RequestClass = PrefixedTestRequest
 
-    def __init__(self, *args, **kwargs):
-        super(BaseTestApp, self).__init__(*args, **kwargs)
-
-    def reset(self):
-        super(BaseTestApp, self).reset()
-        self.recreate_db()
-
-    def recreate_db(self):
-        self.drop_db()
-        return self.create_db()
-
-    def create_db(self):
-        db_name = os.environ.get('DB_NAME', self.app.registry.settings[COUCHBD_NAME_SETTING])
-        self.app.registry.db = self.app.registry.couchdb_server.create(db_name)
-        sync_design(self.app.registry.db)
-        return self.app.registry.db
-
-    def drop_db(self):
-        db_name = self.app.registry.db.name
-        if db_name and db_name in self.app.registry.couchdb_server:
-            self.app.registry.couchdb_server.delete(db_name)
-
 
 class BaseWebTest(unittest.TestCase):
     """
@@ -77,12 +52,20 @@ class BaseWebTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.app = cls.AppClass(loadapp(cls.relative_uri, relative_to=cls.relative_to))
-        cls.couchdb_server = cls.app.app.registry.couchdb_server
-        cls.db = cls.app.app.registry.db
+
+        cls.mongodb = cls.app.app.registry.mongodb
+        cls.clean_mongodb()
 
     def setUp(self):
         self.app.authorization = self.initial_auth
-        self.db = self.app.recreate_db()
 
     def tearDown(self):
-        self.app.drop_db()
+        self.clean_mongodb()
+
+    @classmethod
+    def clean_mongodb(cls):
+        for collection in COLLECTION_CLASSES.keys():
+            collection = getattr(cls.mongodb, collection, None)
+            if collection:  # plugins are optional
+                collection.flush()
+        cls.mongodb.flush_sequences()

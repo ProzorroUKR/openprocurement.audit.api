@@ -1,4 +1,4 @@
-PATCH /api/2.5/monitorings/3c06b16c6bb747449e2e60158453c491/liabilities/4245d45087514ce69c280dc3d8bcb127/documents/a6c95adc117444bc8ff627989dd270ed HTTP/1.0
+PATCH /api/2.5/monitorings/93480d4ae651486ab8cb03ad7baf778c/liabilities/0875071d90154a6eb27229d672a873fb/documents/7dbbabebdd054ae0a78c13b41f8f5822 HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
 Content-Length: 328
 Content-Type: application/json
@@ -15,9 +15,10 @@ DATA:
 
 Response: 200 OK
 Content-Type: application/json
+Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDEyNTE2NzgsICJpIjogNH19LCAiY2x1c3Rlcl90aW1lIjogeyJjbHVzdGVyVGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDEyNTE2NzgsICJpIjogNH19LCAic2lnbmF0dXJlIjogeyJoYXNoIjogeyIkYmluYXJ5IjogeyJiYXNlNjQiOiAiTXlVVDdwSldmUC93ZDYyUUo3RW10OHJsYjVnPSIsICJzdWJUeXBlIjogIjAwIn19LCAia2V5SWQiOiA3MzA2NDA4NzQxMTQ5MDgxNjA2fX19; Path=/
 {
   "data": {
-    "id": "a6c95adc117444bc8ff627989dd270ed",
+    "id": "7dbbabebdd054ae0a78c13b41f8f5822",
     "hash": "md5:00000000000000000000000000000000",
     "title": "letter(0).doc",
     "format": "application/json",

@@ -17,7 +17,7 @@ from openprocurement.audit.api.models import (
     schematics_embedded_role,
 )
 from openprocurement.audit.api.types import IsoDateTimeType, ListType
-from openprocurement.audit.api.utils import get_now
+from openprocurement.audit.api.context import get_now
 from openprocurement.audit.api.choices import VIOLATION_TYPE_CHOICES
 from openprocurement.audit.request.choices import REQUEST_PARTY_ROLES_CHOICES
 
@@ -72,9 +72,9 @@ class Request(BaseModel):
                 "description", "violationType", "documents", "parties", "tenderId", "mode"
             ),
             "edit": whitelist("answer", "reason"),
-            "view": blacklist("revisions") + schematics_embedded_role,
-            "view_%s" % SAS_ROLE: blacklist("revisions") + schematics_embedded_role,
-            "view_%s" % PUBLIC_ROLE: blacklist("revisions") + schematics_embedded_role,
+            "view": blacklist("revisions", "public_modified") + schematics_embedded_role,
+            "view_%s" % SAS_ROLE: blacklist("revisions", "public_modified") + schematics_embedded_role,
+            "view_%s" % PUBLIC_ROLE: blacklist("revisions", "public_modified") + schematics_embedded_role,
             "listing": whitelist("dateModified", "doc_id"),
             "default": schematics_default_role,
         }
@@ -105,6 +105,8 @@ class Request(BaseModel):
         "tenderCancelled",
         "violationRemoved"
     ])
+
+    doc_type = StringType(default="Request")
 
     def __repr__(self):
         return "<%s:%r-%r@%r>" % (

@@ -1,4 +1,4 @@
-PATCH /api/2.5/monitorings/b7fafecebeb04fcb84e8d6bc4c66f2d9 HTTP/1.0
+PATCH /api/2.5/monitorings/66a2e66468e6475bb46169a8443f3153 HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
 Content-Length: 141
 Content-Type: application/json
@@ -8,7 +8,7 @@ DATA:
   "data": {
     "cancellation": {
       "description": "Complaint was created",
-      "relatedParty": "48f22278d5c840658ed10f51ebc8e425"
+      "relatedParty": "bb40083a9ee34e87a99dc973fcc0dab3"
     },
     "status": "stopped"
   }
@@ -16,6 +16,7 @@ DATA:
 
 Response: 200 OK
 Content-Type: application/json
+Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDEyNTE2NzUsICJpIjogNH19LCAiY2x1c3Rlcl90aW1lIjogeyJjbHVzdGVyVGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDEyNTE2NzUsICJpIjogNH19LCAic2lnbmF0dXJlIjogeyJoYXNoIjogeyIkYmluYXJ5IjogeyJiYXNlNjQiOiAicnRhTWpNZHdLK0xKVGxQcmhITXVkS042eUZFPSIsICJzdWJUeXBlIjogIjAwIn19LCAia2V5SWQiOiA3MzA2NDA4NzQxMTQ5MDgxNjA2fX19; Path=/
 {
   "data": {
     "tender_id": "f6d126a0317a55050a99a36bb690533d",
@@ -35,7 +36,7 @@ Content-Type: application/json
     },
     "parties": [
       {
-        "id": "48f22278d5c840658ed10f51ebc8e425",
+        "id": "bb40083a9ee34e87a99dc973fcc0dab3",
         "name": "The State Audit Service of Ukraine",
         "datePublished": "2018-01-01T02:00:00+02:00",
         "identifier": {
@@ -62,12 +63,12 @@ Content-Type: application/json
     "dateModified": "2018-01-03T02:00:00+02:00",
     "endDate": "2018-01-25T00:00:00+02:00",
     "dateCreated": "2018-01-01T02:00:00+02:00",
-    "id": "b7fafecebeb04fcb84e8d6bc4c66f2d9",
+    "id": "66a2e66468e6475bb46169a8443f3153",
     "decision": {
       "description": "text",
       "documents": [
         {
-          "id": "5d30f70011ca46f4910d983a321e3b74",
+          "id": "7c8bcf38ca7d45b6a774a6011b2e6ca3",
           "hash": "md5:00000000000000000000000000000000",
           "title": "lorem.doc",
           "format": "application/msword",
@@ -80,13 +81,13 @@ Content-Type: application/json
       "dateCreated": "2018-01-02T02:00:00+02:00",
       "datePublished": "2018-01-02T02:00:00+02:00",
       "date": "2018-01-02T00:00:00+02:00",
-      "relatedParty": "48f22278d5c840658ed10f51ebc8e425"
+      "relatedParty": "bb40083a9ee34e87a99dc973fcc0dab3"
     },
     "cancellation": {
       "description": "Complaint was created",
       "dateCreated": "2018-01-03T02:00:00+02:00",
       "datePublished": "2018-01-03T02:00:00+02:00",
-      "relatedParty": "48f22278d5c840658ed10f51ebc8e425"
+      "relatedParty": "bb40083a9ee34e87a99dc973fcc0dab3"
     }
   }
 }

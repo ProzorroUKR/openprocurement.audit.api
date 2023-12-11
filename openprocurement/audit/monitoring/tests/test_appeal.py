@@ -1,9 +1,5 @@
-# -*- coding: utf-8 -*-
-import unittest
-from openprocurement.audit.api.utils import get_now
-
+from openprocurement.audit.api.context import get_now
 from freezegun import freeze_time
-
 from openprocurement.audit.monitoring.tests.base import BaseWebTest, DSWebTestMixin
 
 
@@ -16,9 +12,15 @@ class BaseAppealTest(BaseWebTest, DSWebTestMixin):
         self.create_monitoring()
 
         self.tender_owner_token = "1234qwerty"
-        monitoring = self.db.get(self.monitoring_id)
-        monitoring.update(tender_owner="broker", tender_owner_token=self.tender_owner_token)
-        self.db.save(monitoring)
+        monitoring = self.app.app.registry.mongodb.monitoring.get(self.monitoring_id)
+        monitoring.update(
+            tender_owner="broker",
+            tender_owner_token=self.tender_owner_token
+        )
+        self.app.app.registry.mongodb.save_data(
+            self.app.app.registry.mongodb.monitoring.collection,
+            monitoring,
+        )
 
     def post_conclusion(self, publish=True):
         authorization = self.app.authorization

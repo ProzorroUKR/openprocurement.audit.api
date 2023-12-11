@@ -1,5 +1,5 @@
-# -*- coding: utf-8 -*-
-from openprocurement.audit.api.utils import get_file, upload_file, context_unpack, APIResource, json_view
+from openprocurement.audit.api.utils import get_file, upload_file, context_unpack
+from openprocurement.audit.api.views.base import APIResource, json_view
 from openprocurement.audit.api.validation import (
     validate_file_update,
     validate_file_upload,

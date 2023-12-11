@@ -4,13 +4,14 @@ Host: audit-api-sandbox.prozorro.gov.ua
 
 Response: 200 OK
 Content-Type: application/json
+Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDEyNTE2ODEsICJpIjogOX19LCAiY2x1c3Rlcl90aW1lIjogeyJjbHVzdGVyVGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDEyNTE2ODEsICJpIjogOX19LCAic2lnbmF0dXJlIjogeyJoYXNoIjogeyIkYmluYXJ5IjogeyJiYXNlNjQiOiAiYmVFSkVZR0J5NEplZFpEckF5bk9iUE10R21JPSIsICJzdWJUeXBlIjogIjAwIn19LCAia2V5SWQiOiA3MzA2NDA4NzQxMTQ5MDgxNjA2fX19; Path=/
 {
   "data": [
     {
       "inspection_id": "UA-I-2018-01-01-000002",
       "dateModified": "2018-01-01T02:01:00+02:00",
-      "id": "788974a7dd6c4d60af259b7a60e5cb0c",
-      "dateCreated": "2018-01-01T02:01:00+02:00"
+      "dateCreated": "2018-01-01T02:01:00+02:00",
+      "id": "71fbf55e244d42ca89e1ad68e4bf4d4a"
     }
   ],
   "count": 1,

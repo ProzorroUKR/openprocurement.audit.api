@@ -1,52 +1,30 @@
 from logging import getLogger
-
-from openprocurement.audit.api.utils import APIResource, APIResourceListing, json_view
+from openprocurement.audit.api.views.base import APIResource, MongodbResourceListing, json_view
 from openprocurement.audit.api.utils import (
     context_unpack,
-    get_now,
     generate_id,
-)
-from openprocurement.audit.inspection.design import (
-    inspections_real_by_dateModified_view,
-    inspections_real_by_local_seq_view,
-    FIELDS,
 )
 from openprocurement.audit.inspection.utils import (
     save_inspection,
     apply_patch,
     generate_inspection_id,
-    inspection_serialize,
     op_resource,
 )
 from openprocurement.audit.inspection.validation import validate_inspection_data, validate_patch_inspection_data
 from openprocurement.audit.monitoring.utils import set_author
 
 LOGGER = getLogger(__name__)
-VIEW_MAP = {
-    u'': inspections_real_by_dateModified_view,
-}
-CHANGES_VIEW_MAP = {
-    u'': inspections_real_by_local_seq_view,
-}
-FEED = {
-    u'dateModified': VIEW_MAP,
-    u'changes': CHANGES_VIEW_MAP,
-}
 
 
 @op_resource(name='Inspections', path='/inspections')
-class InspectionsResource(APIResourceListing):
-    
+class InspectionsResource(MongodbResourceListing):
+
     def __init__(self, request, context):
         super(InspectionsResource, self).__init__(request, context)
-
-        self.VIEW_MAP = VIEW_MAP
-        self.CHANGES_VIEW_MAP = CHANGES_VIEW_MAP
-        self.FEED = FEED
-        self.FIELDS = FIELDS
-        self.serialize_func = inspection_serialize
-        self.object_name_for_listing = 'Inspections'
-        self.log_message_id = 'inspections_list_custom'
+        self.listing_name = "Inspections"
+        self.listing_default_fields = {"dateModified"}
+        self.listing_allowed_fields = {"dateCreated", "dateModified", "inspection_id"}
+        self.db_listing_method = request.registry.mongodb.inspection.list
 
     @json_view(content_type='application/json',
                permission='create_inspection',
@@ -54,9 +32,14 @@ class InspectionsResource(APIResourceListing):
     def post(self):
         inspection = self.request.validated['inspection']
         inspection.id = generate_id()
-        inspection.inspection_id = generate_inspection_id(get_now(), self.db, self.server_id)
+        inspection.inspection_id = generate_inspection_id(self.request)
         set_author(inspection.documents, self.request, 'author')
-        save_inspection(self.request, date_modified=inspection.dateCreated)
+        self.request.validated["inspection"] = inspection
+        self.request.validated["inspection_src"] = {}
+        save_inspection(
+            self.request,
+            insert=True
+        )
         LOGGER.info('Created inspection {}'.format(inspection.id),
                     extra=context_unpack(self.request,
                                          {'MESSAGE_ID': 'inspection_create'},

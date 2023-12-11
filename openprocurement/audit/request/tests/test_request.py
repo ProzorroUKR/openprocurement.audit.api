@@ -9,19 +9,6 @@ class RequestResourceTest(BaseWebTest):
         self.create_request()
         self.app.get("/requests/{}".format("fake_id"), status=404)
 
-    def test_get_archive(self):
-        data = self.create_request()
-
-        doc = self.db.get(data["id"])
-        doc["doc_type"] = "request"
-        self.db.save(doc)
-
-        response = self.app.get("/requests/{}".format(data["id"]), status=410)
-        self.assertEqual(
-            response.json["errors"],
-            [{"location": "url", "name": "request_id", "description": "Archived"}],
-        )
-
     def test_get(self):
         self.create_request()
 

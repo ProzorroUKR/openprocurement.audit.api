@@ -1,13 +1,12 @@
-# -*- coding: utf-8 -*-
 from openprocurement.audit.api.constants import (
     CONCLUSION_OBJECT_TYPE,
     ADDRESSED_STATUS,
     DECLINED_STATUS,
     POST_OVERDUE_TIME,
 )
-from openprocurement.audit.api.utils import (
-    get_now, context_unpack, APIResource, json_view
-)
+from openprocurement.audit.api.utils import context_unpack
+from openprocurement.audit.api.context import get_now
+from openprocurement.audit.api.views.base import APIResource, json_view
 from openprocurement.audit.monitoring.utils import (
     save_monitoring, set_author,
     get_monitoring_role, get_monitoring_accelerator,

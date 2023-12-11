@@ -3,25 +3,26 @@ Host: audit-api-sandbox.prozorro.gov.ua
 
 Response: 200 OK
 Content-Type: application/json
+Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDEyNTE2NzksICJpIjogMjZ9fSwgImNsdXN0ZXJfdGltZSI6IHsiY2x1c3RlclRpbWUiOiB7IiR0aW1lc3RhbXAiOiB7InQiOiAxNzAxMjUxNjc5LCAiaSI6IDI2fX0sICJzaWduYXR1cmUiOiB7Imhhc2giOiB7IiRiaW5hcnkiOiB7ImJhc2U2NCI6ICJlSVpTWktCNjdUWmUrWXNPSHY3ZzQ3SmpkQm89IiwgInN1YlR5cGUiOiAiMDAifX0sICJrZXlJZCI6IDczMDY0MDg3NDExNDkwODE2MDZ9fX0=; Path=/
 {
   "data": [
     {
-      "id": "c5c21052abc34c87b93f4852aba5d5ea",
-      "dateModified": "2018-01-01T02:00:00+02:00"
+      "dateModified": "2018-01-01T02:00:01+02:00",
+      "id": "ec983e7233a74adfab9a3ec916ca69fe"
     },
     {
-      "id": "f0dcdef86c634647a23c1a6117a408c6",
-      "dateModified": "2018-01-01T02:00:00+02:00"
+      "dateModified": "2018-01-01T02:00:02+02:00",
+      "id": "6e26b208e5fe4e8ea9d77265cba14f8e"
     },
     {
-      "id": "9ed1c8769f03420eb3000ef27c139d4d",
-      "dateModified": "2018-01-01T02:00:00+02:00"
+      "dateModified": "2018-01-01T02:00:03+02:00",
+      "id": "36c2ddb3e83f4638a14c024eca59bd26"
     }
   ],
   "next_page": {
-    "offset": "3610360c384be3d082ae71b7eeb5a43e",
-    "path": "/api/2.5/monitorings?limit=3&feed=changes&offset=3610360c384be3d082ae71b7eeb5a43e",
-    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings?limit=3&feed=changes&offset=3610360c384be3d082ae71b7eeb5a43e"
+    "offset": 1701251679.431,
+    "path": "/api/2.5/monitorings?limit=3&offset=1701251679.431",
+    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings?limit=3&offset=1701251679.431"
   }
 }
 

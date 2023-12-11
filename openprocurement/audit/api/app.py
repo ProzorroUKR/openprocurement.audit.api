@@ -1,5 +1,3 @@
-# -*- coding: utf-8 -*-
-
 def is_test():
     return any([
         'test' in __import__('sys').argv[0],
@@ -10,7 +8,6 @@ if not is_test():
     gevent.monkey.patch_all()
 
 import os
-
 import simplejson
 from nacl.encoding import HexEncoder
 from nacl.signing import SigningKey, VerifyKey
@@ -19,11 +16,10 @@ from pyramid.authorization import ACLAuthorizationPolicy as AuthorizationPolicy
 from pyramid.config import Configurator
 from pyramid.renderers import JSON, JSONP
 from pyramid.settings import asbool
-
 from openprocurement.audit.api.auth import AuthenticationPolicy, authenticated_role, check_accreditation
 from openprocurement.audit.api.constants import ROUTE_PREFIX
-from openprocurement.audit.api.database import set_api_security
-from openprocurement.audit.api.utils import forbidden, request_params, couchdb_json_decode
+from openprocurement.audit.api.database import MongodbStore
+from openprocurement.audit.api.utils import forbidden, request_params
 from sentry_sdk.integrations.logging import LoggingIntegration
 from sentry_sdk.integrations.pyramid import PyramidIntegration
 import sentry_sdk
@@ -69,25 +65,14 @@ def main(global_config, **settings):
             plugin(config)
             pass
 
-    # CouchDB connection
-    aserver, server, db = set_api_security(settings)
-    config.registry.couchdb_server = server
-    if aserver:
-        config.registry.admin_couchdb_server = aserver
-    config.registry.db = db
-    # readjust couchdb json decoder
-    couchdb_json_decode()
+    # mongodb
+    config.registry.mongodb = MongodbStore(settings)
 
     # Document Service key
     config.registry.docservice_url = settings.get('docservice_url')
     config.registry.docservice_username = settings.get('docservice_username')
     config.registry.docservice_password = settings.get('docservice_password')
     config.registry.docservice_upload_url = settings.get('docservice_upload_url')
-    # config.registry.docservice_key = dockey = Signer(settings.get('dockey', '').decode('hex'))
-    # config.registry.keyring = keyring = {}
-    # dockeys = settings.get('dockeys') if 'dockeys' in settings else dockey.hex_vk()
-    # for key in dockeys.split('\0'):
-    #     keyring[key[:8]] = Verifier(key)
 
     signing_key = settings.get('dockey', '')
     signer = SigningKey(signing_key, encoder=HexEncoder) if signing_key else SigningKey.generate()
@@ -124,4 +109,6 @@ def main(global_config, **settings):
     config.registry.health_threshold_func = settings.get('health_threshold_func', 'all')
     config.registry.update_after = asbool(settings.get('update_after', True))
     config.registry.disable_opt_fields_filter = asbool(settings.get('disable_opt_fields_filter', False))
+
+    config.add_tween("openprocurement.audit.api.middlewares.DBSessionCookieMiddleware")
     return config.make_wsgi_app()

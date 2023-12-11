@@ -1,6 +1,6 @@
 from setuptools import setup, find_packages
 
-version = '1.1.21'
+version = '1.2.0'
 
 requires = [
     'pyramid<1.10.0',

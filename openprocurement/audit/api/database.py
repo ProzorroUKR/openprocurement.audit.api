@@ -179,8 +179,6 @@ class MongodbStore:
         pipeline = [
             {"$replaceWith": {"$literal": data}},
         ]
-        if insert:
-            data["dateCreated"] = get_now().isoformat()
         if modified:
             data["dateModified"] = get_now().isoformat()
             pipeline.append(

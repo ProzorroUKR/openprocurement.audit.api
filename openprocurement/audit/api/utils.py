@@ -1,5 +1,6 @@
 import decimal
 import json
+import pytz
 from base64 import b64encode, b64decode
 from binascii import hexlify, unhexlify
 from email.header import decode_header
@@ -10,7 +11,7 @@ from nacl.exceptions import BadSignatureError
 from nacl.encoding import HexEncoder
 from Crypto.Cipher import AES
 from cornice.util import json_error
-from datetime import datetime
+from ciso8601 import parse_datetime
 from jsonpatch import make_patch, apply_patch as _apply_patch
 from rfc6266 import build_header
 from time import time as ttime
@@ -405,13 +406,21 @@ def request_params(request):
         raise error_handler(request.errors, False)
     return params
 
+
+def parse_date(value, default_timezone=pytz.utc):
+    date = parse_datetime(value)
+    if not date.tzinfo:
+        date = default_timezone.localize(date)
+    return date
+
+
 def parse_offset(offset: str):
     try:
         # Used new offset in timestamp format
         return float(offset)
     except ValueError:
         # Used deprecated offset in iso format
-        return datetime.fromisoformat(offset.replace(" ", "+")).timestamp()
+        return parse_date(offset.replace(" ", "+")).timestamp()
 
 
 def forbidden(request):

@@ -33,7 +33,15 @@ class RequestsResource(MongodbResourceListing):
         super(RequestsResource, self).__init__(request, context)
         self.listing_name = "Requests"
         self.listing_default_fields = {"dateModified"}
-        self.listing_allowed_fields = {"dateCreated", "dateModified", "requestId"}
+        self.listing_allowed_fields = {
+            "dateCreated",
+            "dateModified",
+            "requestId",
+            "description",
+            "violationType",
+            "answer",
+            "dateAnswered",
+        }
         self.db_listing_method = request.registry.mongodb.request.list
 
     @staticmethod

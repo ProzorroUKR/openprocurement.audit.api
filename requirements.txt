@@ -59,4 +59,4 @@ git+https://github.com/ProzorroUKR/server_cookie_middleware.git@0.2
 ### Also don't forget to upload new versions to
 ### https://repo.prozorro.gov.ua/repos/dist.quintagroup.com/prozorro/
 ############
-git+https://github.com/ProzorroUKR/standards.git@1.0.41
+git+https://github.com/ProzorroUKR/standards.git@1.0.80

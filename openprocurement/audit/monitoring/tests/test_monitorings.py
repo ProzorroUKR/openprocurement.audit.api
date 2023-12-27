@@ -176,6 +176,13 @@ class BaseFeedResourceTest(BaseWebTest):
             self.assertIn("next_page", response.json)
             url = response.json["next_page"]["path"]
 
+    def test_opt_fields(self):
+        response = self.app.get("/monitorings?opt_fields=reasons,status,procuringStages,conclusion")
+        self.assertIn("reasons", response.json["data"][0])
+        self.assertIn("status", response.json["data"][0])
+        self.assertIn("procuringStages", response.json["data"][0])
+        self.assertNotIn("conclusion", response.json["data"][0])
+
 
 class DescendingFeedResourceTest(BaseFeedResourceTest):
     limit = 2

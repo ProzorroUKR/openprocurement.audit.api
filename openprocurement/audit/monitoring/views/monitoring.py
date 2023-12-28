@@ -43,7 +43,29 @@ class MonitoringsResource(MongodbResourceListing):
         super(MonitoringsResource, self).__init__(request, context)
         self.listing_name = "Monitorings"
         self.listing_default_fields = {"dateModified"}
-        self.listing_allowed_fields = {"dateCreated", "dateModified", "tender_id", "status"}
+        self.listing_allowed_fields = {
+            "dateCreated",
+            "dateModified",
+            "tender_id",
+            "status",
+            "monitoring_id",
+            "reasons",
+            "procuringStages",
+            "monitoringPeriod",
+            "documents",
+            "riskIndicators",
+            "riskIndicatorsTotalImpact",
+            "riskIndicatorsRegion",
+            "eliminationReport",
+            "eliminationResolution",
+            "eliminationPeriod",
+            "posts",
+            "appeal",
+            "liabilities",
+            "parties",
+            "endDate",
+            "tender_owner",
+        }
         self.db_listing_method = request.registry.mongodb.monitoring.list
 
     @staticmethod

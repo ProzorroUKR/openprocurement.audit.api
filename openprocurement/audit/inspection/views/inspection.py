@@ -23,7 +23,14 @@ class InspectionsResource(MongodbResourceListing):
         super(InspectionsResource, self).__init__(request, context)
         self.listing_name = "Inspections"
         self.listing_default_fields = {"dateModified"}
-        self.listing_allowed_fields = {"dateCreated", "dateModified", "inspection_id"}
+        self.listing_allowed_fields = {
+            "dateCreated",
+            "dateModified",
+            "inspection_id",
+            "monitoring_ids",
+            "description",
+            "documents",
+        }
         self.db_listing_method = request.registry.mongodb.inspection.list
 
     @json_view(content_type='application/json',

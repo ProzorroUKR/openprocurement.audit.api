@@ -56,10 +56,11 @@ class RequestCollection(BaseCollection):
             },
         )
         all_by_tender_id = IndexModel(
-            [("tender_id", ASCENDING),
+            [("tenderId", ASCENDING),
              ("dateCreated", ASCENDING)],
-            name="all_by_tender_id_created",
+            name="all_by_tenderId_created",
         )
+        # db.requests.createIndex({ "tenderId": 1,  "dateCreated": 1 }, { name: "all_by_tenderId_created" })
         all_indexes = [
             test_by_public_modified,
             real_by_public_modified,

@@ -7,6 +7,7 @@ from nacl.encoding import HexEncoder
 from openprocurement.audit.api.tests.base import BaseWebTest as BaseApiWebTest
 from datetime import datetime
 from uuid import uuid4
+from unittest import mock
 
 from openprocurement.audit.api.constants import SANDBOX_MODE
 
@@ -63,7 +64,7 @@ class BaseWebTest(BaseApiWebTest):
         self.admin_name = "test"
         self.admin_pass = "token"
 
-    def create_monitoring(self, **kwargs):
+    def create_monitoring(self, restricted_config=False, **kwargs):
 
         data = deepcopy(self.initial_data)
 
@@ -75,7 +76,9 @@ class BaseWebTest(BaseApiWebTest):
         authorization = getattr(self.app, "authorization", None)
 
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
-        response = self.app.post_json('/monitorings', {'data': data})
+        with mock.patch('openprocurement.audit.monitoring.utils.TendersClient') as mock_api_client:
+            mock_api_client.return_value.get_tender.return_value = {'config': {'restricted': restricted_config}}
+            response = self.app.post_json('/monitorings', {'data': data})
         monitoring = response.json['data']
         self.monitoring_id = monitoring['id']
 

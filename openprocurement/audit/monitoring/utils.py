@@ -11,12 +11,17 @@ from openprocurement.audit.api.utils import (
     check_document, update_document_url,
     append_revision,
     handle_store_exceptions,
+    raise_operation_error,
 )
 from openprocurement.audit.monitoring.models import Period, Monitoring
 from openprocurement.audit.api.models import Revision
 from openprocurement.audit.api.mask import mask_object_data
+from openprocurement.audit.api.mask_deprecated import mask_object_data_deprecated
 from openprocurement.audit.api.context import get_now
 from openprocurement.audit.monitoring.traversal import factory
+
+from openprocurement_client.resources.tenders import TendersClient
+from openprocurement_client.exceptions import ResourceError
 
 LOGGER = getLogger(__package__)
 ACCELERATOR_RE = compile(r'accelerator=(?P<accelerator>\d+)')
@@ -89,6 +94,7 @@ def set_logging_context(event):
 
 def monitoring_from_data(request, data):
     # wartime measures
+    mask_object_data_deprecated(request, data)
     mask_object_data(request, data)
     return Monitoring(data)
 
@@ -105,6 +111,21 @@ def extract_monitoring_adapter(request, monitoring_id):
 def extract_monitoring(request):
     monitoring_id = request.matchdict.get('monitoring_id')
     return extract_monitoring_adapter(request, monitoring_id) if monitoring_id else None
+
+
+def extract_restricted_config_from_tender(request):
+    try:
+        response = TendersClient(
+            request.registry.api_token,
+            host_url=request.registry.api_server,
+            api_version=request.registry.api_version,
+        ).get_tender(request.validated['monitoring'].tender_id)
+    except ResourceError as e:
+        if e.status_code == 404:
+            raise_operation_error(request, 'Tender {} not found'.format(request.validated['monitoring'].tender_id))
+        else:
+            raise_operation_error(request, 'Unsuccessful tender request', status=e.status_code)
+    return response.get('config', {}).get('restricted', False)
 
 
 def generate_monitoring_id(request):

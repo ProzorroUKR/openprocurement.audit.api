@@ -15,7 +15,10 @@ from openprocurement.audit.api.constants import (
 from openprocurement.audit.api.views.base import APIResource, MongodbResourceListing, json_view
 from openprocurement.audit.api.utils import context_unpack, forbidden, generate_id
 from openprocurement.audit.monitoring.utils import (
-    get_now, calculate_normalized_business_date, upload_objects_documents
+    get_now,
+    calculate_normalized_business_date,
+    upload_objects_documents,
+    extract_restricted_config_from_tender,
 )
 from openprocurement.audit.monitoring.utils import (
     save_monitoring,
@@ -93,6 +96,7 @@ class MonitoringsResource(MongodbResourceListing):
         monitoring = self.request.validated['monitoring']
         monitoring.id = generate_id()
         monitoring.monitoring_id = generate_monitoring_id(self.request)
+        monitoring.restricted = extract_restricted_config_from_tender(self.request)
         if monitoring.decision:
             upload_objects_documents(self.request, monitoring.decision, key="decision")
             set_author(monitoring.decision.documents, self.request, 'author')

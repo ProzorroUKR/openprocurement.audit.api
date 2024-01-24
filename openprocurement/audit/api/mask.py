@@ -1,75 +1,93 @@
-EXCLUDED_FIELDS = {
-    "mode",
-    "owner",
-    "author",
-    "scheme",
-    "_id",
-    "id",
-    "monitoring_id",
-    "reasons",
-    "procuringStages",
-    "violationType",
-    "result",
-    "resultByType",
-    "relatedParty",
-    "relatedPost",
-    "roles",
-    "type",
-    "postOf",
-    "tender_id",
-    "hash",
-    "owner_token",
-    "status",
-    "next_check",
+from jsonpath_ng import parse
+
+from openprocurement.audit.api.auth import ACCR_RESTRICTED
+
+MASK_STRING = "Приховано"
+MASK_STRING_EN = "Hidden"
+
+
+MONITORING_MASK_MAPPING = {
+    # decision
+    "$.decision.description": MASK_STRING,
+    "$.decision.documents[*].title": MASK_STRING,
+    "$.decision.documents[*].title_ru": MASK_STRING,
+    "$.decision.documents[*].title_en": MASK_STRING_EN,
+    "$.decision.documents[*].url": MASK_STRING,
+
+    # conclusion
+    "$.conclusion.auditFinding": MASK_STRING,
+    "$.conclusion.stringsAttached": MASK_STRING,
+    "$.conclusion.description": MASK_STRING,
+    "$.conclusion.documents[*].title": MASK_STRING,
+    "$.conclusion.documents[*].title_ru": MASK_STRING,
+    "$.conclusion.documents[*].title_en": MASK_STRING_EN,
+    "$.conclusion.documents[*].url": MASK_STRING,
+
+    # cancellation
+    "$.cancellation.description": MASK_STRING,
+    "$.cancellation.documents[*].title": MASK_STRING,
+    "$.cancellation.documents[*].title_ru": MASK_STRING,
+    "$.cancellation.documents[*].title_en": MASK_STRING_EN,
+    "$.cancellation.documents[*].url": MASK_STRING,
+
+    # posts
+    "$.posts[*].title": MASK_STRING,
+    "$.posts[*].description": MASK_STRING,
+    "$.posts[*].documents[*].title": MASK_STRING,
+    "$.posts[*].documents[*].title_ru": MASK_STRING,
+    "$.posts[*].documents[*].title_en": MASK_STRING_EN,
+    "$.posts[*].documents[*].url": MASK_STRING,
+
+    # eliminationReport
+    "$.eliminationReport.description": MASK_STRING,
+    "$.eliminationReport.documents[*].title": MASK_STRING,
+    "$.eliminationReport.documents[*].title_ru": MASK_STRING,
+    "$.eliminationReport.documents[*].title_en": MASK_STRING_EN,
+    "$.eliminationReport.documents[*].url": MASK_STRING,
+
+    # eliminationResolution
+    "$.eliminationResolution.description": MASK_STRING,
+    "$.eliminationResolution.documents[*].title": MASK_STRING,
+    "$.eliminationResolution.documents[*].title_ru": MASK_STRING,
+    "$.eliminationResolution.documents[*].title_en": MASK_STRING_EN,
+    "$.eliminationResolution.documents[*].url": MASK_STRING,
+
+    # appeal
+    "$.appeal.description": MASK_STRING,
+    "$.appeal.documents[*].title": MASK_STRING,
+    "$.appeal.documents[*].title_ru": MASK_STRING,
+    "$.appeal.documents[*].title_en": MASK_STRING_EN,
+    "$.appeal.documents[*].url": MASK_STRING,
+
+    # documents
+    "$.documents[*].title": MASK_STRING,
+    "$.documents[*].title_ru": MASK_STRING,
+    "$.documents[*].title_en": MASK_STRING_EN,
+    "$.documents[*].url": MASK_STRING,
 }
 
 EXCLUDED_ROLES = (
-    "Administrator",
+    "sas",
+    "risk_indicators",
+    "risk_indicators_api",
+    "admins",
 )
 
 
-def mask_simple_data(v):
-    if isinstance(v, str):
-        v = "0" * len(v)
-    elif isinstance(v, bool):
-        pass
-    elif isinstance(v, int) or isinstance(v, float):
-        v = 0
-    return v
-
-
-def ignore_mask(key):
-    ignore_keys = EXCLUDED_FIELDS
-    if key in ignore_keys:
-        return True
-    elif key.startswith("date") or key.endswith("Date"):
-        return True
-
-
-def mask_process_compound(data):
-    if isinstance(data, list):
-        data = [mask_process_compound(e) for e in data]
-    elif isinstance(data, dict):
-        for i, j in data.items():
-            if not ignore_mask(i):
-                j = mask_process_compound(j)
-                if i == "identifier":  # identifier.id
-                    j["id"] = mask_simple_data(j["id"])
-            data[i] = j
-    else:
-        data = mask_simple_data(data)
-    return data
-
-
 def mask_object_data(request, data):
-    is_masked = data.get("is_masked", False)
-    if not is_masked:
+    if not data.get("restricted", False):
+        # Masking only enabled if restricted is True
         return
 
     if request.authenticated_role in EXCLUDED_ROLES:
         # Masking is not required for these roles
         return
 
-    revisions = data.pop("revisions", [])
-    mask_process_compound(data)
-    data["revisions"] = revisions
+    if request.authenticated_role == "brokers" and request.check_accreditation(ACCR_RESTRICTED):
+        # Masking is not required for brokers with accreditation
+        # that allows access to restricted data
+        return
+
+    for json_path, replacement_value in MONITORING_MASK_MAPPING.items():
+        jsonpath_expr = parse(json_path)
+        jsonpath_expr.update(data, replacement_value)

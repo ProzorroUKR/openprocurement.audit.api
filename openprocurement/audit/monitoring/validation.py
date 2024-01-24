@@ -32,6 +32,7 @@ from openprocurement.audit.monitoring.utils import (
     get_monitoring_accelerator,
 )
 
+
 def validate_monitoring_data(request):
     """
     Validate monitoring data POST

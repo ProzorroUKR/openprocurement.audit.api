@@ -433,3 +433,74 @@ class ActiveMonitoringConclusionResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(
             ('body', 'conclusion', 'relatedParty'),
             next(get_errors_field_names(response, 'relatedParty should be one of parties.')))
+
+    def test_restricted_visibility(self):
+        self.create_monitoring(parties=[self.initial_party], restricted_config=True)
+        self.app.patch_json(
+            f'/monitorings/{self.monitoring_id}',
+            {"data": {
+                "status": ACTIVE_STATUS,
+                "decision": {
+                    "description": "text",
+                    "date": datetime.now().isoformat()
+                }
+            }}
+        )
+        conclusion = {
+            "violationOccurred": True,
+            "violationType": ["corruptionProcurementMethodType"],
+            "auditFinding": "Ring around the rosies",
+            "stringsAttached": "Pocket full of posies",
+            "description": "Ashes, ashes, we all fall down",
+            "documents": [
+                {
+                    'title': 'lorem.doc',
+                    'url': self.generate_docservice_url(),
+                    'hash': 'md5:' + '0' * 32,
+                    'format': 'application/msword',
+                },
+                {
+                    'title': 'sign.p7s',
+                    'url': self.generate_docservice_url(),
+                    'hash': 'md5:' + '0' * 32,
+                    'format': 'application/pkcs7-signature',
+                }
+            ]
+        }
+        self.app.patch_json(
+            f'/monitorings/{self.monitoring_id}',
+            {"data": {
+                "conclusion": conclusion,
+                "status": ADDRESSED_STATUS,
+            }}
+        )
+
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        response = self.app.get(f'/monitorings/{self.monitoring_id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["conclusion"]["description"], "Ashes, ashes, we all fall down")
+        self.assertEqual(response.json['data']["conclusion"]["auditFinding"], "Ring around the rosies")
+        self.assertEqual(response.json['data']["conclusion"]["stringsAttached"], "Pocket full of posies")
+        self.assertEqual(response.json['data']["conclusion"]["documents"][0]["title"], "lorem.doc")
+        self.assertIn("http://localhost", response.json['data']["conclusion"]["documents"][0]["url"])
+
+        self.app.authorization = ('Basic', (self.broker_name_r, self.broker_pass_r))
+        response = self.app.get(f'/monitorings/{self.monitoring_id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["conclusion"]["description"], "Ashes, ashes, we all fall down")
+        self.assertEqual(response.json['data']["conclusion"]["auditFinding"], "Ring around the rosies")
+        self.assertEqual(response.json['data']["conclusion"]["stringsAttached"], "Pocket full of posies")
+        self.assertEqual(response.json['data']["conclusion"]["documents"][0]["title"], "lorem.doc")
+        self.assertIn("http://localhost", response.json['data']["conclusion"]["documents"][0]["url"])
+
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+        response = self.app.get(f'/monitorings/{self.monitoring_id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["conclusion"]["description"], "Приховано")
+        self.assertEqual(response.json['data']["conclusion"]["description"], "Приховано")
+        self.assertEqual(response.json['data']["conclusion"]["auditFinding"], "Приховано")
+        self.assertEqual(response.json['data']["conclusion"]["documents"][0]["title"], "Приховано")
+        self.assertEqual(response.json['data']["conclusion"]["documents"][0]["url"], "Приховано")

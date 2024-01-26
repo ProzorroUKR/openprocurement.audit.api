@@ -37,8 +37,8 @@ class MonitoringEliminationBaseTest(BaseWebTest, DSWebTestMixin):
         super(MonitoringEliminationBaseTest, self).setUp()
         self.app.app.registry.docservice_url = 'http://localhost'
 
-    def create_active_monitoring(self, **kwargs):
-        self.create_monitoring(**kwargs)
+    def create_active_monitoring(self, restricted_config=False, **kwargs):
+        self.create_monitoring(restricted_config=restricted_config, **kwargs)
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         self.app.patch_json(
@@ -63,8 +63,8 @@ class MonitoringEliminationBaseTest(BaseWebTest, DSWebTestMixin):
             )
         self.tender_owner_token = response.json['access']['token']
 
-    def create_addressed_monitoring(self, **kwargs):
-        self.create_active_monitoring(**kwargs)
+    def create_addressed_monitoring(self, restricted_config=False, **kwargs):
+        self.create_active_monitoring(restricted_config=restricted_config, **kwargs)
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
@@ -79,8 +79,8 @@ class MonitoringEliminationBaseTest(BaseWebTest, DSWebTestMixin):
         )
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
 
-    def create_monitoring_with_elimination(self, **kwargs):
-        self.create_addressed_monitoring(**kwargs)
+    def create_monitoring_with_elimination(self, restricted_config=False, **kwargs):
+        self.create_addressed_monitoring(restricted_config=restricted_config, **kwargs)
         response = self.app.put_json(
             '/monitorings/{}/eliminationReport?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
             {"data": {
@@ -97,8 +97,8 @@ class MonitoringEliminationBaseTest(BaseWebTest, DSWebTestMixin):
         )
         self.elimination = response.json["data"]
 
-    def create_monitoring_with_resolution(self, **kwargs):
-        self.create_monitoring_with_elimination(**kwargs)
+    def create_monitoring_with_resolution(self, restricted_config=False, **kwargs):
+        self.create_monitoring_with_elimination(restricted_config=restricted_config, **kwargs)
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
@@ -279,6 +279,47 @@ class MonitoringEliminationResolutionResourceTest(MonitoringEliminationBaseTest)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEquals('It\'s a minimal required elimination report', response.json['data']['description'])
+
+    def test_restricted_visibility(self):
+        self.create_monitoring_with_resolution(parties=[self.initial_party], restricted_config=True)
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        response = self.app.get(f'/monitorings/{self.monitoring_id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(
+            response.json['data']["eliminationReport"]["description"],
+            "It's a minimal required elimination report",
+        )
+        self.assertEqual(response.json['data']["eliminationReport"]["documents"][0]["title"], "lorem.doc")
+        self.assertIn("http://localhost", response.json['data']["eliminationReport"]["documents"][0]["url"])
+        self.assertEqual(response.json['data']["eliminationResolution"]["description"], "Do you have spare crutches?")
+        self.assertEqual(response.json['data']["eliminationResolution"]["documents"][0]["title"], "sign.p7s")
+        self.assertIn("http://localhost", response.json['data']["eliminationResolution"]["documents"][0]["url"])
+
+        self.app.authorization = ('Basic', (self.broker_name_r, self.broker_pass_r))
+        response = self.app.get(f'/monitorings/{self.monitoring_id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(
+            response.json['data']["eliminationReport"]["description"],
+            "It's a minimal required elimination report",
+        )
+        self.assertEqual(response.json['data']["eliminationReport"]["documents"][0]["title"], "lorem.doc")
+        self.assertIn("http://localhost", response.json['data']["eliminationReport"]["documents"][0]["url"])
+        self.assertEqual(response.json['data']["eliminationResolution"]["description"], "Do you have spare crutches?")
+        self.assertEqual(response.json['data']["eliminationResolution"]["documents"][0]["title"], "sign.p7s")
+        self.assertIn("http://localhost", response.json['data']["eliminationResolution"]["documents"][0]["url"])
+
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+        response = self.app.get(f'/monitorings/{self.monitoring_id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["eliminationResolution"]["description"], "Приховано")
+        self.assertEqual(response.json['data']["eliminationResolution"]["documents"][0]["title"], "Приховано")
+        self.assertEqual(response.json['data']["eliminationResolution"]["documents"][0]["url"], "Приховано")
+        self.assertEqual(response.json['data']["eliminationReport"]["description"], "Приховано")
+        self.assertEqual(response.json['data']["eliminationReport"]["documents"][0]["title"], "Приховано")
+        self.assertEqual(response.json['data']["eliminationReport"]["documents"][0]["url"], "Приховано")
 
 class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
 

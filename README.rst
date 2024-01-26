@@ -46,9 +46,9 @@ Update documentation
 --------------------
 Running tests to update http files::
 
-    py.test doc.py  # all
+    py.test docs.py  # all
 
-    py.test doc.py -k test_case  # specific
+    py.test docs.py -k test_case  # specific
 
 Build documentation
 -------------------

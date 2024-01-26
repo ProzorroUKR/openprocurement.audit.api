@@ -4,8 +4,10 @@ from hashlib import sha512, md5
 from functools import partial
 from unittest import mock
 import uuid
+import csv
 from datetime import datetime, timedelta
 from openprocurement.audit.api.choices import VIOLATION_TYPE_CHOICES
+from openprocurement.audit.api.mask import MONITORING_MASK_MAPPING
 from openprocurement.audit.monitoring.tests.base import BaseWebTest as MonitoringWebTest, DSWebTestMixin
 from openprocurement.audit.inspection.tests.base import BaseWebTest as InspectionWebTest
 from openprocurement.audit.request.tests.base import BaseWebTest as RequestWebTest
@@ -161,7 +163,11 @@ class BaseRequestWebTest(RequestWebTest, MockWebTestMixin):
 @freeze_time("2018.01.01 00:00")
 class OptionsResourceTest(BaseMonitoringWebTest):
 
-    def test_monitoring_list_options_query_params(self):
+    @mock.patch(
+        'openprocurement.audit.monitoring.views.monitoring.extract_restricted_config_from_tender',
+        return_value=False,
+    )
+    def test_monitoring_list_options_query_params(self, mock_restricted):
         with open('docs/source/monitoring/feed/http/monitorings-with-options.http', 'wt') as self.app.file_obj:
             self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
             response = self.app.post_json(
@@ -186,6 +192,10 @@ class OptionsResourceTest(BaseMonitoringWebTest):
 
 
 @freeze_time("2018.01.01 00:00")
+@mock.patch(
+    'openprocurement.audit.monitoring.views.monitoring.extract_restricted_config_from_tender',
+    return_value=False,
+)
 class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
 
     def setUp(self):
@@ -216,7 +226,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
         }
 
     @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
-    def test_monitoring_life_cycle_with_violations(self, mock_api_client):
+    def test_monitoring_life_cycle_with_violations(self, mock_api_client, mock_restricted):
         tender_token = self.uuid().hex
         mock_api_client.return_value.extract_credentials.return_value = {
             'data': {'tender_token': sha512(tender_token.encode()).hexdigest()}
@@ -977,7 +987,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                     status=200
                 )
 
-    def test_monitoring_life_cycle_with_no_violations(self):
+    def test_monitoring_life_cycle_with_no_violations(self, mock_restricted):
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         with freeze_time("2018.01.01 00:00"):
@@ -1064,7 +1074,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                     }
                 )
 
-    def test_monitoring_life_cycle_stopped(self):
+    def test_monitoring_life_cycle_stopped(self, mock_restricted):
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         with freeze_time("2018.01.01 00:00"):
@@ -1121,7 +1131,7 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                     }
                 )
 
-    def test_monitoring_life_cycle_cancelled(self):
+    def test_monitoring_life_cycle_cancelled(self, mock_restricted):
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         with freeze_time("2018.01.01 00:00"):
@@ -1744,3 +1754,351 @@ class RequestByTenderResourceTest(BaseRequestWebTest):
                 response = self.app.get('/tenders/{}/requests?limit=1&page2'.format(tender_id))
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(len(response.json["data"]), 1)
+
+
+@freeze_time("2018.01.01 00:00")
+class MonitoringRestrictedResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
+
+    def setUp(self):
+        super(MonitoringRestrictedResourceTest, self).setUp()
+        self.app.app.registry.docservice_url = 'http://public-docs-sandbox.prozorro.gov.ua'
+
+    def test_docs_restricted_monitoring_mask_mapping_csv(self):
+        headers = [
+            "rule",
+            "value",
+        ]
+
+        rows = []
+
+        for rule, value in MONITORING_MASK_MAPPING.items():
+            rows.append([rule, value])
+
+        with open("docs/source/monitoring/tutorial/csv/monitoring-mask-mapping.csv", 'w', newline='') as file_csv:
+            writer = csv.writer(file_csv, lineterminator='\n')
+            writer.writerow(headers)
+            writer.writerows(rows)
+
+    @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
+    @mock.patch(
+        'openprocurement.audit.monitoring.views.monitoring.extract_restricted_config_from_tender',
+        return_value=True,
+    )
+    def test_monitoring_restricted(self, mock_restricted, mock_api_client):
+        tender_token = self.uuid().hex
+        mock_api_client.return_value.extract_credentials.return_value = {
+            'data': {'tender_token': sha512(tender_token.encode()).hexdigest()}
+        }
+
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        with open('docs/source/monitoring/tutorial/http/post-monitoring-restricted-true.http',
+                  'wt') as self.app.file_obj:
+            response = self.app.post_json(
+                '/monitorings',
+                {
+                    "data": {
+                        "tender_id": self.uuid().hex,
+                        "reasons": ["public", "fiscal"],
+                        "procuringStages": ["awarding", "contracting"],
+                        "parties": [{
+                            "name": "The State Audit Service of Ukraine",
+                            "contactPoint": {
+                                "name": "Oleksii Kovalenko",
+                                "telephone": "0440000000"
+                            },
+                            "identifier": {
+                                "scheme": "UA-EDR",
+                                "id": "40165856",
+                                "uri": "http://www.dkrs.gov.ua"
+                            },
+                            "address": {
+                                "countryName": "Ukraine",
+                                "postalCode": "04070",
+                                "region": "Kyiv",
+                                "streetAddress": "Petra Sahaidachnoho St, 4",
+                                "locality": "Kyiv"
+                            },
+                            "roles": [
+                                "sas"
+                            ]
+                        }]
+                    }
+                },
+                status=201
+            )
+
+        monitoring_id = response.json["data"]["id"]
+        party_id = response.json["data"]["parties"][0]["id"]
+
+        # PUBLISH
+
+        with freeze_time("2018.01.02 01:05"):
+            self.app.patch_json(
+                '/monitorings/{}'.format(monitoring_id),
+                {
+                    "data": {
+                        "status": "active",
+                        "decision": {
+                            "description": "text",
+                            "date": datetime.now().isoformat(),
+                            "documents": [{
+                                'title': 'lorem.doc',
+                                'url': self.generate_docservice_url(),
+                                'hash': 'md5:' + '0' * 32,
+                                'format': 'application/msword',
+                            }],
+                            "relatedParty": party_id
+                        }
+                    }
+                },
+                status=200
+            )
+
+        # CREDENTIALS
+
+        self.app.authorization = ('Basic', (self.broker_name_r, self.broker_pass_r))
+
+        with freeze_time("2018.01.04 00:00"):
+            response = self.app.patch_json(
+                '/monitorings/{}/credentials?acc_token={}'.format(monitoring_id, tender_token),
+                status=200
+            )
+
+        tender_owner_token = response.json['access']['token']
+
+        # DIALOGUE
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+
+        with freeze_time("2018.01.03 00:05"):
+            response = self.app.post_json(
+                '/monitorings/{}/posts'.format(monitoring_id),
+                {
+                    "data": {
+                        "title": "Lorem ipsum",
+                        "description": "Lorem ipsum dolor sit amet.",
+                        "documents": [{
+                            'title': 'ipsum.doc',
+                            'url': self.generate_docservice_url(),
+                            'hash': 'md5:' + '0' * 32,
+                            'format': 'application/msword',
+                        }],
+                        "relatedParty": party_id
+                    }
+                },
+                status=201
+            )
+
+        post_id = response.json['data']['id']
+
+        self.app.authorization = ('Basic', (self.broker_name_r, self.broker_pass_r))
+
+        with freeze_time("2018.01.04 00:05"):
+            self.app.post_json(
+                '/monitorings/{}/posts?acc_token={}'.format(monitoring_id, tender_owner_token),
+                {
+                    "data": {
+                        'title': 'Sit amet',
+                        'description': 'Dolor sit amet',
+                        'relatedPost': post_id
+                    }
+                },
+                status=201
+            )
+
+        # CONCLUSION
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+
+        with freeze_time("2018.01.05 00:00"):
+            response = self.app.patch_json(
+                '/monitorings/{}'.format(monitoring_id),
+                {
+                    "data": {
+                        "conclusion": {
+                            "violationOccurred": True,
+                            "violationType": ["documentsForm", "corruptionAwarded"],
+                            "auditFinding": "Ring around the rosies",
+                            "stringsAttached": "Pocket full of posies",
+                            "description": "Ashes, ashes, we all fall down",
+                            "documents": [
+                                {
+                                    'title': 'New document(2).doc',
+                                    'url': self.generate_docservice_url(),
+                                    'hash': 'md5:' + '0' * 32,
+                                    'format': 'application/msword',
+                                }
+                            ]
+                        }
+                    }
+                }
+            )
+            self.assertEqual(response.status_code, 200)
+
+        conclusion = {
+            "violationOccurred": True,
+            "violationType": ["corruptionProcurementMethodType"],
+            "auditFinding": "Ring around the rosies",
+            "stringsAttached": "Pocket full of posies",
+            "description": "Ashes, ashes, we all fall down",
+            "documents": [
+                {
+                    'title': 'lorem.doc',
+                    'url': self.generate_docservice_url(),
+                    'hash': 'md5:' + '0' * 32,
+                    'format': 'application/msword',
+                },
+                {
+                    'title': 'sign.p7s',
+                    'url': self.generate_docservice_url(),
+                    'hash': 'md5:' + '0' * 32,
+                    'format': 'application/pkcs7-signature',
+                }
+            ]
+        }
+        # CONCLUSION
+        with freeze_time("2018.01.06 00:00"):
+            response = self.app.patch_json(
+                '/monitorings/{}'.format(monitoring_id),
+                {"data": {
+                    "conclusion": conclusion,
+                    "status": "addressed"
+                }},
+                status=200
+            )
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.json["data"]["status"], "addressed")
+
+        # # APPEAL
+        self.app.authorization = ('Basic', (self.broker_name_r, self.broker_pass_r))
+        with freeze_time("2018.01.06 07:00"):
+            self.app.put_json(
+                '/monitorings/{}/appeal?acc_token={}'.format(monitoring_id, tender_owner_token),
+                {
+                    "data": {
+                        "description": "Appeal description",
+                        "documents": [{
+                            'title': 'letter.doc',
+                            'url': self.generate_docservice_url(),
+                            'hash': 'md5:' + '0' * 32,
+                            'format': 'application/msword',
+                        }]
+                    }
+                },
+            )
+
+        with freeze_time("2018.01.06 07:15"):
+            self.app.patch_json(
+                '/monitorings/{}/appeal?acc_token={}'.format(monitoring_id, tender_owner_token),
+                {
+                    'data': {
+                        'proceeding': {
+                            'dateProceedings': MOCK_DATETIME,
+                            'proceedingNumber': "0123456789",
+                        },
+                    },
+                },
+            )
+
+        # ELIMINATION REPORT
+        with freeze_time("2018.01.07 00:00"):
+            response = self.app.put_json(
+                '/monitorings/{}/eliminationReport?acc_token={}'.format(monitoring_id, tender_owner_token),
+                {
+                    "data": {
+                        "description": "The procurement requirements have been fixed and the changes are attached.",
+                        "documents": [
+                            {
+                                'title': 'requirements.doc',
+                                'url': self.generate_docservice_url(),
+                                'hash': 'md5:' + '0' * 32,
+                                'format': 'application/msword',
+                            }
+                        ],
+                    }
+                },
+            )
+
+        self.assertEqual(response.status_code, 200)
+
+        # ELIMINATION RESOLUTION
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+
+        with freeze_time("2018.01.09 00:00"):
+            self.app.patch_json(
+                '/monitorings/{}'.format(monitoring_id),
+                {
+                    "data": {
+                        "eliminationResolution": {
+                            "result": "partly",
+                            "resultByType": {
+                                "corruptionProcurementMethodType": "eliminated",
+                            },
+                            "description": "The award hasn't been fixed.",
+                            "documents": [
+                                {
+                                    'title': 'sign.p7s',
+                                    'url': self.generate_docservice_url(),
+                                    'hash': 'md5:' + '0' * 32,
+                                    'format': 'application/pkcs7-signature',
+                                }
+                            ],
+                            "relatedParty": party_id
+                        },
+                    }
+                },
+            )
+
+        # COMPLETE MONITORING
+        with freeze_time("2018.01.25 00:00"):
+            self.app.patch_json(
+                '/monitorings/{}'.format(monitoring_id),
+                {
+                    "data": {
+                        "status": "completed",
+                    }
+                },
+                status=200
+            )
+
+        # ADD DOCUMENT TO MONITORING
+        with freeze_time("2018.01.25 01:00"):
+            self.app.post_json(
+                '/monitorings/{}/documents'.format(monitoring_id),
+                {
+                    "data": {
+                        "url": self.generate_docservice_url(),
+                        "title": "sign.p7s",
+                        "hash": "md5:00000000000000000000000000000000",
+                        "format": "application/ms-word"
+                    }
+                },
+                status=201
+            )
+
+        # RESTRICTED VISIBILITY
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        with freeze_time("2018.01.25 01:40"):
+            with open('docs/source/monitoring/tutorial/http/get-monitoring-restricted-true-sas.http',
+                      'wt') as self.app.file_obj:
+                self.app.get(
+                    '/monitorings/{}'.format(monitoring_id),
+                    status=200
+                )
+
+        self.app.authorization = ('Basic', (self.broker_name_r, self.broker_pass_r))
+        with freeze_time("2018.01.25 01:40"):
+            with open('docs/source/monitoring/tutorial/http/get-monitoring-restricted-true-brokerr.http',
+                      'wt') as self.app.file_obj:
+                self.app.get(
+                    '/monitorings/{}'.format(monitoring_id),
+                    status=200
+                )
+
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+        with freeze_time("2018.01.25 01:40"):
+            with open('docs/source/monitoring/tutorial/http/get-monitoring-restricted-true-broker.http',
+                      'wt') as self.app.file_obj:
+                self.app.get(
+                    '/monitorings/{}'.format(monitoring_id),
+                    status=200
+                )

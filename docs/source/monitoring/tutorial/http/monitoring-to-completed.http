@@ -12,7 +12,7 @@ DATA:
 
 Response: 200 OK
 Content-Type: application/json
-Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDEyNTE2NzgsICJpIjogOH19LCAiY2x1c3Rlcl90aW1lIjogeyJjbHVzdGVyVGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDEyNTE2NzgsICJpIjogOH19LCAic2lnbmF0dXJlIjogeyJoYXNoIjogeyIkYmluYXJ5IjogeyJiYXNlNjQiOiAiTXlVVDdwSldmUC93ZDYyUUo3RW10OHJsYjVnPSIsICJzdWJUeXBlIjogIjAwIn19LCAia2V5SWQiOiA3MzA2NDA4NzQxMTQ5MDgxNjA2fX19; Path=/
+Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDYyODU3ODksICJpIjogMn19LCAiY2x1c3Rlcl90aW1lIjogeyJjbHVzdGVyVGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDYyODU3ODksICJpIjogMn19LCAic2lnbmF0dXJlIjogeyJoYXNoIjogeyIkYmluYXJ5IjogeyJiYXNlNjQiOiAiZmRTVTcwUTM4RGR5aDlvU2pneFFFS1QxY3pBPSIsICJzdWJUeXBlIjogIjAwIn19LCAia2V5SWQiOiA3MzE3Mjk5MDQzMDQ0OTUwMDIzfX19; Path=/
 {
   "data": {
     "tender_id": "f71067ac30733261df884de0391debf6",
@@ -338,6 +338,7 @@ Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDEy
     "endDate": "2018-01-25T00:00:00+02:00",
     "dateCreated": "2018-01-01T02:00:00+02:00",
     "tender_owner": "broker",
+    "restricted": false,
     "id": "93480d4ae651486ab8cb03ad7baf778c",
     "decision": {
       "description": "text",

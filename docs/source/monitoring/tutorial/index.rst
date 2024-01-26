@@ -7,6 +7,7 @@ Tutorial
 .. toctree::
    :maxdepth: 1
 
+   configuration
    creation
    publishing
    credentials

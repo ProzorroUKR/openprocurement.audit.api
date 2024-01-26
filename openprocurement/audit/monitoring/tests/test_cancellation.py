@@ -77,3 +77,47 @@ class MonitoringCancellationResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(
             ('body', 'cancellation', 'relatedParty'),
             next(get_errors_field_names(response, 'relatedParty should be one of parties.')))
+
+    def test_restricted_visibility(self):
+        self.create_monitoring(parties=[self.initial_party], restricted_config=True)
+        self.app.patch_json(
+            f'/monitorings/{self.monitoring_id}',
+            {'data': {
+                "status": CANCELLED_STATUS,
+                'cancellation': {
+                    'description': 'some_description',
+                    'documents': [
+                        {
+                            'title': 'lorem.doc',
+                            'url': self.generate_docservice_url(),
+                            'hash': 'md5:' + '0' * 32,
+                            'format': 'application/msword',
+                        }
+                    ]
+                }
+            }}
+        )
+
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        response = self.app.get(f'/monitorings/{self.monitoring_id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["cancellation"]["description"], "some_description")
+        self.assertEqual(response.json['data']["cancellation"]["documents"][0]["title"], "lorem.doc")
+        self.assertIn("http://localhost", response.json['data']["cancellation"]["documents"][0]["url"])
+
+        self.app.authorization = ('Basic', (self.broker_name_r, self.broker_pass_r))
+        response = self.app.get(f'/monitorings/{self.monitoring_id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["cancellation"]["description"], "some_description")
+        self.assertEqual(response.json['data']["cancellation"]["documents"][0]["title"], "lorem.doc")
+        self.assertIn("http://localhost", response.json['data']["cancellation"]["documents"][0]["url"])
+
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+        response = self.app.get(f'/monitorings/{self.monitoring_id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["cancellation"]["description"], "Приховано")
+        self.assertEqual(response.json['data']["cancellation"]["documents"][0]["title"], "Приховано")
+        self.assertEqual(response.json['data']["cancellation"]["documents"][0]["url"], "Приховано")

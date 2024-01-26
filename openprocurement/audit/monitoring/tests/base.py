@@ -57,6 +57,8 @@ class BaseWebTest(BaseApiWebTest):
         super(BaseWebTest, self).setUp()
         self.broker_name = "broker"
         self.broker_pass = "broker"
+        self.broker_name_r = "brokerr"
+        self.broker_pass_r = "brokerr"
         self.sas_name = "test_sas"
         self.sas_pass = "test_sas_token"
         self.risk_indicator_name = "risk_indicator_bot"

@@ -88,6 +88,10 @@ def mask_object_data(request, data):
         # that allows access to restricted data
         return
 
+    if request.matchdict and request.params and request.matchdict.get("document_id") and request.params.get("download"):
+        # Masking is not required when non-authorized user download document by link
+        return
+
     for json_path, replacement_value in MONITORING_MASK_MAPPING.items():
         jsonpath_expr = parse(json_path)
         jsonpath_expr.update(data, replacement_value)

@@ -1,4 +1,6 @@
 from math import ceil
+from unittest import mock
+
 from openprocurement.audit.api.constants import CANCELLED_STATUS, ACTIVE_STATUS
 from openprocurement.audit.monitoring.tests.base import BaseWebTest, DSWebTestMixin
 from openprocurement.audit.monitoring.tests.utils import get_errors_field_names
@@ -45,21 +47,23 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest, DSWebTestMixin):
 
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
-        response = self.app.post_json(
-            '/monitorings',
-            {"data": {
-                "tender_id": "f" * 32,
-                "reasons": ["public", "fiscal"],
-                "procuringStages": ["awarding", "contracting"]
-            }},
-            status=201
-        )
+        with mock.patch('openprocurement.audit.monitoring.utils.TendersClient') as mock_api_client:
+            mock_api_client.return_value.get_tender.return_value = {'config': {'restricted': False}}
+            response = self.app.post_json(
+                '/monitorings',
+                {"data": {
+                    "tender_id": "f" * 32,
+                    "reasons": ["public", "fiscal"],
+                    "procuringStages": ["awarding", "contracting"]
+                }},
+                status=201
+            )
 
         self.assertIn("data", response.json)
         self.assertEqual(
             set(response.json["data"]),
             {"id", "status", "tender_id", "dateModified",
-             "dateCreated", "reasons", "monitoring_id", "procuringStages"}
+             "dateCreated", "reasons", "monitoring_id", "procuringStages", "restricted"}
         )
         self.assertEqual(response.json["data"]["status"], "draft")
 
@@ -84,17 +88,19 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest, DSWebTestMixin):
                 ]
             }
         }
-        response = self.app.post_json(
-            '/monitorings',
-            {"data": data},
-            status=201
-        )
+        with mock.patch('openprocurement.audit.monitoring.utils.TendersClient') as mock_api_client:
+            mock_api_client.return_value.get_tender.return_value = {'config': {'restricted': False}}
+            response = self.app.post_json(
+                '/monitorings',
+                {"data": data},
+                status=201
+            )
 
         self.assertIn("data", response.json)
         self.assertEqual(
             set(response.json["data"]),
             {"id", "status", "tender_id", "dateModified", "dateCreated", "reasons", "monitoring_id",
-             "procuringStages", "riskIndicators", "riskIndicatorsTotalImpact", "riskIndicatorsRegion"}
+             "procuringStages", "riskIndicators", "riskIndicatorsTotalImpact", "riskIndicatorsRegion", "restricted"}
         )
         self.assertEqual(response.json["data"]["status"], "draft")
 
@@ -120,19 +126,21 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest, DSWebTestMixin):
 
     def test_post_not_allowed_fields(self):
         self.app.authorization = ('Basic', (self.risk_indicator_name, self.risk_indicator_pass))
-        response = self.app.post_json(
-            '/monitorings',
-            {"data": {
-                "tender_id": "f" * 32,
-                "reasons": ["public", "fiscal"],
-                "procuringStages": ["awarding", "contracting"],
-                "status": "draft",
-                "eliminationReport": {
-                    "description": "Report from the tender owner"
-                }
-            }},
-        )
-        self.assertNotIn("eliminationReport", response.json["data"])
+        with mock.patch('openprocurement.audit.monitoring.utils.TendersClient') as mock_api_client:
+            mock_api_client.return_value.get_tender.return_value = {'config': {'restricted': False}}
+            response = self.app.post_json(
+                '/monitorings',
+                {"data": {
+                    "tender_id": "f" * 32,
+                    "reasons": ["public", "fiscal"],
+                    "procuringStages": ["awarding", "contracting"],
+                    "status": "draft",
+                    "eliminationReport": {
+                        "description": "Report from the tender owner"
+                    }
+                }},
+            )
+            self.assertNotIn("eliminationReport", response.json["data"])
 
 
 class BaseFeedResourceTest(BaseWebTest):

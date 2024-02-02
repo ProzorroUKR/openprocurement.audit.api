@@ -4,6 +4,8 @@ from hashlib import sha512
 
 from pyramid.authentication import BasicAuthAuthenticationPolicy
 
+ACCR_RESTRICTED = 'r'
+
 
 class AuthenticationPolicy(BasicAuthAuthenticationPolicy):
     def __init__(self, auth_file, realm='Realm', debug=False):
@@ -15,21 +17,27 @@ class AuthenticationPolicy(BasicAuthAuthenticationPolicy):
         self.users = {}
         for group in config.sections():
             for name, password in config.items(group):
+                info = password.split(",", 1)
+                clean_pass = info[0]
+                level = info[1] if "," in password else ""
                 self.users[name] = {
-                    'password': password,
-                    'group': group
+                    'password': clean_pass,
+                    'group': group,
+                    'level': level,
                 }
 
     def check(self, username, password, request):
         if username in self.users:
             user = self.users[username]
             if user['password'] == sha512(password.encode('utf8')).hexdigest():
-                auth_groups = self._get_user_auth_groups(user)
+                principals = self._get_user_auth_groups(user)
                 token = self._get_access_token(request)
                 if token:
-                    auth_groups.append('{}_{}'.format(username, token))
-                    auth_groups.append('{}_{}'.format(username, sha512(token.encode('utf8')).hexdigest()))
-                return auth_groups
+                    principals.append('{}_{}'.format(username, token))
+                    principals.append('{}_{}'.format(username, sha512(token.encode('utf8')).hexdigest()))
+                if user["level"]:
+                    principals.append(f"a:{user['level']}")
+                return principals
 
     def _get_user_auth_groups(self, user):
         auth_groups = ["g:{}".format(user["group"])]

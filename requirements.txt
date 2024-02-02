@@ -38,6 +38,7 @@ jmespath==0.9.3
 execnet==1.1
 sentry-sdk==1.5.12,<2
 pytest-runner
+jsonpath-ng==1.6.0
 
 git+https://github.com/ProzorroUKR/openprocurement.client.python@2.1.1dp#egg=openprocurement_client
 git+https://github.com/ProzorroUKR/request_id_middleware.git@0.1.2

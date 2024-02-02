@@ -316,3 +316,55 @@ class MonitoringAppealPostedResourceTest(BaseAppealTest):
         self.assertEqual(data["format"], request_data["format"])
         self.assertEqual(data["title"], request_data["title"])
         self.assertNotEqual(data["url"], request_data["url"])
+
+    def test_restricted_visibility(self):
+        self.create_monitoring(parties=[self.initial_party], restricted_config=True)
+        self.tender_owner_token = "1234qwerty"
+        monitoring = self.app.app.registry.mongodb.monitoring.get(self.monitoring_id)
+        monitoring.update(
+            tender_owner="broker",
+            tender_owner_token=self.tender_owner_token
+        )
+        self.app.app.registry.mongodb.save_data(
+            self.app.app.registry.mongodb.monitoring.collection,
+            monitoring,
+        )
+        self.post_conclusion()
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+        self.app.put_json(
+            f'/monitorings/{self.monitoring_id}/appeal?acc_token={self.tender_owner_token}',
+            {'data': {
+                'description': 'Lorem ipsum dolor sit amet',
+                'documents': [
+                    {
+                        'title': 'first.doc',
+                        'url': self.generate_docservice_url(),
+                        'hash': 'md5:' + '0' * 32,
+                        'format': 'application/msword',
+                    }
+                ]
+            }},
+        )
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        response = self.app.get(f'/monitorings/{self.monitoring_id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["appeal"]["description"], "Lorem ipsum dolor sit amet")
+        self.assertEqual(response.json['data']["appeal"]["documents"][0]["title"], "first.doc")
+        self.assertIn("http://localhost", response.json['data']["appeal"]["documents"][0]["url"])
+
+        self.app.authorization = ('Basic', (self.broker_name_r, self.broker_pass_r))
+        response = self.app.get(f'/monitorings/{self.monitoring_id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["appeal"]["description"], "Lorem ipsum dolor sit amet")
+        self.assertEqual(response.json['data']["appeal"]["documents"][0]["title"], "first.doc")
+        self.assertIn("http://localhost", response.json['data']["appeal"]["documents"][0]["url"])
+
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+        response = self.app.get(f'/monitorings/{self.monitoring_id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["appeal"]["description"], "Приховано")
+        self.assertEqual(response.json['data']["appeal"]["documents"][0]["title"], "Приховано")
+        self.assertEqual(response.json['data']["appeal"]["documents"][0]["url"], "Приховано")

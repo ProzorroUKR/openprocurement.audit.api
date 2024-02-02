@@ -371,6 +371,7 @@ class Monitoring(BaseModel):
     doc_type = StringType(default="Monitoring")
 
     is_masked = BooleanType()
+    restricted = BooleanType()
 
     mode = StringType(choices=['test'])
     if SANDBOX_MODE:

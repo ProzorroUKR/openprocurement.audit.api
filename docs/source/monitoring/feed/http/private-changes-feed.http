@@ -4,7 +4,7 @@ Host: audit-api-sandbox.prozorro.gov.ua
 
 Response: 200 OK
 Content-Type: application/json
-Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDEyNTE2NzksICJpIjogNTZ9fSwgImNsdXN0ZXJfdGltZSI6IHsiY2x1c3RlclRpbWUiOiB7IiR0aW1lc3RhbXAiOiB7InQiOiAxNzAxMjUxNjc5LCAiaSI6IDU2fX0sICJzaWduYXR1cmUiOiB7Imhhc2giOiB7IiRiaW5hcnkiOiB7ImJhc2U2NCI6ICJlSVpTWktCNjdUWmUrWXNPSHY3ZzQ3SmpkQm89IiwgInN1YlR5cGUiOiAiMDAifX0sICJrZXlJZCI6IDczMDY0MDg3NDExNDkwODE2MDZ9fX0=; Path=/
+Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDYyODU3OTAsICJpIjogNjZ9fSwgImNsdXN0ZXJfdGltZSI6IHsiY2x1c3RlclRpbWUiOiB7IiR0aW1lc3RhbXAiOiB7InQiOiAxNzA2Mjg1NzkwLCAiaSI6IDY2fX0sICJzaWduYXR1cmUiOiB7Imhhc2giOiB7IiRiaW5hcnkiOiB7ImJhc2U2NCI6ICI2UW1YVlFIWHpyOUFDbWRLZzYwMEV4ZENjd2s9IiwgInN1YlR5cGUiOiAiMDAifX0sICJrZXlJZCI6IDczMTcyOTkwNDMwNDQ5NTAwMjN9fX0=; Path=/
 {
   "data": [
     {
@@ -24,9 +24,9 @@ Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDEy
     }
   ],
   "next_page": {
-    "offset": 1701251679.904,
-    "path": "/api/2.5/monitorings?mode=real_draft&opt_fields=status&offset=1701251679.904",
-    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings?mode=real_draft&opt_fields=status&offset=1701251679.904"
+    "offset": 1706285790.717,
+    "path": "/api/2.5/monitorings?mode=real_draft&opt_fields=status&offset=1706285790.717",
+    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings?mode=real_draft&opt_fields=status&offset=1706285790.717"
   }
 }
 

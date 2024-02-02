@@ -1,0 +1,231 @@
+GET /api/2.5/monitorings/828df321537341c294a2d05adc875a05 HTTP/1.0
+Authorization: Basic YnJva2VyOmJyb2tlcg==
+Host: audit-api-sandbox.prozorro.gov.ua
+
+Response: 200 OK
+Content-Type: application/json
+Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDYyODU3OTUsICJpIjogNn19LCAiY2x1c3Rlcl90aW1lIjogeyJjbHVzdGVyVGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDYyODU3OTUsICJpIjogNn19LCAic2lnbmF0dXJlIjogeyJoYXNoIjogeyIkYmluYXJ5IjogeyJiYXNlNjQiOiAiNTRWWTVvcGRmM3V4cEtKd3BoVzJCajJiS2U0PSIsICJzdWJUeXBlIjogIjAwIn19LCAia2V5SWQiOiA3MzE3Mjk5MDQzMDQ0OTUwMDIzfX19; Path=/
+{
+  "data": {
+    "tender_id": "15ded5f10caf9b12d4fb3b46ee3d157b",
+    "monitoring_id": "UA-M-2018-01-01-000001",
+    "status": "completed",
+    "reasons": [
+      "public",
+      "fiscal"
+    ],
+    "procuringStages": [
+      "awarding",
+      "contracting"
+    ],
+    "monitoringPeriod": {
+      "startDate": "2018-01-02T03:05:00+02:00",
+      "endDate": "2018-01-25T00:00:00+02:00"
+    },
+    "documents": [
+      {
+        "id": "ff5cc5840cbf495ea3ffaa00c8afa04e",
+        "hash": "md5:00000000000000000000000000000000",
+        "title": "Приховано",
+        "format": "application/ms-word",
+        "url": "Приховано",
+        "datePublished": "2018-01-25T03:00:00+02:00",
+        "dateModified": "2018-01-25T03:00:00+02:00",
+        "author": "monitoring_owner"
+      }
+    ],
+    "eliminationReport": {
+      "description": "Приховано",
+      "documents": [
+        {
+          "id": "5aed262f00e74ccfbe63b6a436554b5a",
+          "hash": "md5:00000000000000000000000000000000",
+          "title": "Приховано",
+          "format": "application/msword",
+          "url": "Приховано",
+          "datePublished": "2018-01-07T02:00:00+02:00",
+          "dateModified": "2018-01-07T02:00:00+02:00",
+          "author": "tender_owner"
+        }
+      ],
+      "dateCreated": "2018-01-07T02:00:00+02:00",
+      "datePublished": "2018-01-07T02:00:00+02:00"
+    },
+    "eliminationResolution": {
+      "documents": [
+        {
+          "id": "248917223b074dc6bb4c6105dcaec3ba",
+          "hash": "md5:00000000000000000000000000000000",
+          "title": "Приховано",
+          "format": "application/pkcs7-signature",
+          "url": "Приховано",
+          "datePublished": "2018-01-09T02:00:00+02:00",
+          "dateModified": "2018-01-09T02:00:00+02:00"
+        }
+      ],
+      "dateCreated": "2018-01-09T02:00:00+02:00",
+      "datePublished": "2018-01-09T02:00:00+02:00",
+      "result": "partly",
+      "resultByType": {
+        "corruptionProcurementMethodType": "eliminated"
+      },
+      "description": "Приховано",
+      "relatedParty": "df5b1af83da74aada7b7aed234239607"
+    },
+    "eliminationPeriod": {
+      "startDate": "2018-01-06T02:00:00+02:00",
+      "endDate": "2018-01-23T00:00:00+02:00"
+    },
+    "posts": [
+      {
+        "id": "69a045be2e3748a899b7b321bae2adbf",
+        "title": "Приховано",
+        "description": "Приховано",
+        "documents": [
+          {
+            "id": "3edbd56945bf4e3bb1ceb6ca2ed3e92c",
+            "hash": "md5:00000000000000000000000000000000",
+            "title": "Приховано",
+            "format": "application/msword",
+            "url": "Приховано",
+            "datePublished": "2018-01-03T02:05:00+02:00",
+            "dateModified": "2018-01-03T02:05:00+02:00",
+            "author": "monitoring_owner"
+          }
+        ],
+        "author": "monitoring_owner",
+        "postOf": "decision",
+        "datePublished": "2018-01-03T02:05:00+02:00",
+        "dateOverdue": "2018-01-10T00:00:00+02:00",
+        "relatedParty": "df5b1af83da74aada7b7aed234239607"
+      },
+      {
+        "id": "4a2436e5cd4e4e689020884bbaed2af0",
+        "title": "Приховано",
+        "description": "Приховано",
+        "author": "tender_owner",
+        "postOf": "decision",
+        "datePublished": "2018-01-04T02:05:00+02:00",
+        "relatedPost": "69a045be2e3748a899b7b321bae2adbf"
+      }
+    ],
+    "appeal": {
+      "description": "Приховано",
+      "documents": [
+        {
+          "id": "47cf69543c924636a12264da328df691",
+          "hash": "md5:00000000000000000000000000000000",
+          "title": "Приховано",
+          "format": "application/msword",
+          "url": "Приховано",
+          "datePublished": "2018-01-06T09:00:00+02:00",
+          "dateModified": "2018-01-06T09:00:00+02:00",
+          "author": "tender_owner"
+        }
+      ],
+      "dateCreated": "2018-01-06T09:00:00+02:00",
+      "datePublished": "2018-01-06T09:00:00+02:00",
+      "proceeding": {
+        "dateProceedings": "2019-04-01T00:00:00+02:00",
+        "proceedingNumber": "0123456789"
+      },
+      "legislation": {
+        "version": "2020-04-19",
+        "type": "NATIONAL_LEGISLATION",
+        "article": [
+          "8.10"
+        ],
+        "identifier": {
+          "id": "922-VIII",
+          "legalName": "Закон України \"Про публічні закупівлі\"",
+          "uri": "https://zakon.rada.gov.ua/laws/show/922-19"
+        }
+      }
+    },
+    "parties": [
+      {
+        "id": "df5b1af83da74aada7b7aed234239607",
+        "name": "The State Audit Service of Ukraine",
+        "datePublished": "2018-01-01T02:00:00+02:00",
+        "identifier": {
+          "scheme": "UA-EDR",
+          "id": "40165856",
+          "uri": "http://www.dkrs.gov.ua"
+        },
+        "address": {
+          "streetAddress": "Petra Sahaidachnoho St, 4",
+          "locality": "Kyiv",
+          "region": "Kyiv",
+          "postalCode": "04070",
+          "countryName": "Ukraine"
+        },
+        "contactPoint": {
+          "telephone": "0440000000",
+          "name": "Oleksii Kovalenko"
+        },
+        "roles": [
+          "sas"
+        ]
+      }
+    ],
+    "dateModified": "2018-01-25T03:00:00+02:00",
+    "endDate": "2018-01-25T00:00:00+02:00",
+    "dateCreated": "2018-01-01T02:00:00+02:00",
+    "tender_owner": "brokerr",
+    "restricted": true,
+    "id": "828df321537341c294a2d05adc875a05",
+    "decision": {
+      "description": "Приховано",
+      "documents": [
+        {
+          "id": "c3ee66def43a4cb684a73209d40f3037",
+          "hash": "md5:00000000000000000000000000000000",
+          "title": "Приховано",
+          "format": "application/msword",
+          "url": "Приховано",
+          "datePublished": "2018-01-02T03:05:00+02:00",
+          "dateModified": "2018-01-02T03:05:00+02:00",
+          "author": "monitoring_owner"
+        }
+      ],
+      "dateCreated": "2018-01-02T03:05:00+02:00",
+      "datePublished": "2018-01-02T03:05:00+02:00",
+      "date": "2018-01-02T01:05:00+02:00",
+      "relatedParty": "df5b1af83da74aada7b7aed234239607"
+    },
+    "conclusion": {
+      "documents": [
+        {
+          "id": "bbecbf25b58d4d5d9f69f537bebf8f5c",
+          "hash": "md5:00000000000000000000000000000000",
+          "title": "Приховано",
+          "format": "application/msword",
+          "url": "Приховано",
+          "datePublished": "2018-01-05T02:00:00+02:00",
+          "dateModified": "2018-01-05T02:00:00+02:00",
+          "author": "monitoring_owner"
+        },
+        {
+          "id": "967e4b20eb8d418d8232df31abcfbf38",
+          "hash": "md5:00000000000000000000000000000000",
+          "title": "Приховано",
+          "format": "application/pkcs7-signature",
+          "url": "Приховано",
+          "datePublished": "2018-01-06T02:00:00+02:00",
+          "dateModified": "2018-01-06T02:00:00+02:00",
+          "author": "monitoring_owner"
+        }
+      ],
+      "dateCreated": "2018-01-05T02:00:00+02:00",
+      "datePublished": "2018-01-06T02:00:00+02:00",
+      "violationOccurred": true,
+      "violationType": [
+        "corruptionProcurementMethodType"
+      ],
+      "auditFinding": "Приховано",
+      "stringsAttached": "Приховано",
+      "description": "Приховано"
+    }
+  }
+}
+

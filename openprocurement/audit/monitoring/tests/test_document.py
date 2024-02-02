@@ -604,6 +604,47 @@ class MonitoringDocumentResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.status_code, 201)
         self.assertEqual(response.content_type, 'application/json')
 
+    def test_restricted_visibility(self):
+        self.create_monitoring(parties=[self.initial_party], restricted_config=True)
+        response = self.app.patch_json(
+            f'/monitorings/{self.monitoring_id}',
+            {'data': {
+                "status": "active",
+                "decision": {
+                    "date": "2015-05-10T23:11:39.720908+03:00",
+                    "description": "text",
+                },
+            }}
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+
+        self.app.post_json(
+            f'/monitorings/{self.monitoring_id}/documents',
+            {'data': self.test_docservice_document_data},
+        )
+
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        response = self.app.get(f'/monitorings/{self.monitoring_id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["documents"][0]["title"], "lorem.doc")
+        self.assertIn("http://localhost", response.json['data']["documents"][0]["url"])
+
+        self.app.authorization = ('Basic', (self.broker_name_r, self.broker_pass_r))
+        response = self.app.get(f'/monitorings/{self.monitoring_id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["documents"][0]["title"], "lorem.doc")
+        self.assertIn("http://localhost", response.json['data']["documents"][0]["url"])
+
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+        response = self.app.get(f'/monitorings/{self.monitoring_id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["documents"][0]["title"], "Приховано")
+        self.assertEqual(response.json['data']["documents"][0]["url"], "Приховано")
+
 
 class MonitoringCancellationDocumentResourceTest(BaseWebTest, DSWebTestMixin):
 

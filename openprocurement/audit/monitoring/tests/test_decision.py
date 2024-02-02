@@ -250,7 +250,6 @@ class MonitoringDecisionResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(set(response.json["data"].keys()),
                          {"date", "dateCreated", "description", "documents", "datePublished"})
 
-
     def test_decision_party_create(self):
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
@@ -297,3 +296,48 @@ class MonitoringDecisionResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(
             ('body', 'decision', 'relatedParty'),
             next(get_errors_field_names(response, 'relatedParty should be one of parties.')))
+
+    def test_restricted_visibility(self):
+        self.create_monitoring(parties=[self.initial_party], restricted_config=True)
+        self.app.patch_json(
+            f'/monitorings/{self.monitoring_id}',
+            {"data": {
+                "status": ACTIVE_STATUS,
+                "decision": {
+                    "description": "text",
+                    "date": datetime.now(TZ).isoformat(),
+                    "documents": [
+                        {
+                            'title': 'lorem.doc',
+                            'url': self.generate_docservice_url(),
+                            'hash': 'md5:' + '0' * 32,
+                            'format': 'application/msword',
+                        }
+                    ]
+                }
+            }}
+        )
+
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        response = self.app.get(f'/monitorings/{self.monitoring_id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["decision"]["description"], "text")
+        self.assertEqual(response.json['data']["decision"]["documents"][0]["title"], "lorem.doc")
+        self.assertIn("http://localhost", response.json['data']["decision"]["documents"][0]["url"])
+
+        self.app.authorization = ('Basic', (self.broker_name_r, self.broker_pass_r))
+        response = self.app.get(f'/monitorings/{self.monitoring_id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["decision"]["description"], "text")
+        self.assertEqual(response.json['data']["decision"]["documents"][0]["title"], "lorem.doc")
+        self.assertIn("http://localhost", response.json['data']["decision"]["documents"][0]["url"])
+
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+        response = self.app.get(f'/monitorings/{self.monitoring_id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["decision"]["description"], "Приховано")
+        self.assertEqual(response.json['data']["decision"]["documents"][0]["title"], "Приховано")
+        self.assertEqual(response.json['data']["decision"]["documents"][0]["url"], "Приховано")

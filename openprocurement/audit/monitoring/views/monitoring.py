@@ -12,6 +12,8 @@ from openprocurement.audit.api.constants import (
     STOPPED_STATUS,
     CANCELLED_STATUS,
 )
+from openprocurement.audit.api.mask import mask_object_data
+from openprocurement.audit.api.mask_deprecated import mask_object_data_deprecated
 from openprocurement.audit.api.views.base import APIResource, MongodbResourceListing, json_view
 from openprocurement.audit.api.utils import context_unpack, forbidden, generate_id
 from openprocurement.audit.monitoring.utils import (
@@ -184,6 +186,9 @@ class MonitoringCredentialsResource(APIResource):
         if save_monitoring(self.request):
             self.LOGGER.info('Generate Monitoring credentials {}'.format(monitoring.id),
                              extra=context_unpack(self.request, {'MESSAGE_ID': 'monitoring_generate_credentials'}))
+            # mask monitoring if broker is not accredited
+            mask_object_data_deprecated(self.request, monitoring)
+            mask_object_data(self.request, monitoring)
             return {
                 'data': monitoring.serialize('view'),
                 'access': {

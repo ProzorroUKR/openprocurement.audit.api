@@ -20,5 +20,6 @@ services:
       MONGODB_REPLICA_SET_MODE: primary
       MONGODB_REPLICA_SET_NAME: rs0
       MONGODB_REPLICA_SET_KEY: replicaSetKey
+      MONGODB_ADVERTISED_HOSTNAME: mongo
     ports:
       - 27017:27017

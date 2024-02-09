@@ -94,8 +94,9 @@ def set_logging_context(event):
 
 def monitoring_from_data(request, data):
     # wartime measures
-    mask_object_data_deprecated(request, data)
-    mask_object_data(request, data)
+    if request.method == 'GET':
+        mask_object_data_deprecated(request, data)
+        mask_object_data(request, data)
     return Monitoring(data)
 
 

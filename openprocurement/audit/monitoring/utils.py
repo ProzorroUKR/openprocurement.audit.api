@@ -13,6 +13,7 @@ from openprocurement.audit.api.utils import (
     handle_store_exceptions,
     raise_operation_error,
 )
+from openprocurement.audit.monitoring.mask import MONITORING_MASK_MAPPING
 from openprocurement.audit.monitoring.models import Period, Monitoring
 from openprocurement.audit.api.models import Revision
 from openprocurement.audit.api.mask import mask_object_data
@@ -96,7 +97,7 @@ def monitoring_from_data(request, data):
     # wartime measures
     if request.method == 'GET':
         mask_object_data_deprecated(request, data)
-        mask_object_data(request, data)
+        mask_object_data(request, data, mask_mapping=MONITORING_MASK_MAPPING)
     return Monitoring(data)
 
 
@@ -123,7 +124,11 @@ def extract_restricted_config_from_tender(request):
         ).get_tender(request.validated['monitoring'].tender_id)
     except ResourceError as e:
         if e.status_code == 404:
-            raise_operation_error(request, 'Tender {} not found'.format(request.validated['monitoring'].tender_id))
+            raise_operation_error(
+                request,
+                'Tender {} not found'.format(request.validated['monitoring'].tender_id),
+                status=404,
+            )
         else:
             raise_operation_error(request, 'Unsuccessful tender request', status=e.status_code)
     return response.get('config', {}).get('restricted', False)

@@ -1,6 +1,8 @@
 from logging import getLogger
 from cornice.resource import resource
 from functools import partial
+
+from openprocurement.audit.api.mask import mask_object_data
 from openprocurement.audit.api.utils import (
     get_revision_changes,
     apply_data_patch,
@@ -9,7 +11,9 @@ from openprocurement.audit.api.utils import (
     context_unpack,
     handle_store_exceptions,
     append_revision,
+    raise_operation_error,
 )
+from openprocurement.audit.inspection.mask import INSPECTION_MASK_MAPPING
 from openprocurement.audit.inspection.models import Inspection
 from openprocurement.audit.inspection.traversal import factory
 from openprocurement.audit.api.context import get_now
@@ -91,4 +95,16 @@ def inspection_serialize(request, data, fields):
 
 
 def inspection_from_data(request, data, **_):
+    if request.method == 'GET':
+        mask_object_data(request, data, mask_mapping=INSPECTION_MASK_MAPPING)
     return Inspection(data)
+
+
+def extract_restricted_config_from_monitoring(request):
+    for monitoring_id in request.validated['inspection'].monitoring_ids:
+        monitoring = request.registry.mongodb.monitoring.get(monitoring_id)
+        if not monitoring:
+            raise_operation_error(request, f'Monitoring {monitoring_id} not found', status=404)
+        if monitoring["restricted"]:
+            return True
+    return False

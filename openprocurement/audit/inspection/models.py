@@ -1,5 +1,5 @@
 from schematics.transforms import whitelist, blacklist
-from schematics.types import StringType, MD5Type, BaseType
+from schematics.types import BooleanType, StringType, MD5Type, BaseType
 from schematics.types.compound import ModelType, DictType
 from openprocurement.audit.api.models import Revision, Document, BaseModel
 from openprocurement.audit.api.models import schematics_default_role, schematics_embedded_role
@@ -37,6 +37,8 @@ class Inspection(BaseModel):
     revisions = ListType(ModelType(Revision), default=list())
     _attachments = DictType(DictType(BaseType), default=dict())
     doc_type = StringType(default="Inspection")
+
+    restricted = BooleanType()
 
     def __repr__(self):
         return '<%s:%r-%r@%r>' % (type(self).__name__, self.inspection_id, self.id, self.rev)

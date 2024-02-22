@@ -1,3 +1,4 @@
+from openprocurement.audit.api.mask import mask_object_data
 from openprocurement.audit.api.traversal import factory
 from openprocurement.audit.api.utils import error_handler, parse_offset, raise_operation_error
 from cornice.resource import resource, view
@@ -99,12 +100,13 @@ class MongodbResourceListing(APIResource):
             prev_params["descending"] = 1
 
         data_fields = opt_fields | self.listing_default_fields
+        db_fields = self.db_fields(data_fields)
 
         # call db method
         results = self.db_listing_method(
             offset_field=self.offset_field,
             offset_value=offset,
-            fields=data_fields,
+            fields=db_fields,
             descending=params.get("descending"),
             limit=params.get("limit", self.default_limit),
             filters=filters,
@@ -118,7 +120,7 @@ class MongodbResourceListing(APIResource):
                 for r in results:
                     r.pop(self.offset_field)
         data = {
-            "data": results,
+            "data": self.filter_results_fields(results, data_fields),
             "next_page": self.get_page(keys, params)
         }
         if self.request.params.get("descending") or self.request.params.get("offset"):
@@ -132,6 +134,33 @@ class MongodbResourceListing(APIResource):
             "path": self.request.route_path(self.listing_name, _query=params, **keys),
             "uri": self.request.route_url(self.listing_name, _query=params, **keys)
         }
+
+    def db_fields(self, fields):
+        return fields
+
+    def filter_results_fields(self, results, fields):
+        all_fields = fields | {"id"}
+        for r in results:
+            for k in list(r.keys()):
+                if k not in all_fields:
+                    del r[k]
+        return results
+
+
+class RestrictedResourceListingMixin:
+    mask_mapping = {}
+    request = None
+
+    def db_fields(self, fields):
+        fields = super().db_fields(fields)
+        return fields | {"restricted"}
+
+    def filter_results_fields(self, results, fields):
+        print(results)
+        for r in results:
+            mask_object_data(self.request, r, mask_mapping=self.mask_mapping)
+        results = super().filter_results_fields(results, fields)
+        return results
 
 
 DEFAULT_PAGE = 1

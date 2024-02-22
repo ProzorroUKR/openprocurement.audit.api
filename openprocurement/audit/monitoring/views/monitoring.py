@@ -14,8 +14,14 @@ from openprocurement.audit.api.constants import (
 )
 from openprocurement.audit.api.mask import mask_object_data
 from openprocurement.audit.api.mask_deprecated import mask_object_data_deprecated
-from openprocurement.audit.api.views.base import APIResource, MongodbResourceListing, json_view
+from openprocurement.audit.api.views.base import (
+    APIResource,
+    MongodbResourceListing,
+    RestrictedResourceListingMixin,
+    json_view,
+)
 from openprocurement.audit.api.utils import context_unpack, forbidden, generate_id
+from openprocurement.audit.monitoring.mask import MONITORING_MASK_MAPPING
 from openprocurement.audit.monitoring.utils import (
     get_now,
     calculate_normalized_business_date,
@@ -42,7 +48,7 @@ LOGGER = getLogger(__name__)
 
 
 @op_resource(name='Monitorings', path='/monitorings')
-class MonitoringsResource(MongodbResourceListing):
+class MonitoringsResource(RestrictedResourceListingMixin, MongodbResourceListing):
 
     def __init__(self, request, context):
         super(MonitoringsResource, self).__init__(request, context)
@@ -72,6 +78,7 @@ class MonitoringsResource(MongodbResourceListing):
             "tender_owner",
         }
         self.db_listing_method = request.registry.mongodb.monitoring.list
+        self.mask_mapping = MONITORING_MASK_MAPPING
 
     @staticmethod
     def add_mode_filters(filters: dict, mode: str):
@@ -188,7 +195,7 @@ class MonitoringCredentialsResource(APIResource):
                              extra=context_unpack(self.request, {'MESSAGE_ID': 'monitoring_generate_credentials'}))
             # mask monitoring if broker is not accredited
             mask_object_data_deprecated(self.request, monitoring)
-            mask_object_data(self.request, monitoring)
+            mask_object_data(self.request, monitoring, mask_mapping=MONITORING_MASK_MAPPING)
             return {
                 'data': monitoring.serialize('view'),
                 'access': {

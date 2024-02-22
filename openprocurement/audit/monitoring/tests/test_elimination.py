@@ -37,32 +37,6 @@ class MonitoringEliminationBaseTest(BaseWebTest, DSWebTestMixin):
         super(MonitoringEliminationBaseTest, self).setUp()
         self.app.app.registry.docservice_url = 'http://localhost'
 
-    def create_active_monitoring(self, restricted_config=False, **kwargs):
-        self.create_monitoring(restricted_config=restricted_config, **kwargs)
-        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
-
-        self.app.patch_json(
-            '/monitorings/{}'.format(self.monitoring_id),
-            {"data": {
-                "decision": {
-                    "description": "text",
-                    "date": datetime.now().isoformat()
-                },
-                "status": "active",
-            }}
-        )
-
-        # get credentials for tha monitoring owner
-        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
-        with mock.patch('openprocurement.audit.monitoring.validation.TendersClient') as mock_api_client:
-            mock_api_client.return_value.extract_credentials.return_value = {
-                'data': {'tender_token': sha512(b'tender_token').hexdigest()}
-            }
-            response = self.app.patch_json(
-                '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token')
-            )
-        self.tender_owner_token = response.json['access']['token']
-
     def create_addressed_monitoring(self, restricted_config=False, **kwargs):
         self.create_active_monitoring(restricted_config=restricted_config, **kwargs)
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
@@ -320,6 +294,16 @@ class MonitoringEliminationResolutionResourceTest(MonitoringEliminationBaseTest)
         self.assertEqual(response.json['data']["eliminationReport"]["description"], "Приховано")
         self.assertEqual(response.json['data']["eliminationReport"]["documents"][0]["title"], "Приховано")
         self.assertEqual(response.json['data']["eliminationReport"]["documents"][0]["url"], "Приховано")
+
+        # check masking in feed
+        response = self.app.get(f'/monitorings?opt_fields=eliminationResolution,eliminationReport')
+        self.assertEqual(response.json['data'][-1]["eliminationResolution"]["description"], "Приховано")
+        self.assertEqual(response.json['data'][-1]["eliminationResolution"]["documents"][0]["title"], "Приховано")
+        self.assertEqual(response.json['data'][-1]["eliminationResolution"]["documents"][0]["url"], "Приховано")
+        self.assertEqual(response.json['data'][-1]["eliminationReport"]["description"], "Приховано")
+        self.assertEqual(response.json['data'][-1]["eliminationReport"]["documents"][0]["title"], "Приховано")
+        self.assertEqual(response.json['data'][-1]["eliminationReport"]["documents"][0]["url"], "Приховано")
+
 
 class UpdateEliminationResourceTest(MonitoringEliminationBaseTest):
 

@@ -4,7 +4,7 @@ Host: audit-api-sandbox.prozorro.gov.ua
 
 Response: 200 OK
 Content-Type: application/json
-Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDYyODU3OTUsICJpIjogNn19LCAiY2x1c3Rlcl90aW1lIjogeyJjbHVzdGVyVGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDYyODU3OTUsICJpIjogNn19LCAic2lnbmF0dXJlIjogeyJoYXNoIjogeyIkYmluYXJ5IjogeyJiYXNlNjQiOiAiNTRWWTVvcGRmM3V4cEtKd3BoVzJCajJiS2U0PSIsICJzdWJUeXBlIjogIjAwIn19LCAia2V5SWQiOiA3MzE3Mjk5MDQzMDQ0OTUwMDIzfX19; Path=/
+Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDg1Mjc4ODgsICJpIjogOH19LCAiY2x1c3Rlcl90aW1lIjogeyJjbHVzdGVyVGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDg1Mjc4ODgsICJpIjogOH19LCAic2lnbmF0dXJlIjogeyJoYXNoIjogeyIkYmluYXJ5IjogeyJiYXNlNjQiOiAiZE5BOUZCM253RmlUVHJWVStkMHIxU1YzWXZZPSIsICJzdWJUeXBlIjogIjAwIn19LCAia2V5SWQiOiA3MzMzMTc5ODM5MjQwNzMyNjc3fX19; Path=/
 {
   "data": {
     "tender_id": "15ded5f10caf9b12d4fb3b46ee3d157b",
@@ -142,6 +142,41 @@ Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDYy
         }
       }
     },
+    "liabilities": [
+      {
+        "id": "4b33e849cd0c40928f10951724895b18",
+        "reportNumber": "1234567890",
+        "datePublished": "2018-01-09T02:30:00+02:00",
+        "documents": [
+          {
+            "id": "a6685bb5b7234cc287f4f8a238bc205a",
+            "hash": "md5:00000000000000000000000000000000",
+            "title": "Приховано",
+            "format": "application/msword",
+            "url": "Приховано",
+            "datePublished": "2018-01-09T02:30:00+02:00",
+            "dateModified": "2018-01-09T02:30:00+02:00",
+            "author": "monitoring_owner"
+          }
+        ],
+        "proceeding": {
+          "dateProceedings": "2019-04-01T00:00:00+02:00",
+          "proceedingNumber": "0123456789"
+        },
+        "legislation": {
+          "version": "2020-11-21",
+          "type": "NATIONAL_LEGISLATION",
+          "article": [
+            "8.10"
+          ],
+          "identifier": {
+            "id": "8073-X",
+            "legalName": "Кодекс України про адміністративні правопорушення",
+            "uri": "https://zakon.rada.gov.ua/laws/show/80731-10#Text"
+          }
+        }
+      }
+    ],
     "parties": [
       {
         "id": "df5b1af83da74aada7b7aed234239607",

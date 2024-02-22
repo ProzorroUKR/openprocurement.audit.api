@@ -1,9 +1,10 @@
 GET /api/2.5/tenders/13c14e6a15b24e1a982310f262e18e7a/monitorings?mode=test&opt_fields=mode HTTP/1.0
+Authorization: Basic YnJva2VyOmJyb2tlcg==
 Host: audit-api-sandbox.prozorro.gov.ua
 
 Response: 200 OK
 Content-Type: application/json
-Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDYyODU3OTEsICJpIjogMjR9fSwgImNsdXN0ZXJfdGltZSI6IHsiY2x1c3RlclRpbWUiOiB7IiR0aW1lc3RhbXAiOiB7InQiOiAxNzA2Mjg1NzkxLCAiaSI6IDI0fX0sICJzaWduYXR1cmUiOiB7Imhhc2giOiB7IiRiaW5hcnkiOiB7ImJhc2U2NCI6ICJBeXI4MENxczFNb0V0V1hhbEE3N3luMXQwb1k9IiwgInN1YlR5cGUiOiAiMDAifX0sICJrZXlJZCI6IDczMTcyOTkwNDMwNDQ5NTAwMjN9fX0=; Path=/
+Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDg1Mjc4ODMsICJpIjogMjd9fSwgImNsdXN0ZXJfdGltZSI6IHsiY2x1c3RlclRpbWUiOiB7IiR0aW1lc3RhbXAiOiB7InQiOiAxNzA4NTI3ODgzLCAiaSI6IDI3fX0sICJzaWduYXR1cmUiOiB7Imhhc2giOiB7IiRiaW5hcnkiOiB7ImJhc2U2NCI6ICJJUDFqVjZ6N0Y4dGtNSVdPYkRtUGtuYmZTeWM9IiwgInN1YlR5cGUiOiAiMDAifX0sICJrZXlJZCI6IDczMzMxNzk4MzkyNDA3MzI2Nzd9fX0=; Path=/
 {
   "data": [
     {
@@ -11,7 +12,7 @@ Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDYy
       "dateModified": "2018-01-01T02:03:00+02:00",
       "dateCreated": "2018-01-01T02:03:00+02:00",
       "mode": "test",
-      "id": "612abb3f8fca4eb8b842be0b806fd97a"
+      "id": "05a178d3c4fb49b686cb637ff9893b36"
     }
   ],
   "count": 1,

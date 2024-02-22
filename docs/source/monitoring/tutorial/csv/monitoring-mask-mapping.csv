@@ -1,4 +1,4 @@
-rule,value
+path,value
 $.decision.description,Приховано
 $.decision.documents[*].title,Приховано
 $.decision.documents[*].title_ru,Приховано
@@ -37,6 +37,10 @@ $.appeal.documents[*].title,Приховано
 $.appeal.documents[*].title_ru,Приховано
 $.appeal.documents[*].title_en,Hidden
 $.appeal.documents[*].url,Приховано
+$.liabilities[*].documents[*].title,Приховано
+$.liabilities[*].documents[*].title_ru,Приховано
+$.liabilities[*].documents[*].title_en,Hidden
+$.liabilities[*].documents[*].url,Приховано
 $.documents[*].title,Приховано
 $.documents[*].title_ru,Приховано
 $.documents[*].title_en,Hidden

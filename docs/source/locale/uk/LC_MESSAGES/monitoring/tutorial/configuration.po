@@ -9,7 +9,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: openprocurement.audit.api 1.0\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-01-29 10:38+0100\n"
+"POT-Creation-Date: 2024-02-21 16:28+0100\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language: uk\n"
@@ -34,15 +34,15 @@ msgid ""
 "Tenders have configuration that indicates whether the tender has "
 "restricted access. This configuration relates to monitoring too."
 msgstr ""
-"Тендери мають конфігурацію, що визначає наявність або відсутність обмеження публічного доступу до структур даних. "
-"Ця конфігурація розповсюджується на моніторинги також."
+"Тендери мають конфігурацію, що визначає наявність або відсутність "
+"обмеження публічного доступу до структур даних. Ця конфігурація "
+"розповсюджується на моніторинги також."
 
 #: ../../source/monitoring/tutorial/configuration.rst:10
 msgid ""
 "During monitoring creation configuration `restricted` is moving from "
 "tender."
-msgstr ""
-"Під час створення моніторингу, параметр `restricted` переїзжає з тендеру."
+msgstr "Під час створення моніторингу, параметр `restricted` переїзжає з тендеру."
 
 #: ../../source/monitoring/tutorial/configuration.rst:12
 msgid "Let's create monitoring for tender with `restricted: True` value:"
@@ -53,15 +53,16 @@ msgid ""
 "After adding some kind of monitoring objects some fields will be masked "
 "depends on `restricted` configuration."
 msgstr ""
-"Після проходження загального флоу і додавання до моніторингу різних об'єктів в залежності від параметру "
-"`restricted` деякі поля будуть приховані."
+"Після проходження загального флоу і додавання до моніторингу різних "
+"об'єктів в залежності від параметру `restricted` деякі поля будуть "
+"приховані."
 
 #: ../../source/monitoring/tutorial/configuration.rst:19
 msgid "List of monitoring masked fields:"
 msgstr "Список прихованих полів моніторингу:"
 
 #: ../../source/monitoring/tutorial/csv/monitoring-mask-mapping.csv:1
-msgid "rule"
+msgid "path"
 msgstr ""
 
 #: ../../source/monitoring/tutorial/csv/monitoring-mask-mapping.csv:1
@@ -229,6 +230,22 @@ msgid "$.appeal.documents[*].url"
 msgstr ""
 
 #: ../../source/monitoring/tutorial/csv/monitoring-mask-mapping.csv:1
+msgid "$.liabilities[*].documents[*].title"
+msgstr ""
+
+#: ../../source/monitoring/tutorial/csv/monitoring-mask-mapping.csv:1
+msgid "$.liabilities[*].documents[*].title_ru"
+msgstr ""
+
+#: ../../source/monitoring/tutorial/csv/monitoring-mask-mapping.csv:1
+msgid "$.liabilities[*].documents[*].title_en"
+msgstr ""
+
+#: ../../source/monitoring/tutorial/csv/monitoring-mask-mapping.csv:1
+msgid "$.liabilities[*].documents[*].url"
+msgstr ""
+
+#: ../../source/monitoring/tutorial/csv/monitoring-mask-mapping.csv:1
 msgid "$.documents[*].title"
 msgstr ""
 
@@ -257,5 +274,6 @@ msgid ""
 "Let's look at monitoring as unauthorized user or as broker who doesn't "
 "have accreditation to see restricted fields:"
 msgstr ""
-"Подивимося на моніторинг в якості неавторизованого користувача або від імені майданчика, який не пройшов акредитацію "
-"для того, щоб бачити приховані поля:"
+"Подивимося на моніторинг в якості неавторизованого користувача або від "
+"імені майданчика, який не пройшов акредитацію для того, щоб бачити "
+"приховані поля:"

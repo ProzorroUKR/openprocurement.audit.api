@@ -8,6 +8,7 @@ from openprocurement.audit.api.tests.base import BaseWebTest as BaseApiWebTest
 from datetime import datetime
 from uuid import uuid4
 from unittest import mock
+from hashlib import sha512
 
 from openprocurement.audit.api.constants import SANDBOX_MODE
 
@@ -88,11 +89,11 @@ class BaseWebTest(BaseApiWebTest):
 
         return monitoring
 
-    def create_active_monitoring(self, **kwargs):
-        self.create_monitoring(**kwargs)
+    def create_active_monitoring(self, restricted_config=False, **kwargs):
+        self.create_monitoring(restricted_config=restricted_config, **kwargs)
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
-        response = self.app.patch_json(
+        self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
             {"data": {
                 "decision": {
@@ -102,7 +103,17 @@ class BaseWebTest(BaseApiWebTest):
                 "status": "active",
             }}
         )
-        self.app.authorization = None
+
+        # get credentials for tha monitoring owner
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+        with mock.patch('openprocurement.audit.monitoring.validation.TendersClient') as mock_api_client:
+            mock_api_client.return_value.extract_credentials.return_value = {
+                'data': {'tender_token': sha512(b'tender_token').hexdigest()}
+            }
+            response = self.app.patch_json(
+                '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token')
+            )
+        self.tender_owner_token = response.json['access']['token']
         return response.json['data']
 
 

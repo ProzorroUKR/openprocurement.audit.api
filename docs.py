@@ -7,7 +7,8 @@ import uuid
 import csv
 from datetime import datetime, timedelta
 from openprocurement.audit.api.choices import VIOLATION_TYPE_CHOICES
-from openprocurement.audit.api.mask import MONITORING_MASK_MAPPING
+from openprocurement.audit.inspection.mask import INSPECTION_MASK_MAPPING
+from openprocurement.audit.monitoring.mask import MONITORING_MASK_MAPPING
 from openprocurement.audit.monitoring.tests.base import BaseWebTest as MonitoringWebTest, DSWebTestMixin
 from openprocurement.audit.inspection.tests.base import BaseWebTest as InspectionWebTest
 from openprocurement.audit.request.tests.base import BaseWebTest as RequestWebTest
@@ -1380,14 +1381,17 @@ class MonitoringByTenderResourceTest(BaseMonitoringWebTest):
         self.assertEqual(len(response.json["data"]), 1)
 
 
-
 class InspectionResourceTest(BaseInspectionWebTest):
 
     def setUp(self):
         super(InspectionResourceTest, self).setUp()
         self.app.app.registry.docservice_url = 'http://public-docs-sandbox.prozorro.gov.ua'
 
-    def test_tutorial(self):
+    @mock.patch(
+        'openprocurement.audit.inspection.views.inspection.extract_restricted_config_from_monitoring',
+        return_value=False,
+    )
+    def test_tutorial(self, mock_restricted):
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         with open('docs/source/inspection/tutorial/http/inspection-list-empty.http', 'wt') as self.app.file_obj:
@@ -1469,7 +1473,11 @@ class InspectionsByMonitoringResourceTest(BaseInspectionWebTest):
         super(InspectionsByMonitoringResourceTest, self).setUp()
         self.app.app.registry.docservice_url = 'http://public-docs-sandbox.prozorro.gov.ua'
 
-    def test_tutorial(self):
+    @mock.patch(
+        'openprocurement.audit.inspection.views.inspection.extract_restricted_config_from_monitoring',
+        return_value=False,
+    )
+    def test_tutorial(self, mock_restricted):
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         monitoring_id = "580997bb06674235801d75f2f6e6c6c6"
@@ -1519,6 +1527,58 @@ class InspectionsByMonitoringResourceTest(BaseInspectionWebTest):
                 response = self.app.get('/monitorings/{}/inspections?limit=1&page=2'.format(monitoring_id))
         self.assertEqual(response.status, '200 OK')
         self.assertEqual(len(response.json["data"]), 1)
+
+    @mock.patch(
+        'openprocurement.audit.inspection.views.inspection.extract_restricted_config_from_monitoring',
+        return_value=True,
+    )
+    def test_restricted_inspection(self, mock_restricted):
+        with freeze_time("2018.01.01 00:00"):
+            with open(
+                'docs/source/inspection/tutorial/http/post-inspection-restricted-true.http',
+                'wt'
+            ) as self.app.file_obj:
+                response = self.app.post_json(
+                    '/inspections',
+                    {
+                        "data": {
+                            "monitoring_ids": [
+                                uuid.uuid4().hex,
+                                uuid.uuid4().hex,
+                            ],
+                            "description": "Inspection is an official visit to a building or organization to check "
+                                           "that everything is satisfactory and that rules are being obeyed",
+                            "documents": [{
+                                'title': 'lorem.doc',
+                                'url': self.generate_docservice_url(),
+                                'hash': 'md5:' + '0' * 32,
+                                'format': 'application/msword',
+                            }],
+                        }
+                    }
+                )
+            inspection_id = response.json["data"]["id"]
+            self.assertEqual(response.status, '201 Created')
+
+        with open(
+            'docs/source/inspection/tutorial/http/get-inspection-restricted-true-sas.http',
+            'wt'
+        ) as self.app.file_obj:
+            self.app.get('/inspections/{}'.format(inspection_id), status=200)
+
+        self.app.authorization = ('Basic', (self.broker_name_r, self.broker_pass_r))
+        with open(
+            'docs/source/inspection/tutorial/http/get-inspection-restricted-true-brokerr.http',
+            'wt'
+        ) as self.app.file_obj:
+            self.app.get('/inspections/{}'.format(inspection_id), status=200)
+
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+        with open(
+            'docs/source/inspection/tutorial/http/get-inspection-restricted-true-broker.http',
+            'wt'
+        ) as self.app.file_obj:
+            self.app.get('/inspections/{}'.format(inspection_id), status=200)
 
 
 class RequestResourceTest(BaseRequestWebTest):
@@ -1763,21 +1823,33 @@ class MonitoringRestrictedResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
         super(MonitoringRestrictedResourceTest, self).setUp()
         self.app.app.registry.docservice_url = 'http://public-docs-sandbox.prozorro.gov.ua'
 
-    def test_docs_restricted_monitoring_mask_mapping_csv(self):
+    def write_config_mask_csv(self, mapping, file_path):
         headers = [
-            "rule",
+            "path",
             "value",
         ]
 
         rows = []
 
-        for rule, value in MONITORING_MASK_MAPPING.items():
-            rows.append([rule, value])
+        for path, rule in mapping.items():
+            rows.append([path, rule["value"]])
 
-        with open("docs/source/monitoring/tutorial/csv/monitoring-mask-mapping.csv", 'w', newline='') as file_csv:
+        with open(file_path, 'w', newline='') as file_csv:
             writer = csv.writer(file_csv, lineterminator='\n')
             writer.writerow(headers)
             writer.writerows(rows)
+
+    def test_docs_restricted_monitoring_mask_mapping_csv(self):
+        self.write_config_mask_csv(
+            mapping=MONITORING_MASK_MAPPING,
+            file_path="docs/source/monitoring/tutorial/csv/monitoring-mask-mapping.csv",
+        )
+
+    def test_docs_restricted_inspection_mask_mapping_csv(self):
+        self.write_config_mask_csv(
+            mapping=INSPECTION_MASK_MAPPING,
+            file_path="docs/source/inspection/tutorial/csv/inspection-mask-mapping.csv",
+        )
 
     @mock.patch('openprocurement.audit.monitoring.validation.TendersClient')
     @mock.patch(
@@ -2045,6 +2117,40 @@ class MonitoringRestrictedResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                             "relatedParty": party_id
                         },
                     }
+                },
+            )
+
+        # LIABILITY
+
+        with freeze_time("2018.01.09 00:30"):
+            response = self.app.post_json(
+                '/monitorings/{}/liabilities'.format(monitoring_id),
+                {
+                    'data': {
+                        'reportNumber': '1234567890',
+                        'legislation': {
+                            'article': ['8.10'],
+                        },
+                        'documents': [{
+                            'title': 'letter.doc',
+                            'url': self.generate_docservice_url(),
+                            'hash': 'md5:' + '0' * 32,
+                            'format': 'application/msword',
+                        }]
+                    }
+                },
+            )
+        liability_id = response.json["data"]["id"]
+        with freeze_time("2018.01.09 01:30"):
+            self.app.patch_json(
+                '/monitorings/{}/liabilities/{}'.format(monitoring_id, liability_id),
+                {
+                    "data": {
+                        "proceeding": {
+                            "dateProceedings": MOCK_DATETIME,
+                            "proceedingNumber": "0123456789",
+                        },
+                    },
                 },
             )
 

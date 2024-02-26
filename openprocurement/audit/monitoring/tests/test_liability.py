@@ -1,6 +1,3 @@
-from unittest import mock
-from hashlib import sha512
-
 from openprocurement.audit.api.constants import TZ
 from datetime import datetime
 from freezegun import freeze_time
@@ -24,34 +21,8 @@ class BaseLiabilityTest(BaseWebTest, DSWebTestMixin):
             monitoring,
         )
 
-    def create_active_monitoring(self, **kwargs):
-        self.create_monitoring(**kwargs)
-        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
-
-        self.app.patch_json(
-            '/monitorings/{}'.format(self.monitoring_id),
-            {"data": {
-                "decision": {
-                    "description": "text",
-                    "date": datetime.now(TZ).isoformat()
-                },
-                "status": "active",
-            }}
-        )
-
-        # get credentials for tha monitoring owner
-        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
-        with mock.patch('openprocurement.audit.monitoring.validation.TendersClient') as mock_api_client:
-            mock_api_client.return_value.extract_credentials.return_value = {
-                'data': {'tender_token': sha512(b'tender_token').hexdigest()}
-            }
-            response = self.app.patch_json(
-                '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token')
-            )
-        self.tender_owner_token = response.json['access']['token']
-
-    def create_addressed_monitoring(self, **kwargs):
-        self.create_active_monitoring(**kwargs)
+    def create_addressed_monitoring(self, restricted_config=False, **kwargs):
+        self.create_active_monitoring(restricted_config, **kwargs)
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         self.app.patch_json(
             '/monitorings/{}'.format(self.monitoring_id),
@@ -66,8 +37,8 @@ class BaseLiabilityTest(BaseWebTest, DSWebTestMixin):
         )
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
 
-    def create_monitoring_with_elimination(self, **kwargs):
-        self.create_addressed_monitoring(**kwargs)
+    def create_monitoring_with_elimination(self, restricted_config=False, **kwargs):
+        self.create_addressed_monitoring(restricted_config, **kwargs)
         response = self.app.put_json(
             '/monitorings/{}/eliminationReport?acc_token={}'.format(self.monitoring_id, self.tender_owner_token),
             {"data": {
@@ -84,8 +55,8 @@ class BaseLiabilityTest(BaseWebTest, DSWebTestMixin):
         )
         self.elimination = response.json["data"]
 
-    def post_eliminationResolution(self):
-        self.create_monitoring_with_elimination()
+    def post_eliminationResolution(self, restricted_config=False):
+        self.create_monitoring_with_elimination(restricted_config)
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
 
         self.app.patch_json(
@@ -235,6 +206,68 @@ class MonitoringLiabilityResourceTest(BaseLiabilityTest):
                 'title', 'datePublished', 'dateModified', 'id',
             }
         )
+
+    def test_restricted_visibility(self):
+        self.post_eliminationResolution(restricted_config=True)
+
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        response = self.app.post_json(
+            '/monitorings/{}/liabilities'.format(self.monitoring_id),
+            {'data': {
+                'reportNumber': '1234567890',
+                'legislation': {
+                    'version': '13.08.2020',
+                    'article': ['8.10'],
+                    'type': 'NATIONAL_LEGISLATION',
+                    'identifier': {
+                        'id': '8073-X',
+                        'legalName': 'Кодекс України про адміністративні правопорушення',
+                        'uri': 'https://zakon.rada.gov.ua/laws/show/80731-10#Text',
+                    }
+                },
+                'documents': [
+                    {
+                        'title': 'lorem.doc',
+                        'url': self.generate_docservice_url(),
+                        'hash': 'md5:' + '0' * 32,
+                        'format': 'application/msword',
+                    }
+                ]
+            }},
+        )
+        self.assertEqual(len(response.json["data"]["documents"]), 1)
+        liability_id = response.json["data"]["id"]
+        response = self.app.get(f'/monitorings/{self.monitoring_id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["liabilities"][0]["documents"][0]["title"], "lorem.doc")
+        self.assertIn("http://localhost", response.json['data']["liabilities"][0]["documents"][0]["url"])
+
+        response = self.app.get(f'/monitorings/{self.monitoring_id}/liabilities/{liability_id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["documents"][0]["title"], "lorem.doc")
+        self.assertIn("http://localhost", response.json['data']["documents"][0]["url"])
+
+        self.app.authorization = ('Basic', (self.broker_name_r, self.broker_pass_r))
+        response = self.app.get(f'/monitorings/{self.monitoring_id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["liabilities"][0]["documents"][0]["title"], "lorem.doc")
+        self.assertIn("http://localhost", response.json['data']["liabilities"][0]["documents"][0]["url"])
+
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+        response = self.app.get(f'/monitorings/{self.monitoring_id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["liabilities"][0]["documents"][0]["title"], "Приховано")
+        self.assertEqual(response.json['data']["liabilities"][0]["documents"][0]["url"], "Приховано")
+
+        response = self.app.get(f'/monitorings/{self.monitoring_id}/liabilities/{liability_id}')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["documents"][0]["title"], "Приховано")
+        self.assertEqual(response.json['data']["documents"][0]["url"], "Приховано")
 
 
 class MonitoringLiabilityPostedResourceTest(BaseLiabilityTest):

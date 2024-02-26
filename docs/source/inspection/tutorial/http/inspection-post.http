@@ -18,7 +18,7 @@ DATA:
 Response: 201 Created
 Content-Type: application/json
 Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/inspections/71fbf55e244d42ca89e1ad68e4bf4d4a
-Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDYyODU3OTIsICJpIjogMn19LCAiY2x1c3Rlcl90aW1lIjogeyJjbHVzdGVyVGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDYyODU3OTIsICJpIjogMn19LCAic2lnbmF0dXJlIjogeyJoYXNoIjogeyIkYmluYXJ5IjogeyJiYXNlNjQiOiAiZ3Y4MGx2bGVFTDlOQ1ZFeExmYVRGQ3NyVGpFPSIsICJzdWJUeXBlIjogIjAwIn19LCAia2V5SWQiOiA3MzE3Mjk5MDQzMDQ0OTUwMDIzfX19; Path=/
+Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDg1Mjc4ODQsICJpIjogMTN9fSwgImNsdXN0ZXJfdGltZSI6IHsiY2x1c3RlclRpbWUiOiB7IiR0aW1lc3RhbXAiOiB7InQiOiAxNzA4NTI3ODg0LCAiaSI6IDEzfX0sICJzaWduYXR1cmUiOiB7Imhhc2giOiB7IiRiaW5hcnkiOiB7ImJhc2U2NCI6ICJNSnZNZHRia1FabGNVK1hvaTgxR1FxT0JkVFk9IiwgInN1YlR5cGUiOiAiMDAifX0sICJrZXlJZCI6IDczMzMxNzk4MzkyNDA3MzI2Nzd9fX0=; Path=/
 {
   "data": {
     "monitoring_ids": [
@@ -30,6 +30,7 @@ Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDYy
     "inspection_id": "UA-I-2018-01-01-000001",
     "dateModified": "2018-01-01T02:00:00+02:00",
     "dateCreated": "2018-01-01T02:00:00+02:00",
+    "restricted": false,
     "id": "71fbf55e244d42ca89e1ad68e4bf4d4a"
   }
 }

@@ -5,6 +5,7 @@ from urllib.parse import urlencode
 from nacl.encoding import HexEncoder
 from openprocurement.audit.api.tests.base import BaseWebTest as BaseApiWebTest
 from uuid import uuid4
+from unittest import mock
 
 
 class BaseWebTest(BaseApiWebTest):
@@ -15,6 +16,8 @@ class BaseWebTest(BaseApiWebTest):
         self.app.app.registry.docservice_url = 'http://localhost'
         self.broker_name = "broker"
         self.broker_pass = "broker"
+        self.broker_name_r = "brokerr"
+        self.broker_pass_r = "brokerr"
         self.sas_name = "test_sas"
         self.sas_pass = "test_sas_token"
 
@@ -29,7 +32,7 @@ class BaseWebTest(BaseApiWebTest):
         query = {'Signature': signature, 'KeyID': keyid}
         return '{}/get/{}?{}'.format(registry.docservice_url, uuid, urlencode(query))
 
-    def create_inspection(self, **kwargs):
+    def create_inspection(self, restricted_config=False, **kwargs):
         data = {
             "monitoring_ids": ["f" * 32, "e" * 32, "d" * 32],
             "description": "Yo-ho-ho",
@@ -44,7 +47,11 @@ class BaseWebTest(BaseApiWebTest):
         }
         data.update(kwargs)
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
-        response = self.app.post_json('/inspections', {'data': data})
+        with mock.patch(
+        'openprocurement.audit.inspection.views.inspection.extract_restricted_config_from_monitoring'
+        ) as mock_get_monitoring:
+            mock_get_monitoring.return_value = restricted_config
+            response = self.app.post_json('/inspections', {'data': data})
 
         self.inspection_id = response.json['data']['id']
         self.inspectionId = response.json['data']['inspection_id']

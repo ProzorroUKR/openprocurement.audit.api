@@ -1,0 +1,6 @@
+path,value
+$.description,Приховано
+$.documents[*].title,Приховано
+$.documents[*].title_ru,Приховано
+$.documents[*].title_en,Hidden
+$.documents[*].url,Приховано

@@ -1,6 +1,7 @@
 import unittest
+from datetime import datetime
 
-from openprocurement.audit.api.constants import CANCELLED_STATUS, ACTIVE_STATUS
+from openprocurement.audit.api.constants import CANCELLED_STATUS, ACTIVE_STATUS, TZ
 from openprocurement.audit.monitoring.tests.base import BaseWebTest
 
 
@@ -201,3 +202,28 @@ class TenderMonitoringsResourceTest(BaseWebTest):
         self.assertEqual(response.json['limit'], 2)
         self.assertEqual(response.json['page'], 4)
         self.assertEqual(len(response.json['data']), 0)
+
+    def test_restricted_visibility(self):
+        tender_id = "f" * 32
+        self.create_monitoring(tender_id=tender_id, restricted_config=True)
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {"data": {
+                "status": "active",
+                "decision": {
+                    "description": "text",
+                    "date": datetime.now(TZ).isoformat()
+                }
+            }}
+        )
+
+        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+        response = self.app.get(f'/tenders/{tender_id}/monitorings?mode=_all&opt_fields=decision')
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data'][0]['decision']['description'], 'Приховано')
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        response = self.app.get(f'/tenders/{tender_id}/monitorings?mode=_all_&opt_fields=decision')
+        self.assertEqual(response.status, '200 OK')
+        self.assertEqual(response.json['data'][0]['decision']['description'], 'text')

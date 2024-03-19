@@ -1,5 +1,5 @@
 from openprocurement.audit.inspection.utils import op_resource, inspection_serialize
-from openprocurement.audit.api.views.base import APIResourcePaginatedListing
+from openprocurement.audit.api.views.base import APIResourcePaginatedListing, RestrictedResourceListingMixin
 from openprocurement.audit.api.context import get_request
 
 
@@ -10,7 +10,7 @@ def serialize(data, fields):
 
 @op_resource(name='Monitoring inspections',
              path='/monitorings/{monitoring_id}/inspections')
-class MonitoringInspectionsResource(APIResourcePaginatedListing):
+class MonitoringInspectionsResource(RestrictedResourceListingMixin, APIResourcePaginatedListing):
 
     def __init__(self, request, context):
         super(MonitoringInspectionsResource, self).__init__(request, context)

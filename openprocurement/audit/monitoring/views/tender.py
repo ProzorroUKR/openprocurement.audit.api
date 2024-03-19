@@ -3,7 +3,7 @@ from pyramid.security import ACLAllowed
 from openprocurement.audit.api.utils import forbidden
 from openprocurement.audit.api.context import get_request
 from openprocurement.audit.monitoring.utils import op_resource, monitoring_serialize
-from openprocurement.audit.api.views.base import APIResourcePaginatedListing, json_view
+from openprocurement.audit.api.views.base import APIResourcePaginatedListing, RestrictedResourceListingMixin, json_view
 
 LOGGER = getLogger(__name__)
 
@@ -14,7 +14,7 @@ def serialize(data, fields):
 
 
 @op_resource(name='Tender Monitorings', path='/tenders/{tender_id}/monitorings')
-class TenderMonitoringResource(APIResourcePaginatedListing):
+class TenderMonitoringResource(RestrictedResourceListingMixin, APIResourcePaginatedListing):
     @staticmethod
     def add_mode_filters(filters: dict, mode: str):
         if "draft" not in mode:

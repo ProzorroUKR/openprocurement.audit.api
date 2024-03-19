@@ -16,6 +16,9 @@ class APIResource:
         self.request = request
         self.LOGGER = getLogger(type(self).__module__)
 
+    def db_fields(self, fields):
+        return fields
+
 
 class MongodbResourceListing(APIResource):
     listing_name = "Items"
@@ -135,9 +138,6 @@ class MongodbResourceListing(APIResource):
             "uri": self.request.route_url(self.listing_name, _query=params, **keys)
         }
 
-    def db_fields(self, fields):
-        return fields
-
     def filter_results_fields(self, results, fields):
         all_fields = fields | {"id"}
         for r in results:
@@ -156,7 +156,6 @@ class RestrictedResourceListingMixin:
         return fields | {"restricted"}
 
     def filter_results_fields(self, results, fields):
-        print(results)
         for r in results:
             mask_object_data(self.request, r, mask_mapping=self.mask_mapping)
         results = super().filter_results_fields(results, fields)
@@ -208,10 +207,12 @@ class APIResourcePaginatedListing(APIResource):
         page = int(self.request.params.get('page', DEFAULT_PAGE))
         skip = page * limit - limit
 
+        db_fields = self.db_fields(opt_fields)
+
         results, total = self.db_listing_method(
             skip=skip,
             limit=limit,
-            fields=opt_fields,
+            fields=db_fields,
             sort_by=self.sort_by,
             descending=descending,
             filters=filters,

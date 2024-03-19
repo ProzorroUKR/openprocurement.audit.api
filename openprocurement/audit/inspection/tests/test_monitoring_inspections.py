@@ -47,6 +47,29 @@ class MonitoringInspectionsResourceTest(BaseWebTest):
                 }]
             )
 
+    def test_restricted_visibility(self):
+        self.create_inspection(restricted_config=True)
+
+        for uid in self.monitoring_ids:
+            self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
+            response = self.app.get(f'/monitorings/{uid}/inspections?opt_fields=description')
+            self.assertEqual(response.status, '200 OK')
+            self.assertEqual(response.content_type, 'application/json')
+            self.assertEqual(
+                response.json['data'],
+                [{
+                    'description': 'Приховано',
+                    'dateCreated': '2018-01-01T11:00:00+02:00',
+                    'dateModified': '2018-01-01T11:00:00+02:00',
+                    'inspection_id': self.inspectionId,
+                    'id': self.inspection_id
+                }]
+            )
+            self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+            response = self.app.get(f'/monitorings/{uid}/inspections?opt_fields=description')
+            self.assertEqual(response.status, '200 OK')
+            self.assertEqual(response.json['data'][0]['description'], 'Yo-ho-ho')
+
     def test_get_two(self):
         self.create_inspection()
         expected_one = {

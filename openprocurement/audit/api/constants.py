@@ -15,8 +15,8 @@ SCHEMA_DOC = 'openprocurement_schema'
 JOURNAL_PREFIX = os.environ.get('JOURNAL_PREFIX', 'JOURNAL_')
 TZ = timezone(os.environ['TZ'] if 'TZ' in os.environ else 'Europe/Kiev')
 SANDBOX_MODE = os.environ.get('SANDBOX_MODE', False)
-DOCUMENT_BLACKLISTED_FIELDS = ('title', 'format', 'url', 'dateModified', 'hash')
-DOCUMENT_WHITELISTED_FIELDS = ('id', 'datePublished', 'author', '__parent__')
+DOCUMENT_BLACKLISTED_FIELDS = ('title', 'format', 'url', 'dateModified', 'datePublished', 'hash')
+DOCUMENT_WHITELISTED_FIELDS = ('id', 'author', '__parent__')
 WORKING_DAYS = {}
 HOLIDAYS = standards.load("calendars/workdays_off.json")
 for date_str in HOLIDAYS:

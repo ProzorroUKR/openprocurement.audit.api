@@ -146,7 +146,7 @@ class RequestDocumentsResourceTest(BaseWebTest):
             },
         )
         self.assertNotEqual(data["id"], self.document_id)
-        self.assertNotEqual(data["datePublished"], post_time)
+        self.assertEqual(data["datePublished"], post_time)
         self.assertEqual(data["dateModified"], post_time)
 
         response = self.app.get("/requests/{}".format(self.request_id))

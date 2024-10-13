@@ -76,6 +76,7 @@ class MonitoringsResource(RestrictedResourceListingMixin, MongodbResourceListing
             "parties",
             "endDate",
             "tender_owner",
+            "owner",
         }
         self.db_listing_method = request.registry.mongodb.monitoring.list
         self.mask_mapping = MONITORING_MASK_MAPPING
@@ -106,6 +107,7 @@ class MonitoringsResource(RestrictedResourceListingMixin, MongodbResourceListing
         monitoring.id = generate_id()
         monitoring.monitoring_id = generate_monitoring_id(self.request)
         monitoring.restricted = extract_restricted_config_from_tender(self.request)
+        set_ownership(monitoring, self.request, token=False)
         if monitoring.decision:
             upload_objects_documents(self.request, monitoring.decision, key="decision")
             set_author(monitoring.decision.documents, self.request, 'author')

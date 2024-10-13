@@ -364,6 +364,7 @@ class Monitoring(BaseModel):
     dateModified = IsoDateTimeType()
     endDate = IsoDateTimeType()
     dateCreated = IsoDateTimeType(default=get_now)
+    owner = StringType()
     tender_owner = StringType()
     tender_owner_token = StringType()
     revisions = ListType(ModelType(Revision), default=[])

@@ -1,5 +1,5 @@
 from logging import getLogger
-from openprocurement.audit.api.utils import forbidden
+from openprocurement.audit.api.utils import forbidden, set_ownership
 from openprocurement.audit.api.views.base import (
     APIResource,
     MongodbResourceListing,
@@ -41,6 +41,7 @@ class RequestsResource(MongodbResourceListing):
             "violationType",
             "answer",
             "dateAnswered",
+            "owner",
         }
         self.db_listing_method = request.registry.mongodb.request.list
 
@@ -65,6 +66,7 @@ class RequestsResource(MongodbResourceListing):
         obj = self.request.validated["request"]
         obj.id = generate_id()
         obj.requestId = generate_request_id(self.request)
+        set_ownership(obj, self.request, token=False)
         set_author(obj.documents, self.request, "author")
         upload_objects_documents(self.request, obj)
         save_request(

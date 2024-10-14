@@ -1,4 +1,4 @@
-POST /api/2.5/monitorings/93480d4ae651486ab8cb03ad7baf778c/posts?acc_token=c5614e7f9edb460fb3f59aae20bf6b17 HTTP/1.0
+POST /api/2.5/monitorings/05c8521747ee4ed096200197b78b5990/posts?acc_token=69045f54ece34e2ab0c4e6709780a61f HTTP/1.0
 Authorization: Basic YnJva2VyOmJyb2tlcg==
 Content-Length: 416
 Content-Type: application/json
@@ -21,16 +21,16 @@ DATA:
 
 Response: 201 Created
 Content-Type: application/json
-Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/93480d4ae651486ab8cb03ad7baf778c/posts/c7c8746e51e744508230cb306ada1c33
-Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDg1Mjc4NzcsICJpIjogMTh9fSwgImNsdXN0ZXJfdGltZSI6IHsiY2x1c3RlclRpbWUiOiB7IiR0aW1lc3RhbXAiOiB7InQiOiAxNzA4NTI3ODc3LCAiaSI6IDE4fX0sICJzaWduYXR1cmUiOiB7Imhhc2giOiB7IiRiaW5hcnkiOiB7ImJhc2U2NCI6ICJXZzkwVUFQTGJhdlNyT0M0OHRYQ0p2UitIdE09IiwgInN1YlR5cGUiOiAiMDAifX0sICJrZXlJZCI6IDczMzMxNzk4MzkyNDA3MzI2Nzd9fX0=; Path=/
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/05c8521747ee4ed096200197b78b5990/posts/3cae71a9602841c88e7f14fbc095445c
+Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3Mjg4OTk2MjYsICJpIjogMTR9fSwgImNsdXN0ZXJfdGltZSI6IHsiY2x1c3RlclRpbWUiOiB7IiR0aW1lc3RhbXAiOiB7InQiOiAxNzI4ODk5NjI2LCAiaSI6IDE0fX0sICJzaWduYXR1cmUiOiB7Imhhc2giOiB7IiRiaW5hcnkiOiB7ImJhc2U2NCI6ICJsaHJwRXpGbzRKVkU0NC8rRFRGOVdvektEWkE9IiwgInN1YlR5cGUiOiAiMDAifX0sICJrZXlJZCI6IDczNzIxODEzMTE5NzQyNzcxMjJ9fX0=; Path=/
 {
   "data": {
-    "id": "c7c8746e51e744508230cb306ada1c33",
+    "id": "3cae71a9602841c88e7f14fbc095445c",
     "title": "Dolor sit amet",
     "description": "Lorem ipsum dolor sit amet.",
     "documents": [
       {
-        "id": "e930d9ee6f024504b461c68b0dbe3b1b",
+        "id": "e8db0a1697b44717afaef51f83f88348",
         "hash": "md5:00000000000000000000000000000000",
         "title": "ipsum.doc",
         "format": "application/msword",

@@ -1,4 +1,4 @@
-PUT /api/2.5/monitorings/93480d4ae651486ab8cb03ad7baf778c/liabilities/0875071d90154a6eb27229d672a873fb/documents/7dbbabebdd054ae0a78c13b41f8f5822 HTTP/1.0
+PUT /api/2.5/monitorings/05c8521747ee4ed096200197b78b5990/liabilities/b9c20573d5f346f9ae89dfaf05fe6707/documents/8706547746124d12be2846ba6c291a3d HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
 Content-Length: 323
 Content-Type: application/json
@@ -15,15 +15,15 @@ DATA:
 
 Response: 200 OK
 Content-Type: application/json
-Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDg1Mjc4ODAsICJpIjogOH19LCAiY2x1c3Rlcl90aW1lIjogeyJjbHVzdGVyVGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDg1Mjc4ODAsICJpIjogOH19LCAic2lnbmF0dXJlIjogeyJoYXNoIjogeyIkYmluYXJ5IjogeyJiYXNlNjQiOiAiWWlWMm55ZCs5b2FkM285NWRoYWxEYm1uVmNzPSIsICJzdWJUeXBlIjogIjAwIn19LCAia2V5SWQiOiA3MzMzMTc5ODM5MjQwNzMyNjc3fX19; Path=/
+Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3Mjg4OTk2MjcsICJpIjogMTJ9fSwgImNsdXN0ZXJfdGltZSI6IHsiY2x1c3RlclRpbWUiOiB7IiR0aW1lc3RhbXAiOiB7InQiOiAxNzI4ODk5NjI3LCAiaSI6IDEyfX0sICJzaWduYXR1cmUiOiB7Imhhc2giOiB7IiRiaW5hcnkiOiB7ImJhc2U2NCI6ICIxK015bUtjb1MwcVJlRGs2SEd4blowU1hwUDQ9IiwgInN1YlR5cGUiOiAiMDAifX0sICJrZXlJZCI6IDczNzIxODEzMTE5NzQyNzcxMjJ9fX0=; Path=/
 {
   "data": {
-    "id": "7dbbabebdd054ae0a78c13b41f8f5822",
+    "id": "8706547746124d12be2846ba6c291a3d",
     "hash": "md5:00000000000000000000000000000000",
     "title": "letter_put.doc",
     "format": "application/json",
     "url": "http://public-docs-sandbox.prozorro.gov.ua/get/dbc15c3f69a64a178d4ebcaf5c01cdda?Signature=e1E%252ByS7g3WXdW7Q9onHTPiL39UZu%2FNUalT3qhYkIygPvCyH2eG4EgX9y%2FqQl2BMsSg7RcScC3xCn73ArLiLcCA%253D%253D&KeyID=a8968c46",
-    "datePublished": "2018-01-09T02:30:00+02:00",
+    "datePublished": "2018-01-09T05:05:00+02:00",
     "dateModified": "2018-01-09T05:05:00+02:00",
     "author": "monitoring_owner"
   }

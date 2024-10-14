@@ -1,4 +1,4 @@
-PATCH /api/2.5/monitorings/93480d4ae651486ab8cb03ad7baf778c/liabilities/0875071d90154a6eb27229d672a873fb HTTP/1.0
+PATCH /api/2.5/monitorings/05c8521747ee4ed096200197b78b5990/liabilities/b9c20573d5f346f9ae89dfaf05fe6707 HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
 Content-Length: 108
 Content-Type: application/json
@@ -15,15 +15,15 @@ DATA:
 
 Response: 200 OK
 Content-Type: application/json
-Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDg1Mjc4ODAsICJpIjogMn19LCAiY2x1c3Rlcl90aW1lIjogeyJjbHVzdGVyVGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDg1Mjc4ODAsICJpIjogMn19LCAic2lnbmF0dXJlIjogeyJoYXNoIjogeyIkYmluYXJ5IjogeyJiYXNlNjQiOiAiWWlWMm55ZCs5b2FkM285NWRoYWxEYm1uVmNzPSIsICJzdWJUeXBlIjogIjAwIn19LCAia2V5SWQiOiA3MzMzMTc5ODM5MjQwNzMyNjc3fX19; Path=/
+Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3Mjg4OTk2MjcsICJpIjogNn19LCAiY2x1c3Rlcl90aW1lIjogeyJjbHVzdGVyVGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3Mjg4OTk2MjcsICJpIjogNn19LCAic2lnbmF0dXJlIjogeyJoYXNoIjogeyIkYmluYXJ5IjogeyJiYXNlNjQiOiAiMStNeW1LY29TMHFSZURrNkhHeG5aMFNYcFA0PSIsICJzdWJUeXBlIjogIjAwIn19LCAia2V5SWQiOiA3MzcyMTgxMzExOTc0Mjc3MTIyfX19; Path=/
 {
   "data": {
-    "id": "0875071d90154a6eb27229d672a873fb",
+    "id": "b9c20573d5f346f9ae89dfaf05fe6707",
     "reportNumber": "1234567890",
     "datePublished": "2018-01-09T02:30:00+02:00",
     "documents": [
       {
-        "id": "7dbbabebdd054ae0a78c13b41f8f5822",
+        "id": "8706547746124d12be2846ba6c291a3d",
         "hash": "md5:00000000000000000000000000000000",
         "title": "letter.doc",
         "format": "application/msword",

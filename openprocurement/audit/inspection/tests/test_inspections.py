@@ -81,7 +81,7 @@ class InspectionsListingResourceTest(BaseWebTest):
         self.assertEqual(
             set(response.json["data"]),
             {"id", "inspection_id", "dateModified",
-             "dateCreated", "monitoring_ids", "description", "restricted"}
+             "dateCreated", "monitoring_ids", "description", "restricted", "owner"}
         )
         self.assertIn("Location", response.headers)
         inspection_id = response.json["data"]["id"]

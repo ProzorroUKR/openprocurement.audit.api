@@ -20,7 +20,12 @@ from openprocurement.audit.api.views.base import (
     RestrictedResourceListingMixin,
     json_view,
 )
-from openprocurement.audit.api.utils import context_unpack, forbidden, generate_id
+from openprocurement.audit.api.utils import (
+    context_unpack,
+    forbidden,
+    generate_id,
+    set_ownership
+)
 from openprocurement.audit.monitoring.mask import MONITORING_MASK_MAPPING
 from openprocurement.audit.monitoring.utils import (
     get_now,
@@ -33,7 +38,6 @@ from openprocurement.audit.monitoring.utils import (
     apply_patch,
     generate_monitoring_id,
     generate_period,
-    set_ownership,
     set_author,
     get_monitoring_accelerator,
     op_resource

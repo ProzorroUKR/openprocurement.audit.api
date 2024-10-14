@@ -27,6 +27,7 @@ class InspectionResourceTest(BaseWebTest):
                 'dateCreated',
                 'dateModified',
                 'restricted',
+                'owner',
             }
         )
         self.assertEqual(data["id"], self.inspection_id)

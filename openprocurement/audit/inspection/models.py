@@ -14,7 +14,7 @@ class Inspection(BaseModel):
             'revision': whitelist('revisions'),
             'create': blacklist(
                 'revisions', 'dateModified', 'dateCreated',
-                'doc_id', '_attachments', 'inspection_id'
+                'doc_id', '_attachments', 'inspection_id', 'owner'
             ) + schematics_embedded_role,
             'edit': whitelist("description", "monitoring_ids"),
             'view': blacklist(
@@ -37,6 +37,8 @@ class Inspection(BaseModel):
     revisions = ListType(ModelType(Revision), default=list())
     _attachments = DictType(DictType(BaseType), default=dict())
     doc_type = StringType(default="Inspection")
+
+    owner = StringType()
 
     restricted = BooleanType()
 

@@ -149,13 +149,6 @@ def generate_period(date, delta, accelerator=None):
     return period
 
 
-def set_ownership(data, request, fieldname='owner', token=True):
-    for item in data if isinstance(data, list) else [data]:
-        setattr(item, fieldname, request.authenticated_userid)
-        if token:
-            setattr(item, '{}_token'.format(fieldname), generate_id())
-
-
 def set_author(data, request, fieldname='author'):
     for item in data if isinstance(data, list) else [data]:
         setattr(item, fieldname, get_monitoring_role(request.authenticated_role))

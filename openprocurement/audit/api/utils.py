@@ -282,10 +282,11 @@ def get_revision_changes(dst, src):
     return make_patch(dst, src).patch
 
 
-def set_ownership(item, request):
-    if not item.get('owner'):
-        item.owner = request.authenticated_userid
-    item.owner_token = generate_id()
+def set_ownership(data, request, fieldname='owner', token=True):
+    for item in data if isinstance(data, list) else [data]:
+        setattr(item, fieldname, request.authenticated_userid)
+        if token:
+            setattr(item, '{}_token'.format(fieldname), generate_id())
 
 
 def check_document(request, document, document_container):

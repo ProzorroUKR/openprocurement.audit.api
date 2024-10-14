@@ -28,7 +28,8 @@ class RequestResourceTest(BaseWebTest):
                 "dateCreated",
                 "dateModified",
                 "parties",
-                "tenderId"
+                "tenderId",
+                "owner",
             },
         )
         self.assertEqual(
@@ -61,7 +62,8 @@ class RequestResourceTest(BaseWebTest):
                 "dateCreated",
                 "dateModified",
                 "parties",
-                "tenderId"
+                "tenderId",
+                "owner",
             },
         )
         self.assertEqual(

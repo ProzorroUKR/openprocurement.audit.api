@@ -93,6 +93,8 @@ class Request(BaseModel):
     parties = ListType(ModelType(RequestParty, required=True), required=True, min_size=1)
     revisions = ListType(ModelType(Revision), default=list())
 
+    owner = StringType()
+
     reason = StringType()
     answer = StringType(choices=[
         "monitoringCreated",

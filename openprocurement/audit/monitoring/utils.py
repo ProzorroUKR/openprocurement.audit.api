@@ -117,6 +117,7 @@ def extract_monitoring(request):
 
 def extract_restricted_config_from_tender(request):
     try:
+        # TODO: get rid of TendersClient usage
         response = TendersClient(
             request.registry.api_token,
             host_url=request.registry.api_server,

@@ -191,6 +191,7 @@ def validate_credentials_generate(request):
     except ValueError:
         raise_operation_error(request, 'No access token was provided.')
     try:
+        # TODO: get rid of TendersClient usage
         response = TendersClient(
             request.registry.api_token,
             host_url=request.registry.api_server,

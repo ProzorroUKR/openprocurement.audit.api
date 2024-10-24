@@ -13,7 +13,6 @@ from Crypto.Cipher import AES
 from cornice.util import json_error
 from ciso8601 import parse_datetime
 from jsonpatch import make_patch, apply_patch as _apply_patch
-from rfc6266 import build_header
 from time import time as ttime
 from contextlib import contextmanager
 from uuid import uuid4
@@ -27,6 +26,7 @@ from openprocurement.audit.api.constants import (
     LOGGER, JOURNAL_PREFIX
 )
 from schematics.exceptions import ModelValidationError
+from openprocurement.audit.api.rfc6266 import build_header
 from openprocurement.audit.api.events import ErrorDesctiptorEvent
 from openprocurement.audit.api.interfaces import IContentConfigurator
 from openprocurement.audit.api.interfaces import IOPContent

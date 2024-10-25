@@ -137,7 +137,7 @@ stop_review:
   script:
     - cd /app
     - pip install -e .[test]
-    - py.test $TESTS_PATH --cov=$COV_PATH --cov-config=$COV_FILE -v --maxfail=1 --color=yes --dist=each
+    - pytest $TESTS_PATH --cov=$COV_PATH --cov-config=$COV_FILE -v --maxfail=1 --color=yes --dist=each
       --tx=popen//id=sand//env:DB_NAME=test_sandbox//env:SANDBOX_MODE=1
       --tx=popen//id=prod//env:DB_NAME=test_prod//env:SANDBOX_MODE=
   coverage: '/TOTAL\s+\d+\s+\d+\s+(\d+%)/'
@@ -155,7 +155,7 @@ test_docs:
     - cd /app
     - pip install -e .[test]
   script:
-    - py.test docs.py
+    - pytest docs.py
   when: manual
 
 test_setup_py:

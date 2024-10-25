@@ -17,4 +17,6 @@ USER user
 
 EXPOSE 80
 
+ENV PATH="/app/.local/bin:$PATH"
+
 CMD ["gunicorn", "-k", "gevent", "--paste", "/app/etc/service.ini", "--graceful-timeout=60"]

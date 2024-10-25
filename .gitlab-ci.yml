@@ -3,7 +3,6 @@ stages:
   - build
   - deploy
   - test
-  - cleanup
 
 variables:
   GIT_STRATEGY: none
@@ -149,17 +148,6 @@ test_api:
     TESTS_PATH: openprocurement/audit
     COV_PATH: openprocurement/audit
     COV_FILE: .coveragerc
-
-cleanup:
-  extends: .werf
-  stage: cleanup
-  script:
-    - docker login -u $WERF_IMAGES_CLEANUP_USERNAME -p $WERF_IMAGES_CLEANUP_PASSWORD $WERF_IMAGES_REPO
-    - werf cleanup --stages-storage :local
-  only:
-    - schedules
-  tags:
-    - shell
 
 test_docs:
   extends: .test

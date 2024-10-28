@@ -19,7 +19,7 @@ def load_requirements(filename):
 requires = load_requirements("requirements.txt")
 test_requires = requires + [
     'pytest',
-    'pytest-xdist',
+    'pytest-xdist<3.0',
     'webtest',
     'freezegun',
     'python-coveralls',

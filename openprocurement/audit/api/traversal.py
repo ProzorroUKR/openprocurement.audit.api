@@ -25,7 +25,7 @@ def get_item(parent, key, request):
         from openprocurement.audit.api.utils import error_handler
         request.errors.add('url', '{}_id'.format(key), 'Not Found')
         request.errors.status = 404
-        raise error_handler(request.errors)
+        raise error_handler(request)
     else:
         if key == 'document':
             request.validated[plural] = items

@@ -83,21 +83,28 @@ def generate_docservice_url(request, doc_id, temporary=True, prefix=None):
     return urlunsplit((parsed_url.scheme, parsed_url.netloc, '/get/{}'.format(doc_id), urlencode(query), ''))
 
 
-def error_handler(errors, request_params=True):
-    params = {
-        'ERROR_STATUS': errors.status
-    }
+def error_handler(request, request_params=True):
+    errors = request.errors
+    params = {"ERROR_STATUS": errors.status}
     if request_params:
-        params['ROLE'] = str(errors.request.authenticated_role)
-        if errors.request.params:
-            params['PARAMS'] = str(dict(errors.request.params))
-    if errors.request.matchdict:
-        for x, j in errors.request.matchdict.items():
+        params["ROLE"] = str(request.authenticated_role)
+        if request.params:
+            params["PARAMS"] = str(dict(request.params))
+    if request.matchdict:
+        for x, j in request.matchdict.items():
             params[x.upper()] = j
-    errors.request.registry.notify(ErrorDesctiptorEvent(errors, params))
-    LOGGER.info('Error on processing request "{}"'.format(dumps(errors, indent=4)),
-                extra=context_unpack(errors.request, {'MESSAGE_ID': 'error_handler'}, params))
-    return json_error(errors)
+    request.registry.notify(ErrorDesctiptorEvent(request, params))
+
+    for item in errors:
+        for key, value in item.items():
+            if isinstance(value, bytes):
+                item[key] = value.decode("utf-8")
+
+    LOGGER.info(
+        'Error on processing request "{}"'.format(dumps(errors, indent=4)),
+        extra=context_unpack(request, {"MESSAGE_ID": "error_handler"}, params),
+    )
+    return json_error(request)
 
 
 def raise_operation_error(request, message, status=403, location='body', name='data'):
@@ -107,7 +114,7 @@ def raise_operation_error(request, message, status=403, location='body', name='d
     """
     request.errors.add(location, name, message)
     request.errors.status = status
-    raise error_handler(request.errors)
+    raise error_handler(request)
 
 
 def upload_file(request,
@@ -190,7 +197,7 @@ def upload_file(request,
         else:
             request.errors.add('body', 'data', "Can't upload document to document service.")
             request.errors.status = 422
-            raise error_handler(request.errors)
+            raise error_handler(request)
         document.hash = doc_hash
         key = urlparse(doc_url).path.split('/')[-1]
     else:
@@ -290,16 +297,16 @@ def check_document(request, document, document_container):
             set(['Signature', 'KeyID']) != set(parsed_query):
         request.errors.add(document_container, 'url', "Can add document only from document service.")
         request.errors.status = 403
-        raise error_handler(request.errors)
+        raise error_handler(request)
     if not document.hash:
         request.errors.add(document_container, 'hash', "This field is required.")
         request.errors.status = 422
-        raise error_handler(request.errors)
+        raise error_handler(request)
     keyid = parsed_query['KeyID']
     if keyid not in request.registry.keyring:
         request.errors.add(document_container, 'url', "Document url expired.")
         request.errors.status = 422
-        raise error_handler(request.errors)
+        raise error_handler(request)
     dockey = request.registry.keyring[keyid]
     signature = parsed_query['Signature']
     key = urlparse(url).path.split('/')[-1]
@@ -308,14 +315,14 @@ def check_document(request, document, document_container):
     except TypeError:
         request.errors.add(document_container, 'url', "Document url signature invalid.")
         request.errors.status = 422
-        raise error_handler(request.errors)
+        raise error_handler(request)
     mess = "{}\0{}".format(key, document.hash.split(':', 1)[-1])
     try:
         dockey.verify(mess.encode("utf-8"), signature)
     except BadSignatureError:
         request.errors.add(document_container, 'url', "Document url invalid.")
         request.errors.status = 422
-        raise error_handler(request.errors)
+        raise error_handler(request)
 
 
 def update_document_url(request, document, document_route, route_kwargs):
@@ -399,11 +406,11 @@ def request_params(request):
     except UnicodeDecodeError:
         request.errors.add('body', 'data', 'could not decode params')
         request.errors.status = 422
-        raise error_handler(request.errors, False)
+        raise error_handler(request, False)
     except Exception as e:
         request.errors.add('body', str(e.__class__.__name__), str(e))
         request.errors.status = 422
-        raise error_handler(request.errors, False)
+        raise error_handler(request, False)
     return params
 
 
@@ -426,7 +433,7 @@ def parse_offset(offset: str):
 def forbidden(request):
     request.errors.add('url', 'permission', 'Forbidden')
     request.errors.status = 403
-    return error_handler(request.errors)
+    return error_handler(request)
 
 
 def update_logging_context(request, params):

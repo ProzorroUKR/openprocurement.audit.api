@@ -82,7 +82,7 @@ def extract_request(request):
         if doc is None or doc.get("doc_type") != "Request":
             request.errors.add("url", key, "Not Found")
             request.errors.status = 404
-            raise error_handler(request.errors)
+            raise error_handler(request)
 
         return request.request_from_data(doc)
 

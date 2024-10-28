@@ -106,7 +106,7 @@ def extract_monitoring_adapter(request, monitoring_id):
     if data is None:
         request.errors.add('url', 'monitoring_id', 'Not Found')
         request.errors.status = 404
-        raise error_handler(request.errors)
+        raise error_handler(request)
     return request.monitoring_from_data(data)
 
 

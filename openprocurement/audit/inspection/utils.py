@@ -84,7 +84,7 @@ def extract_inspection(request):
         if doc is None:
             request.errors.add('url', key, 'Not Found')
             request.errors.status = 404
-            raise error_handler(request.errors)
+            raise error_handler(request)
         return request.inspection_from_data(doc)
 
 

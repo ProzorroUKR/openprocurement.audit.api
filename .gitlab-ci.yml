@@ -3,7 +3,6 @@ stages:
   - build
   - deploy
   - test
-  - cleanup
 
 variables:
   GIT_STRATEGY: none
@@ -13,44 +12,49 @@ variables:
   MONGODB_REPLICA_SET_KEY: replicaSetKey
 
 
-.werf:
-  before_script:
-    - type multiwerf && source <(multiwerf use 1.0 beta)
-    - type werf && source <(werf ci-env gitlab --tagging-strategy tag-or-branch --verbose)
-
 .build:
-  extends: .werf
   stage: build
-  script:
-    - werf build-and-publish
-  except:
-    - schedules
-  tags:
-    - shell
   variables:
+    IMAGE_TAG: ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
     GIT_STRATEGY: fetch
-    WERF_STAGES_STORAGE: ":local"
+  image:
+    name: gcr.io/kaniko-project/executor:v1.9.0-debug
+    entrypoint: [""]
+  tags:
+    - kube-dev
+  before_script:
+    - echo "{\"auths\":{\"$CI_REGISTRY\":{\"username\":\"$CI_REGISTRY_USER\",\"password\":\"$CI_REGISTRY_PASSWORD\"}}}" > /kaniko/.docker/config.json
+  script:
+    - >
+      /kaniko/executor --context $CI_PROJECT_DIR
+      --dockerfile $CI_PROJECT_DIR/Dockerfile
+      --destination $CI_REGISTRY_IMAGE:$IMAGE_TAG
+      --registry-mirror $REGISTRY_MIRROR
+      --insecure-registry $REGISTRY_MIRROR
+      --skip-tls-verify
+      --cache=true
+
 
 build:
   extends: .build
   only:
     - branches
   variables:
-    WERF_TAG_GIT_COMMIT: ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
+    IMAGE_TAG: ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
 
 build_master:
   extends: .build
   only:
     - master
   variables:
-    WERF_TAG_GIT_BRANCH: latest
+    IMAGE_TAG: latest
 
 build_tag:
   extends: .build
   only:
     - tags
   variables:
-    WERF_TAG_GIT_TAG: $CI_COMMIT_TAG
+    IMAGE_TAG: $CI_COMMIT_TAG
 
 .base_deploy: &base_deploy
   stage: deploy
@@ -133,7 +137,12 @@ stop_review:
   script:
     - cd /app
     - pip install -e .[test]
-    - py.test $TESTS_PATH --cov=$COV_PATH --cov-config=$COV_FILE -v --maxfail=1 --color=yes --dist=each
+    - py.test $TESTS_PATH -v
+      --color=yes
+      --cov=$COV_PATH
+      --cov-config=$COV_FILE
+      --cov-report xml
+      --dist=each
       --tx=popen//id=sand//env:DB_NAME=test_sandbox//env:SANDBOX_MODE=1
       --tx=popen//id=prod//env:DB_NAME=test_prod//env:SANDBOX_MODE=
   coverage: '/TOTAL\s+\d+\s+\d+\s+(\d+%)/'
@@ -144,17 +153,6 @@ test_api:
     TESTS_PATH: openprocurement/audit
     COV_PATH: openprocurement/audit
     COV_FILE: .coveragerc
-
-cleanup:
-  extends: .werf
-  stage: cleanup
-  script:
-    - docker login -u $WERF_IMAGES_CLEANUP_USERNAME -p $WERF_IMAGES_CLEANUP_PASSWORD $WERF_IMAGES_REPO
-    - werf cleanup --stages-storage :local
-  only:
-    - schedules
-  tags:
-    - shell
 
 test_docs:
   extends: .test

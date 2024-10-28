@@ -5,16 +5,16 @@ from openprocurement.audit.api.validation import validate_data
 from openprocurement.audit.request.models import Request
 
 
-def validate_request_data(request):
+def validate_request_data(request, **_):
     update_logging_context(request, {"REQUEST_ID": "__new__"})
     return validate_data(request, Request)
 
 
-def validate_patch_request_data(request):
+def validate_patch_request_data(request, **_):
     return validate_data(request, Request, partial=True)
 
 
-def validate_allowed_request_document(request):
+def validate_allowed_request_document(request, **_):
     obj = request.validated['request']
     if request.authenticated_role == PUBLIC_ROLE and obj.answer is not None:
         raise forbidden(request)

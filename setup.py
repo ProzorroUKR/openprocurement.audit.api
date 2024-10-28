@@ -2,35 +2,24 @@ from setuptools import setup, find_packages
 
 version = '1.2.9'
 
-requires = [
-    'pyramid<1.10.0',
-    'schematics<2.0.0',
-    'pymongo>=3.10.1<4',
-    'cornice==1.2.0.dev0',
-    'barbecue',
-    'chaussette',
-    'cornice',
-    'gevent',
-    'iso8601',
-    'isodate',
-    'zope.component',
-    'zope.configuration',
-    'esculator',
-    'pycrypto',
-    'libnacl',
-    'pbkdf2',
-    'six',
-    'PyNaCl<2',
-    'pytz',
-    'pyramid_exclog',
-    'jsonpatch==1.14-dp',
-    'rfc6266==0.0.6',
-    'openprocurement_client==2.1.1dp',
-    'standards>=1.0.22',
-]
+
+def load_requirements(filename):
+    requirements = []
+    with open(filename) as f:
+        for resource in f.readlines():
+            if not resource.startswith("git+"):
+                requirements.append(resource.strip())
+            else:
+                res = resource.strip()
+                egg = res.split("#egg=")[1]
+                requirements.append("@".join([egg, res]))
+    return requirements
+
+
+requires = load_requirements("requirements.txt")
 test_requires = requires + [
     'pytest',
-    'pytest-xdist',
+    'pytest-xdist<3.0',
     'webtest',
     'freezegun',
     'python-coveralls',
@@ -39,19 +28,7 @@ test_requires = requires + [
 ]
 setup_requires = [
     'pytest-runner',
-    'setuptools==33.1.1',
-    'six',
 ]
-dependency_links = [
-    "https://github.com/ProzorroUKR/openprocurement.client.python/tarball/2.1.1dp#egg=openprocurement_client-2.1.1dp",
-    "https://github.com/ProzorroUKR/esculator/tarball/master#egg=esculator",
-    "https://github.com/ProzorroUKR/dateorro/tarball/master#egg=dateorro",
-    "https://github.com/ProzorroUKR/barbecue/tarball/master#egg=barbecue",
-    "https://github.com/ProzorroUKR/cornice/tarball/1.2.0.dev0#egg=cornice-1.2.0.dev0",
-    "https://github.com/ProzorroUKR/rfc6266/tarball/0.0.6#egg=rfc6266-0.0.6",
-    "https://github.com/ProzorroUKR/python-json-patch/tarball/1.14-dp#egg=jsonpatch-1.14-dp",
-]
-
 
 entry_points = {
     'paste.app_factory': [
@@ -84,5 +61,4 @@ setup(name='openprocurement.audit.api',
       setup_requires=setup_requires,
       tests_require=test_requires,
       extras_require={'test': test_requires},
-      dependency_links=dependency_links,
       entry_points=entry_points)

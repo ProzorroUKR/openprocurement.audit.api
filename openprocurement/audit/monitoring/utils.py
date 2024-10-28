@@ -106,7 +106,7 @@ def extract_monitoring_adapter(request, monitoring_id):
     if data is None:
         request.errors.add('url', 'monitoring_id', 'Not Found')
         request.errors.status = 404
-        raise error_handler(request.errors)
+        raise error_handler(request)
     return request.monitoring_from_data(data)
 
 
@@ -117,6 +117,7 @@ def extract_monitoring(request):
 
 def extract_restricted_config_from_tender(request):
     try:
+        # TODO: get rid of TendersClient usage
         response = TendersClient(
             request.registry.api_token,
             host_url=request.registry.api_server,

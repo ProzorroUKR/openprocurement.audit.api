@@ -33,7 +33,7 @@ from openprocurement.audit.monitoring.utils import (
 )
 
 
-def validate_monitoring_data(request):
+def validate_monitoring_data(request, **_):
     """
     Validate monitoring data POST
     """
@@ -46,11 +46,11 @@ def validate_monitoring_data(request):
             'body', 'status', "Can't create a monitoring in '{}' status.".format(monitoring.status)
         )
         request.errors.status = 422
-        raise error_handler(request.errors)
+        raise error_handler(request)
     return data
 
 
-def validate_patch_monitoring_data(request):
+def validate_patch_monitoring_data(request, **_):
     """
     Validate monitoring data PATCH
     """
@@ -60,7 +60,7 @@ def validate_patch_monitoring_data(request):
     return data
 
 
-def validate_post_data(request):
+def validate_post_data(request, **_):
     """
     Validate post data POST
     """
@@ -70,7 +70,7 @@ def validate_post_data(request):
     return data
 
 
-def validate_party_data(request):
+def validate_party_data(request, **_):
     """
     Validate party data POST
     """
@@ -78,7 +78,7 @@ def validate_party_data(request):
     return validate_data(request, Party)
 
 
-def validate_patch_party_data(request):
+def validate_patch_party_data(request, **_):
     """
     Validate party data PATCH
     """
@@ -86,7 +86,7 @@ def validate_patch_party_data(request):
     return data
 
 
-def validate_elimination_report_data(request):
+def validate_elimination_report_data(request, **_):
     """
     Validate elimination report data POST
     """
@@ -102,7 +102,7 @@ def _validate_monitoring_statuses(request, obj_name, valid_statuses):
         raise_operation_error(request, "{} can't be added to monitoring in current ({}) status".format(obj_name, monitoring.status))
 
 
-def validate_appeal_data(request):
+def validate_appeal_data(request, **_):
     """
     Validate appeal report data POST
     """
@@ -115,7 +115,7 @@ def validate_appeal_data(request):
     return validate_data(request, Appeal)
 
 
-def validate_patch_appeal_data(request):
+def validate_patch_appeal_data(request, **_):
     """
     Validate appeal report data PATCH
     """
@@ -135,7 +135,7 @@ def validate_patch_appeal_data(request):
     return validate_data(request, Appeal, partial=True)
 
 
-def validate_liability_data(request):
+def validate_liability_data(request, **_):
     """
     Validate liability report data POST
     """
@@ -148,7 +148,7 @@ def validate_liability_data(request):
     return validate_data(request, Liability)
 
 
-def validate_patch_liability_data(request):
+def validate_patch_liability_data(request, **_):
     """
     Validate liability report data PATCH
     """
@@ -165,15 +165,15 @@ def validate_patch_liability_data(request):
     return validate_data(request, Liability, partial=True)
 
 
-def validate_document_decision_status(request):
+def validate_document_decision_status(request, **_):
     _validate_document_status(request, DRAFT_STATUS)
 
 
-def validate_document_conclusion_status(request):
+def validate_document_conclusion_status(request, **_):
     _validate_document_status(request, ACTIVE_STATUS)
 
 
-def validate_document_post_status(request):
+def validate_document_post_status(request, **_):
     post = request.validated['post']
 
     if post.author != get_monitoring_role(request.authenticated_role):
@@ -185,12 +185,13 @@ def validate_document_post_status(request):
         _validate_document_status(request, (ADDRESSED_STATUS, DECLINED_STATUS))
 
 
-def validate_credentials_generate(request):
+def validate_credentials_generate(request, **_):
     try:
         token = get_access_token(request)
     except ValueError:
         raise_operation_error(request, 'No access token was provided.')
     try:
+        # TODO: get rid of TendersClient usage
         response = TendersClient(
             request.registry.api_token,
             host_url=request.registry.api_server,
@@ -219,7 +220,7 @@ def _validate_patch_monitoring_fields(request):
             request.errors.add('body', i, 'This field cannot be updated in the {} status.'.format(
                 request.validated['monitoring']['status']))
         request.errors.status = 422
-        raise error_handler(request.errors)
+        raise error_handler(request)
 
 
 def _validate_patch_monitoring_status(request):
@@ -237,7 +238,7 @@ def _validate_patch_monitoring_status(request):
                 'Status update from "{}" to "{}" is not allowed.'.format(request.context.status, status)
             )
             request.errors.status = 422
-            raise error_handler(request.errors)
+            raise error_handler(request)
         else:
             return func(request)
 
@@ -246,7 +247,7 @@ def _validate_patch_monitoring_status_draft_to_active(request):
     if not request.validated.get('data', {}).get('decision'):
         request.errors.status = 422
         request.errors.add('body', 'decision', 'This field is required.')
-        raise error_handler(request.errors)
+        raise error_handler(request)
 
 
 def _validate_patch_monitoring_status_active_to_addressed(request):
@@ -267,7 +268,7 @@ def _validate_patch_monitoring_status_active_to_addressed_or_declined(request):
     if not request.validated.get('data', {}).get('conclusion'):
         request.errors.status = 422
         request.errors.add('body', 'conclusion', 'This field is required.')
-        raise error_handler(request.errors)
+        raise error_handler(request)
 
 
 def _validate_patch_monitoring_status_addressed_to_completed(request):
@@ -303,7 +304,7 @@ def _validate_patch_monitoring_status_to_stopped_or_cancelled(request):
     if not request.validated.get('data', {}).get('cancellation'):
         request.errors.status = 422
         request.errors.add('body', 'cancellation', 'This field is required.')
-        raise error_handler(request.errors)
+        raise error_handler(request)
 
 
 def _validate_post_post_status(request):
@@ -329,7 +330,7 @@ def _validate_elimination_report_status(request):
         request.errors.status = 422
         request.errors.add('body', 'eliminationReport',
                            'Can\'t update in current {} monitoring status.'.format(monitoring.status))
-        raise error_handler(request.errors)
+        raise error_handler(request)
 
 
 def _validate_document_status(request, status):
@@ -339,7 +340,7 @@ def _validate_document_status(request, status):
         raise_operation_error(request, 'Can\'t add document in current {} monitoring status.'.format(status_current))
 
 
-def validate_posting_elimination_resolution(request):
+def validate_posting_elimination_resolution(request, **_):
     monitoring = request.validated['monitoring']
     monitoring.eliminationResolution.datePublished = monitoring.eliminationResolution.dateCreated
     if not monitoring.eliminationReport:

@@ -63,7 +63,7 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(
             set(response.json["data"]),
             {"id", "status", "tender_id", "dateModified",
-             "dateCreated", "reasons", "monitoring_id", "procuringStages", "restricted"}
+             "dateCreated", "reasons", "monitoring_id", "procuringStages", "restricted", "owner"}
         )
         self.assertEqual(response.json["data"]["status"], "draft")
 
@@ -100,7 +100,7 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(
             set(response.json["data"]),
             {"id", "status", "tender_id", "dateModified", "dateCreated", "reasons", "monitoring_id",
-             "procuringStages", "riskIndicators", "riskIndicatorsTotalImpact", "riskIndicatorsRegion", "restricted"}
+             "procuringStages", "riskIndicators", "riskIndicatorsTotalImpact", "riskIndicatorsRegion", "restricted", "owner"}
         )
         self.assertEqual(response.json["data"]["status"], "draft")
 

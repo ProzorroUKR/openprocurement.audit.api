@@ -60,9 +60,11 @@ class InspectionDocumentsResourceTest(BaseWebTest):
 
     def test_get_download(self):
         data = self.create_inspection()
-        response = self.app.get('/inspections/{}/documents/{}?download=1'.format(
+        key = data["documents"][0]["url"].split("/")[-1].split("?")[0]
+        response = self.app.get('/inspections/{}/documents/{}?download={}'.format(
             self.inspection_id,
             data["documents"][0]["id"],
+            key,
             status=302,
         ))
         self.assertIn('Content-Disposition', response.headers)

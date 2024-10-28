@@ -280,6 +280,7 @@ class RequestsListingResourceTest(BaseWebTest):
                 "parties",
                 "tenderId",
                 "documents",
+                "owner",
             },
         )
         self.assertIn("Location", response.headers)

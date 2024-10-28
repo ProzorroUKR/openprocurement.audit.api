@@ -1,4 +1,4 @@
-POST /api/2.5/monitorings/93480d4ae651486ab8cb03ad7baf778c/liabilities/0875071d90154a6eb27229d672a873fb/documents HTTP/1.0
+POST /api/2.5/monitorings/05c8521747ee4ed096200197b78b5990/liabilities/b9c20573d5f346f9ae89dfaf05fe6707/documents HTTP/1.0
 Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
 Content-Length: 331
 Content-Type: application/json
@@ -15,11 +15,11 @@ DATA:
 
 Response: 201 Created
 Content-Type: application/json
-Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/93480d4ae651486ab8cb03ad7baf778c/liabilities/0875071d90154a6eb27229d672a873fb/documents/bcc23016e50145f9b2065710d96d4a02
-Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDg1Mjc4ODAsICJpIjogNH19LCAiY2x1c3Rlcl90aW1lIjogeyJjbHVzdGVyVGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3MDg1Mjc4ODAsICJpIjogNH19LCAic2lnbmF0dXJlIjogeyJoYXNoIjogeyIkYmluYXJ5IjogeyJiYXNlNjQiOiAiWWlWMm55ZCs5b2FkM285NWRoYWxEYm1uVmNzPSIsICJzdWJUeXBlIjogIjAwIn19LCAia2V5SWQiOiA3MzMzMTc5ODM5MjQwNzMyNjc3fX19; Path=/
+Location: http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings/05c8521747ee4ed096200197b78b5990/liabilities/b9c20573d5f346f9ae89dfaf05fe6707/documents/c1bbd957caf449d496a714ef8976ca1a
+Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3Mjg5MDEwODksICJpIjogOH19LCAiY2x1c3Rlcl90aW1lIjogeyJjbHVzdGVyVGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3Mjg5MDEwODksICJpIjogOH19LCAic2lnbmF0dXJlIjogeyJoYXNoIjogeyIkYmluYXJ5IjogeyJiYXNlNjQiOiAibW1IeHJjTEJXcENpT0ZRQW82TzRCdmJNY09zPSIsICJzdWJUeXBlIjogIjAwIn19LCAia2V5SWQiOiA3MzcyMTgxMzExOTc0Mjc3MTIyfX19; Path=/
 {
   "data": {
-    "id": "bcc23016e50145f9b2065710d96d4a02",
+    "id": "c1bbd957caf449d496a714ef8976ca1a",
     "hash": "md5:00000000000000000000000000000000",
     "title": "another-letter.doc",
     "format": "application/msword",

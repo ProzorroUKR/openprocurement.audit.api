@@ -9,6 +9,7 @@ from openprocurement.audit.api.views.base import (
 from openprocurement.audit.api.utils import (
     context_unpack,
     generate_id,
+    set_ownership,
 )
 from openprocurement.audit.inspection.mask import INSPECTION_MASK_MAPPING
 from openprocurement.audit.inspection.utils import (
@@ -38,6 +39,7 @@ class InspectionsResource(RestrictedResourceListingMixin, MongodbResourceListing
             "monitoring_ids",
             "description",
             "documents",
+            "owner",
         }
         self.db_listing_method = request.registry.mongodb.inspection.list
         self.mask_mapping = INSPECTION_MASK_MAPPING
@@ -50,6 +52,7 @@ class InspectionsResource(RestrictedResourceListingMixin, MongodbResourceListing
         inspection.id = generate_id()
         inspection.inspection_id = generate_inspection_id(self.request)
         inspection.restricted = extract_restricted_config_from_monitoring(self.request)
+        set_ownership(inspection, self.request)
         set_author(inspection.documents, self.request, 'author')
         self.request.validated["inspection"] = inspection
         self.request.validated["inspection_src"] = {}

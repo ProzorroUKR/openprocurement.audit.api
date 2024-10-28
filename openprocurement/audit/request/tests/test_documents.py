@@ -60,10 +60,12 @@ class RequestDocumentsResourceTest(BaseWebTest):
 
     def test_get_download(self):
         data = self.create_request()
+        key = data["documents"][0]["url"].split("/")[-1].split("?")[0]
         response = self.app.get(
-            "/requests/{}/documents/{}?download=1".format(
+            "/requests/{}/documents/{}?download={}".format(
                 self.request_id,
                 data["documents"][0]["id"],
+                key,
                 status=302,
             )
         )

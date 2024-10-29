@@ -23,9 +23,9 @@ def run(env, args):
     logger.info("Starting migration: %s", migration_name)
 
     collections = {
-        "monitoring": env["registry"].mongodb.monitoring.collection.collection,
-        "inspection": env["registry"].mongodb.inspection.collection.collection,
-        "request": env["registry"].mongodb.request.collection.collection,
+        "monitoring": env["registry"].mongodb.monitoring.collection,
+        "inspection": env["registry"].mongodb.inspection.collection,
+        "request": env["registry"].mongodb.request.collection,
     }
 
     log_every = 100000
@@ -34,9 +34,14 @@ def run(env, args):
     for collection_name, collection in collections.items():
         logger.info(f"Updating {collection_name}s with owner field")
         count = 0
+        
+        filter_query = {"owner": {"$exists": False}}
+
+        total_docs = collection.count_documents(filter_query)
+        logger.info(f"Found {total_docs} {collection_name}s to update")
 
         cursor = collection.find(
-            {"owner": {"$exists": False}},
+            filter_query,
             no_cursor_timeout=True,
         )
         cursor.batch_size(args.b)
@@ -44,9 +49,7 @@ def run(env, args):
             for document in cursor:
                 collection.update_one(
                     {"_id": document["_id"]},
-                    {
-                        "$set": {"owner": args.owner},
-                    },
+                    {"$set": {"owner": args.owner}},
                 )
                 count += 1
                 if count % log_every == 0:

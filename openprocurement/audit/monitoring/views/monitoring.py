@@ -1,3 +1,4 @@
+from datetime import datetime
 from logging import getLogger
 
 from pyramid.security import ACLAllowed
@@ -32,6 +33,7 @@ from openprocurement.audit.monitoring.utils import (
     calculate_normalized_business_date,
     upload_objects_documents,
     extract_restricted_config_from_tender,
+    calculate_monitoring_prolongation,
 )
 from openprocurement.audit.monitoring.utils import (
     save_monitoring,
@@ -46,7 +48,7 @@ from openprocurement.audit.monitoring.validation import (
     validate_monitoring_data,
     validate_patch_monitoring_data,
     validate_credentials_generate,
-    validate_posting_elimination_resolution,
+    validate_posting_elimination_resolution, validate_cancellation_already_exists,
 )
 LOGGER = getLogger(__name__)
 
@@ -165,11 +167,16 @@ class MonitoringResource(APIResource):
         elif any([
             monitoring_old_status == DRAFT_STATUS and monitoring.status == CANCELLED_STATUS,
             monitoring_old_status == ACTIVE_STATUS and monitoring.status == STOPPED_STATUS,
-            monitoring_old_status == DECLINED_STATUS and monitoring.status == STOPPED_STATUS,
-            monitoring_old_status == ADDRESSED_STATUS and monitoring.status == STOPPED_STATUS
         ]):
+            validate_cancellation_already_exists(self.request)
             set_author(monitoring.cancellation.documents, self.request, 'author')
             monitoring.cancellation.datePublished = now
+        elif monitoring_old_status == STOPPED_STATUS and monitoring.status == ACTIVE_STATUS:
+            if monitoring.cancellation.datePublished < monitoring.monitoringPeriod.endDate:
+                monitoring_delta = calculate_monitoring_prolongation(monitoring)
+                if monitoring_delta:
+                    accelerator = get_monitoring_accelerator(self.context)
+                    monitoring.monitoringPeriod.endDate = monitoring.endDate = calculate_normalized_business_date(now, monitoring_delta, accelerator)
 
         if not elimination_resolution and monitoring.eliminationResolution:
             validate_posting_elimination_resolution(self.request)

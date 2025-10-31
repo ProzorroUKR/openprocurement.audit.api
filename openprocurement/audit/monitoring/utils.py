@@ -3,8 +3,8 @@ from functools import partial
 from logging import getLogger
 from re import compile
 from datetime import timedelta
-from dateorro import calc_datetime, calc_normalized_datetime, calc_working_datetime
-from openprocurement.audit.api.constants import TZ, WORKING_DAYS
+from dateorro import calc_datetime, calc_normalized_datetime, calc_working_datetime, calc_next_working_datetime
+from openprocurement.audit.api.constants import TZ, WORKING_DAYS, MONITORING_TIME
 from openprocurement.audit.api.utils import (
     update_logging_context, context_unpack, get_revision_changes,
     apply_data_patch, error_handler, generate_id,
@@ -198,3 +198,20 @@ def upload_objects_documents(request, obj, key='body'):
         check_document(request, document, key)
         document_route = request.matched_route.name
         update_document_url(request, document, document_route, {})
+
+
+def calculate_monitoring_prolongation(monitoring):
+    normalized_prev_start_date = calc_normalized_datetime(monitoring.monitoringPeriod.startDate, ceil=True)
+    normalized_cancellation_date = calc_normalized_datetime(monitoring.cancellation.datePublished, ceil=True)
+    if normalized_cancellation_date.date() == monitoring.monitoringPeriod.endDate.date():
+        return None
+    elif normalized_cancellation_date.date() == normalized_prev_start_date.date():
+        return MONITORING_TIME
+    else:
+        delta = 1
+        dt = calc_next_working_datetime(normalized_cancellation_date, backwards=True, calendar=WORKING_DAYS)
+        while dt.date() != normalized_prev_start_date.date():
+            dt = calc_next_working_datetime(dt, backwards=True, calendar=WORKING_DAYS)
+            delta += 1
+        return MONITORING_TIME - timedelta(days=delta)
+

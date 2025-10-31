@@ -14,7 +14,7 @@ services:
     ports:
     - "80:80"
   mongo:
-    image: 'bitnami/mongodb:latest'
+    image: bitnamilegacy/mongodb:6.0.13
     environment:
       MONGODB_ROOT_PASSWORD: example
       MONGODB_REPLICA_SET_MODE: primary

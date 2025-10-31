@@ -1167,6 +1167,86 @@ class MonitoringsResourceTest(BaseMonitoringWebTest, DSWebTestMixin):
                     }
                 )
 
+    def test_monitoring_life_cycle_reactivation(self, mock_restricted):
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+
+        with freeze_time("2025.10.01 12:00"):
+            response = self.app.post_json(
+                '/monitorings',
+                {
+                    "data": {
+                        "tender_id": self.uuid().hex,
+                        "reasons": ["public", "fiscal"],
+                        "procuringStages": ["awarding", "contracting"],
+                        "parties": [self.party]
+                    }
+                },
+                status=201
+            )
+
+        monitoring_id = response.json["data"]["id"]
+        party_id = response.json["data"]["parties"][0]["id"]
+
+        with freeze_time("2025.10.29 00:00"):
+            self.app.patch_json(
+                '/monitorings/{}'.format(monitoring_id),
+                {
+                    "data": {
+                        "status": "active",
+                        "decision": {
+                            "description": "text",
+                            "date": datetime.now().isoformat(),
+                            "documents": [{
+                                'title': 'lorem.doc',
+                                'url': self.generate_docservice_url(),
+                                'hash': 'md5:' + '0' * 32,
+                                'format': 'application/msword',
+                            }],
+                            "relatedParty": party_id
+                        }
+                    }
+                },
+                status=200
+            )
+
+        with freeze_time("2025.11.05 10:00"):
+            self.app.patch_json(
+                '/monitorings/{}'.format(monitoring_id),
+                {
+                    "data": {
+                        "cancellation": {
+                            "description": "Complaint was created",
+                            "relatedParty": party_id
+                        },
+                        "status": "stopped",
+                    }
+                }
+            )
+            with open('docs/source/monitoring/tutorial/http/stopped-monitoring.http', 'wt') as self.app.file_obj:
+                self.app.get('/monitorings/{}'.format(monitoring_id))
+
+        with freeze_time("2025.11.11 10:00"):
+            with open('docs/source/monitoring/tutorial/http/stopped-monitoring-to-active.http', 'wt') as self.app.file_obj:
+                self.app.patch_json(
+                    '/monitorings/{}'.format(monitoring_id),
+                    {
+                        "data": {
+                            "status": "active",
+                        }
+                    }
+                )
+
+            with open('docs/source/monitoring/tutorial/http/active-monitoring-to-stopped-second-time.http', 'wt') as self.app.file_obj:
+                self.app.patch_json(
+                    '/monitorings/{}'.format(monitoring_id),
+                    {
+                        "data": {
+                            "status": "stopped",
+                        }
+                    },
+                    status=403,
+                )
+
 
 @freeze_time("2018.01.01 00:00")
 class FeedDocsTest(BaseMonitoringWebTest):

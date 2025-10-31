@@ -1,0 +1,27 @@
+PATCH /api/2.5/monitorings/d8eb122045a54c979f0d47b968358ff4 HTTP/1.0
+Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
+Content-Length: 31
+Content-Type: application/json
+Host: audit-api-sandbox.prozorro.gov.ua
+DATA:
+{
+  "data": {
+    "status": "stopped"
+  }
+}
+
+Response: 403 Forbidden
+Content-Type: application/json
+Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3NjE5MDg0NjksICJpIjogNH19LCAiY2x1c3Rlcl90aW1lIjogeyJjbHVzdGVyVGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3NjE5MDg0NjksICJpIjogNH19LCAic2lnbmF0dXJlIjogeyJoYXNoIjogeyIkYmluYXJ5IjogeyJiYXNlNjQiOiAibGNrL0hGazVWV2Z2VnRDcUpQUWU0SlNmemxjPSIsICJzdWJUeXBlIjogIjAwIn19LCAia2V5SWQiOiA3NTY2NjI5NjY4NDY4NTU1NzgzfX19; Path=/
+X-Content-Type-Options: nosniff
+{
+  "status": "error",
+  "errors": [
+    {
+      "location": "body",
+      "name": "status",
+      "description": "Forbidden to change status from active to stopped more than once."
+    }
+  ]
+}
+

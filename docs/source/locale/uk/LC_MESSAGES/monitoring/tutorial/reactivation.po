@@ -1,0 +1,61 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) 2018, Raccoongang
+# This file is distributed under the same license as the openprocurement.audit.api package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, 2025.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: openprocurement.audit.api 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-10-31 13:18+0200\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: uk\n"
+"Language-Team: uk <LL@li.org>\n"
+"Plural-Forms: nplurals=3; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && n%10<=4 && (n%100<10 || n%100>=20) ? 1 : 2);\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Generated-By: Babel 2.15.0\n"
+
+#: ../../source/images.hrst:1
+msgid "yes"
+msgstr ""
+
+#: ../../source/images.hrst:5
+msgid "no"
+msgstr ""
+
+#: ../../source/monitoring/tutorial/reactivation.rst:4
+msgid "Reactivation Monitoring"
+msgstr "Поновлення моніторингу"
+
+#: ../../source/monitoring/tutorial/stopping.rst
+msgid "This section contains available actions for next roles:"
+msgstr "Секція містить опис можливих дій для наступний учасників моніторингу:"
+
+#: ../../source/monitoring/tutorial/stopping.rst
+msgid "|yes| Monitoring owner"
+msgstr "|yes| Власник моніторингу"
+
+#: ../../source/monitoring/tutorial/stopping.rst
+msgid "|no| Tender owner"
+msgstr "|no| Власник тендеру"
+
+#: ../../source/monitoring/tutorial/reactivation.rst:12
+msgid "If monitoring has ``stopped`` status, SAS-employee can activate one more time monitoring with ``active`` status. During that process new ``monitoringPeriod.endDate`` will be calculated, if monitoring has stopped in this period and some working days are left."
+msgstr "Маючи моніторинг у статусі ``stopped`` (Рішення зупинено), власник моніторингу має можливість поновити ще раз моніторинг змінивши статус на ``active``. Під час поновлення моніторингу буде оновлена дата ``monitoringPeriod.endDate``, якщо моніторинг було зупинено під час ``monitoringPeriod`` і залишилися невикористані робочі дні на розгляд моніторингу."
+
+#: ../../source/monitoring/tutorial/reactivation.rst:15
+msgid "Let's look at monitoring, that was ``stopped`` at 5th working day:"
+msgstr "Подивимося на моніторинг, який було призупинено на 5 робочий день (``2025-11-05T12:00:00+02:00``):"
+
+#: ../../source/monitoring/tutorial/reactivation.rst:20
+msgid "Let's activate one more time monitoring in 6 days (``2025-11-11T10:00:00+02:00``). 10 working days of period are left during stopping, that's why new ``monitoringPeriod.endDate`` will be calculated:"
+msgstr "Власник моніторингу прийняв рішення поновити моніторинг через 6 днів (``2025-11-11T10:00:00+02:00``). На момент призупинення моніторингу залишалося 10 робочих днів, тому при поновленні моніторингу буде оновлена дата ``monitoringPeriod.endDate`` (до 11.11 буде додано 10 повних робочих днів):"
+
+#: ../../source/monitoring/tutorial/reactivation.rst:26
+msgid "There is a possibility reactivate ``stopped`` monitoring and stop ``active`` monitoring only once. If we try to stop one more time this monitoring we will see an error:"
+msgstr "Поновлювати і призупиняти повторно моніторинг дозволено тільки один раз. Якщо спробуємо призупинити поновлений моніторинг другий раз, то побачимо помилку:"
+

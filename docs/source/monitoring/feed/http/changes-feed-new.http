@@ -1,10 +1,11 @@
-GET /api/2.5/monitorings?offset=1728901089.992&limit=3&opt_fields=reasons HTTP/1.0
+GET /api/2.5/monitorings?offset=1761908474.013&limit=3&opt_fields=reasons HTTP/1.0
 Authorization: Basic YnJva2VyOmJyb2tlcg==
 Host: audit-api-sandbox.prozorro.gov.ua
 
 Response: 200 OK
 Content-Type: application/json
-Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3Mjg5MDEwOTAsICJpIjogN319LCAiY2x1c3Rlcl90aW1lIjogeyJjbHVzdGVyVGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3Mjg5MDEwOTAsICJpIjogN319LCAic2lnbmF0dXJlIjogeyJoYXNoIjogeyIkYmluYXJ5IjogeyJiYXNlNjQiOiAicStJUkdNaGpDQ2ljaFFDR3lNc3IrdXd4RWF3PSIsICJzdWJUeXBlIjogIjAwIn19LCAia2V5SWQiOiA3MzcyMTgxMzExOTc0Mjc3MTIyfX19; Path=/
+Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3NjE5MDg0NzQsICJpIjogOX19LCAiY2x1c3Rlcl90aW1lIjogeyJjbHVzdGVyVGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3NjE5MDg0NzQsICJpIjogOX19LCAic2lnbmF0dXJlIjogeyJoYXNoIjogeyIkYmluYXJ5IjogeyJiYXNlNjQiOiAiMTViSDBKWE9CSU92WkVQN3ZOQjMzV2crSUdFPSIsICJzdWJUeXBlIjogIjAwIn19LCAia2V5SWQiOiA3NTY2NjI5NjY4NDY4NTU1NzgzfX19; Path=/
+X-Content-Type-Options: nosniff
 {
   "data": [
     {
@@ -16,14 +17,14 @@ Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3Mjg5
     }
   ],
   "next_page": {
-    "offset": 1728901090.043,
-    "path": "/api/2.5/monitorings?offset=1728901090.043&limit=3&opt_fields=reasons",
-    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings?offset=1728901090.043&limit=3&opt_fields=reasons"
+    "offset": 1761908474.101,
+    "path": "/api/2.5/monitorings?offset=1761908474.101&limit=3&opt_fields=reasons",
+    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings?offset=1761908474.101&limit=3&opt_fields=reasons"
   },
   "prev_page": {
-    "offset": 1728901090.043,
-    "path": "/api/2.5/monitorings?offset=1728901090.043&limit=3&opt_fields=reasons&descending=1",
-    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings?offset=1728901090.043&limit=3&opt_fields=reasons&descending=1"
+    "offset": 1761908474.101,
+    "path": "/api/2.5/monitorings?offset=1761908474.101&limit=3&opt_fields=reasons&descending=1",
+    "uri": "http://audit-api-sandbox.prozorro.gov.ua/api/2.5/monitorings?offset=1761908474.101&limit=3&opt_fields=reasons&descending=1"
   }
 }
 

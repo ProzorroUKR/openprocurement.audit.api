@@ -1,0 +1,93 @@
+PATCH /api/2.5/monitorings/d8eb122045a54c979f0d47b968358ff4 HTTP/1.0
+Authorization: Basic dGVzdF9zYXM6dGVzdF9zYXNfdG9rZW4=
+Content-Length: 30
+Content-Type: application/json
+Host: audit-api-sandbox.prozorro.gov.ua
+DATA:
+{
+  "data": {
+    "status": "active"
+  }
+}
+
+Response: 200 OK
+Content-Type: application/json
+Set-Cookie: SESSION=eyJvcGVyYXRpb25fdGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3NjE5MDg0NjksICJpIjogNH19LCAiY2x1c3Rlcl90aW1lIjogeyJjbHVzdGVyVGltZSI6IHsiJHRpbWVzdGFtcCI6IHsidCI6IDE3NjE5MDg0NjksICJpIjogNH19LCAic2lnbmF0dXJlIjogeyJoYXNoIjogeyIkYmluYXJ5IjogeyJiYXNlNjQiOiAibGNrL0hGazVWV2Z2VnRDcUpQUWU0SlNmemxjPSIsICJzdWJUeXBlIjogIjAwIn19LCAia2V5SWQiOiA3NTY2NjI5NjY4NDY4NTU1NzgzfX19; Path=/
+X-Content-Type-Options: nosniff
+{
+  "data": {
+    "tender_id": "6dea03580463fcef063bedcff13dcbfe",
+    "monitoring_id": "UA-M-2025-10-01-000001",
+    "status": "active",
+    "reasons": [
+      "public",
+      "fiscal"
+    ],
+    "procuringStages": [
+      "awarding",
+      "contracting"
+    ],
+    "monitoringPeriod": {
+      "startDate": "2025-10-29T02:00:00+02:00",
+      "endDate": "2025-11-26T00:00:00+02:00"
+    },
+    "parties": [
+      {
+        "id": "debfed83b50642e1a1ef3283a7c2d3b3",
+        "name": "The State Audit Service of Ukraine",
+        "datePublished": "2025-10-01T15:00:00+03:00",
+        "identifier": {
+          "scheme": "UA-EDR",
+          "id": "40165856",
+          "uri": "http://www.dkrs.gov.ua"
+        },
+        "address": {
+          "streetAddress": "Petra Sahaidachnoho St, 4",
+          "locality": "Kyiv",
+          "region": "Kyiv",
+          "postalCode": "04070",
+          "countryName": "Ukraine"
+        },
+        "contactPoint": {
+          "telephone": "0440000000",
+          "name": "Oleksii Kovalenko"
+        },
+        "roles": [
+          "sas"
+        ]
+      }
+    ],
+    "dateModified": "2025-11-11T12:00:00+02:00",
+    "endDate": "2025-11-26T00:00:00+02:00",
+    "dateCreated": "2025-10-01T15:00:00+03:00",
+    "owner": "test_sas",
+    "restricted": false,
+    "id": "d8eb122045a54c979f0d47b968358ff4",
+    "decision": {
+      "description": "text",
+      "documents": [
+        {
+          "id": "3af9759640384f5d92e242158bd17ecf",
+          "hash": "md5:00000000000000000000000000000000",
+          "title": "lorem.doc",
+          "format": "application/msword",
+          "url": "http://public-docs-sandbox.prozorro.gov.ua/get/8429403bd61044b5a29b2e093f81053b?Signature=8ghy2ERr%252BgDa4rkq1FfPhvHERf55Fpqa4ZSVq4UgOwYls2UhoiMstRJ%252B3i4yNhu4E8qBwQFJ%252BR8NNQUvRhjNDg%253D%253D&KeyID=a8968c46",
+          "datePublished": "2025-10-29T02:00:00+02:00",
+          "dateModified": "2025-10-29T02:00:00+02:00",
+          "author": "monitoring_owner"
+        }
+      ],
+      "dateCreated": "2025-10-29T02:00:00+02:00",
+      "datePublished": "2025-10-29T02:00:00+02:00",
+      "date": "2025-10-29T00:00:00+02:00",
+      "relatedParty": "debfed83b50642e1a1ef3283a7c2d3b3"
+    },
+    "cancellation": {
+      "description": "Complaint was created",
+      "dateCreated": "2025-11-05T12:00:00+02:00",
+      "datePublished": "2025-11-05T12:00:00+02:00",
+      "relatedParty": "debfed83b50642e1a1ef3283a7c2d3b3"
+    }
+  }
+}
+

@@ -9,7 +9,7 @@ Stop Monitoring
     | |no| Tender owner
 
 
-As soon as the monitoring in ``active``, ``addressed``, ``declined`` status, SAS-employee can terminate monitoring with ``stopped`` status with providing the ``description`` in ``cancellation`` report
+As soon as the monitoring in ``active`` status, SAS-employee can terminate monitoring with ``stopped`` status with providing the ``description`` in ``cancellation`` report
 
 .. include:: http/monitoring-to-stopped.http
    :code:

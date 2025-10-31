@@ -21,4 +21,5 @@ Tutorial
    closing
    stopping
    cancellation
+   reactivation
    documents

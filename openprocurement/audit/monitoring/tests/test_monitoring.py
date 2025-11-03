@@ -1,3 +1,5 @@
+import unittest
+
 from dateorro import calc_working_datetime, calc_datetime
 from datetime import datetime, timedelta
 from freezegun import freeze_time
@@ -598,31 +600,31 @@ class StoppedMonitoringResourceTest(BaseWebTest):
         ('2025-10-30T12:00:00+02:00', '2025-10-31T15:00:00+02:00', '2025-11-21T00:00:00+02:00'),
         ('2025-11-05T12:00:00+02:00', '2025-11-11T10:00:00+02:00', '2025-11-26T00:00:00+02:00'),
     ])
+    @unittest.skipIf(SANDBOX_MODE, "Skip test with accelerator")
     def test_patch_to_active(self, cancellation_date, activation_date, monitoring_period_end_date):
-        if not SANDBOX_MODE:
-            with freeze_time(cancellation_date):
-                response = self.app.patch_json(
-                    '/monitorings/{}'.format(self.monitoring_id),
-                    {"data": {
-                        "status": "stopped",
-                        "cancellation": {
-                            "description": "Whisper words of wisdom - let it be."
-                        }
-                    }},
-                )
-                self.assertEqual(response.json["data"]["status"], "stopped")
+        with freeze_time(cancellation_date):
+            response = self.app.patch_json(
+                '/monitorings/{}'.format(self.monitoring_id),
+                {"data": {
+                    "status": "stopped",
+                    "cancellation": {
+                        "description": "Whisper words of wisdom - let it be."
+                    }
+                }},
+            )
+            self.assertEqual(response.json["data"]["status"], "stopped")
 
-            with freeze_time(activation_date):
-                response = self.app.patch_json(
-                    '/monitorings/{}'.format(self.monitoring_id),
-                    {"data": {
-                        "status": "active",
-                    }},
-                )
+        with freeze_time(activation_date):
+            response = self.app.patch_json(
+                '/monitorings/{}'.format(self.monitoring_id),
+                {"data": {
+                    "status": "active",
+                }},
+            )
 
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.content_type, 'application/json')
-            self.assertEqual(response.json['data']["status"], "active")
-            self.assertEqual(response.json['data']["monitoringPeriod"]["startDate"], self.monitoring_period["startDate"])
-            self.assertEqual(response.json['data']["monitoringPeriod"]["endDate"], monitoring_period_end_date)
-            self.assertEqual(response.json['data']["endDate"], monitoring_period_end_date)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.json['data']["status"], "active")
+        self.assertEqual(response.json['data']["monitoringPeriod"]["startDate"], self.monitoring_period["startDate"])
+        self.assertEqual(response.json['data']["monitoringPeriod"]["endDate"], monitoring_period_end_date)
+        self.assertEqual(response.json['data']["endDate"], monitoring_period_end_date)

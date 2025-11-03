@@ -48,7 +48,8 @@ from openprocurement.audit.monitoring.validation import (
     validate_monitoring_data,
     validate_patch_monitoring_data,
     validate_credentials_generate,
-    validate_posting_elimination_resolution, validate_cancellation_already_exists,
+    validate_posting_elimination_resolution,
+    validate_cancellation_already_exists,
 )
 LOGGER = getLogger(__name__)
 

@@ -11,7 +11,7 @@ from openprocurement.audit.api.constants import (
     ADDRESSED_STATUS,
     DECLINED_STATUS,
     STOPPED_STATUS,
-    CANCELLED_STATUS,
+    CANCELLED_STATUS, CLOSED_STATUS, COMPLETED_STATUS,
 )
 from openprocurement.audit.api.mask import mask_object_data
 from openprocurement.audit.api.mask_deprecated import mask_object_data_deprecated
@@ -155,7 +155,6 @@ class MonitoringResource(APIResource):
             accelerator = get_monitoring_accelerator(self.context)
             monitoring.monitoringPeriod = generate_period(now, MONITORING_TIME, accelerator)
             monitoring.decision.datePublished = now
-            monitoring.endDate = calculate_normalized_business_date(now, MONITORING_TIME, accelerator)
         elif monitoring_old_status == ACTIVE_STATUS and monitoring.status == ADDRESSED_STATUS:
             set_author(monitoring.conclusion.documents, self.request, 'author')
             accelerator = get_monitoring_accelerator(self.context)
@@ -177,7 +176,12 @@ class MonitoringResource(APIResource):
                 monitoring_delta = calculate_monitoring_prolongation(monitoring)
                 if monitoring_delta:
                     accelerator = get_monitoring_accelerator(self.context)
-                    monitoring.monitoringPeriod.endDate = monitoring.endDate = calculate_normalized_business_date(now, monitoring_delta, accelerator)
+                    monitoring.monitoringPeriod.endDate = calculate_normalized_business_date(now, monitoring_delta, accelerator)
+        elif any([
+            monitoring_old_status == DECLINED_STATUS and monitoring.status == CLOSED_STATUS,
+            monitoring_old_status == ADDRESSED_STATUS and monitoring.status == COMPLETED_STATUS,
+        ]):
+            monitoring.endDate = now
 
         if not elimination_resolution and monitoring.eliminationResolution:
             validate_posting_elimination_resolution(self.request)

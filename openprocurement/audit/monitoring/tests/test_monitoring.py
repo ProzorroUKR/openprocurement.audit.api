@@ -130,7 +130,6 @@ class MonitoringResourceTest(BaseWebTest):
         self.assertEqual(response.json['data']["monitoringPeriod"]["startDate"], now_date.isoformat())
         self.assertEqual(response.json['data']["dateModified"], now_date.isoformat())
         self.assertEqual(response.json['data']["monitoringPeriod"]["endDate"], end_date.isoformat())
-        self.assertEqual(response.json['data']["endDate"], end_date.isoformat())
 
     def test_patch_risk_indicators_forbidden(self):
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
@@ -516,6 +515,7 @@ class DeclinedMonitoringResourceTest(BaseWebTest):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["status"], "closed")
+        self.assertIn("endDate", response.json['data'])
 
     def test_fail_change_status(self):
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
@@ -627,4 +627,3 @@ class StoppedMonitoringResourceTest(BaseWebTest):
         self.assertEqual(response.json['data']["status"], "active")
         self.assertEqual(response.json['data']["monitoringPeriod"]["startDate"], self.monitoring_period["startDate"])
         self.assertEqual(response.json['data']["monitoringPeriod"]["endDate"], monitoring_period_end_date)
-        self.assertEqual(response.json['data']["endDate"], monitoring_period_end_date)

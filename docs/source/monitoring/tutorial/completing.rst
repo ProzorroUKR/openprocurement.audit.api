@@ -9,7 +9,8 @@ Complete Monitoring
     | |no| Tender owner
 
 
-When the elimination report is posted, SAS-employee can move the monitoring to ``completed`` status
+When the elimination report is posted, SAS-employee can move the monitoring to ``completed`` status.
+Field `endDate` will be set during completing.
 
 .. include:: http/monitoring-to-completed.http
    :code:

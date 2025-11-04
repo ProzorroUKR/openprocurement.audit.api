@@ -1,4 +1,3 @@
-from datetime import datetime
 from logging import getLogger
 
 from pyramid.security import ACLAllowed
@@ -11,7 +10,9 @@ from openprocurement.audit.api.constants import (
     ADDRESSED_STATUS,
     DECLINED_STATUS,
     STOPPED_STATUS,
-    CANCELLED_STATUS, CLOSED_STATUS, COMPLETED_STATUS,
+    CANCELLED_STATUS,
+    CLOSED_STATUS,
+    COMPLETED_STATUS,
 )
 from openprocurement.audit.api.mask import mask_object_data
 from openprocurement.audit.api.mask_deprecated import mask_object_data_deprecated

@@ -25,6 +25,7 @@ test_requires = requires + [
     'python-coveralls',
     'coverage',
     'pytest-cov',
+    'parameterized',
 ]
 setup_requires = [
     'pytest-runner',

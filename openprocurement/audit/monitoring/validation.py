@@ -286,14 +286,8 @@ def _validate_patch_monitoring_status_declined_to_closed(request):
 
 def _validate_patch_monitoring_status_active_to_stopped(request):
     _validate_patch_monitoring_status_to_stopped_or_cancelled(request)
-
-
-def _validate_patch_monitoring_status_addressed_to_stopped(request):
-    _validate_patch_monitoring_status_to_stopped_or_cancelled(request)
-
-
-def _validate_patch_monitoring_status_declined_to_stopped(request):
-    _validate_patch_monitoring_status_to_stopped_or_cancelled(request)
+    if request.validated.get('data', {}).get('cancellation', {}).get('datePublished'):
+        raise_operation_error(request, 'Forbidden to change status from active to stopped more than once.', name="status")
 
 
 def _validate_patch_monitoring_status_draft_to_cancelled(request):
@@ -305,6 +299,10 @@ def _validate_patch_monitoring_status_to_stopped_or_cancelled(request):
         request.errors.status = 422
         request.errors.add('body', 'cancellation', 'This field is required.')
         raise error_handler(request)
+
+
+def _validate_patch_monitoring_status_stopped_to_active(request):
+    pass
 
 
 def _validate_post_post_status(request):
@@ -355,4 +353,16 @@ def validate_posting_elimination_resolution(request, **_):
                 request,
                 "Can't post eliminationResolution without eliminationReport "
                 "earlier than {} business days since conclusion.datePublished".format(RESOLUTION_WAIT_PERIOD.days)
+            )
+
+
+def validate_cancellation_already_exists(request):
+    if request.validated.get('monitoring_src', {}).get('cancellation') and request.validated['monitoring'].cancellation:
+        monitoring_cancellation = request.validated['monitoring'].cancellation.serialize("view")
+        if request.validated.get('monitoring_src', {}).get('cancellation') != monitoring_cancellation:
+            raise_operation_error(
+                request,
+                'Cancellation already exists.',
+                status=422,
+                name='cancellation',
             )

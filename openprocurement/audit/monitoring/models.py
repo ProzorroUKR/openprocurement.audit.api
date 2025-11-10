@@ -324,7 +324,7 @@ class Monitoring(BaseModel):
             'edit_declined': whitelist('cancellation') + _perm_edit_whitelist,
             'edit_completed': whitelist('documents'),
             'edit_closed': whitelist('documents'),
-            'edit_stopped': whitelist('documents'),
+            'edit_stopped': whitelist('documents', 'status'),
             'edit_cancelled': whitelist('documents'),
             'admins': whitelist('is_masked'),
             'view': blacklist(

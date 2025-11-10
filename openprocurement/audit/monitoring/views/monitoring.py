@@ -11,6 +11,8 @@ from openprocurement.audit.api.constants import (
     DECLINED_STATUS,
     STOPPED_STATUS,
     CANCELLED_STATUS,
+    CLOSED_STATUS,
+    COMPLETED_STATUS,
 )
 from openprocurement.audit.api.mask import mask_object_data
 from openprocurement.audit.api.mask_deprecated import mask_object_data_deprecated
@@ -32,6 +34,7 @@ from openprocurement.audit.monitoring.utils import (
     calculate_normalized_business_date,
     upload_objects_documents,
     extract_restricted_config_from_tender,
+    calculate_monitoring_prolongation,
 )
 from openprocurement.audit.monitoring.utils import (
     save_monitoring,
@@ -47,6 +50,7 @@ from openprocurement.audit.monitoring.validation import (
     validate_patch_monitoring_data,
     validate_credentials_generate,
     validate_posting_elimination_resolution,
+    validate_cancellation_already_exists,
 )
 LOGGER = getLogger(__name__)
 
@@ -152,7 +156,6 @@ class MonitoringResource(APIResource):
             accelerator = get_monitoring_accelerator(self.context)
             monitoring.monitoringPeriod = generate_period(now, MONITORING_TIME, accelerator)
             monitoring.decision.datePublished = now
-            monitoring.endDate = calculate_normalized_business_date(now, MONITORING_TIME, accelerator)
         elif monitoring_old_status == ACTIVE_STATUS and monitoring.status == ADDRESSED_STATUS:
             set_author(monitoring.conclusion.documents, self.request, 'author')
             accelerator = get_monitoring_accelerator(self.context)
@@ -165,11 +168,21 @@ class MonitoringResource(APIResource):
         elif any([
             monitoring_old_status == DRAFT_STATUS and monitoring.status == CANCELLED_STATUS,
             monitoring_old_status == ACTIVE_STATUS and monitoring.status == STOPPED_STATUS,
-            monitoring_old_status == DECLINED_STATUS and monitoring.status == STOPPED_STATUS,
-            monitoring_old_status == ADDRESSED_STATUS and monitoring.status == STOPPED_STATUS
         ]):
+            validate_cancellation_already_exists(self.request)
             set_author(monitoring.cancellation.documents, self.request, 'author')
             monitoring.cancellation.datePublished = now
+        elif monitoring_old_status == STOPPED_STATUS and monitoring.status == ACTIVE_STATUS:
+            if monitoring.cancellation.datePublished < monitoring.monitoringPeriod.endDate:
+                monitoring_delta = calculate_monitoring_prolongation(monitoring)
+                if monitoring_delta:
+                    accelerator = get_monitoring_accelerator(self.context)
+                    monitoring.monitoringPeriod.endDate = calculate_normalized_business_date(now, monitoring_delta, accelerator)
+        elif any([
+            monitoring_old_status == DECLINED_STATUS and monitoring.status == CLOSED_STATUS,
+            monitoring_old_status == ADDRESSED_STATUS and monitoring.status == COMPLETED_STATUS,
+        ]):
+            monitoring.endDate = now
 
         if not elimination_resolution and monitoring.eliminationResolution:
             validate_posting_elimination_resolution(self.request)

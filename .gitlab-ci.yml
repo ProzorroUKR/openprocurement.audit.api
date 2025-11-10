@@ -119,7 +119,7 @@ stop_review:
   image: $CI_REGISTRY_IMAGE:$TAG
   stage: test
   services:
-    - name: bitnami/mongodb:4.4.12-debian-10-r24
+    - name: bitnamilegacy/mongodb:6.0.13-debian-11-r9
       alias: mongo
   tags:
     - kube-dev
@@ -167,7 +167,7 @@ test_setup_py:
   image: python:3.6-slim-jessie
   stage: test
   services:
-    - name: bitnami/mongodb:4.4.12-debian-10-r24
+    - name: bitnamilegacy/mongodb:6.0.13-debian-11-r9
       alias: mongo
   cache:
     key: ${CI_COMMIT_REF_SLUG}

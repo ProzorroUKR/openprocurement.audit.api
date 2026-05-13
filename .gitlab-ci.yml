@@ -1,8 +1,7 @@
-image: docker:stable
-stages:
-  - build
-  - deploy
-  - test
+include:
+  - project: 'Web-Projects/pipeline-scripts'
+    ref: master
+    file: '/templates/security.yml'
 
 variables:
   GIT_STRATEGY: none
@@ -10,12 +9,32 @@ variables:
   MONGODB_REPLICA_SET_MODE: primary
   MONGODB_REPLICA_SET_NAME: rs0
   MONGODB_REPLICA_SET_KEY: replicaSetKey
+  IMAGE_TAG: ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
+  SEC_CS_IMAGE: $CI_REGISTRY_IMAGE:$IMAGE_TAG
+  SEC_CS_DOCKERFILE_PATH: Dockerfile
+  DEFECTDOJO_PRODUCT_TYPE: "CDB"
 
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+    - if: $CI_COMMIT_BRANCH == "master" && $BUILT_AS_BRIDGE == null
+      when: never
+    - if: $CI_COMMIT_BRANCH && $BUILT_AS_BRIDGE
+    - if: $CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS
+      when: never
+    - if: $CI_COMMIT_BRANCH
+    - if: $CI_COMMIT_TAG
+    - when: never
+
+stages:
+  - build
+  - security
+  - deploy
+  - test
 
 .build:
   stage: build
   variables:
-    IMAGE_TAG: ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
     GIT_STRATEGY: fetch
   image:
     name: gcr.io/kaniko-project/executor:v1.9.0-debug
@@ -34,27 +53,25 @@ variables:
       --skip-tls-verify
       --cache=true
 
-
 build:
   extends: .build
-  only:
-    - branches
-  variables:
-    IMAGE_TAG: ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
+  rules:
+    - if: $CI_COMMIT_BRANCH && $CI_COMMIT_BRANCH != "master"
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
 build_master:
   extends: .build
-  only:
-    - master
   variables:
     IMAGE_TAG: latest
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
 
 build_tag:
   extends: .build
-  only:
-    - tags
   variables:
     IMAGE_TAG: $CI_COMMIT_TAG
+  rules:
+    - if: $CI_COMMIT_TAG
 
 .base_deploy: &base_deploy
   stage: deploy
@@ -80,12 +97,11 @@ review:
     TAG: ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
   dependencies:
     - build
-  only:
-    - branches
-  except:
-    - master
-    - schedules
-  when: manual    
+  rules:
+    - if: $CI_COMMIT_BRANCH && $CI_COMMIT_BRANCH != "master"
+      when: manual
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: manual
 
 deploy_master:
   <<: *base_deploy
@@ -94,95 +110,40 @@ deploy_master:
     url: http://$APP_NAME-${CI_COMMIT_REF_SLUG}.${K8S_DOMAIN}/api/2.5/monitorings
   dependencies:
     - build_master
-  only:
-    - master
-  except:
-    - schedules
+  rules:
+    - if: $CI_COMMIT_BRANCH == "master"
 
 stop_review:
   stage: deploy
   script:
-    - helm3 uninstall audit-api-$CI_COMMIT_REF_SLUG
+    - helm3 delete $APP_NAME-$CI_COMMIT_REF_SLUG --namespace $HELM_NAMESPACE
   environment:
     name: review/${CI_COMMIT_REF_SLUG}
     action: stop
   tags:
     - shell
-  only:
-    - branches
-  except:
-    - master
-    - schedules
-  when: manual
+  variables:
+    APP_NAME: audit-api
+  rules:
+    - if: $CI_COMMIT_BRANCH && $CI_COMMIT_BRANCH != "master"
+      when: manual
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: manual
 
-.test:
-  image: $CI_REGISTRY_IMAGE:$TAG
+test:
   stage: test
-  services:
-    - name: bitnamilegacy/mongodb:6.0.13-debian-11-r9
-      alias: mongo
+  image: python:3.9
   tags:
     - kube-dev
-  only:
-    - branches
-  except:
-    - schedules
-  dependencies:
-    - build
-  variables:
-    TAG: ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
-
-.test_main:
-  extends: .test
-  script:
-    - cd /app
-    - pip install -e .[test]
-    - py.test $TESTS_PATH -v
-      --color=yes
-      --cov=$COV_PATH
-      --cov-config=$COV_FILE
-      --cov-report xml
-      --dist=each
-      --tx=popen//id=sand//env:DB_NAME=test_sandbox//env:SANDBOX_MODE=1
-      --tx=popen//id=prod//env:DB_NAME=test_prod//env:SANDBOX_MODE=
-  coverage: '/TOTAL\s+\d+\s+\d+\s+(\d+%)/'
-
-test_api:
-  extends: .test_main
-  variables:
-    TESTS_PATH: openprocurement/audit
-    COV_PATH: openprocurement/audit
-    COV_FILE: .coveragerc
-
-test_docs:
-  extends: .test
-  before_script:
-    - cd /app
-    - pip install -e .[test]
-  script:
-    - py.test docs.py
-  when: manual
-
-test_setup_py:
-  image: python:3.6-slim-jessie
-  stage: test
   services:
-    - name: bitnamilegacy/mongodb:6.0.13-debian-11-r9
+    - name: bitnami/mongodb:latest
       alias: mongo
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - .eggs/
-  variables:
-    GIT_STRATEGY: clone
-  only:
-    - branches
-  dependencies:
-    - build
-  when: manual
   before_script:
-    - apt-get update
-    - apt-get install -y git libzmq-dev libssl-dev gcc
-    - pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+    - pip install -r requirements.txt
+    - pip install -r tests/requirements.txt
+    - pip install -e .
   script:
-    - python setup.py test
+    - cd tests && pytest
+  rules:
+    - if: $CI_COMMIT_BRANCH
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"

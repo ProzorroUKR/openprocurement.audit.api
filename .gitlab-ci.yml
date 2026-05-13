@@ -29,8 +29,8 @@ image: docker:stable
 stages:
   - build
   - security
-  - deploy
   - test
+  - deploy
 
 .build:
   stage: build

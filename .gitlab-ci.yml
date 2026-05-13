@@ -9,8 +9,7 @@ variables:
   MONGODB_REPLICA_SET_MODE: primary
   MONGODB_REPLICA_SET_NAME: rs0
   MONGODB_REPLICA_SET_KEY: replicaSetKey
-  IMAGE_TAG: ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
-  SEC_CS_IMAGE: $CI_REGISTRY_IMAGE:$IMAGE_TAG
+  SEC_CS_IMAGE: $CI_REGISTRY_IMAGE:ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
   SEC_CS_DOCKERFILE_PATH: Dockerfile
   DEFECTDOJO_PRODUCT_TYPE: "CDB"
 
@@ -26,6 +25,7 @@ workflow:
     - if: $CI_COMMIT_TAG
     - when: never
 
+image: docker:stable
 stages:
   - build
   - security
@@ -35,6 +35,7 @@ stages:
 .build:
   stage: build
   variables:
+    IMAGE_TAG: ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
     GIT_STRATEGY: fetch
   image:
     name: gcr.io/kaniko-project/executor:v1.9.0-debug
@@ -55,8 +56,10 @@ stages:
 
 build:
   extends: .build
+  variables:
+    IMAGE_TAG: ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
   rules:
-    - if: $CI_COMMIT_BRANCH && $CI_COMMIT_BRANCH != "master"
+    - if: $CI_COMMIT_BRANCH
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
 
 build_master:
@@ -98,6 +101,8 @@ review:
   dependencies:
     - build
   rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
     - if: $CI_COMMIT_BRANCH && $CI_COMMIT_BRANCH != "master"
       when: manual
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
@@ -111,39 +116,104 @@ deploy_master:
   dependencies:
     - build_master
   rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
     - if: $CI_COMMIT_BRANCH == "master"
 
 stop_review:
   stage: deploy
   script:
-    - helm3 delete $APP_NAME-$CI_COMMIT_REF_SLUG --namespace $HELM_NAMESPACE
+    - helm3 uninstall audit-api-$CI_COMMIT_REF_SLUG
   environment:
     name: review/${CI_COMMIT_REF_SLUG}
     action: stop
   tags:
     - shell
-  variables:
-    APP_NAME: audit-api
   rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
     - if: $CI_COMMIT_BRANCH && $CI_COMMIT_BRANCH != "master"
       when: manual
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: manual
 
-test:
+.test:
+  image: $CI_REGISTRY_IMAGE:$TAG
   stage: test
-  image: python:3.9
+  services:
+    - name: bitnamilegacy/mongodb:6.0.13-debian-11-r9
+      alias: mongo
   tags:
     - kube-dev
-  services:
-    - name: bitnami/mongodb:latest
-      alias: mongo
-  before_script:
-    - pip install -r requirements.txt
-    - pip install -r tests/requirements.txt
-    - pip install -e .
-  script:
-    - cd tests && pytest
+  dependencies:
+    - build
+  variables:
+    TAG: ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
   rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
     - if: $CI_COMMIT_BRANCH
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+
+.test_main:
+  extends: .test
+  script:
+    - cd /app
+    - pip install -e .[test]
+    - py.test $TESTS_PATH -v
+      --color=yes
+      --cov=$COV_PATH
+      --cov-config=$COV_FILE
+      --cov-report xml
+      --dist=each
+      --tx=popen//id=sand//env:DB_NAME=test_sandbox//env:SANDBOX_MODE=1
+      --tx=popen//id=prod//env:DB_NAME=test_prod//env:SANDBOX_MODE=
+  coverage: '/TOTAL\s+\d+\s+\d+\s+(\d+%)/'
+
+test_api:
+  extends: .test_main
+  variables:
+    TESTS_PATH: openprocurement/audit
+    COV_PATH: openprocurement/audit
+    COV_FILE: .coveragerc
+
+test_docs:
+  extends: .test
+  before_script:
+    - cd /app
+    - pip install -e .[test]
+  script:
+    - py.test docs.py
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "schedule"
+      when: never
+    - if: $CI_COMMIT_BRANCH
+      when: manual
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: manual
+
+test_setup_py:
+  image: python:3.6-slim-jessie
+  stage: test
+  services:
+    - name: bitnamilegacy/mongodb:6.0.13-debian-11-r9
+      alias: mongo
+  cache:
+    key: ${CI_COMMIT_REF_SLUG}
+    paths:
+      - .eggs/
+  variables:
+    GIT_STRATEGY: clone
+  dependencies:
+    - build
+  before_script:
+    - apt-get update
+    - apt-get install -y git libzmq-dev libssl-dev gcc
+    - pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+  script:
+    - python setup.py test
+  rules:
+    - if: $CI_COMMIT_BRANCH
+      when: manual
+    - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+      when: manual

@@ -29,8 +29,8 @@ image: docker:stable
 stages:
   - build
   - security
-  - test
   - deploy
+  - test
 
 .build:
   stage: build
@@ -145,8 +145,6 @@ stop_review:
       alias: mongo
   tags:
     - kube-dev
-  dependencies:
-    - build
   variables:
     TAG: ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
   rules:
@@ -154,6 +152,11 @@ stop_review:
       when: never
     - if: $CI_COMMIT_BRANCH
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
+  needs:
+    - job: build
+      optional: true
+    - job: build_master
+      optional: true
 
 .test_main:
   extends: .test
@@ -191,6 +194,11 @@ test_docs:
       when: manual
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: manual
+  needs:
+    - job: build
+      optional: true
+    - job: build_master
+      optional: true
 
 test_setup_py:
   image: python:3.6-slim-jessie
@@ -204,8 +212,6 @@ test_setup_py:
       - .eggs/
   variables:
     GIT_STRATEGY: clone
-  dependencies:
-    - build
   before_script:
     - apt-get update
     - apt-get install -y git libzmq-dev libssl-dev gcc
@@ -217,3 +223,8 @@ test_setup_py:
       when: manual
     - if: $CI_PIPELINE_SOURCE == "merge_request_event"
       when: manual
+  needs:
+    - job: build
+      optional: true
+    - job: build_master
+      optional: true

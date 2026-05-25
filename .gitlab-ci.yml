@@ -1,8 +1,22 @@
+include:
+  - project: 'Web-Projects/pipeline-scripts'
+    ref: master
+    file: '/templates/security.yml'
+
+workflow:
+  rules:
+    - if: $CI_MERGE_REQUEST_ID || $CI_MERGE_REQUEST_EVENT_TYPE
+      when: never
+    - if: $CI_COMMIT_BRANCH
+    - if: $CI_COMMIT_TAG
+    - when: never
+
 image: docker:stable
 stages:
   - build
   - deploy
   - test
+  - security
 
 variables:
   GIT_STRATEGY: none
@@ -10,6 +24,9 @@ variables:
   MONGODB_REPLICA_SET_MODE: primary
   MONGODB_REPLICA_SET_NAME: rs0
   MONGODB_REPLICA_SET_KEY: replicaSetKey
+  SEC_CS_IMAGE: $CI_REGISTRY_IMAGE:$CI_COMMIT_TAG
+  SEC_CS_DOCKERFILE_PATH: Dockerfile
+  DEFECTDOJO_PRODUCT_TYPE: "CDB"
 
 
 .build:

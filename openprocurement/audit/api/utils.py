@@ -10,7 +10,6 @@ from urllib.parse import urlparse, urlunsplit, parse_qsl
 from nacl.exceptions import BadSignatureError
 from nacl.encoding import HexEncoder
 from Crypto.Cipher import AES
-from cornice.util import json_error
 from ciso8601 import parse_datetime
 from jsonpatch import make_patch, apply_patch as _apply_patch
 from time import time as ttime
@@ -18,6 +17,7 @@ from contextlib import contextmanager
 from uuid import uuid4
 from webob.multidict import NestedMultiDict
 from pymongo.errors import DuplicateKeyError
+from pyramid.interfaces import IRendererFactory
 from jsonpointer import resolve_pointer
 from openprocurement.audit.api.constants import (
     DOCUMENT_BLACKLISTED_FIELDS,
@@ -104,7 +104,8 @@ def error_handler(request, request_params=True):
         'Error on processing request "{}"'.format(dumps(errors, indent=4)),
         extra=context_unpack(request, {"MESSAGE_ID": "error_handler"}, params),
     )
-    return json_error(request)
+    renderer = request.registry.queryUtility(IRendererFactory, name="cornicejson")
+    return renderer.render_errors(request)
 
 
 def raise_operation_error(request, message, status=403, location='body', name='data'):

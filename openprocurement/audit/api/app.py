@@ -35,7 +35,7 @@ def main(global_config, **settings):
                 PyramidIntegration(),
             ],
             send_default_pii=True,
-            request_bodies="always",
+            max_request_body_size="always",
             environment=settings.get("sentry.environment"),
         )
 

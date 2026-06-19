@@ -164,7 +164,7 @@ test_docs:
   when: manual
 
 test_setup_py:
-  image: python:3.6-slim-jessie
+  image: python:3.13-trixie
   stage: test
   services:
     - name: bitnamilegacy/mongodb:6.0.13-debian-11-r9

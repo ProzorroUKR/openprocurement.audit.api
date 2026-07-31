@@ -29,6 +29,19 @@ class MonitoringCancellationResourceTest(BaseWebTest, DSWebTestMixin):
 
         self.assertEquals('some_description', response.json['data']['description'])
 
+    def test_cancellation_get_forbidden(self):
+        self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {'data': {
+                "status": CANCELLED_STATUS,
+                'cancellation': {
+                    'description': 'some_description'
+                }
+            }})
+        self.app.authorization = None
+        self.app.get('/monitorings/{}/cancellation'.format(self.monitoring_id), status=403)
+        self.app.get('/monitorings/{}'.format(self.monitoring_id), status=403)
+
     def test_get_cancellation_from_active_monitoring(self):
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         with self.assertRaisesRegexp(Exception, 'Bad response: 403 Forbidden'):
@@ -107,17 +120,7 @@ class MonitoringCancellationResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertIn("http://localhost", response.json['data']["cancellation"]["documents"][0]["url"])
 
         self.app.authorization = ('Basic', (self.broker_name_r, self.broker_pass_r))
-        response = self.app.get(f'/monitorings/{self.monitoring_id}')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content_type, 'application/json')
-        self.assertEqual(response.json['data']["cancellation"]["description"], "some_description")
-        self.assertEqual(response.json['data']["cancellation"]["documents"][0]["title"], "lorem.doc")
-        self.assertIn("http://localhost", response.json['data']["cancellation"]["documents"][0]["url"])
+        self.app.get(f'/monitorings/{self.monitoring_id}', status=403)
 
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
-        response = self.app.get(f'/monitorings/{self.monitoring_id}')
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content_type, 'application/json')
-        self.assertEqual(response.json['data']["cancellation"]["description"], "Приховано")
-        self.assertEqual(response.json['data']["cancellation"]["documents"][0]["title"], "Приховано")
-        self.assertEqual(response.json['data']["cancellation"]["documents"][0]["url"], "Приховано")
+        self.app.get(f'/monitorings/{self.monitoring_id}', status=403)

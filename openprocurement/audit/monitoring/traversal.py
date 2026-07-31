@@ -16,6 +16,7 @@ class Root(object):
         (Allow, 'g:sas', 'view_draft_monitoring'),
         (Allow, 'g:risk_indicators', 'view_draft_monitoring'),
         (Allow, 'g:risk_indicators_api', 'view_draft_monitoring'),
+        (Allow, 'g:admins', 'view_draft_monitoring'),
         (Allow, Everyone, 'revision_monitoring'),
         (Allow, 'g:brokers', 'generate_credentials'),
         (Allow, 'g:risk_indicators', 'create_monitoring'),

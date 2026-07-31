@@ -5,7 +5,7 @@ from datetime import datetime, timedelta
 from freezegun import freeze_time
 from parameterized import parameterized
 
-from openprocurement.audit.api.constants import MONITORING_TIME, TZ, SANDBOX_MODE, WORKING_DAYS
+from openprocurement.audit.api.constants import MONITORING_TIME, TZ, SANDBOX_MODE, WORKING_DAYS, CANCELLED_STATUS
 from openprocurement.audit.monitoring.tests.base import BaseWebTest
 from openprocurement.audit.monitoring.tests.utils import get_errors_field_names
 from openprocurement.audit.monitoring.utils import get_monitoring_accelerator
@@ -52,10 +52,36 @@ class MonitoringResourceTest(BaseWebTest):
         self.create_monitoring()
 
     def test_get(self):
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
         self.assertEqual(response.json['data']["id"], self.monitoring_id)
+
+    def test_get_draft_forbidden(self):
+        self.app.authorization = None
+        response = self.app.get('/monitorings/{}'.format(self.monitoring_id), status=403)
+        self.assertEqual(
+            response.json,
+            {u'status': u'error', u'errors': [
+                {u'description': u'Forbidden', u'location': u'url', u'name': u'permission'}]})
+
+    def test_get_cancelled_forbidden(self):
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        self.app.patch_json(
+            '/monitorings/{}'.format(self.monitoring_id),
+            {'data': {
+                "status": CANCELLED_STATUS,
+                'cancellation': {
+                    'description': 'some_description'
+                }
+            }})
+        self.app.authorization = None
+        response = self.app.get('/monitorings/{}'.format(self.monitoring_id), status=403)
+        self.assertEqual(
+            response.json,
+            {u'status': u'error', u'errors': [
+                {u'description': u'Forbidden', u'location': u'url', u'name': u'permission'}]})
 
     def test_get_not_found(self):
         response = self.app.get('/monitorings/{}'.format('some_id'), status=404)

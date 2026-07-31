@@ -181,10 +181,7 @@ class MonitoringDecisionResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.json['data']["decision"]["description"], "text")
 
         self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
-        response = self.app.get('/monitorings/{}'.format(self.monitoring_id))
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content_type, 'application/json')
-        self.assertNotIn('decision', response.json['data'])
+        self.app.get('/monitorings/{}'.format(self.monitoring_id), status=403)
 
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         self.app.patch_json(

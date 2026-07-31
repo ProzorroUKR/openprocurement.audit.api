@@ -1,4 +1,4 @@
-from pyramid.security import Allow
+from pyramid.security import Allow, Deny, Everyone
 from schematics.exceptions import ValidationError
 from schematics.transforms import whitelist, blacklist
 from schematics.types import StringType, FloatType, BooleanType, BaseType, MD5Type
@@ -7,6 +7,7 @@ from schematics.types.serializable import serializable
 from uuid import uuid4
 
 from openprocurement.audit.api.constants import (
+    CANCELLED_STATUS,
     DECISION_OBJECT_TYPE,
     DRAFT_STATUS,
     OTHER_VIOLATION,
@@ -408,11 +409,21 @@ class Monitoring(BaseModel):
         return role
 
     def __acl__(self):
-        return [
+        acl = []
+        if self.status in (DRAFT_STATUS, CANCELLED_STATUS):
+            acl.extend([
+                (Allow, 'g:sas', 'view_monitoring'),
+                (Allow, 'g:risk_indicators', 'view_monitoring'),
+                (Allow, 'g:risk_indicators_api', 'view_monitoring'),
+                (Allow, 'g:admins', 'view_monitoring'),
+                (Deny, Everyone, 'view_monitoring'),
+            ])
+        acl.extend([
             (Allow, '{}_{}'.format(self.tender_owner, self.tender_owner_token), 'create_post'),
             (Allow, '{}_{}'.format(self.tender_owner, self.tender_owner_token), 'create_elimination_report'),
             (Allow, '{}_{}'.format(self.tender_owner, self.tender_owner_token), 'create_appeal'),
-        ]
+        ])
+        return acl
 
     def __repr__(self):
         return '<%s:%r-%r@%r>' % (type(self).__name__, self.tender_id, self.id, self.rev)

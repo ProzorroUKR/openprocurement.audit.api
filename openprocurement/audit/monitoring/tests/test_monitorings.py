@@ -263,6 +263,15 @@ class DraftChangesFeedTestCase(BaseWebTest):
             {u'status': u'error', u'errors': [
                 {u'description': u'Forbidden', u'location': u'url', u'name': u'permission'}]})
 
+    def test_draft_forbidden(self):
+        self.app.authorization = None
+        url = '/monitorings?mode=draft&feed=changes'
+        response = self.app.get(url, status=403)
+        self.assertEqual(
+            response.json,
+            {u'status': u'error', u'errors': [
+                {u'description': u'Forbidden', u'location': u'url', u'name': u'permission'}]})
+
     def test_real_draft(self):
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
         url = '/monitorings?mode=real_draft&feed=changes'
@@ -277,6 +286,13 @@ class DraftChangesFeedTestCase(BaseWebTest):
         self.assertEqual(len(response.json["data"]), 4)
         self.assertEqual(set(e["id"] for e in response.json["data"]),
                          set(self.expected_real_ids + self.expected_test_ids))
+
+    def test_draft(self):
+        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        url = '/monitorings?mode=draft&feed=changes'
+        response = self.app.get(url)
+        self.assertEqual(len(response.json["data"]), 2)
+        self.assertEqual(set(e["id"] for e in response.json["data"]), set(self.expected_real_ids))
 
 
 class FeedVisibilityTestCase(BaseWebTest):

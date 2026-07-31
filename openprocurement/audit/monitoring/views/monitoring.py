@@ -101,7 +101,7 @@ class MonitoringsResource(RestrictedResourceListingMixin, MongodbResourceListing
 
     @json_view(permission='view_listing')
     def get(self):
-        if self.request.params.get('mode') in ('real_draft', 'all_draft'):
+        if 'draft' in self.request.params.get('mode', ''):
             perm = self.request.has_permission('view_draft_monitoring')
             if not isinstance(perm, ACLAllowed):
                 return forbidden(self.request)

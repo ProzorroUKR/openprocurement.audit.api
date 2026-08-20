@@ -5,18 +5,33 @@ RUN apk --no-cache add gcc build-base git openssl-dev libffi-dev
 RUN addgroup -g 10000 user && \
     adduser -S -u 10000 -G user -h /app user
 
-WORKDIR /app
-COPY requirements.txt .
-RUN pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
+ENV APP_HOME=/app
+WORKDIR ${APP_HOME}
 
-COPY . /app
-RUN pip install -e .
-
-RUN chown -R user:user /app
+RUN chown -R user:user ${APP_HOME}
 USER user
 
-EXPOSE 80
+# Install uv
+COPY --from=ghcr.io/astral-sh/uv:0.11 /uv /uvx /bin/
 
-ENV PATH="/app/.local/bin:$PATH"
+ARG UV_EXTRA_ARGS="--no-dev"
+
+# install deps
+COPY pyproject.toml uv.lock ${APP_HOME}/
+RUN uv sync --frozen --no-cache ${UV_EXTRA_ARGS} --compile-bytecode
+
+COPY ./ ${APP_HOME}/
+
+# set the virtualenv
+ENV VIRTUAL_ENV=${APP_HOME}/.venv
+ENV PATH=${APP_HOME}/.venv/bin:$PATH
+
+ENV TZ=Europe/Kiev
+ENV LANG="en_US.UTF-8"
+ENV LC_ALL="en_US.UTF-8"
+ENV LC_LANG="en_US.UTF-8"
+ENV PYTHONIOENCODING="UTF-8"
+
+EXPOSE 80
 
 CMD ["gunicorn", "-k", "gevent", "--paste", "/app/etc/service.ini", "--graceful-timeout=60"]

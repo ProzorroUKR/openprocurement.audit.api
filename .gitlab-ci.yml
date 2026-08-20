@@ -136,7 +136,7 @@ stop_review:
   extends: .test
   script:
     - cd /app
-    - pip install -e .[test]
+    - uv sync --frozen
     - py.test $TESTS_PATH -v
       --color=yes
       --cov=$COV_PATH
@@ -158,31 +158,7 @@ test_docs:
   extends: .test
   before_script:
     - cd /app
-    - pip install -e .[test]
+    - uv sync --frozen
   script:
     - py.test docs.py
   when: manual
-
-test_setup_py:
-  image: python:3.6-slim-jessie
-  stage: test
-  services:
-    - name: bitnamilegacy/mongodb:6.0.13-debian-11-r9
-      alias: mongo
-  cache:
-    key: ${CI_COMMIT_REF_SLUG}
-    paths:
-      - .eggs/
-  variables:
-    GIT_STRATEGY: clone
-  only:
-    - branches
-  dependencies:
-    - build
-  when: manual
-  before_script:
-    - apt-get update
-    - apt-get install -y git libzmq-dev libssl-dev gcc
-    - pip install --upgrade pip && pip install --no-cache-dir -r requirements.txt
-  script:
-    - python setup.py test

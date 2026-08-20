@@ -1,0 +1,95 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openprocurement.audit.api"
+version = "1.3.3"
+description = "OpenProcurement Audit Api"
+readme = "README.rst"
+license = { text = "Apache License 2.0" }
+classifiers = [
+    "Programming Language :: Python",
+]
+requires-python = ">=3.11,<3.12"
+dependencies = [
+    "gunicorn==22.0.0",
+    "gevent==23.9.1",
+    "ciso8601==2.1.3",
+    "iso8601==0.1.11",
+    "pyramid==1.10.5",
+    "pyramid_exclog==1.0",
+    "pymongo>=4.7.3,<5",
+    "repoze.profile==2.3",
+    "pycryptodome==3.19.1",
+    "jsonpointer==2.0",
+    "pbkdf2==1.3",
+    "PyNaCl==1.5.0",
+    "Paste==3.5.0",
+    "python-json-logger==2.0.1",
+    "tzlocal==2.1",
+    "simplejson==3.17.2",
+    "beautifulsoup4==4.9.3",
+    "isodate==0.6.1",
+    "jmespath==0.10.0",
+    "configparser==5.0.1",
+    "sentry-sdk==1.5.12,<2",
+    "cornice==4.0.1",
+    "WebOb==1.8.6",
+    "jsonpath-ng==1.6.0",
+    "zope.component==6.0",
+    "setuptools<81",
+    "schematics",
+    "openprocurement_client",
+    "request_id_middleware",
+    "openprocurement.subscribers.serverid",
+    "esculator",
+    "dateorro",
+    "jsonpatch",
+    "barbecue",
+    "server_cookie_middleware",
+    "standards",
+]
+
+[project.urls]
+Homepage = "https://github.com/ProzorroUKR/openprocurement.audit.api"
+
+[dependency-groups]
+dev = [
+    "pytest",
+    "pytest-xdist<3.0",
+    "webtest",
+    "freezegun",
+    "python-coveralls",
+    "coverage",
+    "pytest-cov",
+    "parameterized",
+]
+
+[project.entry-points."paste.app_factory"]
+main = "openprocurement.audit.api.app:main"
+
+[project.entry-points."openprocurement.audit.api.plugins"]
+api = "openprocurement.audit.api:includeme"
+monitoring = "openprocurement.audit.monitoring:includeme"
+inspection = "openprocurement.audit.inspection:includeme"
+request = "openprocurement.audit.request:includeme"
+
+[tool.setuptools.packages.find]
+include = ["openprocurement*"]
+namespaces = true
+
+[tool.uv]
+package = true
+
+[tool.uv.sources]
+schematics = { git = "https://github.com/ProzorroUKR/schematics.git", rev = "1.1.3-prozorro.1" }
+openprocurement_client = { git = "https://github.com/ProzorroUKR/openprocurement.client.python", rev = "2.2.0+dp" }
+request_id_middleware = { git = "https://github.com/ProzorroUKR/request_id_middleware.git", rev = "0.1.2" }
+"openprocurement.subscribers.serverid" = { git = "https://github.com/ProzorroUKR/openprocurement.subscribers.serverid.git", rev = "2.0" }
+esculator = { git = "https://github.com/ProzorroUKR/esculator.git", rev = "0.0.2" }
+dateorro = { git = "https://github.com/ProzorroUKR/dateorro.git", rev = "0.0.3" }
+jsonpatch = { git = "https://github.com/ProzorroUKR/python-json-patch.git", rev = "1.14+jsondiff.unicode.replacefix.0" }
+barbecue = { git = "https://github.com/ProzorroUKR/barbecue.git", rev = "0.2" }
+server_cookie_middleware = { git = "https://github.com/ProzorroUKR/server_cookie_middleware.git", rev = "0.2" }
+standards = { git = "https://github.com/ProzorroUKR/standards.git", rev = "1.0.110" }

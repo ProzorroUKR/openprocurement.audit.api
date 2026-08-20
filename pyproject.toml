@@ -57,7 +57,7 @@ Homepage = "https://github.com/ProzorroUKR/openprocurement.audit.api"
 [dependency-groups]
 dev = [
     "pytest",
-    "pytest-xdist<3.0",
+    "pytest-xdist==3.6.1",
     "webtest",
     "freezegun",
     "python-coveralls",

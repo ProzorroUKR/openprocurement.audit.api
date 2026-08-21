@@ -6,7 +6,7 @@ from functools import partial
 from logging import getLogger
 
 
-json_view = partial(view, renderer='simplejson')
+json_view = partial(view, renderer='json')
 op_resource = partial(resource, error_handler=error_handler, factory=factory)
 
 

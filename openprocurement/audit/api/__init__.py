@@ -11,6 +11,5 @@ LOGGER = getLogger(__package__)
 def includeme(config):
     config.scan("openprocurement.audit.api.views")
     config.scan("openprocurement.audit.api.subscribers")
-    config.set_authentication_policy(AuthenticationPolicy(config.registry.settings['auth.file']))
     config.registry.registerAdapter(ContentConfigurator, (IOPContent, IRequest), IContentConfigurator)
     config.add_request_method(get_content_configurator, 'content_configurator', reify=True)

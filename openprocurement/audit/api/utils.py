@@ -10,7 +10,7 @@ from urllib.parse import urlparse, urlunsplit, parse_qsl
 from nacl.exceptions import BadSignatureError
 from nacl.encoding import HexEncoder
 from Crypto.Cipher import AES
-from cornice.util import json_error
+from cornice.renderer import JSONError
 from ciso8601 import parse_datetime
 from jsonpatch import make_patch, apply_patch as _apply_patch
 from time import time as ttime
@@ -104,7 +104,7 @@ def error_handler(request, request_params=True):
         'Error on processing request "{}"'.format(dumps(errors, indent=4)),
         extra=context_unpack(request, {"MESSAGE_ID": "error_handler"}, params),
     )
-    return json_error(request)
+    return JSONError(dumps, {}, request.errors, request.errors.status)
 
 
 def raise_operation_error(request, message, status=403, location='body', name='data'):

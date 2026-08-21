@@ -2,7 +2,6 @@ from logging import getLogger
 
 from pyramid.events import ContextFound
 
-from openprocurement.audit.api import AuthenticationPolicy
 from openprocurement.audit.api.database import COLLECTION_CLASSES
 from openprocurement.audit.request.database import RequestCollection
 from openprocurement.audit.request.utils import (
@@ -16,9 +15,6 @@ LOGGER = getLogger(__package__)
 
 def includeme(config):
     LOGGER.info("init audit-request plugin")
-    config.set_authentication_policy(
-        AuthenticationPolicy(config.registry.settings["auth.file"])
-    )
     COLLECTION_CLASSES["request"] = RequestCollection
     config.add_subscriber(set_logging_context, ContextFound)
     config.add_request_method(extract_request, "request", reify=True)

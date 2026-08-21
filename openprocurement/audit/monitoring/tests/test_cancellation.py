@@ -27,11 +27,11 @@ class MonitoringCancellationResourceTest(BaseWebTest, DSWebTestMixin):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
 
-        self.assertEquals('some_description', response.json['data']['description'])
+        self.assertEqual('some_description', response.json['data']['description'])
 
     def test_get_cancellation_from_active_monitoring(self):
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
-        with self.assertRaisesRegexp(Exception, 'Bad response: 403 Forbidden'):
+        with self.assertRaisesRegex(Exception, 'Bad response: 403 Forbidden'):
             response = self.app.get('/monitorings/{}/cancellation'.format(self.monitoring_id))
             self.assertEqual(response.status_code, 404)
 

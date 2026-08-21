@@ -5,7 +5,6 @@ import unittest
 from hashlib import sha512
 
 from pyramid import testing
-from pyramid.compat import bytes_
 
 from openprocurement.audit.api.auth import AuthenticationPolicy
 
@@ -17,7 +16,7 @@ class AuthTest(unittest.TestCase):
 
     def test_unauthenticated_userid(self):
         request = testing.DummyRequest()
-        request.headers['Authorization'] = 'Basic %s' % base64.b64encode(bytes_('chrisr:password')).decode('ascii')
+        request.headers['Authorization'] = 'Basic %s' % base64.b64encode('chrisr:password'.encode('latin-1')).decode('ascii')
         policy = self._makeOne(None)
         self.assertEqual(policy.unauthenticated_userid(request), 'chrisr')
 
@@ -46,7 +45,7 @@ class AuthTest(unittest.TestCase):
 
     def test_authenticated_userid(self):
         request = testing.DummyRequest()
-        request.headers['Authorization'] = 'Basic %s' % base64.b64encode(bytes_('chrisr:password')).decode('ascii')
+        request.headers['Authorization'] = 'Basic %s' % base64.b64encode('chrisr:password'.encode('latin-1')).decode('ascii')
 
         def check(username, password, request):
             return []
@@ -56,7 +55,7 @@ class AuthTest(unittest.TestCase):
 
     def test_unauthenticated_userid_invalid_payload(self):
         request = testing.DummyRequest()
-        request.headers['Authorization'] = 'Basic %s' % base64.b64encode(bytes_('chrisrpassword')).decode('ascii')
+        request.headers['Authorization'] = 'Basic %s' % base64.b64encode('chrisrpassword'.encode('latin-1')).decode('ascii')
         policy = self._makeOne(None)
         self.assertEqual(policy.unauthenticated_userid(request), None)
 

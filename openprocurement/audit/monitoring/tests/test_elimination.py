@@ -245,14 +245,14 @@ class MonitoringEliminationResolutionResourceTest(MonitoringEliminationBaseTest)
         response = self.app.get('/monitorings/{}/eliminationResolution'.format(self.monitoring_id))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
-        self.assertEquals('partly', response.json['data']['result'])
-        self.assertEquals('Do you have spare crutches?', response.json['data']['description'])
+        self.assertEqual('partly', response.json['data']['result'])
+        self.assertEqual('Do you have spare crutches?', response.json['data']['description'])
 
     def test_elimination_report_get(self):
         response = self.app.get('/monitorings/{}/eliminationReport'.format(self.monitoring_id))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content_type, 'application/json')
-        self.assertEquals('It\'s a minimal required elimination report', response.json['data']['description'])
+        self.assertEqual('It\'s a minimal required elimination report', response.json['data']['description'])
 
     def test_restricted_visibility(self):
         self.create_monitoring_with_resolution(parties=[self.initial_party], restricted_config=True)

@@ -114,6 +114,6 @@ class MonitoringPartyResourceTest(BaseWebTest, DSWebTestMixin):
 
     def test_party_get_missing(self):
         self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
-        with self.assertRaisesRegexp(Exception, 'Bad response: 404 Not Found'):
+        with self.assertRaisesRegex(Exception, 'Bad response: 404 Not Found'):
             response = self.app.get('/monitorings/{}/parties/{}'.format(self.monitoring_id, 'not_existent_id'))
             self.assertEqual(response.status_code, 404)

@@ -61,7 +61,7 @@ def main(global_config, **settings):
     plugins = settings.get('plugins') and settings['plugins'].split(',')
     for entry_point in iter_entry_points('openprocurement.audit.api.plugins'):
         if not plugins or entry_point.name in plugins:
-            plugin = entry_point.load()
+            plugin = entry_point.load(require=False)
             plugin(config)
             pass
 
@@ -90,7 +90,7 @@ def main(global_config, **settings):
     # migrate data
     if not os.environ.get('MIGRATION_SKIP'):
         for entry_point in iter_entry_points('openprocurement.audit.api.migrations'):
-            plugin = entry_point.load()
+            plugin = entry_point.load(require=False)
             plugin(config.registry)
 
     config.registry.server_id = settings.get('id', '')
@@ -102,7 +102,7 @@ def main(global_config, **settings):
         for subscriber in subscribers:
             for entry_point in iter_entry_points('openprocurement.{}'.format(k), subscriber):
                 if entry_point:
-                    plugin = entry_point.load()
+                    plugin = entry_point.load(require=False)
                     plugin(config)
 
     config.registry.health_threshold = float(settings.get('health_threshold', 512))

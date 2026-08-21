@@ -2,6 +2,9 @@ version = 1
 revision = 3
 requires-python = "==3.13.*"
 
+[manifest]
+overrides = [{ name = "pycrypto", marker = "sys_platform == 'never'" }]
+
 [[package]]
 name = "barbecue"
 version = "0.2"
@@ -1105,7 +1108,7 @@ version = "0.2"
 source = { git = "https://github.com/ProzorroUKR/server_cookie_middleware.git?rev=0.2#c396af002ab9b2704edba23c0fcf2fda47b805cf" }
 dependencies = [
     { name = "oslo-middleware" },
-    { name = "pycrypto" },
+    { name = "pycrypto", marker = "sys_platform == 'never'" },
     { name = "pytz" },
     { name = "webob" },
 ]

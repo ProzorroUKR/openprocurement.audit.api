@@ -1,11 +1,11 @@
 def get_errors_field_names(response, text=None):
-    for error in response.json.get('errors', []):
-        location = (error['location'], error['name'])
+    for error in response.json.get("errors", []):
+        location = (error["location"], error["name"])
         if text:
-            if isinstance(error['description'], list):
-                descriptions = error['description']
+            if isinstance(error["description"], list):
+                descriptions = error["description"]
             else:
-                descriptions = [error['description']]
+                descriptions = [error["description"]]
             if text in descriptions:
                 yield location
             else:

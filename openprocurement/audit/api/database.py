@@ -1,16 +1,17 @@
 import os
-from uuid import uuid4
-from logging import getLogger
-from pymongo import MongoClient, ReturnDocument, DESCENDING, ASCENDING, ReadPreference, IndexModel
-from pymongo.write_concern import WriteConcern
-from pymongo.read_concern import ReadConcern
-from bson.codec_options import TypeRegistry, TypeCodec, CodecOptions
-from bson.decimal128 import Decimal128
 from decimal import Decimal
-from openprocurement.audit.api.context import get_now, get_db_session, get_request
+from logging import getLogger
 from pprint import pprint
-from bson.raw_bson import RawBSONDocument
+from uuid import uuid4
 
+from bson.codec_options import CodecOptions, TypeCodec, TypeRegistry
+from bson.decimal128 import Decimal128
+from bson.raw_bson import RawBSONDocument
+from pymongo import ASCENDING, DESCENDING, MongoClient, ReadPreference, ReturnDocument
+from pymongo.read_concern import ReadConcern
+from pymongo.write_concern import WriteConcern
+
+from openprocurement.audit.api.context import get_db_session, get_now, get_request
 
 LOGGER = getLogger("{}.init".format(__name__))
 
@@ -26,9 +27,7 @@ def print_cursor_explain(cursor):
         return data
 
     explain_data = cursor.explain()
-    pprint(
-        to_native(explain_data)
-    )
+    pprint(to_native(explain_data))
 
 
 #  mongodb
@@ -43,8 +42,8 @@ class MongodbResourceConflict(Exception):
 
 
 class DecimalCodec(TypeCodec):
-    python_type = Decimal    # the Python type acted upon by this type codec
-    bson_type = Decimal128   # the BSON type acted upon by this type codec
+    python_type = Decimal  # the Python type acted upon by this type codec
+    bson_type = Decimal128  # the BSON type acted upon by this type codec
 
     def transform_python(self, value):
         """Function that transforms a custom type value into a type
@@ -57,9 +56,11 @@ class DecimalCodec(TypeCodec):
         return value.to_decimal()
 
 
-type_registry = TypeRegistry([
-    DecimalCodec(),
-])
+type_registry = TypeRegistry(
+    [
+        DecimalCodec(),
+    ]
+)
 codec_options = CodecOptions(type_registry=type_registry)
 COLLECTION_CLASSES = {}
 
@@ -70,7 +71,6 @@ def get_public_modified():
 
 
 class MongodbStore:
-
     def __init__(self, settings):
         db_name = os.environ.get("DB_NAME", settings["mongodb.db_name"])
         mongodb_uri = os.environ.get("MONGODB_URI", settings["mongodb.uri"])
@@ -79,17 +79,10 @@ class MongodbStore:
 
         # https://docs.mongodb.com/manual/core/causal-consistency-read-write-concerns/#causal-consistency-and-read-and-write-concerns
         raw_read_preference = os.environ.get(
-            "READ_PREFERENCE",
-            settings.get("mongodb.read_preference", "SECONDARY_PREFERRED")
+            "READ_PREFERENCE", settings.get("mongodb.read_preference", "SECONDARY_PREFERRED")
         )
-        raw_w_concert = os.environ.get(
-            "WRITE_CONCERN",
-            settings.get("mongodb.write_concern", "majority")
-        )
-        raw_r_concern = os.environ.get(
-            "READ_CONCERN",
-            settings.get("mongodb.read_concern", "majority")
-        )
+        raw_w_concert = os.environ.get("WRITE_CONCERN", settings.get("mongodb.write_concern", "majority"))
+        raw_r_concern = os.environ.get("READ_CONCERN", settings.get("mongodb.read_concern", "majority"))
         self.connection = MongoClient(
             mongodb_uri,
             maxPoolSize=max_pool_size,
@@ -114,7 +107,7 @@ class MongodbStore:
     def get_next_sequence_value(self, uid):
         collection = self.get_sequences_collection()
         result = collection.find_one_and_update(
-            {'_id': uid},
+            {"_id": uid},
             {"$inc": {"value": 1}},
             return_document=ReturnDocument.AFTER,
             upsert=True,
@@ -145,7 +138,7 @@ class MongodbStore:
     @staticmethod
     def get(collection, uid):
         res = collection.find_one(
-            {'_id': uid},
+            {"_id": uid},
             projection={"is_public": False, "is_test": False},
             session=get_db_session(),
         )
@@ -155,13 +148,15 @@ class MongodbStore:
         filters = filters or {}
         if offset_value:
             filters[offset_field] = {"$lt" if descending else "$gt": offset_value}
-        results = list(collection.find(
-            filter=filters,
-            projection={f: 1 for f in fields | {offset_field}},
-            limit=limit,
-            sort=((offset_field, DESCENDING if descending else ASCENDING),),
-            session=get_db_session(),
-        ))
+        results = list(
+            collection.find(
+                filter=filters,
+                projection={f: 1 for f in fields | {offset_field}},
+                limit=limit,
+                sort=((offset_field, DESCENDING if descending else ASCENDING),),
+                session=get_db_session(),
+            )
+        )
         for e in results:
             self.rename_id(e)
         return results
@@ -170,7 +165,7 @@ class MongodbStore:
         uid = data.pop("id" if "id" in data else "_id")
         revision = data.pop("rev" if "rev" in data else "_rev", None)
 
-        data['_id'] = uid
+        data["_id"] = uid
         data["_rev"] = self.get_next_rev(revision)
         data["is_test"] = data.get("mode") == "test"
         if "is_masked" in data and data.get("is_masked") is not True:
@@ -181,16 +176,9 @@ class MongodbStore:
         ]
         if modified:
             data["dateModified"] = get_now().isoformat()
-            pipeline.append(
-                {"$set": {
-                    "public_modified": get_public_modified()
-                }}
-            )
+            pipeline.append({"$set": {"public_modified": get_public_modified()}})
         result = collection.find_one_and_update(
-            {
-                "_id": uid,
-                "_rev": revision
-            },
+            {"_id": uid, "_rev": revision},
             pipeline,
             upsert=insert,
             session=get_db_session(),
@@ -220,13 +208,13 @@ class MongodbStore:
 
 
 class BaseCollection:
-
     object_name = "dummy"
 
     def __init__(self, store, settings):
         self.store = store
-        collection_name = os.environ.get(f"{self.object_name.upper()}_COLLECTION",
-                                         settings[f"mongodb.{self.object_name.lower()}_collection"])
+        collection_name = os.environ.get(
+            f"{self.object_name.upper()}_COLLECTION", settings[f"mongodb.{self.object_name.lower()}_collection"]
+        )
         self.collection = getattr(store.database, collection_name)
         if isinstance(self.collection.read_preference, type(ReadPreference.PRIMARY)):
             self.collection_primary = self.collection
@@ -258,9 +246,7 @@ class BaseCollection:
         # when write operation is allowed because of a state object from a secondary replica
         # This means more reads from Primary, but at the moment we can't force everybody to use the cookie
         collection = (
-            self.collection
-            if getattr(get_request(), "method", None) in ("GET", "HEAD")
-            else self.collection_primary
+            self.collection if getattr(get_request(), "method", None) in ("GET", "HEAD") else self.collection_primary
         )
         doc = self.store.get(collection, uid)
         return doc
@@ -277,17 +263,25 @@ class BaseCollection:
         return result
 
     def paging_list(
-        self, skip=0, limit=1000, fields=None, sort_by="dateCreated", descending=False, filters=None,
+        self,
+        skip=0,
+        limit=1000,
+        fields=None,
+        sort_by="dateCreated",
+        descending=False,
+        filters=None,
     ):
         filters = filters or {}
-        result = list(self.collection.find(
-            filter=filters,
-            projection=fields if fields else None,
-            sort=((sort_by, DESCENDING if descending else ASCENDING),),
-            skip=skip,
-            limit=limit,
-            session=get_db_session(),
-        ))
+        result = list(
+            self.collection.find(
+                filter=filters,
+                projection=fields if fields else None,
+                sort=((sort_by, DESCENDING if descending else ASCENDING),),
+                skip=skip,
+                limit=limit,
+                session=get_db_session(),
+            )
+        )
 
         count = self.collection.count_documents(
             filter=filters,

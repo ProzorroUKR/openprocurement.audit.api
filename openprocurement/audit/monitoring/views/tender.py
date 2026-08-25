@@ -1,9 +1,11 @@
 from logging import getLogger
+
 from pyramid.security import ACLAllowed
-from openprocurement.audit.api.utils import forbidden
+
 from openprocurement.audit.api.context import get_request
-from openprocurement.audit.monitoring.utils import op_resource, monitoring_serialize
+from openprocurement.audit.api.utils import forbidden
 from openprocurement.audit.api.views.base import APIResourcePaginatedListing, RestrictedResourceListingMixin, json_view
+from openprocurement.audit.monitoring.utils import monitoring_serialize, op_resource
 
 LOGGER = getLogger(__name__)
 
@@ -13,7 +15,7 @@ def serialize(data, fields):
     return r
 
 
-@op_resource(name='Tender Monitorings', path='/tenders/{tender_id}/monitorings')
+@op_resource(name="Tender Monitorings", path="/tenders/{tender_id}/monitorings")
 class TenderMonitoringResource(RestrictedResourceListingMixin, APIResourcePaginatedListing):
     @staticmethod
     def add_mode_filters(filters: dict, mode: str):
@@ -32,10 +34,10 @@ class TenderMonitoringResource(RestrictedResourceListingMixin, APIResourcePagina
         self.obj_id_key = "tender_id"
         self.obj_id_key_filter = "tender_id"
 
-    @json_view(permission='view_listing')
+    @json_view(permission="view_listing")
     def get(self):
-        if 'draft' in self.request.params.get('mode', ''):
-            perm = self.request.has_permission('view_draft_monitoring')
+        if "draft" in self.request.params.get("mode", ""):
+            perm = self.request.has_permission("view_draft_monitoring")
             if not isinstance(perm, ACLAllowed):
                 return forbidden(self.request)
         return super(TenderMonitoringResource, self).get()

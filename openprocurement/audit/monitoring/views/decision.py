@@ -4,15 +4,14 @@ from openprocurement.audit.api.views.base import APIResource, json_view
 from openprocurement.audit.monitoring.utils import op_resource
 
 
-@op_resource(name='Monitoring Decision',
-             path='/monitorings/{monitoring_id}/decision',
-             description='Monitoring Decision endpoint')
+@op_resource(
+    name="Monitoring Decision", path="/monitorings/{monitoring_id}/decision", description="Monitoring Decision endpoint"
+)
 class DecisionResource(APIResource):
-
-    @json_view(permission='view_monitoring')
+    @json_view(permission="view_monitoring")
     def get(self):
-        if self.request.validated['monitoring'].status == DRAFT_STATUS \
-           and not self.request.has_permission('view_draft_monitoring'):
+        if self.request.validated["monitoring"].status == DRAFT_STATUS and not self.request.has_permission(
+            "view_draft_monitoring"
+        ):
             return forbidden(self.request)
-        return {'data': self.context.serialize('default')}
-
+        return {"data": self.context.serialize("default")}

@@ -21,7 +21,7 @@ class RequestsListingResourceTest(BaseWebTest):
         self.assertEqual(response.content_type, "application/json")
         self.assertEqual(
             response.json["data"],
-            [{u"dateModified": u"2018-01-01T11:00:00+02:00", u"id": self.request_id}],
+            [{"dateModified": "2018-01-01T11:00:00+02:00", "id": self.request_id}],
         )
 
     def test_get_modes(self):
@@ -31,12 +31,7 @@ class RequestsListingResourceTest(BaseWebTest):
         self.app.authorization = ("Basic", (self.sas_name, self.sas_pass))
         response = self.app.patch_json(
             "/requests/{}".format(self.request_id),
-            {
-                "data": {
-                    "answer":  "monitoringCreated",
-                    "reason": "Because i am your father"
-                }
-            }
+            {"data": {"answer": "monitoringCreated", "reason": "Because i am your father"}},
         )
 
         response = self.app.get("/requests")
@@ -79,9 +74,9 @@ class RequestsListingResourceTest(BaseWebTest):
             response.json["data"],
             [
                 {
-                    u"dateModified": u"2018-01-01T11:00:00+02:00",
-                    u"requestId": u"UA-R-2018-01-01-000001",
-                    u"id": self.request_id,
+                    "dateModified": "2018-01-01T11:00:00+02:00",
+                    "requestId": "UA-R-2018-01-01-000001",
+                    "id": self.request_id,
                 }
             ],
         )
@@ -159,13 +154,7 @@ class RequestsListingResourceTest(BaseWebTest):
                     "tenderId": "f" * 32,
                     "description": "Yo-ho-ho",
                     "violationType": VIOLATION_TYPE_CHOICES,
-                    "parties": [{
-                        "name": "party name",
-                        "address": {},
-                        "contactPoint": {
-                            "email": "test@example.com"
-                        }
-                    }],
+                    "parties": [{"name": "party name", "address": {}, "contactPoint": {"email": "test@example.com"}}],
                     "documents": [
                         {
                             "title": "doc.txt",
@@ -198,17 +187,19 @@ class RequestsListingResourceTest(BaseWebTest):
                     "tenderId": "f" * 32,
                     "description": "Yo-ho-ho",
                     "violationType": VIOLATION_TYPE_CHOICES,
-                    "parties": [{
-                        "name": "party name",
-                        "address": {
-                            "streetAddress": "test street address",
-                            "locality": "test locality",
-                            "region": "test region",
-                            "postalCode": "test postalCode",
-                            "countryName": "test country",
-                        },
-                        "contactPoint": {}
-                    }],
+                    "parties": [
+                        {
+                            "name": "party name",
+                            "address": {
+                                "streetAddress": "test street address",
+                                "locality": "test locality",
+                                "region": "test region",
+                                "postalCode": "test postalCode",
+                                "countryName": "test country",
+                            },
+                            "contactPoint": {},
+                        }
+                    ],
                     "documents": [
                         {
                             "title": "doc.txt",
@@ -248,9 +239,7 @@ class RequestsListingResourceTest(BaseWebTest):
                                 "postalCode": "test postalCode",
                                 "countryName": "test country",
                             },
-                            "contactPoint": {
-                                "email": "test@example.com"
-                            }
+                            "contactPoint": {"email": "test@example.com"},
                         }
                     ],
                     "documents": [

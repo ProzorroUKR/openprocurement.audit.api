@@ -4,11 +4,11 @@ from hashlib import sha512
 
 from pyramid.authentication import BasicAuthAuthenticationPolicy
 
-ACCR_RESTRICTED = 'r'
+ACCR_RESTRICTED = "r"
 
 
 class AuthenticationPolicy(BasicAuthAuthenticationPolicy):
-    def __init__(self, auth_file, realm='Realm', debug=False):
+    def __init__(self, auth_file, realm="Realm", debug=False):
         self.realm = realm
         self.debug = debug
 
@@ -21,20 +21,20 @@ class AuthenticationPolicy(BasicAuthAuthenticationPolicy):
                 clean_pass = info[0]
                 level = info[1] if "," in password else ""
                 self.users[name] = {
-                    'password': clean_pass,
-                    'group': group,
-                    'level': level,
+                    "password": clean_pass,
+                    "group": group,
+                    "level": level,
                 }
 
     def check(self, username, password, request):
         if username in self.users:
             user = self.users[username]
-            if user['password'] == sha512(password.encode('utf8')).hexdigest():
+            if user["password"] == sha512(password.encode("utf8")).hexdigest():
                 principals = self._get_user_auth_groups(user)
                 token = self._get_access_token(request)
                 if token:
-                    principals.append('{}_{}'.format(username, token))
-                    principals.append('{}_{}'.format(username, sha512(token.encode('utf8')).hexdigest()))
+                    principals.append("{}_{}".format(username, token))
+                    principals.append("{}_{}".format(username, sha512(token.encode("utf8")).hexdigest()))
                 if user["level"]:
                     principals.append(f"a:{user['level']}")
                 return principals
@@ -53,8 +53,10 @@ class AuthenticationPolicy(BasicAuthAuthenticationPolicy):
             token = json.get("access", {}).get("token") if isinstance(json, dict) else None
         return token
 
+
 def get_local_roles(context):
     from pyramid.location import lineage
+
     roles = {}
     for location in lineage(context):
         try:
@@ -69,13 +71,13 @@ def get_local_roles(context):
 
 def authenticated_role(request):
     principals = request.effective_principals
-    if hasattr(request, 'context'):
+    if hasattr(request, "context"):
         roles = get_local_roles(request.context)
         local_roles = [roles[i] for i in reversed(principals) if i in roles]
         if local_roles:
             return local_roles[0]
-    groups = [g for g in reversed(principals) if g.startswith('g:')]
-    return groups[0][2:] if groups else 'anonymous'
+    groups = [g for g in reversed(principals) if g.startswith("g:")]
+    return groups[0][2:] if groups else "anonymous"
 
 
 def check_accreditation(request, level):

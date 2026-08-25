@@ -1,7 +1,8 @@
-from openprocurement.audit.api.database import BaseCollection
-from pymongo import ASCENDING, IndexModel
 import logging
 
+from pymongo import ASCENDING, IndexModel
+
+from openprocurement.audit.api.database import BaseCollection
 
 logger = logging.getLogger(__name__)
 
@@ -17,8 +18,7 @@ class InspectionCollection(BaseCollection):
         #   As such, you cannot create multiple partial indexes that differ only by the filter expression.``
         # Hold my 🍺
         test_by_public_modified = IndexModel(
-            [("public_modified", ASCENDING),
-             ("existing_key", ASCENDING)],
+            [("public_modified", ASCENDING), ("existing_key", ASCENDING)],
             name="ins_test_by_public_modified",
             partialFilterExpression={
                 "is_test": True,
@@ -32,13 +32,11 @@ class InspectionCollection(BaseCollection):
             },
         )
         all_by_public_modified = IndexModel(
-            [("public_modified", ASCENDING),
-             ("surely_existing_key", ASCENDING)],
+            [("public_modified", ASCENDING), ("surely_existing_key", ASCENDING)],
             name="ins_all_by_public_modified",
         )
         all_by_monitoring_ids = IndexModel(
-            [("monitoring_ids", ASCENDING),
-             ("dateCreated", ASCENDING)],
+            [("monitoring_ids", ASCENDING), ("dateCreated", ASCENDING)],
             name="ins_all_by_monitoring_ids",
         )
         all_indexes = [

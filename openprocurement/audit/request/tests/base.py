@@ -48,9 +48,7 @@ class BaseWebTest(BaseApiWebTest):
                         "postalCode": "test postalCode",
                         "countryName": "test country",
                     },
-                    "contactPoint": {
-                        "email": "test@example.com"
-                    }
+                    "contactPoint": {"email": "test@example.com"},
                 }
             ],
             "documents": [
@@ -60,7 +58,7 @@ class BaseWebTest(BaseApiWebTest):
                     "hash": "md5:" + "0" * 32,
                     "format": "application/msword",
                 }
-            ]
+            ],
         }
         data.update(kwargs)
         self.app.authorization = ("Basic", (self.public_name, self.public_pass))

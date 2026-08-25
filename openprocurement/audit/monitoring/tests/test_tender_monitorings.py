@@ -6,12 +6,11 @@ from openprocurement.audit.monitoring.tests.base import BaseWebTest
 
 
 class TenderMonitoringsResourceTest(BaseWebTest):
-
     def test_get_empty_list(self):
-        response = self.app.get('/tenders/f9f9f9/monitorings')
+        response = self.app.get("/tenders/f9f9f9/monitorings")
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content_type, 'application/json')
-        self.assertEqual(response.json['data'], [])
+        self.assertEqual(response.content_type, "application/json")
+        self.assertEqual(response.json["data"], [])
 
     def test_get(self):
         tender_id = "f" * 32
@@ -24,17 +23,16 @@ class TenderMonitoringsResourceTest(BaseWebTest):
         for i in range(5):  # these are not on the list
             self.create_monitoring(tender_id="a" * 32)
 
-        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
-        response = self.app.get('/tenders/{}/monitorings?mode=draft'.format(tender_id))
+        self.app.authorization = ("Basic", (self.sas_name, self.sas_pass))
+        response = self.app.get("/tenders/{}/monitorings?mode=draft".format(tender_id))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content_type, 'application/json')
-        self.assertEqual([e["id"] for e in response.json['data']], ids)
-        self.assertEqual(set(response.json['data'][0].keys()),
-                         {"id", "dateCreated", "dateModified", "status"})
+        self.assertEqual(response.content_type, "application/json")
+        self.assertEqual([e["id"] for e in response.json["data"]], ids)
+        self.assertEqual(set(response.json["data"][0].keys()), {"id", "dateCreated", "dateModified", "status"})
 
     def test_get_without_draft(self):
         tender_id = "f" * 32
-        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        self.app.authorization = ("Basic", (self.sas_name, self.sas_pass))
 
         self.create_monitoring(tender_id=tender_id)
         draft_id = self.monitoring_id
@@ -42,34 +40,31 @@ class TenderMonitoringsResourceTest(BaseWebTest):
         self.create_monitoring(tender_id=tender_id)
         cancelled_id = self.monitoring_id
         self.app.patch_json(
-            '/monitorings/{}'.format(self.monitoring_id),
-            {'data': {
-                "status": CANCELLED_STATUS,
-                'cancellation': {
-                    'description': 'some_description'
-                }
-            }})
+            "/monitorings/{}".format(self.monitoring_id),
+            {"data": {"status": CANCELLED_STATUS, "cancellation": {"description": "some_description"}}},
+        )
 
         self.create_monitoring(tender_id=tender_id)
         active_id = self.monitoring_id
         self.app.patch_json(
-            '/monitorings/{}'.format(self.monitoring_id),
-            {"data": {
-                "decision": {"description": "text"},
-                "status": ACTIVE_STATUS,
-            }}
+            "/monitorings/{}".format(self.monitoring_id),
+            {
+                "data": {
+                    "decision": {"description": "text"},
+                    "status": ACTIVE_STATUS,
+                }
+            },
         )
 
-        response = self.app.get('/tenders/{}/monitorings'.format(tender_id))
+        response = self.app.get("/tenders/{}/monitorings".format(tender_id))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content_type, 'application/json')
-        self.assertEqual([e["id"] for e in response.json['data']], [active_id])
-        self.assertEqual(set(response.json['data'][0].keys()),
-                         {"id", "dateCreated", "dateModified", "status"})
+        self.assertEqual(response.content_type, "application/json")
+        self.assertEqual([e["id"] for e in response.json["data"]], [active_id])
+        self.assertEqual(set(response.json["data"][0].keys()), {"id", "dateCreated", "dateModified", "status"})
 
     def test_get_with_draft(self):
         tender_id = "f" * 32
-        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        self.app.authorization = ("Basic", (self.sas_name, self.sas_pass))
 
         self.create_monitoring(tender_id=tender_id)
         draft_id = self.monitoring_id
@@ -77,39 +72,35 @@ class TenderMonitoringsResourceTest(BaseWebTest):
         self.create_monitoring(tender_id=tender_id)
         cancelled_id = self.monitoring_id
         self.app.patch_json(
-            '/monitorings/{}'.format(self.monitoring_id),
-            {'data': {
-                "status": CANCELLED_STATUS,
-                'cancellation': {
-                    'description': 'some_description'
-                }
-            }})
+            "/monitorings/{}".format(self.monitoring_id),
+            {"data": {"status": CANCELLED_STATUS, "cancellation": {"description": "some_description"}}},
+        )
 
         self.create_monitoring(tender_id=tender_id)
         active_id = self.monitoring_id
         self.app.patch_json(
-            '/monitorings/{}'.format(self.monitoring_id),
-            {"data": {
-                "decision": {"description": "text"},
-                "status": ACTIVE_STATUS,
-            }}
+            "/monitorings/{}".format(self.monitoring_id),
+            {
+                "data": {
+                    "decision": {"description": "text"},
+                    "status": ACTIVE_STATUS,
+                }
+            },
         )
 
-        response = self.app.get('/tenders/{}/monitorings?mode=draft'.format(tender_id))
+        response = self.app.get("/tenders/{}/monitorings?mode=draft".format(tender_id))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content_type, 'application/json')
-        self.assertEqual({e["id"] for e in response.json['data']}, {active_id, draft_id, cancelled_id})
-        self.assertEqual(set(response.json['data'][0].keys()),
-                         {"id", "dateCreated", "dateModified", "status"})
+        self.assertEqual(response.content_type, "application/json")
+        self.assertEqual({e["id"] for e in response.json["data"]}, {active_id, draft_id, cancelled_id})
+        self.assertEqual(set(response.json["data"][0].keys()), {"id", "dateCreated", "dateModified", "status"})
 
     def test_get_with_draft_forbidden(self):
         tender_id = "f" * 32
         self.app.authorization = None
-        response = self.app.get('/tenders/{}/monitorings?mode=draft'.format(tender_id), status=403)
+        response = self.app.get("/tenders/{}/monitorings?mode=draft".format(tender_id), status=403)
         self.assertEqual(
             response.json,
-            {u'status': u'error',
-             u'errors': [{u'description': u'Forbidden', u'location': u'url', u'name': u'permission'}]}
+            {"status": "error", "errors": [{"description": "Forbidden", "location": "url", "name": "permission"}]},
         )
 
     def test_get_custom_fields(self):
@@ -120,110 +111,97 @@ class TenderMonitoringsResourceTest(BaseWebTest):
             self.create_monitoring(tender_id=tender_id)
             ids.append(self.monitoring_id)
 
-        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        self.app.authorization = ("Basic", (self.sas_name, self.sas_pass))
         response = self.app.get(
-            '/tenders/{}/monitorings?mode=draft&opt_fields=dateModified%2Creasons'.format(
-                tender_id
-            )
+            "/tenders/{}/monitorings?mode=draft&opt_fields=dateModified%2Creasons".format(tender_id)
         )
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content_type, 'application/json')
+        self.assertEqual(response.content_type, "application/json")
 
-        self.assertEqual([e["id"] for e in response.json['data']], ids)
-        self.assertEqual(set(response.json['data'][0].keys()),
-                         {"id", "dateCreated", "dateModified", "status", "reasons"})
+        self.assertEqual([e["id"] for e in response.json["data"]], ids)
+        self.assertEqual(
+            set(response.json["data"][0].keys()), {"id", "dateCreated", "dateModified", "status", "reasons"}
+        )
 
     def test_get_test_empty(self):
         tender_id = "a" * 32
         for i in range(10):
             self.create_monitoring(tender_id=tender_id, mode="test")
 
-        response = self.app.get(
-            '/tenders/{}/monitorings'.format(tender_id)
-        )
+        response = self.app.get("/tenders/{}/monitorings".format(tender_id))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content_type, 'application/json')
-        self.assertEqual(response.json['data'], [])
+        self.assertEqual(response.content_type, "application/json")
+        self.assertEqual(response.json["data"], [])
 
     def test_get_with_pagination(self):
         tender_id = "a" * 32
-        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        self.app.authorization = ("Basic", (self.sas_name, self.sas_pass))
         for i in range(5):
             self.create_monitoring(tender_id=tender_id)
         self.app.patch_json(
-            '/monitorings/{}'.format(self.monitoring_id),
-            {"data": {
-                "decision": {"description": "text"},
-                "status": ACTIVE_STATUS,
-            }}
+            "/monitorings/{}".format(self.monitoring_id),
+            {
+                "data": {
+                    "decision": {"description": "text"},
+                    "status": ACTIVE_STATUS,
+                }
+            },
         )
 
-        response = self.app.get(
-            '/tenders/{}/monitorings?mode=draft&limit=2&page=2'.format(tender_id)
-        )
+        response = self.app.get("/tenders/{}/monitorings?mode=draft&limit=2&page=2".format(tender_id))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content_type, 'application/json')
-        self.assertEqual(response.json['total'], 5)
-        self.assertEqual(response.json['count'], 2)
-        self.assertEqual(response.json['limit'], 2)
-        self.assertEqual(response.json['page'], 2)
-        self.assertEqual(len(response.json['data']), 2)
+        self.assertEqual(response.content_type, "application/json")
+        self.assertEqual(response.json["total"], 5)
+        self.assertEqual(response.json["count"], 2)
+        self.assertEqual(response.json["limit"], 2)
+        self.assertEqual(response.json["page"], 2)
+        self.assertEqual(len(response.json["data"]), 2)
 
     def test_get_with_pagination_not_full_page(self):
         tender_id = "a" * 32
-        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        self.app.authorization = ("Basic", (self.sas_name, self.sas_pass))
         for i in range(5):
             self.create_monitoring(tender_id=tender_id)
 
-        response = self.app.get(
-            '/tenders/{}/monitorings?mode=draft&limit=2&page=3'.format(tender_id)
-        )
+        response = self.app.get("/tenders/{}/monitorings?mode=draft&limit=2&page=3".format(tender_id))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content_type, 'application/json')
-        self.assertEqual(response.json['total'], 5)
-        self.assertEqual(response.json['count'], 1)
-        self.assertEqual(response.json['limit'], 2)
-        self.assertEqual(response.json['page'], 3)
-        self.assertEqual(len(response.json['data']), 1)
+        self.assertEqual(response.content_type, "application/json")
+        self.assertEqual(response.json["total"], 5)
+        self.assertEqual(response.json["count"], 1)
+        self.assertEqual(response.json["limit"], 2)
+        self.assertEqual(response.json["page"], 3)
+        self.assertEqual(len(response.json["data"]), 1)
 
     def test_get_with_pagination_out_of_bounds_page(self):
         tender_id = "a" * 32
-        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        self.app.authorization = ("Basic", (self.sas_name, self.sas_pass))
         for i in range(5):
             self.create_monitoring(tender_id=tender_id)
 
-        response = self.app.get(
-            '/tenders/{}/monitorings?mode=draft&limit=2&page=4'.format(tender_id)
-        )
+        response = self.app.get("/tenders/{}/monitorings?mode=draft&limit=2&page=4".format(tender_id))
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content_type, 'application/json')
-        self.assertEqual(response.json['total'], 5)
-        self.assertEqual(response.json['count'], 0)
-        self.assertEqual(response.json['limit'], 2)
-        self.assertEqual(response.json['page'], 4)
-        self.assertEqual(len(response.json['data']), 0)
+        self.assertEqual(response.content_type, "application/json")
+        self.assertEqual(response.json["total"], 5)
+        self.assertEqual(response.json["count"], 0)
+        self.assertEqual(response.json["limit"], 2)
+        self.assertEqual(response.json["page"], 4)
+        self.assertEqual(len(response.json["data"]), 0)
 
     def test_restricted_visibility(self):
         tender_id = "f" * 32
         self.create_monitoring(tender_id=tender_id, restricted_config=True)
-        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        self.app.authorization = ("Basic", (self.sas_name, self.sas_pass))
         self.app.patch_json(
-            '/monitorings/{}'.format(self.monitoring_id),
-            {"data": {
-                "status": "active",
-                "decision": {
-                    "description": "text",
-                    "date": datetime.now(TZ).isoformat()
-                }
-            }}
+            "/monitorings/{}".format(self.monitoring_id),
+            {"data": {"status": "active", "decision": {"description": "text", "date": datetime.now(TZ).isoformat()}}},
         )
 
-        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
-        response = self.app.get(f'/tenders/{tender_id}/monitorings?mode=_all&opt_fields=decision')
-        self.assertEqual(response.status, '200 OK')
-        self.assertEqual(response.content_type, 'application/json')
-        self.assertEqual(response.json['data'][0]['decision']['description'], 'Приховано')
-        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
-        response = self.app.get(f'/tenders/{tender_id}/monitorings?mode=_all_&opt_fields=decision')
-        self.assertEqual(response.status, '200 OK')
-        self.assertEqual(response.json['data'][0]['decision']['description'], 'text')
+        self.app.authorization = ("Basic", (self.broker_name, self.broker_pass))
+        response = self.app.get(f"/tenders/{tender_id}/monitorings?mode=_all&opt_fields=decision")
+        self.assertEqual(response.status, "200 OK")
+        self.assertEqual(response.content_type, "application/json")
+        self.assertEqual(response.json["data"][0]["decision"]["description"], "Приховано")
+        self.app.authorization = ("Basic", (self.sas_name, self.sas_pass))
+        response = self.app.get(f"/tenders/{tender_id}/monitorings?mode=_all_&opt_fields=decision")
+        self.assertEqual(response.status, "200 OK")
+        self.assertEqual(response.json["data"][0]["decision"]["description"], "text")

@@ -1,7 +1,8 @@
-from openprocurement.audit.api.database import BaseCollection
-from pymongo import IndexModel, ASCENDING
 import logging
 
+from pymongo import ASCENDING, IndexModel
+
+from openprocurement.audit.api.database import BaseCollection
 
 logger = logging.getLogger(__name__)
 
@@ -17,8 +18,7 @@ class RequestCollection(BaseCollection):
         #   As such, you cannot create multiple partial indexes that differ only by the filter expression.``
         # Hold my 🍺
         test_by_public_modified = IndexModel(
-            [("public_modified", ASCENDING),
-             ("existing_key", ASCENDING)],
+            [("public_modified", ASCENDING), ("existing_key", ASCENDING)],
             name="test_by_public_modified",
             partialFilterExpression={
                 "is_test": True,
@@ -32,14 +32,15 @@ class RequestCollection(BaseCollection):
             },
         )
         all_by_public_modified = IndexModel(
-            [("public_modified", ASCENDING),
-             ("surely_existing_key", ASCENDING)],  # makes key unique https://jira.mongodb.org/browse/SERVER-25023
+            [
+                ("public_modified", ASCENDING),
+                ("surely_existing_key", ASCENDING),
+            ],  # makes key unique https://jira.mongodb.org/browse/SERVER-25023
             name="all_by_public_modified",
         )
         # answered / not answered
         real_is_answered_by_public_modified = IndexModel(
-            [("public_modified", ASCENDING),
-             ("answered_string_existing_key", ASCENDING)],
+            [("public_modified", ASCENDING), ("answered_string_existing_key", ASCENDING)],
             name="real_is_answered_by_public_modified",
             partialFilterExpression={
                 "is_test": False,
@@ -47,8 +48,10 @@ class RequestCollection(BaseCollection):
             },
         )
         real_not_is_answered_by_public_modified = IndexModel(
-            [("public_modified", ASCENDING),
-             ("real_is_answered_by_public_modified", ASCENDING)],  # makes key unique https://jira.mongodb.org/browse/SERVER-25023
+            [
+                ("public_modified", ASCENDING),
+                ("real_is_answered_by_public_modified", ASCENDING),
+            ],  # makes key unique https://jira.mongodb.org/browse/SERVER-25023
             name="real_not_is_answered_by_public_modified",
             partialFilterExpression={
                 "is_test": False,
@@ -56,8 +59,7 @@ class RequestCollection(BaseCollection):
             },
         )
         all_by_tender_id = IndexModel(
-            [("tenderId", ASCENDING),
-             ("dateCreated", ASCENDING)],
+            [("tenderId", ASCENDING), ("dateCreated", ASCENDING)],
             name="all_by_tenderId_created",
         )
         # db.requests.createIndex({ "tenderId": 1,  "dateCreated": 1 }, { name: "all_by_tenderId_created" })

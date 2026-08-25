@@ -33,11 +33,7 @@ class RequestDocumentsResourceTest(BaseWebTest):
 
     def test_get(self):
         data = self.create_request()
-        response = self.app.get(
-            "/requests/{}/documents/{}".format(
-                self.request_id, data["documents"][0]["id"]
-            )
-        )
+        response = self.app.get("/requests/{}/documents/{}".format(self.request_id, data["documents"][0]["id"]))
         self.assertEqual(response.status, "200 OK")
         self.assertEqual(response.content_type, "application/json")
         data = response.json["data"]
@@ -92,12 +88,7 @@ class RequestDocumentsResourceTest(BaseWebTest):
         self.app.authorization = ("Basic", (self.sas_name, self.sas_pass))
         response = self.app.patch_json(
             "/requests/{}".format(self.request_id),
-            {
-                "data": {
-                    "answer":  "monitoringCreated",
-                    "reason": "Because i am your father"
-                }
-            }
+            {"data": {"answer": "monitoringCreated", "reason": "Because i am your father"}},
         )
         self.app.authorization = ("Basic", (self.public_name, self.public_pass))
         self.app.post_json(

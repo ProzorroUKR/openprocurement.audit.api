@@ -119,9 +119,7 @@ class RequestResourceTest(BaseWebTest):
                 },
             )
         self.assertNotEqual(response.json["data"]["dateModified"], modified_date)
-        self.assertEqual(
-            response.json["data"]["dateModified"], initial_data["dateModified"]
-        )
+        self.assertEqual(response.json["data"]["dateModified"], initial_data["dateModified"])
 
     def test_patch_sas_answer_reason_fields(self):
         self.create_request()
@@ -134,9 +132,7 @@ class RequestResourceTest(BaseWebTest):
 
         modified_date = "2018-01-02T13:30:00+02:00"
         with freeze_time(modified_date):
-            response = self.app.patch_json(
-                "/requests/{}".format(self.request_id), {"data": request_data}
-            )
+            response = self.app.patch_json("/requests/{}".format(self.request_id), {"data": request_data})
         self.assertEqual(response.json["data"]["answer"], request_data["answer"])
         self.assertEqual(response.json["data"]["dateModified"], modified_date)
         self.assertEqual(response.json["data"]["dateAnswered"], modified_date)
@@ -150,12 +146,8 @@ class RequestResourceTest(BaseWebTest):
             "reason": "Because i am your father",
         }
 
-        response = self.app.patch_json(
-            "/requests/{}".format(self.request_id), {"data": request_data}
-        )
-        response = self.app.patch_json(
-            "/requests/{}".format(self.request_id), {"data": request_data}, status=403
-        )
+        response = self.app.patch_json("/requests/{}".format(self.request_id), {"data": request_data})
+        response = self.app.patch_json("/requests/{}".format(self.request_id), {"data": request_data}, status=403)
         self.assertEqual(response.status_code, 403)
 
     def test_patch_validation_error(self):

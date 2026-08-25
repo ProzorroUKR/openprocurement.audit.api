@@ -2,6 +2,7 @@ image: docker:stable
 stages:
   - build
   - deploy
+  - check
   - test
 
 variables:
@@ -55,6 +56,30 @@ build_tag:
     - tags
   variables:
     IMAGE_TAG: $CI_COMMIT_TAG
+
+.tools:
+  allow_failure: false
+  tags:
+    - kube-dev
+  only:
+    - branches
+  except:
+    - schedules
+
+.tools_static:
+  extends: .tools
+  image: $CI_REGISTRY/cdb/openprocurement.api-ci:latest
+  stage: check
+  needs: []
+  variables:
+    GIT_STRATEGY: clone
+
+ruff:
+  extends: .tools_static
+  stage: check
+  script:
+    - ruff check openprocurement/
+    - ruff format openprocurement/ --check
 
 .base_deploy: &base_deploy
   stage: deploy

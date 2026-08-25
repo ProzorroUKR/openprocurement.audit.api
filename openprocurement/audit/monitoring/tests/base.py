@@ -54,7 +54,6 @@ class BaseWebTest(BaseApiWebTest):
         self.admin_pass = "token"
 
     def create_monitoring(self, restricted_config=False, **kwargs):
-
         data = deepcopy(self.initial_data)
 
         if SANDBOX_MODE:

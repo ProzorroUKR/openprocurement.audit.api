@@ -38,7 +38,6 @@ class MonitoringsEmptyListingResourceTest(BaseWebTest, DSWebTestMixin):
         )
 
     def test_post_monitoring_sas(self):
-
         self.app.authorization = ("Basic", (self.sas_name, self.sas_pass))
 
         with mock.patch("openprocurement.audit.monitoring.utils.TendersClient") as mock_api_client:

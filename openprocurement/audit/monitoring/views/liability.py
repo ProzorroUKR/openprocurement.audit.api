@@ -21,7 +21,6 @@ from openprocurement.audit.monitoring.validation import (
 class LiabilityResource(APIResource):
     @json_view(content_type="application/json", validators=(validate_liability_data,), permission="edit_monitoring")
     def collection_post(self):
-
         monitoring = self.context
         liability = self.request.validated["liability"]
         set_author(liability.documents, self.request, "author")

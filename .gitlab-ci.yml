@@ -2,7 +2,7 @@ image: docker:stable
 stages:
   - build
   - deploy
-  - check
+  - lint
   - test
 
 variables:
@@ -66,20 +66,19 @@ build_tag:
   except:
     - schedules
 
-.tools_static:
+.lint_tools:
   extends: .tools
   image: $CI_REGISTRY/cdb/openprocurement.api-ci:latest
-  stage: check
+  stage: lint
   needs: []
   variables:
     GIT_STRATEGY: clone
 
 ruff:
-  extends: .tools_static
-  stage: check
+  extends: .lint_tools
   script:
-    - ruff check openprocurement/
-    - ruff format openprocurement/ --check
+    - uv run --active ruff check --force-exclude
+    - uv run --active ruff format --check --force-exclude
 
 .base_deploy: &base_deploy
   stage: deploy

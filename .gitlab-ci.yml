@@ -76,7 +76,8 @@ build_tag:
   except:
     - schedules
   stage: lint
-  needs: []
+  needs:
+    - build
   variables:
     GIT_STRATEGY: clone
 

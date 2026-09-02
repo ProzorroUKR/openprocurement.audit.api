@@ -84,8 +84,8 @@ build_tag:
 ruff:
   extends: .lint_tools
   script:
-    - uv run --active ruff check --force-exclude
-    - uv run --active ruff format --check --force-exclude
+    - uv run --active ruff check openprocurement/ --force-exclude
+    - uv run --active ruff format openprocurement/ --check --force-exclude
 
 mypy:
   extends: .lint_tools

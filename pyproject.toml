@@ -64,6 +64,7 @@ dev = [
     "pytest-cov==6.1.1",
     "parameterized==0.7.4",
     "ruff==0.6.9",
+    "mypy==1.11.2",
     "pre-commit",
 ]
 
@@ -178,3 +179,54 @@ docstring-code-format = false
 # This only has an effect when the `docstring-code-format` setting is
 # enabled.
 docstring-code-line-length = "dynamic"
+
+[tool.mypy]
+python_version = "3.13"
+ignore_missing_imports = true
+check_untyped_defs = false
+warn_unused_configs = true
+explicit_package_bases = true
+disable_error_code = [
+    "var-annotated",
+    "assignment",
+    "index",
+    "return",
+    "str-format",
+]
+
+exclude = '/(site-packages|__pycache__|\..*)/$'
+
+[[tool.mypy.overrides]]
+module = [
+    "openprocurement.*",
+    "setuptools.*",
+    "freezegun.*",
+    "jmespath.*",
+    "pymongo.*",
+    "bson.*",
+    "pytz.*",
+    "pyramid.*",
+    "schematics.*",
+    "paste.*",
+    "cornice.*",
+    "webob.*",
+    "dateorro.*",
+    "jsonpointer.*",
+    "isodate.*",
+    "gevent.*",
+    "jsonpath_ng.*",
+    "simplejson.*",
+    "pkg_resources.*",
+    "zope.*",
+    "barbecue.*",
+    "esculator.*",
+    "parameterized.*",
+    "nacl.*",
+    "ciso8601.*",
+    "iso8601.*",
+    "sentry_sdk.*",
+    "request_id_middleware.*",
+    "jsonpatch.*",
+    "standards.*",
+]
+ignore_missing_imports = true

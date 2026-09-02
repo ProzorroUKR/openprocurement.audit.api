@@ -1,5 +1,6 @@
 from functools import partial
 from logging import getLogger
+from typing import Callable
 
 from cornice.resource import resource, view
 
@@ -29,7 +30,7 @@ class MongodbResourceListing(APIResource):
     default_limit = 100
     max_limit = 1000
 
-    db_listing_method: callable
+    db_listing_method: Callable
     filter_key = None
 
     @staticmethod
@@ -167,10 +168,10 @@ DEFAULT_DESCENDING = False
 
 class APIResourcePaginatedListing(APIResource):
     sort_by: str = "dateCreated"
-    db_listing_method: callable
+    db_listing_method: Callable
     obj_id_key: str
     obj_id_key_filter: str
-    serialize_method: callable
+    serialize_method: Callable
     default_fields: set
 
     @classmethod

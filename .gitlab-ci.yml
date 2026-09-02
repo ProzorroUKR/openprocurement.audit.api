@@ -18,6 +18,7 @@ variables:
   variables:
     IMAGE_TAG: ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
     GIT_STRATEGY: fetch
+    UV_EXTRA_ARGS: ""
   image:
     name: gcr.io/kaniko-project/executor:v1.9.0-debug
     entrypoint: [""]
@@ -29,6 +30,7 @@ variables:
     - >
       /kaniko/executor --context $CI_PROJECT_DIR
       --dockerfile $CI_PROJECT_DIR/Dockerfile
+      --build-arg UV_EXTRA_ARGS="$UV_EXTRA_ARGS"
       --destination $CI_REGISTRY_IMAGE:$IMAGE_TAG
       --registry-mirror $REGISTRY_MIRROR
       --insecure-registry $REGISTRY_MIRROR
@@ -49,6 +51,7 @@ build_master:
     - master
   variables:
     IMAGE_TAG: latest
+    UV_EXTRA_ARGS: "--no-dev"
 
 build_tag:
   extends: .build
@@ -56,8 +59,15 @@ build_tag:
     - tags
   variables:
     IMAGE_TAG: $CI_COMMIT_TAG
+    UV_EXTRA_ARGS: "--no-dev"
 
-.tools:
+.image_defaults:
+  image: $CI_REGISTRY_IMAGE:ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
+  before_script:
+    - cd /app
+
+.lint_tools:
+  extends: .image_defaults
   allow_failure: false
   tags:
     - kube-dev
@@ -65,10 +75,6 @@ build_tag:
     - branches
   except:
     - schedules
-
-.lint_tools:
-  extends: .tools
-  image: $CI_REGISTRY/cdb/openprocurement.api-ci:latest
   stage: lint
   needs: []
   variables:
@@ -79,6 +85,11 @@ ruff:
   script:
     - uv run --active ruff check --force-exclude
     - uv run --active ruff format --check --force-exclude
+
+mypy:
+  extends: .lint_tools
+  script:
+    - uv run --active mypy openprocurement/ --explicit-package-bases
 
 .base_deploy: &base_deploy
   stage: deploy

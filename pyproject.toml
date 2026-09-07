@@ -33,7 +33,7 @@ dependencies = [
     "isodate==0.6.1",
     "jmespath==0.10.0",
     "configparser==5.0.1",
-    "sentry-sdk==2.29.1",
+    "sentry-sdk==2.68.1",
     "cornice==6.1.0",
     "WebOb==1.8.9",
     "jsonpath-ng==1.6.0",

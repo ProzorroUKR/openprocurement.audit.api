@@ -32,7 +32,7 @@ Documentation
 
 1. Install requirements by running::
 
-    pip install -r requirements.txt -e .[test,docs]
+    uv sync
 
 2. Add "couchdb" to be resolved to localhost in /etc/hosts::
 

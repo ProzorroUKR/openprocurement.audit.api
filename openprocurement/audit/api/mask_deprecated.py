@@ -23,9 +23,7 @@ EXCLUDED_FIELDS = {
     "next_check",
 }
 
-EXCLUDED_ROLES = (
-    "Administrator",
-)
+EXCLUDED_ROLES = ("Administrator",)
 
 
 def mask_simple_data(v):

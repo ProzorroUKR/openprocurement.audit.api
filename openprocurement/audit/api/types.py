@@ -1,8 +1,9 @@
-from hashlib import algorithms_guaranteed, new as hash_new
-
 from datetime import datetime
-from iso8601 import parse_date, ParseError
-from schematics.exceptions import ValidationError, ConversionError
+from hashlib import algorithms_guaranteed
+from hashlib import new as hash_new
+
+from iso8601 import ParseError, parse_date
+from schematics.exceptions import ConversionError, ValidationError
 from schematics.types import BaseType, StringType
 from schematics.types.compound import ListType as BaseListType
 
@@ -10,47 +11,42 @@ from openprocurement.audit.api.constants import TZ
 
 
 class HashType(StringType):
-
     MESSAGES = {
-        'hash_invalid': "Hash type is not supported.",
-        'hash_length': "Hash value is wrong length.",
-        'hash_hex': "Hash value is not hexadecimal.",
+        "hash_invalid": "Hash type is not supported.",
+        "hash_length": "Hash value is wrong length.",
+        "hash_hex": "Hash value is not hexadecimal.",
     }
 
     def to_native(self, value, context=None):
         value = super(HashType, self).to_native(value, context)
 
-        if ':' not in value:
-            raise ValidationError(self.messages['hash_invalid'])
+        if ":" not in value:
+            raise ValidationError(self.messages["hash_invalid"])
 
-        hash_type, hash_value = value.split(':', 1)
+        hash_type, hash_value = value.split(":", 1)
 
         if hash_type not in algorithms_guaranteed:
-            raise ValidationError(self.messages['hash_invalid'])
+            raise ValidationError(self.messages["hash_invalid"])
 
         if len(hash_value) != hash_new(hash_type).digest_size * 2:
-            raise ValidationError(self.messages['hash_length'])
+            raise ValidationError(self.messages["hash_length"])
         try:
             int(hash_value, 16)
         except ValueError:
-            raise ConversionError(self.messages['hash_hex'])
+            raise ConversionError(self.messages["hash_hex"])
         return value
 
 
 class ListType(BaseListType):
-
-    def export_loop(self, list_instance, field_converter,
-                    role=None, print_none=False):
+    def export_loop(self, list_instance, field_converter, role=None, print_none=False):
         """Loops over each item in the model and applies either the field
         transform or the multitype transform.  Essentially functions the same
         as `transforms.export_loop`.
         """
         data = []
         for value in list_instance:
-            if hasattr(self.field, 'export_loop'):
-                shaped = self.field.export_loop(value, field_converter,
-                                                role=role,
-                                                print_none=print_none)
+            if hasattr(self.field, "export_loop"):
+                shaped = self.field.export_loop(value, field_converter, role=role, print_none=print_none)
                 feels_empty = shaped and len(shaped) == 0
             else:
                 shaped = field_converter(self.field, value)
@@ -75,7 +71,7 @@ class ListType(BaseListType):
 
 class IsoDateTimeType(BaseType):
     MESSAGES = {
-        'parse': u'Could not parse {0}. Should be ISO8601.',
+        "parse": "Could not parse {0}. Should be ISO8601.",
     }
 
     def to_native(self, value, context=None):
@@ -87,7 +83,7 @@ class IsoDateTimeType(BaseType):
                 date = TZ.localize(date)
             return date
         except ParseError:
-            raise ConversionError(self.messages['parse'].format(value))
+            raise ConversionError(self.messages["parse"].format(value))
         except OverflowError as e:
             raise ConversionError(e.message)
 

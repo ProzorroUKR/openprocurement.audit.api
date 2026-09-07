@@ -1,27 +1,28 @@
 # -*- coding: utf-8 -*-
-from schematics.exceptions import (
-    ModelValidationError, ModelConversionError
-)
+from schematics.exceptions import ModelConversionError, ModelValidationError
 
 from openprocurement.audit.api.utils import (
-    apply_data_patch, update_logging_context, error_handler,
+    apply_data_patch,
+    error_handler,
+    update_logging_context,
 )
 
 OPERATIONS = {"POST": "add", "PATCH": "update", "PUT": "update", "DELETE": "delete"}
+
 
 def validate_json_data(request, **_):
     try:
         json = request.json_body
     except ValueError as e:
-        request.errors.add('body', 'data', str(e))
+        request.errors.add("body", "data", str(e))
         request.errors.status = 422
         raise error_handler(request)
-    if not isinstance(json, dict) or 'data' not in json or not isinstance(json.get('data'), dict):
-        request.errors.add('body', 'data', "Data not available")
+    if not isinstance(json, dict) or "data" not in json or not isinstance(json.get("data"), dict):
+        request.errors.add("body", "data", "Data not available")
         request.errors.status = 422
         raise error_handler(request)
-    request.validated['json_data'] = json['data']
-    return json['data']
+    request.validated["json_data"] = json["data"]
+    return json["data"]
 
 
 def validate_data(request, model, partial=False, data=None):
@@ -43,24 +44,24 @@ def validate_data(request, model, partial=False, data=None):
             m.__parent__ = request.context
             m.validate()
             method = m.serialize
-            role = 'create'
+            role = "create"
     except (ModelValidationError, ModelConversionError) as e:
         for i in e.messages:
-            request.errors.add('body', i, e.messages[i])
+            request.errors.add("body", i, e.messages[i])
         request.errors.status = 422
         raise error_handler(request)
     except ValueError as e:
-        request.errors.add('body', 'data', e.args[0])
+        request.errors.add("body", "data", e.args[0])
         request.errors.status = 422
         raise error_handler(request)
     else:
-        if hasattr(type(m), '_options') and role not in type(m)._options.roles:
-            request.errors.add('url', 'role', 'Forbidden')
+        if hasattr(type(m), "_options") and role not in type(m)._options.roles:
+            request.errors.add("url", "role", "Forbidden")
             request.errors.status = 403
             raise error_handler(request)
         else:
             data = method(role)
-            request.validated['data'] = data
+            request.validated["data"] = data
             if not partial:
                 m = model(data)
                 m.__parent__ = request.context
@@ -77,25 +78,25 @@ def validate_patch_document_data(request, **_):
 
 
 def validate_document_data(request, **_):
-    context = request.context if 'documents' in request.context else request.context.__parent__
+    context = request.context if "documents" in request.context else request.context.__parent__
     model = type(context).documents.model_class
     return validate_data(request, model)
 
 
 def validate_file_upload(request, **_):
-    update_logging_context(request, {'document_id': '__new__'})
+    update_logging_context(request, {"document_id": "__new__"})
     if request.registry.docservice_url and request.content_type == "application/json":
         return validate_document_data(request)
-    if 'file' not in request.POST or not hasattr(request.POST['file'], 'filename'):
-        request.errors.add('body', 'file', 'Not Found')
+    if "file" not in request.POST or not hasattr(request.POST["file"], "filename"):
+        request.errors.add("body", "file", "Not Found")
         request.errors.status = 404
         raise error_handler(request)
     else:
-        request.validated['file'] = request.POST['file']
+        request.validated["file"] = request.POST["file"]
 
 
 def validate_file_update(request, **_):
     if request.registry.docservice_url and request.content_type == "application/json":
         return validate_document_data(request)
-    if request.content_type == 'multipart/form-data':
+    if request.content_type == "multipart/form-data":
         validate_file_upload(request)

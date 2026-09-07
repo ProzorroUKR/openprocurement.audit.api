@@ -1,27 +1,29 @@
 from logging import getLogger
-from openprocurement.audit.api.utils import forbidden, set_ownership
+
+from openprocurement.audit.api.context import get_now
+from openprocurement.audit.api.utils import (
+    context_unpack,
+    forbidden,
+    generate_id,
+    set_ownership,
+)
 from openprocurement.audit.api.views.base import (
     APIResource,
     MongodbResourceListing,
     json_view,
 )
-from openprocurement.audit.api.utils import (
-    context_unpack,
-    generate_id,
-)
-from openprocurement.audit.api.context import get_now
 from openprocurement.audit.monitoring.utils import upload_objects_documents
-from openprocurement.audit.request.utils import save_request
 from openprocurement.audit.request.utils import (
     apply_patch,
     generate_request_id,
     op_resource,
-    set_author,
     request_serialize_view,
+    save_request,
+    set_author,
 )
 from openprocurement.audit.request.validation import (
-    validate_request_data,
     validate_patch_request_data,
+    validate_request_data,
 )
 
 LOGGER = getLogger(__name__)
@@ -69,11 +71,7 @@ class RequestsResource(MongodbResourceListing):
         set_ownership(obj, self.request, token=False)
         set_author(obj.documents, self.request, "author")
         upload_objects_documents(self.request, obj)
-        save_request(
-            self.request,
-            modified=True,
-            insert=True
-        )
+        save_request(self.request, modified=True, insert=True)
         LOGGER.info(
             "Created request {}".format(obj.id),
             extra=context_unpack(
@@ -83,9 +81,7 @@ class RequestsResource(MongodbResourceListing):
             ),
         )
         self.request.response.status = 201
-        self.request.response.headers["Location"] = self.request.route_url(
-            "Request", request_id=obj.id
-        )
+        self.request.response.headers["Location"] = self.request.route_url("Request", request_id=obj.id)
         return {"data": request_serialize_view(obj, self.request.authenticated_role)}
 
 

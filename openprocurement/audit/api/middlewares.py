@@ -1,7 +1,9 @@
-from openprocurement.audit.api.context import set_db_session
+from base64 import b64decode, b64encode
 from logging import getLogger
+
 from bson.json_util import dumps, loads
-from base64 import b64encode, b64decode
+
+from openprocurement.audit.api.context import set_db_session
 
 LOGGER = getLogger(__name__)
 
@@ -12,6 +14,7 @@ class DBSessionCookieMiddleware:
     Passes cluster_time & operation_time between requests of a client
     to provide casual consistency 
     """
+
     def __init__(self, handler, registry):
         self.handler = handler
         self.registry = registry
@@ -38,7 +41,7 @@ class DBSessionCookieMiddleware:
 
         if warning:
             # https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Warning
-            response.headers["X-Warning"] = f"199 - \"{warning}\""
+            response.headers["X-Warning"] = f'199 - "{warning}"'
 
         session_data = {
             "operation_time": session.operation_time,

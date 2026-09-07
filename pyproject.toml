@@ -1,0 +1,232 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "openprocurement.audit.api"
+version = "1.3.3"
+description = "OpenProcurement Audit Api"
+readme = "README.rst"
+license = { text = "Apache License 2.0" }
+classifiers = [
+    "Programming Language :: Python",
+]
+requires-python = ">=3.13.0,<3.14"
+dependencies = [
+    "gunicorn==23.0.0",
+    "gevent==25.5.1",
+    "ciso8601==2.1.3",
+    "iso8601==0.1.11",
+    "pyramid>=2.0,<3",
+    "pyramid_exclog==1.1",
+    "pymongo>=4.7.3,<5",
+    "repoze.profile==2.3",
+    "pycryptodome==3.19.1",
+    "jsonpointer==2.0",
+    "pbkdf2==1.3",
+    "PyNaCl==1.5.0",
+    "Paste==3.5.0",
+    "python-json-logger==2.0.1",
+    "tzlocal==2.1",
+    "simplejson==3.17.2",
+    "beautifulsoup4==4.9.3",
+    "isodate==0.6.1",
+    "jmespath==0.10.0",
+    "configparser==5.0.1",
+    "sentry-sdk==2.29.1",
+    "cornice==6.1.0",
+    "WebOb==1.8.9",
+    "jsonpath-ng==1.6.0",
+    "zope.component==6.0",
+    "setuptools==78.1.0",
+    "schematics",
+    "openprocurement_client",
+    "request_id_middleware",
+    "openprocurement.subscribers.serverid",
+    "esculator",
+    "dateorro",
+    "jsonpatch",
+    "barbecue",
+    "standards",
+]
+
+[project.urls]
+Homepage = "https://github.com/ProzorroUKR/openprocurement.audit.api"
+
+[dependency-groups]
+dev = [
+    "pytest==8.3.5",
+    "pytest-xdist==3.6.1",
+    "webtest==3.0.4",
+    "freezegun==1.5.1",
+    "python-coveralls==2.9.3",
+    "coverage==7.8.1",
+    "pytest-cov==6.1.1",
+    "parameterized==0.7.4",
+    "ruff==0.6.9",
+    "mypy==1.11.2",
+    "pre-commit",
+]
+
+[project.entry-points."paste.app_factory"]
+main = "openprocurement.audit.api.app:main"
+
+[project.entry-points."openprocurement.audit.api.plugins"]
+api = "openprocurement.audit.api:includeme"
+monitoring = "openprocurement.audit.monitoring:includeme"
+inspection = "openprocurement.audit.inspection:includeme"
+request = "openprocurement.audit.request:includeme"
+
+[tool.setuptools.packages.find]
+include = ["openprocurement*"]
+namespaces = true
+
+[tool.uv]
+package = true
+
+[tool.uv.sources]
+schematics = { git = "https://github.com/ProzorroUKR/schematics.git", rev = "1.1.3-prozorro.1" }
+openprocurement_client = { git = "https://github.com/ProzorroUKR/openprocurement.client.python", rev = "2.2.0+dp" }
+request_id_middleware = { git = "https://github.com/ProzorroUKR/request_id_middleware.git", rev = "0.1.2" }
+"openprocurement.subscribers.serverid" = { git = "https://github.com/ProzorroUKR/openprocurement.subscribers.serverid.git", rev = "2.0" }
+esculator = { git = "https://github.com/ProzorroUKR/esculator.git", rev = "0.0.2" }
+dateorro = { git = "https://github.com/ProzorroUKR/dateorro.git", rev = "0.0.3" }
+jsonpatch = { git = "https://github.com/ProzorroUKR/python-json-patch.git", rev = "1.14+jsondiff.unicode.replacefix.0" }
+barbecue = { git = "https://github.com/ProzorroUKR/barbecue.git", rev = "0.2" }
+standards = { git = "https://github.com/ProzorroUKR/standards.git", rev = "1.0.110" }
+
+[tool.ruff]
+# Exclude a variety of commonly ignored directories.
+exclude = [
+    ".bzr",
+    ".direnv",
+    ".eggs",
+    ".git",
+    ".git-rewrite",
+    ".hg",
+    ".ipynb_checkpoints",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pyenv",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    ".vscode",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "site-packages",
+    "venv",
+]
+
+# Same as Black.
+line-length = 120
+indent-width = 4
+
+# Assume Python 3.13
+target-version = "py313"
+
+[tool.ruff.lint]
+# Enable Pyflakes (`F`) and a subset of the pycodestyle (`E`)  codes by default.
+# Unlike Flake8, Ruff doesn't enable pycodestyle warnings (`W`) or
+# McCabe complexity (`C901`) by default.
+select = ["E4", "E7", "E9", "F", "I"]
+ignore = []
+exclude = [
+    "openprocurement/audit/api/tests/**",
+    "openprocurement/audit/inspection/tests/**",
+    "openprocurement/audit/monitoring/tests/**",
+    "openprocurement/audit/request/tests/**",
+]
+
+# Allow fix for all enabled rules (when `--fix`) is provided.
+fixable = ["ALL"]
+unfixable = []
+
+# Allow unused variables when underscore-prefixed.
+dummy-variable-rgx = "^(_+|(_+[a-zA-Z0-9_]*[a-zA-Z0-9]+?))$"
+
+[tool.ruff.format]
+# Like Black, use double quotes for strings.
+quote-style = "double"
+
+# Like Black, indent with spaces, rather than tabs.
+indent-style = "space"
+
+# Like Black, respect magic trailing commas.
+skip-magic-trailing-comma = false
+
+# Like Black, automatically detect the appropriate line ending.
+line-ending = "auto"
+
+# Enable auto-formatting of code examples in docstrings. Markdown,
+# reStructuredText code/literal blocks and doctests are all supported.
+#
+# This is currently disabled by default, but it is planned for this
+# to be opt-out in the future.
+docstring-code-format = false
+
+# Set the line length limit used when formatting code snippets in
+# docstrings.
+#
+# This only has an effect when the `docstring-code-format` setting is
+# enabled.
+docstring-code-line-length = "dynamic"
+
+[tool.mypy]
+python_version = "3.13"
+ignore_missing_imports = true
+check_untyped_defs = false
+warn_unused_configs = true
+explicit_package_bases = true
+disable_error_code = [
+    "var-annotated",
+    "assignment",
+    "index",
+    "return",
+    "str-format",
+]
+
+exclude = '/(site-packages|__pycache__|\..*)/$'
+
+[[tool.mypy.overrides]]
+module = [
+    "openprocurement.*",
+    "setuptools.*",
+    "freezegun.*",
+    "jmespath.*",
+    "pymongo.*",
+    "bson.*",
+    "pytz.*",
+    "pyramid.*",
+    "schematics.*",
+    "paste.*",
+    "cornice.*",
+    "webob.*",
+    "dateorro.*",
+    "jsonpointer.*",
+    "isodate.*",
+    "gevent.*",
+    "jsonpath_ng.*",
+    "simplejson.*",
+    "pkg_resources.*",
+    "zope.*",
+    "barbecue.*",
+    "esculator.*",
+    "parameterized.*",
+    "nacl.*",
+    "ciso8601.*",
+    "iso8601.*",
+    "sentry_sdk.*",
+    "request_id_middleware.*",
+    "jsonpatch.*",
+    "standards.*",
+]
+ignore_missing_imports = true

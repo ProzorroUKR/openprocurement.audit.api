@@ -1,19 +1,19 @@
 from openprocurement.audit.api.utils import (
+    context_unpack,
     get_file,
     upload_file,
-    context_unpack,
-)
-from openprocurement.audit.api.views.base import (
-    APIResource,
-    json_view,
 )
 from openprocurement.audit.api.validation import (
     validate_file_update,
     validate_file_upload,
     validate_patch_document_data,
 )
+from openprocurement.audit.api.views.base import (
+    APIResource,
+    json_view,
+)
+from openprocurement.audit.request.utils import apply_patch, op_resource, save_request, set_author
 from openprocurement.audit.request.validation import validate_allowed_request_document
-from openprocurement.audit.request.utils import save_request, apply_patch, op_resource, set_author
 
 
 @op_resource(
@@ -27,15 +27,12 @@ class RequestsDocumentBaseResource(APIResource):
     def collection_get(self):
         documents = self.context.documents
         if not self.request.params.get("all", ""):
-            documents_top = dict(
-                [(document.id, document) for document in documents]
-            ).values()
+            documents_top = dict([(document.id, document) for document in documents]).values()
             documents = sorted(documents_top, key=lambda i: i["dateModified"])
         return {"data": [document.serialize("view") for document in documents]}
 
     @json_view(
-        permission="create_request_document",
-        validators=(validate_file_upload, validate_allowed_request_document)
+        permission="create_request_document", validators=(validate_file_upload, validate_allowed_request_document)
     )
     def collection_post(self):
         document = upload_file(self.request)
@@ -52,9 +49,7 @@ class RequestsDocumentBaseResource(APIResource):
                 ),
             )
             route = self.request.matched_route.name.replace("collection_", "")
-            location = self.request.current_route_url(
-                document_id=document.id, _route_name=route, _query={}
-            )
+            location = self.request.current_route_url(document_id=document.id, _route_name=route, _query={})
             self.request.response.status = 201
             self.request.response.headers["Location"] = location
             return {"data": document.serialize("view")}
@@ -65,16 +60,13 @@ class RequestsDocumentBaseResource(APIResource):
             return get_file(self.request)
         document = self.request.validated["document"]
         documents = self.request.validated["documents"]
-        versions_data = [
-            i.serialize("view") for i in documents if i.url != document.url
-        ]
+        versions_data = [i.serialize("view") for i in documents if i.url != document.url]
         document_data = document.serialize("view")
         document_data["previousVersions"] = versions_data
         return {"data": document_data}
 
     @json_view(
-        permission="create_request_document",
-        validators=(validate_file_update, validate_allowed_request_document)
+        permission="create_request_document", validators=(validate_file_update, validate_allowed_request_document)
     )
     def put(self):
         parent = self.request.context.__parent__

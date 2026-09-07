@@ -1,8 +1,9 @@
-from openprocurement.audit.api.database import BaseCollection
-from openprocurement.audit.api.context import get_db_session
-from pymongo import DESCENDING, ASCENDING, IndexModel
 import logging
 
+from pymongo import ASCENDING, IndexModel
+
+from openprocurement.audit.api.context import get_db_session
+from openprocurement.audit.api.database import BaseCollection
 
 logger = logging.getLogger(__name__)
 
@@ -18,8 +19,7 @@ class MonitoringCollection(BaseCollection):
         #   As such, you cannot create multiple partial indexes that differ only by the filter expression.``
         # Hold my 🍺
         test_by_public_modified = IndexModel(
-            [("public_modified", ASCENDING),
-             ("existing_key", ASCENDING)],
+            [("public_modified", ASCENDING), ("existing_key", ASCENDING)],
             name="test_by_public_modified",
             partialFilterExpression={
                 "is_test": True,
@@ -27,8 +27,7 @@ class MonitoringCollection(BaseCollection):
             },
         )
         real_by_public_modified = IndexModel(
-            [("public_modified", ASCENDING),
-             ("real_surely_existing_key", ASCENDING)],
+            [("public_modified", ASCENDING), ("real_surely_existing_key", ASCENDING)],
             name="real_by_public_modified",
             partialFilterExpression={
                 "is_test": False,
@@ -36,8 +35,10 @@ class MonitoringCollection(BaseCollection):
             },
         )
         all_by_public_modified = IndexModel(
-            [("public_modified", ASCENDING),
-             ("surely_existing_key", ASCENDING)],  # makes key unique https://jira.mongodb.org/browse/SERVER-25023
+            [
+                ("public_modified", ASCENDING),
+                ("surely_existing_key", ASCENDING),
+            ],  # makes key unique https://jira.mongodb.org/browse/SERVER-25023
             name="all_by_public_modified",
             partialFilterExpression={
                 "is_public": True,
@@ -52,13 +53,17 @@ class MonitoringCollection(BaseCollection):
             },
         )
         all_with_drafts_by_public_modified = IndexModel(
-            [("public_modified", ASCENDING),
-             ("surely_draft_existing_key", ASCENDING)],  # makes key unique https://jira.mongodb.org/browse/SERVER-25023
+            [
+                ("public_modified", ASCENDING),
+                ("surely_draft_existing_key", ASCENDING),
+            ],  # makes key unique https://jira.mongodb.org/browse/SERVER-25023
             name="all_draft_by_public_modified",
         )
         all_by_tender_id = IndexModel(
-            [("tender_id", ASCENDING),
-             ("dateCreated", ASCENDING)],  # makes key unique https://jira.mongodb.org/browse/SERVER-25023
+            [
+                ("tender_id", ASCENDING),
+                ("dateCreated", ASCENDING),
+            ],  # makes key unique https://jira.mongodb.org/browse/SERVER-25023
             name="all_by_tender_id_created",
         )
         all_indexes = [
@@ -90,4 +95,3 @@ class MonitoringCollection(BaseCollection):
             session=get_db_session(),
         )
         return count
-

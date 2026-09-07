@@ -5,7 +5,7 @@ from openprocurement.audit.inspection.models import Inspection
 
 
 def validate_inspection_data(request, **_):
-    update_logging_context(request, {'INSPECTION_ID': '__new__'})
+    update_logging_context(request, {"INSPECTION_ID": "__new__"})
     return validate_data(request, Inspection)
 
 

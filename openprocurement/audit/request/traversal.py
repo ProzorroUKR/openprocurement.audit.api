@@ -4,7 +4,7 @@ from pyramid.security import (
     Everyone,
 )
 
-from openprocurement.audit.api.constants import SAS_ROLE, PUBLIC_ROLE
+from openprocurement.audit.api.constants import PUBLIC_ROLE, SAS_ROLE
 from openprocurement.audit.api.traversal import get_item
 
 

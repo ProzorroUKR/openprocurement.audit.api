@@ -1,22 +1,23 @@
-from logging import getLogger
-from cornice.resource import resource
 from functools import partial
+from logging import getLogger
 
+from cornice.resource import resource
+
+from openprocurement.audit.api.context import get_now
 from openprocurement.audit.api.mask import mask_object_data
 from openprocurement.audit.api.utils import (
-    get_revision_changes,
-    apply_data_patch,
-    error_handler,
-    update_logging_context,
-    context_unpack,
-    handle_store_exceptions,
     append_revision,
+    apply_data_patch,
+    context_unpack,
+    error_handler,
+    get_revision_changes,
+    handle_store_exceptions,
     raise_operation_error,
+    update_logging_context,
 )
 from openprocurement.audit.inspection.mask import INSPECTION_MASK_MAPPING
 from openprocurement.audit.inspection.models import Inspection
 from openprocurement.audit.inspection.traversal import factory
-from openprocurement.audit.api.context import get_now
 
 LOGGER = getLogger(__package__)
 
@@ -41,9 +42,7 @@ def save_inspection(request, modified: bool = True, insert: bool = False) -> boo
             )
             LOGGER.info(
                 "Saved inspection {}: dateModified {} -> {}".format(
-                    inspection.id,
-                    old_date_modified,
-                    inspection.dateModified.isoformat()
+                    inspection.id, old_date_modified, inspection.dateModified.isoformat()
                 ),
                 extra=context_unpack(request, {"MESSAGE_ID": "save_inspection"}, {"RESULT": inspection["_rev"]}),
             )
@@ -52,7 +51,7 @@ def save_inspection(request, modified: bool = True, insert: bool = False) -> boo
 
 
 def apply_patch(request, data=None, save=True, src=None):
-    data = request.validated['data'] if data is None else data
+    data = request.validated["data"] if data is None else data
     patch = data and apply_data_patch(src or request.context.serialize(), data)
     if patch:
         request.context.import_data(patch)
@@ -64,15 +63,15 @@ def generate_inspection_id(request):
     ctime = get_now().date()
     index_key = "inspection_{}".format(ctime.isoformat())
     index = request.registry.mongodb.get_next_sequence_value(index_key)
-    return 'UA-I-{:04}-{:02}-{:02}-{:06}'.format(ctime.year, ctime.month, ctime.day, index)
+    return "UA-I-{:04}-{:02}-{:02}-{:06}".format(ctime.year, ctime.month, ctime.day, index)
 
 
 def set_logging_context(event):
     request = event.request
     params = {}
-    if 'inspection' in request.validated:
-        params['INSPECTION_REV'] = request.validated['inspection'].rev
-        params['INSPECTION_ID'] = request.validated['inspection'].id
+    if "inspection" in request.validated:
+        params["INSPECTION_REV"] = request.validated["inspection"].rev
+        params["INSPECTION_ID"] = request.validated["inspection"].id
     update_logging_context(request, params)
 
 
@@ -82,7 +81,7 @@ def extract_inspection(request):
     if uid:
         doc = request.registry.mongodb.inspection.get(uid)
         if doc is None:
-            request.errors.add('url', key, 'Not Found')
+            request.errors.add("url", key, "Not Found")
             request.errors.status = 404
             raise error_handler(request)
         return request.inspection_from_data(doc)
@@ -95,16 +94,16 @@ def inspection_serialize(request, data, fields):
 
 
 def inspection_from_data(request, data, **_):
-    if request.method == 'GET':
+    if request.method == "GET":
         mask_object_data(request, data, mask_mapping=INSPECTION_MASK_MAPPING)
     return Inspection(data)
 
 
 def extract_restricted_config_from_monitoring(request):
-    for monitoring_id in request.validated['inspection'].monitoring_ids:
+    for monitoring_id in request.validated["inspection"].monitoring_ids:
         monitoring = request.registry.mongodb.monitoring.get(monitoring_id)
         if not monitoring:
-            raise_operation_error(request, f'Monitoring {monitoring_id} not found', status=404)
+            raise_operation_error(request, f"Monitoring {monitoring_id} not found", status=404)
         if monitoring["restricted"]:
             return True
     return False

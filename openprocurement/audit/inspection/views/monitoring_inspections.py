@@ -1,6 +1,6 @@
-from openprocurement.audit.inspection.utils import op_resource, inspection_serialize
-from openprocurement.audit.api.views.base import APIResourcePaginatedListing, RestrictedResourceListingMixin
 from openprocurement.audit.api.context import get_request
+from openprocurement.audit.api.views.base import APIResourcePaginatedListing, RestrictedResourceListingMixin
+from openprocurement.audit.inspection.utils import inspection_serialize, op_resource
 
 
 def serialize(data, fields):
@@ -8,10 +8,8 @@ def serialize(data, fields):
     return r
 
 
-@op_resource(name='Monitoring inspections',
-             path='/monitorings/{monitoring_id}/inspections')
+@op_resource(name="Monitoring inspections", path="/monitorings/{monitoring_id}/inspections")
 class MonitoringInspectionsResource(RestrictedResourceListingMixin, APIResourcePaginatedListing):
-
     def __init__(self, request, context):
         super(MonitoringInspectionsResource, self).__init__(request, context)
         self.db_listing_method = request.registry.mongodb.inspection.paging_list

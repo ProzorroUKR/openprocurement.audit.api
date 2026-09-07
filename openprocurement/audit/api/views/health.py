@@ -1,7 +1,7 @@
 from cornice.service import Service
 from pyramid.response import Response
 
-health = Service(name='health', path='/health', renderer='json')
+health = Service(name="health", path="/health", renderer="json")
 
 
 @health.get()

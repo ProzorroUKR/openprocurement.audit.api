@@ -1,7 +1,8 @@
 from logging import getLogger
-from openprocurement.audit.api.views.base import APIResourcePaginatedListing
-from openprocurement.audit.request.utils import request_serialize, op_resource
+
 from openprocurement.audit.api.context import get_request
+from openprocurement.audit.api.views.base import APIResourcePaginatedListing
+from openprocurement.audit.request.utils import op_resource, request_serialize
 
 LOGGER = getLogger(__name__)
 
@@ -11,7 +12,7 @@ def serialize(data, fields):
     return r
 
 
-@op_resource(name='Tender Requests', path='/tenders/{tender_id}/requests')
+@op_resource(name="Tender Requests", path="/tenders/{tender_id}/requests")
 class TenderRequestResource(APIResourcePaginatedListing):
     def __init__(self, request, context):
         super(TenderRequestResource, self).__init__(request, context)

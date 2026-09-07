@@ -1,26 +1,25 @@
 from string import hexdigits
 from urllib.parse import parse_qs, urlparse
-
-from schematics.types.serializable import serializable
 from uuid import uuid4
 
 from schematics.models import Model as SchematicsModel
 from schematics.transforms import blacklist, convert, export_loop, whitelist
-from schematics.types import BaseType, StringType, MD5Type, URLType, EmailType
+from schematics.types import BaseType, EmailType, MD5Type, StringType, URLType
 from schematics.types.compound import DictType, ModelType
-from zope.component import queryAdapter, getAdapters
-from openprocurement.audit.api.constants import ORA_CODES
-from openprocurement.audit.api.types import IsoDateTimeType, ListType, HashType
-from openprocurement.audit.api.utils import set_parent
-from openprocurement.audit.api.context import get_now
+from schematics.types.serializable import serializable
+from zope.component import getAdapters, queryAdapter
 
+from openprocurement.audit.api.constants import ORA_CODES
+from openprocurement.audit.api.context import get_now
+from openprocurement.audit.api.types import HashType, IsoDateTimeType, ListType
+from openprocurement.audit.api.utils import set_parent
 
 schematics_default_role = blacklist("__parent__")
 schematics_embedded_role = blacklist("__parent__", "_id", "_rev", "doc_type")
 
 
 class AdaptiveDict(dict):
-    def __init__(self, context, interface, data, prefix=''):
+    def __init__(self, context, interface, data, prefix=""):
         self.context = context
         self.interface = interface
         self.prefix = prefix
@@ -35,7 +34,7 @@ class AdaptiveDict(dict):
         if key in self.adaptive_items:
             return self.adaptive_items[key]
         if self.prefix and key.startswith(self.prefix):
-            adapter = queryAdapter(self.context, self.interface, key[self.prefix_len:])
+            adapter = queryAdapter(self.context, self.interface, key[self.prefix_len :])
         else:
             adapter = queryAdapter(self.context, self.interface, key)
         if adapter:
@@ -48,7 +47,7 @@ class AdaptiveDict(dict):
 
     def __repr__(self):
         dictrepr = dict.__repr__(self)
-        return '%s(%s)' % (type(self).__name__, dictrepr)
+        return "%s(%s)" % (type(self).__name__, dictrepr)
 
     def keys(self):
         return list(self)
@@ -69,11 +68,11 @@ class AdaptiveDict(dict):
 
 
 class Model(SchematicsModel):
-
-    default_role = 'edit'
+    default_role = "edit"
 
     class Options(object):
         """Export options for Document."""
+
         serialize_when_none = False
         roles = {
             "default": blacklist("__parent__"),
@@ -91,7 +90,7 @@ class Model(SchematicsModel):
     def __eq__(self, other):
         if isinstance(other, self.__class__):
             for k in self._fields:
-                if k != '__parent__' and self.get(k) != other.get(k):
+                if k != "__parent__" and self.get(k) != other.get(k):
                     return False
             return True
         return NotImplemented
@@ -115,7 +114,10 @@ class Model(SchematicsModel):
         Return data as it would be validated. No filtering of output unless
         role is defined.
         """
-        field_converter = lambda field, value: field.to_primitive(value)
+
+        def field_converter(field, value):
+            return field.to_primitive(value)
+
         data = export_loop(self.__class__, self, field_converter, role=role, raise_error_on_role=True, print_none=True)
         return data
 
@@ -133,12 +135,12 @@ class Revision(Model):
 class Document(Model):
     class Options:
         roles = {
-            'create': blacklist('id', 'datePublished', 'dateModified', 'author', 'download_url'),
-            'edit': blacklist('id', 'url', 'datePublished', 'dateModified', 'author', 'hash', 'download_url'),
-            'embedded': (blacklist('url', 'download_url') + schematics_embedded_role),
-            'default': blacklist("__parent__"),
-            'view': (blacklist('revisions') + schematics_default_role),
-            'revisions': whitelist('url', 'dateModified'),
+            "create": blacklist("id", "datePublished", "dateModified", "author", "download_url"),
+            "edit": blacklist("id", "url", "datePublished", "dateModified", "author", "hash", "download_url"),
+            "embedded": (blacklist("url", "download_url") + schematics_embedded_role),
+            "default": blacklist("__parent__"),
+            "view": (blacklist("revisions") + schematics_default_role),
+            "revisions": whitelist("url", "dateModified"),
         }
 
     id = MD5Type(required=True, default=lambda: uuid4().hex)
@@ -149,7 +151,7 @@ class Document(Model):
     description = StringType()  # A description of the document.
     description_en = StringType()
     description_ru = StringType()
-    format = StringType(required=True, regex='^[-\w]+/[-\.\w\+]+$')
+    format = StringType(required=True, regex="^[-\w]+/[-\.\w\+]+$")
     url = StringType(required=True)  # Link to the document or attachment.
     datePublished = IsoDateTimeType(default=get_now)
     dateModified = IsoDateTimeType(default=get_now)  # Date that the document was last dateModified
@@ -194,9 +196,9 @@ class Document(Model):
     @serializable(serialized_name="url")
     def download_url(self):
         url = self.url
-        if not url or '?download=' not in url:
+        if not url or "?download=" not in url:
             return url
-        doc_id = parse_qs(urlparse(url).query)['download'][-1]
+        doc_id = parse_qs(urlparse(url).query)["download"][-1]
         root = self.__parent__
         parents = []
         while root.__parent__ is not None:
@@ -205,21 +207,22 @@ class Document(Model):
         request = root.request
         if not request.registry.docservice_url:
             return url
-        if 'status' in parents[0] and parents[0].status in type(parents[0])._options.roles:
+        if "status" in parents[0] and parents[0].status in type(parents[0])._options.roles:
             role = parents[0].status
             for index, obj in enumerate(parents):
-                if obj.id != url.split('/')[(index - len(parents)) * 2 - 1]:
+                if obj.id != url.split("/")[(index - len(parents)) * 2 - 1]:
                     break
-                field = url.split('/')[(index - len(parents)) * 2]
+                field = url.split("/")[(index - len(parents)) * 2]
                 if "_" in field:
                     field = field[0] + field.title().replace("_", "")[1:]
                 roles = type(obj)._options.roles
-                if roles[role if role in roles else 'default'](field, []):
+                if roles[role if role in roles else "default"](field, []):
                     return url
         from openprocurement.audit.api.utils import generate_docservice_url
+
         if not self.hash:
-            path = [i for i in urlparse(url).path.split('/') if len(i) == 32 and not set(i).difference(hexdigits)]
-            return generate_docservice_url(request, doc_id, False, '{}/{}'.format(path[0], path[-1]))
+            path = [i for i in urlparse(url).path.split("/") if len(i) == 32 and not set(i).difference(hexdigits)]
+            return generate_docservice_url(request, doc_id, False, "{}/{}".format(path[0], path[-1]))
         return generate_docservice_url(request, doc_id, False)
 
     def import_data(self, raw_data, **kw):
@@ -238,7 +241,7 @@ class Document(Model):
 
 
 class BaseModel(Model):
-    _id = StringType(deserialize_from=['id', 'doc_id'])
+    _id = StringType(deserialize_from=["id", "doc_id"])
     _rev = StringType()
 
     def _get_id(self):
@@ -248,17 +251,17 @@ class BaseModel(Model):
     def _set_id(self, value):
         """id property setter."""
         if self.id is not None:
-            raise AttributeError('id can only be set on new documents')
+            raise AttributeError("id can only be set on new documents")
         self._id = value
 
-    id = property(_get_id, _set_id, doc='The document ID')
+    id = property(_get_id, _set_id, doc="The document ID")
 
     @property
     def rev(self):
         """A property for self._rev"""
         return self._rev
 
-    @serializable(serialized_name='id')
+    @serializable(serialized_name="id")
     def doc_id(self):
         """
         A property that is serialized by schematics exports.
@@ -274,9 +277,7 @@ class BaseModel(Model):
         """
         data = self.convert(raw_data, **kw)
         del_keys = [
-            k for k in data.keys()
-            if data[k] == self.__class__.fields[k].default
-               or data[k] == getattr(self, k)
+            k for k in data.keys() if data[k] == self.__class__.fields[k].default or data[k] == getattr(self, k)
         ]
         for k in del_keys:
             del data[k]

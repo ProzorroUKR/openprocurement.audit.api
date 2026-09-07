@@ -1,24 +1,22 @@
-from schematics.transforms import whitelist, blacklist
-from schematics.types import StringType, MD5Type, EmailType
+from schematics.transforms import blacklist, whitelist
+from schematics.types import EmailType, MD5Type, StringType
 from schematics.types.compound import ModelType
 from schematics.validate import ValidationError
 
-from openprocurement.audit.api.constants import SAS_ROLE, PUBLIC_ROLE
+from openprocurement.audit.api.choices import VIOLATION_TYPE_CHOICES
+from openprocurement.audit.api.constants import PUBLIC_ROLE, SAS_ROLE
+from openprocurement.audit.api.context import get_now
 from openprocurement.audit.api.models import (
-    Revision,
-    Document,
-    BaseModel,
-    Party,
     Address,
+    BaseModel,
     ContactPoint,
-)
-from openprocurement.audit.api.models import (
+    Document,
+    Party,
+    Revision,
     schematics_default_role,
     schematics_embedded_role,
 )
 from openprocurement.audit.api.types import IsoDateTimeType, ListType
-from openprocurement.audit.api.context import get_now
-from openprocurement.audit.api.choices import VIOLATION_TYPE_CHOICES
 from openprocurement.audit.request.choices import REQUEST_PARTY_ROLES_CHOICES
 
 
@@ -49,7 +47,8 @@ class RequestParty(Party):
                 "contactPoint",
                 "identifier",
                 "additionalIdentifiers",
-            ) + schematics_embedded_role,
+            )
+            + schematics_embedded_role,
             "view_%s" % SAS_ROLE: schematics_embedded_role,
         }
 
@@ -68,9 +67,7 @@ class Request(BaseModel):
         roles = {
             "plain": blacklist("revisions") + schematics_embedded_role,
             "revision": whitelist("revisions"),
-            "create": whitelist(
-                "description", "violationType", "documents", "parties", "tenderId", "mode"
-            ),
+            "create": whitelist("description", "violationType", "documents", "parties", "tenderId", "mode"),
             "edit": whitelist("answer", "reason"),
             "view": blacklist("revisions", "public_modified") + schematics_embedded_role,
             "view_%s" % SAS_ROLE: blacklist("revisions", "public_modified") + schematics_embedded_role,
@@ -80,10 +77,7 @@ class Request(BaseModel):
         }
 
     description = StringType(required=True, min_length=1)
-    violationType = ListType(
-        StringType(choices=VIOLATION_TYPE_CHOICES),
-        required=True,
-        min_size=1)
+    violationType = ListType(StringType(choices=VIOLATION_TYPE_CHOICES), required=True, min_size=1)
     dateAnswered = IsoDateTimeType()
     dateModified = IsoDateTimeType()
     dateCreated = IsoDateTimeType(default=get_now)
@@ -96,17 +90,19 @@ class Request(BaseModel):
     owner = StringType()
 
     reason = StringType()
-    answer = StringType(choices=[
-        "monitoringCreated",
-        "noViolations",
-        "plannedInspection",
-        "lawEnforcement",
-        "inspectionCreated",
-        "plannedMonitoring",
-        "noCompetency",
-        "tenderCancelled",
-        "violationRemoved"
-    ])
+    answer = StringType(
+        choices=[
+            "monitoringCreated",
+            "noViolations",
+            "plannedInspection",
+            "lawEnforcement",
+            "inspectionCreated",
+            "plannedMonitoring",
+            "noCompetency",
+            "tenderCancelled",
+            "violationRemoved",
+        ]
+    )
 
     doc_type = StringType(default="Request")
 

@@ -5,9 +5,9 @@ from pyramid.events import ContextFound
 from openprocurement.audit.api.database import COLLECTION_CLASSES
 from openprocurement.audit.request.database import RequestCollection
 from openprocurement.audit.request.utils import (
-    set_logging_context,
     extract_request,
     request_from_data,
+    set_logging_context,
 )
 
 LOGGER = getLogger(__package__)

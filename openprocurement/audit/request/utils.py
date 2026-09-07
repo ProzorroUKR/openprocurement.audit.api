@@ -1,21 +1,23 @@
-from logging import getLogger
-from cornice.resource import resource
 from functools import partial
-from openprocurement.audit.api.constants import SAS_ROLE, PUBLIC_ROLE
-from openprocurement.audit.api.utils import (
-    get_revision_changes,
-    apply_data_patch,
-    error_handler,
-    update_logging_context,
-    context_unpack,
-    handle_store_exceptions,
-)
+from logging import getLogger
+
+from cornice.resource import resource
+
+from openprocurement.audit.api.constants import PUBLIC_ROLE, SAS_ROLE
 from openprocurement.audit.api.context import get_now
-from openprocurement.audit.request.models import Request
-from openprocurement.audit.request.traversal import factory
+from openprocurement.audit.api.utils import (
+    apply_data_patch,
+    context_unpack,
+    error_handler,
+    get_revision_changes,
+    handle_store_exceptions,
+    update_logging_context,
+)
 from openprocurement.audit.monitoring.utils import (
     add_revision,
 )
+from openprocurement.audit.request.models import Request
+from openprocurement.audit.request.traversal import factory
 
 LOGGER = getLogger(__package__)
 
@@ -25,9 +27,7 @@ op_resource = partial(resource, error_handler=error_handler, factory=factory)
 
 def save_request(request, modified: bool = True, insert=False) -> bool:
     obj = request.validated["request"]
-    patch = get_revision_changes(
-        request.validated["request_src"], obj.serialize("plain")
-    )
+    patch = get_revision_changes(request.validated["request_src"], obj.serialize("plain"))
     if patch:
         add_revision(request, obj, patch)
         old_date_modified = obj.dateModified
@@ -62,7 +62,7 @@ def generate_request_id(request):
     ctime = get_now().date()
     index_key = "requests_{}".format(ctime.isoformat())
     index = request.registry.mongodb.get_next_sequence_value(index_key)
-    return 'UA-R-{:04}-{:02}-{:02}-{:06}'.format(ctime.year, ctime.month, ctime.day, index)
+    return "UA-R-{:04}-{:02}-{:02}-{:06}".format(ctime.year, ctime.month, ctime.day, index)
 
 
 def set_logging_context(event):
@@ -90,9 +90,8 @@ def extract_request(request):
 def request_serialize(request, data, fields):
     obj = request.request_from_data(data, raise_error=False)
     obj.__parent__ = request.context
-    return {i: j for i, j in request_serialize_view(
-        obj, request.authenticated_role
-    ).items() if i in fields}
+    return {i: j for i, j in request_serialize_view(obj, request.authenticated_role).items() if i in fields}
+
 
 def request_serialize_view(obj, authenticated_role):
     if authenticated_role in (SAS_ROLE, PUBLIC_ROLE):
@@ -100,14 +99,15 @@ def request_serialize_view(obj, authenticated_role):
     else:
         return obj.serialize("view")
 
+
 def request_from_data(request, data, **_):
     return Request(data)
 
 
-def set_author(data, request, fieldname='author'):
+def set_author(data, request, fieldname="author"):
     for item in data if isinstance(data, list) else [data]:
         setattr(item, fieldname, get_request_role(request.authenticated_role))
 
 
 def get_request_role(role):
-    return 'monitoring_owner' if role == 'sas' else 'request_owner'
+    return "monitoring_owner" if role == "sas" else "request_owner"

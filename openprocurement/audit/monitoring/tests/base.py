@@ -19,40 +19,26 @@ class BaseWebTest(BaseApiWebTest):
 
     It setups the database before each test and delete it after.
     """
+
     relative_to = os.path.dirname(__file__)
 
-    initial_data = {
-        "tender_id": "f" * 32,
-        "reasons": ["indicator"],
-        "procuringStages": ["planning"]
-    }
+    initial_data = {"tender_id": "f" * 32, "reasons": ["indicator"], "procuringStages": ["planning"]}
 
     initial_party = {
         "name": "The State Audit Service of Ukraine",
-        "contactPoint": {
-            "name": "Jane Doe",
-            "telephone": "0440000000"
-        },
-        "identifier": {
-            "scheme": "UA-EDR",
-            "id": "40165856",
-            "uri": "http://www.dkrs.gov.ua"
-        },
+        "contactPoint": {"name": "Jane Doe", "telephone": "0440000000"},
+        "identifier": {"scheme": "UA-EDR", "id": "40165856", "uri": "http://www.dkrs.gov.ua"},
         "address": {
             "countryName": "Ukraine",
             "postalCode": "04070",
             "region": "Kyiv",
             "streetAddress": "Petra Sahaidachnoho St, 4",
-            "locality": "Kyiv"
+            "locality": "Kyiv",
         },
-        "roles": [
-            "sas"
-        ]
+        "roles": ["sas"],
     }
 
-    acceleration = {
-        'monitoringDetails': 'accelerator=1440'
-    }
+    acceleration = {"monitoringDetails": "accelerator=1440"}
 
     def setUp(self):
         super(BaseWebTest, self).setUp()
@@ -68,7 +54,6 @@ class BaseWebTest(BaseApiWebTest):
         self.admin_pass = "token"
 
     def create_monitoring(self, restricted_config=False, **kwargs):
-
         data = deepcopy(self.initial_data)
 
         if SANDBOX_MODE:
@@ -78,12 +63,12 @@ class BaseWebTest(BaseApiWebTest):
 
         authorization = getattr(self.app, "authorization", None)
 
-        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
-        with mock.patch('openprocurement.audit.monitoring.utils.TendersClient') as mock_api_client:
-            mock_api_client.return_value.get_tender.return_value = {'config': {'restricted': restricted_config}}
-            response = self.app.post_json('/monitorings', {'data': data})
-        monitoring = response.json['data']
-        self.monitoring_id = monitoring['id']
+        self.app.authorization = ("Basic", (self.sas_name, self.sas_pass))
+        with mock.patch("openprocurement.audit.monitoring.utils.TendersClient") as mock_api_client:
+            mock_api_client.return_value.get_tender.return_value = {"config": {"restricted": restricted_config}}
+            response = self.app.post_json("/monitorings", {"data": data})
+        monitoring = response.json["data"]
+        self.monitoring_id = monitoring["id"]
 
         self.app.authorization = authorization
 
@@ -91,40 +76,39 @@ class BaseWebTest(BaseApiWebTest):
 
     def create_active_monitoring(self, restricted_config=False, **kwargs):
         self.create_monitoring(restricted_config=restricted_config, **kwargs)
-        self.app.authorization = ('Basic', (self.sas_name, self.sas_pass))
+        self.app.authorization = ("Basic", (self.sas_name, self.sas_pass))
 
         self.app.patch_json(
-            '/monitorings/{}'.format(self.monitoring_id),
-            {"data": {
-                "decision": {
-                    "description": "text",
-                    "date": datetime.now().isoformat()
-                },
-                "status": "active",
-            }}
+            "/monitorings/{}".format(self.monitoring_id),
+            {
+                "data": {
+                    "decision": {"description": "text", "date": datetime.now().isoformat()},
+                    "status": "active",
+                }
+            },
         )
 
         # get credentials for tha monitoring owner
-        self.app.authorization = ('Basic', (self.broker_name, self.broker_pass))
-        with mock.patch('openprocurement.audit.monitoring.validation.TendersClient') as mock_api_client:
+        self.app.authorization = ("Basic", (self.broker_name, self.broker_pass))
+        with mock.patch("openprocurement.audit.monitoring.validation.TendersClient") as mock_api_client:
             mock_api_client.return_value.extract_credentials.return_value = {
-                'data': {'tender_token': sha512(b'tender_token').hexdigest()}
+                "data": {"tender_token": sha512(b"tender_token").hexdigest()}
             }
             response = self.app.patch_json(
-                '/monitorings/{}/credentials?acc_token={}'.format(self.monitoring_id, 'tender_token')
+                "/monitorings/{}/credentials?acc_token={}".format(self.monitoring_id, "tender_token")
             )
-        self.tender_owner_token = response.json['access']['token']
-        return response.json['data']
+        self.tender_owner_token = response.json["access"]["token"]
+        return response.json["data"]
 
 
 class DSWebTestMixin(object):
     def generate_docservice_url(self, doc_hash=None):
         uuid = uuid4().hex
-        doc_hash = doc_hash or '0' * 32
+        doc_hash = doc_hash or "0" * 32
         registry = self.app.app.registry
         signer = registry.docservice_key
         keyid = signer.verify_key.encode(encoder=HexEncoder)[:8].decode()
         msg = "{}\0{}".format(uuid, doc_hash).encode()
         signature = b64encode(signer.sign(msg).signature)
-        query = {'Signature': signature, 'KeyID': keyid}
-        return '{}/get/{}?{}'.format(registry.docservice_url, uuid, urlencode(query))
+        query = {"Signature": signature, "KeyID": keyid}
+        return "{}/get/{}?{}".format(registry.docservice_url, uuid, urlencode(query))

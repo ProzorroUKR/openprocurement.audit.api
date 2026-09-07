@@ -3,11 +3,11 @@ from zope.interface import Interface
 
 
 class IOPContent(Interface):
-    """ Openprocurement Content """
+    """Openprocurement Content"""
 
 
 class IContentConfigurator(Interface):
-    """ Content configurator """
+    """Content configurator"""
 
 
 class IValidator(Interface):

@@ -1,12 +1,14 @@
+from functools import partial
+from logging import getLogger
+from typing import Callable
+
+from cornice.resource import resource, view
+
 from openprocurement.audit.api.mask import mask_object_data
 from openprocurement.audit.api.traversal import factory
 from openprocurement.audit.api.utils import error_handler, parse_offset, raise_operation_error
-from cornice.resource import resource, view
-from functools import partial
-from logging import getLogger
 
-
-json_view = partial(view, renderer='json')
+json_view = partial(view, renderer="json")
 op_resource = partial(resource, error_handler=error_handler, factory=factory)
 
 
@@ -28,7 +30,7 @@ class MongodbResourceListing(APIResource):
     default_limit = 100
     max_limit = 1000
 
-    db_listing_method: callable
+    db_listing_method: Callable
     filter_key = None
 
     @staticmethod
@@ -64,8 +66,11 @@ class MongodbResourceListing(APIResource):
                 offset = parse_offset(offset_param)
             except ValueError:
                 raise_operation_error(
-                    self.request, f"Invalid offset provided: {offset_param}",
-                    status=404, location="querystring", name="offset"
+                    self.request,
+                    f"Invalid offset provided: {offset_param}",
+                    status=404,
+                    location="querystring",
+                    name="offset",
                 )
             params["offset"] = offset
 
@@ -75,10 +80,7 @@ class MongodbResourceListing(APIResource):
             try:
                 limit = int(limit_param)
             except ValueError as e:
-                raise_operation_error(
-                    self.request, e.args[0],
-                    status=400, location="querystring", name="limit"
-                )
+                raise_operation_error(self.request, e.args[0], status=400, location="querystring", name="limit")
             else:
                 params["limit"] = min(limit, self.max_limit)
 
@@ -122,10 +124,7 @@ class MongodbResourceListing(APIResource):
             if self.offset_field not in self.listing_allowed_fields:
                 for r in results:
                     r.pop(self.offset_field)
-        data = {
-            "data": self.filter_results_fields(results, data_fields),
-            "next_page": self.get_page(keys, params)
-        }
+        data = {"data": self.filter_results_fields(results, data_fields), "next_page": self.get_page(keys, params)}
         if self.request.params.get("descending") or self.request.params.get("offset"):
             data["prev_page"] = self.get_page(keys, prev_params)
 
@@ -135,7 +134,7 @@ class MongodbResourceListing(APIResource):
         return {
             "offset": params.get("offset", ""),
             "path": self.request.route_path(self.listing_name, _query=params, **keys),
-            "uri": self.request.route_url(self.listing_name, _query=params, **keys)
+            "uri": self.request.route_url(self.listing_name, _query=params, **keys),
         }
 
     def filter_results_fields(self, results, fields):
@@ -169,16 +168,16 @@ DEFAULT_DESCENDING = False
 
 class APIResourcePaginatedListing(APIResource):
     sort_by: str = "dateCreated"
-    db_listing_method: callable
+    db_listing_method: Callable
     obj_id_key: str
     obj_id_key_filter: str
-    serialize_method: callable
+    serialize_method: Callable
     default_fields: set
 
     @classmethod
     def serialize(cls, *args, **kwargs):
         if not cls.serialize_method:
-            raise NotImplemented
+            raise NotImplementedError
         return cls.serialize_method(*args, **kwargs)
 
     @staticmethod
@@ -188,23 +187,23 @@ class APIResourcePaginatedListing(APIResource):
         elif "all" not in mode:
             filters["is_test"] = False
 
-    @json_view(permission='view_listing')
+    @json_view(permission="view_listing")
     def get(self):
         obj_id = self.request.matchdict[self.obj_id_key]
         filters = {
             self.obj_id_key_filter: obj_id,
         }
 
-        opt_fields = self.request.params.get('opt_fields', '')
-        opt_fields = set(e for e in opt_fields.split(',') if e)
+        opt_fields = self.request.params.get("opt_fields", "")
+        opt_fields = set(e for e in opt_fields.split(",") if e)
         opt_fields |= self.default_fields
 
-        mode = self.request.params.get('mode', '')
+        mode = self.request.params.get("mode", "")
         self.add_mode_filters(filters, mode)
 
-        descending = bool(self.request.params.get('descending', DEFAULT_DESCENDING))
-        limit = int(self.request.params.get('limit', DEFAULT_LIMIT))
-        page = int(self.request.params.get('page', DEFAULT_PAGE))
+        descending = bool(self.request.params.get("descending", DEFAULT_DESCENDING))
+        limit = int(self.request.params.get("limit", DEFAULT_LIMIT))
+        page = int(self.request.params.get("page", DEFAULT_PAGE))
         skip = page * limit - limit
 
         db_fields = self.db_fields(opt_fields)
@@ -218,10 +217,10 @@ class APIResourcePaginatedListing(APIResource):
             filters=filters,
         )
         data = {
-            'data': [self.serialize_method(r, opt_fields) for r in results],
-            'count': len(results),
-            'page': page,
-            'limit': limit,
-            'total': total,
+            "data": [self.serialize_method(r, opt_fields) for r in results],
+            "count": len(results),
+            "page": page,
+            "limit": limit,
+            "total": total,
         }
         return data

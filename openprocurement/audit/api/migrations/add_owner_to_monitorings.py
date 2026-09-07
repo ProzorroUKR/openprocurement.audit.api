@@ -11,8 +11,6 @@ import os
 
 from pyramid.paster import bootstrap
 
-from openprocurement.audit.api.database import COLLECTION_CLASSES
-
 logging.basicConfig(level=logging.INFO, format="%(message)s")
 logger = logging.getLogger(__name__)
 
@@ -34,7 +32,7 @@ def run(env, args):
     for collection_name, collection in collections.items():
         logger.info(f"Updating {collection_name}s with owner field")
         count = 0
-        
+
         filter_query = {"owner": {"$exists": False}}
 
         total_docs = collection.count_documents(filter_query)
@@ -75,9 +73,7 @@ if __name__ == "__main__":
         "-b",
         type=int,
         default=1000,
-        help=(
-            "Limits the number of documents returned in one batch. Each batch requires a round trip to the server."
-        ),
+        help=("Limits the number of documents returned in one batch. Each batch requires a round trip to the server."),
     )
     parser.add_argument(
         "--owner",
@@ -90,4 +86,4 @@ if __name__ == "__main__":
     try:
         run(env, args)
     finally:
-        env['closer']()
+        env["closer"]()

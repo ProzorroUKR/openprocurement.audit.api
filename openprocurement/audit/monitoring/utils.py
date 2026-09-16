@@ -208,7 +208,7 @@ def calculate_monitoring_prolongation(monitoring):
     else:
         delta = 1
         dt = calc_next_working_datetime(normalized_cancellation_date, backwards=True, calendar=WORKING_DAYS)
-        while dt.date() != normalized_prev_start_date.date():
+        while dt.date() > normalized_prev_start_date.date():
             dt = calc_next_working_datetime(dt, backwards=True, calendar=WORKING_DAYS)
             delta += 1
         return MONITORING_TIME - timedelta(days=delta)

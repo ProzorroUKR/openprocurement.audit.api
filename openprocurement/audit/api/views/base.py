@@ -173,6 +173,7 @@ class APIResourcePaginatedListing(APIResource):
     obj_id_key_filter: str
     serialize_method: Callable
     default_fields: set
+    max_limit: int = 1000
 
     @classmethod
     def serialize(cls, *args, **kwargs):
@@ -202,8 +203,16 @@ class APIResourcePaginatedListing(APIResource):
         self.add_mode_filters(filters, mode)
 
         descending = bool(self.request.params.get("descending", DEFAULT_DESCENDING))
-        limit = int(self.request.params.get("limit", DEFAULT_LIMIT))
-        page = int(self.request.params.get("page", DEFAULT_PAGE))
+        try:
+            limit = min(max(1, int(self.request.params.get("limit", DEFAULT_LIMIT))), self.max_limit)
+        except (ValueError, TypeError):
+            limit = DEFAULT_LIMIT
+
+        try:
+            page = max(1, int(self.request.params.get("page", DEFAULT_PAGE)))
+        except (ValueError, TypeError):
+            page = DEFAULT_PAGE
+
         skip = page * limit - limit
 
         db_fields = self.db_fields(opt_fields)

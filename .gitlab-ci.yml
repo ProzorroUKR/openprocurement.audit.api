@@ -198,3 +198,22 @@ test_docs:
   script:
     - py.test docs.py
   when: manual
+
+deploy_sandbox2:
+  tags:
+    - k8s-sandbox
+  stage: deploy
+  only:
+    - tags
+  script:
+    - rm -rf ./k8s-sandbox
+    - git config --global user.email "gitlab@gitlab.dc.prozorro.gov.ua"
+    - git config --global user.name "GitLab CI/CD Bot"
+    - git clone git@git.prozorro.gov.ua:DP/k8s-sandbox.git
+    - cd k8s-sandbox
+    - cat sandbox/charts/prozorro-audit/values.yaml | python -c "import sys; import yaml; file=sys.stdin.read(); dct=yaml.safe_load(file); dct['image']['tag'] = '$CI_COMMIT_TAG'; print yaml.dump(dct)" >out
+    - mv out sandbox/charts/prozorro-audit/values.yaml
+    - git add sandbox/charts/prozorro-audit/values.yaml
+    - git commit -m "Audit API image tag changed to $CI_COMMIT_TAG"
+    - git push origin master
+  when: manual

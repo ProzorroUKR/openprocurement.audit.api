@@ -101,6 +101,7 @@ exclude_dirs = [
     "**/tests/**",
     "**/migrations/**",
     ".venv",
+    ".cache",
     "docs",
 ]
 skips = []

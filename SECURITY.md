@@ -22,7 +22,7 @@
     (`build_header` викликається лише з `disposition="attachment"` і `filename_compat=quote(title)`), образ не запускається з `-O`.
   - `openprocurement/audit/api/utils.py` B413: `from Crypto.Cipher import AES` походить із pycryptodome, а не pycrypto; хибне спрацювання.
     Зауваження: функції `encrypt`/`decrypt` у цьому модулі не мають викликів у коді; кандидат на видалення окремою задачею.
-- Локально: `uv run bandit -r . -c pyproject.toml` → `No issues identified`.
+- Локально: `uv run bandit -r openprocurement/ -c pyproject.toml` → `No issues identified`.
 
 ## osv-scanner
 

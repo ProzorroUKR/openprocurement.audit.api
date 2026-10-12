@@ -42,7 +42,7 @@ in the project CI/CD variables; no code change is needed.
 
 Run the same checks locally before opening a merge request or when a job goes red::
 
-    uv run bandit -r . -c pyproject.toml   # own code
+    uv run bandit -r openprocurement/ -c pyproject.toml   # own code
     make audit                             # dependencies (or ./osv_scan.sh)
     gitleaks git . --redact                # secrets in commits (gitleaks dir . for the working tree)
 

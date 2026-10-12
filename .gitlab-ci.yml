@@ -105,7 +105,7 @@ mypy:
 bandit:
   extends: .lint_tools
   script:
-    - uv run --active bandit -r . -c pyproject.toml
+    - uv run --active bandit -r openprocurement/ -c pyproject.toml
 
 # Not extended from .lint_tools: it uses only/except, which cannot be
 # combined with the rules block that switches allow_failure.

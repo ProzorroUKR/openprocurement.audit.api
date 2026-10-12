@@ -59,7 +59,7 @@ live in ``.gitleaks.toml`` and cover only ``generic-api-key`` for test tokens un
 ``tests/`` and ``etc/``.
 
 Dependencies installed from git (``[tool.uv.sources]`` in ``pyproject.toml``) have no version
-the scanner can match, so they are reviewed by hand on every change; the list is in ``SECURITY.md``.
+the scanner can match, so they are reviewed by hand whenever a revision in ``[tool.uv.sources]`` changes.
 
 Documentation
 ----------------------

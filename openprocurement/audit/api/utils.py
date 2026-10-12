@@ -12,7 +12,9 @@ from uuid import uuid4
 import pytz
 from ciso8601 import parse_datetime
 from cornice.renderer import JSONError
-from Crypto.Cipher import AES
+
+# B413 below is a false positive: `Crypto` is pycryptodome (pinned in pyproject.toml), not pycrypto.
+from Crypto.Cipher import AES  # nosec B413
 from jsonpatch import apply_patch as _apply_patch
 from jsonpatch import make_patch
 from jsonpointer import resolve_pointer

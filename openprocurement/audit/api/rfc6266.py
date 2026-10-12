@@ -78,7 +78,9 @@ def build_header(filename, disposition="attachment", filename_compat=None):
     # by rejecting slashes or other weirdness that might upset a receiver.
 
     if disposition != "attachment":
-        assert is_token(disposition)
+        # Internal invariant: build_header is only called with the default
+        # disposition ("attachment"); not user input. Image is not run with -O.
+        assert is_token(disposition)  # nosec B101
 
     rv = disposition
 
@@ -96,7 +98,9 @@ def build_header(filename, disposition="attachment", filename_compat=None):
         if is_token(filename_compat):
             rv += "; filename=%s" % (filename_compat,)
         else:
-            assert is_lws_safe(filename_compat)
+            # Internal invariant: filename_compat is urllib.parse.quote(document.title),
+            # i.e. percent-encoded ASCII, which is always LWS-safe. Image is not run with -O.
+            assert is_lws_safe(filename_compat)  # nosec B101
             rv += '; filename="%s"' % (qd_quote(filename_compat),)
 
     # alnum are already considered always-safe, but the rest isn't.

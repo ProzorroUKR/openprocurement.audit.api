@@ -1,0 +1,28 @@
+# gitleaks: правила стандартні, тут лише винятки. Діють тільки на правило generic-api-key —
+# приватні ключі, ключі хмар, паролі в URL ловляться всюди, включно з docs, tests і etc.
+[extend]
+useDefault = true
+
+[[allowlists]]
+description = """
+Тестові токени доступу і ключ Document Service у згенерованій документації (docs/source/**/http/*.http),
+у tests.ini кожного плагіна та в dev-конфігу etc/service.ini для docker-compose.
+acc_token / tender_owner_token: токени sandbox, які генерує docs.py під час збірки документації.
+dockey / dockeys: спільний тестовий ключ підпису DS, той самий, що в тестових конфігах openprocurement.api.
+Це не облікові дані.
+Переглянути: при зміні структури docs/ або etc/, не пізніше 2027-10-10.
+# TODO: додати власника і ревʼюера
+Власник: <команда або людина, яка відповідає за перегляд до дати>.
+Погодив: <хто прийняв ризик>, <дата>.
+"""
+targetRules = ["generic-api-key"]
+paths = [
+  '''^docs/''',
+  '''(^|/)tests/''',
+  '''^etc/''',
+]
+regexTarget = "line"
+regexes = [
+  '''(acc_token|tender_owner_token|tender_token|dockeys?)\W{0,4}[=:]''',
+  '''"token"\s*:\s*"[0-9a-f]{32}"''',
+]

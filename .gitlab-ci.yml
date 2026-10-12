@@ -11,6 +11,13 @@ variables:
   MONGODB_REPLICA_SET_MODE: primary
   MONGODB_REPLICA_SET_NAME: rs0
   MONGODB_REPLICA_SET_KEY: replicaSetKey
+  # CS-22510. Security flow: dependency scan (uv.lock) and secret scan of new
+  # commits. Non-blocking until the corresponding *_BLOCKING variable is set
+  # to "true" in the project CI/CD settings (Settings -> CI/CD -> Variables).
+  OSV_SCANNER_IMAGE: "ghcr.io/google/osv-scanner:v2.6.0"
+  OSV_BLOCKING: "false"
+  GITLEAKS_IMAGE: "ghcr.io/gitleaks/gitleaks:v8.30.1"
+  GITLEAKS_BLOCKING: "false"
 
 
 .build:
@@ -91,6 +98,79 @@ mypy:
   extends: .lint_tools
   script:
     - uv run --active mypy openprocurement/ --explicit-package-bases
+
+# CS-22510. Security flow, stage `lint`. Bandit checks our own code and blocks
+# from day one. osv_scanner and gitleaks run in observation mode until
+# OSV_BLOCKING / GITLEAKS_BLOCKING are set to "true" in the project settings.
+bandit:
+  extends: .lint_tools
+  script:
+    - uv run --active bandit -r . -c pyproject.toml
+
+# Not extended from .lint_tools: it uses only/except, which cannot be
+# combined with the rules block that switches allow_failure.
+osv_scanner:
+  stage: lint
+  tags:
+    - kube-dev
+  image:
+    name: $OSV_SCANNER_IMAGE
+    entrypoint: [""]
+  needs: []
+  rules:
+    - if: $CI_COMMIT_BRANCH && $OSV_BLOCKING == "true"
+      allow_failure: false
+    - if: $CI_COMMIT_BRANCH
+      allow_failure: true
+  variables:
+    GIT_STRATEGY: clone
+  script:
+    - /osv-scanner scan source -r .
+        --offline-vulnerabilities --download-offline-databases --no-resolve
+        --format html --output-file osv-report.html || true
+    - /osv-scanner scan source -r .
+        --offline-vulnerabilities --download-offline-databases --no-resolve
+        --format vertical
+  artifacts:
+    when: always
+    expire_in: 30 days
+    paths:
+      - osv-report.html
+
+gitleaks:
+  stage: lint
+  tags:
+    - kube-dev
+  image:
+    name: $GITLEAKS_IMAGE
+    entrypoint: [""]
+  needs: []
+  rules:
+    - if: $CI_COMMIT_BRANCH && $GITLEAKS_BLOCKING == "true"
+      allow_failure: false
+    - if: $CI_COMMIT_BRANCH
+      allow_failure: true
+  variables:
+    GIT_STRATEGY: clone
+    GIT_DEPTH: "50"
+  script:
+    - |
+      if [ -n "$CI_COMMIT_BEFORE_SHA" ] \
+         && [ "$CI_COMMIT_BEFORE_SHA" != "0000000000000000000000000000000000000000" ] \
+         && git cat-file -e "$CI_COMMIT_BEFORE_SHA" 2>/dev/null; then
+        RANGE="$CI_COMMIT_BEFORE_SHA..$CI_COMMIT_SHA"
+      else
+        RANGE="-n 50"
+      fi
+      echo "gitleaks: scanning commits $RANGE"
+      gitleaks git . --redact --verbose \
+        --report-format json --report-path gitleaks-report.json \
+        --log-opts="-m $RANGE"
+  artifacts:
+    when: always
+    expire_in: 30 days
+    paths:
+      - gitleaks-report.json
 
 .base_deploy: &base_deploy
   stage: deploy

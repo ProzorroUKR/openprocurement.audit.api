@@ -27,6 +27,40 @@ There are two types of users use the module:
 `auth.ini`  should contain [sas] group so that SAS staff users are able to pass the authorization
 
 
+Security scan
+-------------
+
+Three checks run in the ``lint`` stage of the pipeline next to ruff and mypy:
+
+- **Bandit** scans our own Python code and blocks the pipeline from day one.
+- **osv-scanner** checks ``uv.lock`` against the OSV vulnerability database.
+- **gitleaks** checks the diff of every new commit for secrets.
+
+osv-scanner and gitleaks start in observation mode (the job may fail, the pipeline stays green).
+They switch to blocking mode when ``OSV_BLOCKING`` / ``GITLEAKS_BLOCKING`` are set to ``"true"``
+in the project CI/CD variables; no code change is needed.
+
+Run the same checks locally before opening a merge request or when a job goes red::
+
+    uv run bandit -r . -c pyproject.toml   # own code
+    make audit                             # dependencies (or ./osv_scan.sh)
+    gitleaks git . --redact                # secrets in commits (gitleaks dir . for the working tree)
+
+``make audit`` runs the scanner from a pinned Docker image (or a local ``osv-scanner`` binary if
+present) so a local run and the CI job give the same result. The vulnerability database is
+downloaded into the ``osv-db`` docker volume and the comparison happens locally: package names
+are never sent anywhere. Other formats: ``make audit OSV_FORMAT=table`` / ``html`` / ``json``.
+
+Known vulnerabilities that we cannot or should not fix are listed in ``osv-scanner.toml``;
+every entry has a ``reason`` and an ``ignoreUntil`` date, after which the finding comes back.
+Bandit exceptions are ``# nosec BXXX`` comments with a reason on the line; the ``[tool.bandit]``
+section of ``pyproject.toml`` only excludes test and migration directories. gitleaks exceptions
+live in ``.gitleaks.toml`` and cover only ``generic-api-key`` for test tokens under ``docs/``,
+``tests/`` and ``etc/``.
+
+Dependencies installed from git (``[tool.uv.sources]`` in ``pyproject.toml``) have no version
+the scanner can match, so they are reviewed by hand on every change; the list is in ``SECURITY.md``.
+
 Documentation
 ----------------------
 

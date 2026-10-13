@@ -4,7 +4,7 @@ requires-python = "==3.13.*"
 
 [[package]]
 name = "bandit"
-version = "1.7.7"
+version = "1.9.4"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "colorama", marker = "sys_platform == 'win32'" },
@@ -12,9 +12,9 @@ dependencies = [
     { name = "rich" },
     { name = "stevedore" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/50/04/f9efce9197981a6b36e44433c3f7349016f92ab69ddf9f9339d2fce0720d/bandit-1.7.7.tar.gz", hash = "sha256:527906bec6088cb499aae31bc962864b4e77569e9d529ee51df3a93b4b8ab28a", size = 1980358, upload-time = "2024-01-23T21:16:12.171Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/aa/c3/0cb80dfe0f3076e5da7e4c5ad8e57bac6ac357ff4a6406205501cade4965/bandit-1.9.4.tar.gz", hash = "sha256:b589e5de2afe70bd4d53fa0c1da6199f4085af666fde00e8a034f152a52cd628", size = 4242677, upload-time = "2026-02-25T06:44:15.503Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f5/b2/327fb8e5df44eec822bb19add844d03bd2f550a1c4f21913d575cdff83cc/bandit-1.7.7-py3-none-any.whl", hash = "sha256:17e60786a7ea3c9ec84569fd5aee09936d116cb0cb43151023258340dbffb7ed", size = 124173, upload-time = "2024-01-23T21:16:08.929Z" },
+    { url = "https://files.pythonhosted.org/packages/05/a4/a26d5b25671d27e03afb5401a0be5899d94ff8fab6a698b1ac5be3ec29ef/bandit-1.9.4-py3-none-any.whl", hash = "sha256:f89ffa663767f5a0585ea075f01020207e966a9c0f2b9ef56a57c7963a3f6f8e", size = 134741, upload-time = "2026-02-25T06:44:13.694Z" },
 ]
 
 [[package]]
@@ -669,7 +669,7 @@ requires-dist = [
 
 [package.metadata.requires-dev]
 dev = [
-    { name = "bandit", extras = ["toml"], specifier = "==1.7.7" },
+    { name = "bandit", extras = ["toml"], specifier = "==1.9.4" },
     { name = "coverage", specifier = "==7.8.1" },
     { name = "freezegun", specifier = "==1.5.1" },
     { name = "mypy", specifier = "==1.11.2" },

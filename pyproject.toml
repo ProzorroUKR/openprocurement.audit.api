@@ -66,7 +66,7 @@ dev = [
     "ruff==0.6.9",
     "mypy==1.11.2",
     "pre-commit",
-    "bandit[toml]==1.7.7",
+    "bandit[toml]==1.9.4",
 ]
 
 [project.entry-points."paste.app_factory"]

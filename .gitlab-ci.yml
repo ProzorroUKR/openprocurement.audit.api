@@ -63,6 +63,9 @@ build_tag:
 
 .image_defaults:
   image: $CI_REGISTRY_IMAGE:ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
+  variables:
+    # /app is read-only in the image
+    RUFF_CACHE_DIR: /tmp/.ruff_cache
   before_script:
     - cd /app
 
@@ -167,17 +170,20 @@ stop_review:
     - build
   variables:
     TAG: ci-$CI_COMMIT_REF_SLUG-$CI_COMMIT_SHORT_SHA
+    # /app is read-only in the image, so coverage data goes to /tmp
+    COVERAGE_FILE: /tmp/.coverage
 
+# the branch image already has the dev dependencies and the project installed,
+# and /app is read-only there, so the jobs run without `uv sync`
 .test_main:
   extends: .test
   script:
     - cd /app
-    - uv sync --frozen
     - py.test $TESTS_PATH -v
       --color=yes
       --cov=$COV_PATH
       --cov-config=$COV_FILE
-      --cov-report xml
+      --cov-report xml:/tmp/coverage.xml
       --dist=each
       --tx=popen//id=sand//env:DB_NAME=test_sandbox//env:SANDBOX_MODE=1
       --tx=popen//id=prod//env:DB_NAME=test_prod//env:SANDBOX_MODE=
@@ -192,11 +198,10 @@ test_api:
 
 test_docs:
   extends: .test
-  before_script:
-    - cd /app
-    - uv sync --frozen
   script:
-    - py.test docs.py
+    # docs.py writes the generated examples into docs/, so it runs in a writable copy
+    - mkdir /tmp/app && cp -R /app/__init__.py /app/docs /app/docs.py /app/pytest.ini /tmp/app/
+    - cd /tmp/app && py.test docs.py
   when: manual
 
 deploy_sandbox2:
